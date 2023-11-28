@@ -3,20 +3,28 @@ import Link from 'next/link';
 interface CardProps {
   title: string;
   link: string;
+  cardInsideClass?: string;
+  iconContainerClass?: string;
+  cardContainerClass?: string;
 }
 
-const Card: React.FC<CardProps> = ({ title, link }) => {
+const Card: React.FC<CardProps> = ({
+  title,
+  link,
+  cardContainerClass,
+  cardInsideClass,
+  iconContainerClass
+}) => {
   return (
-    <div className="m-4 max-w-md overflow-hidden rounded bg-white shadow-lg">
-      <div className="flex items-center p-4">
-        <div className="ml-4">
-          <Link href={link}>
-            <div className="text-xm ">{title}</div>
-          </Link>
+    <Link href={link}>
+      <div className={`flex  items-center ${cardContainerClass} rounded-md bg-white p-4 shadow-lg`}>
+        <div className={`flex flex-col items-center ${cardInsideClass}`}>
+          <div className={`${iconContainerClass}`}>Icon</div>
+          <p className="text-xm mb-0 text-center font-medium ">{title}</p>
           {/* <p className="text-base text-gray-700">{description}</p> */}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
