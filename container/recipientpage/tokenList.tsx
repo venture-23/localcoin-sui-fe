@@ -9,7 +9,7 @@ const TokenList = () => {
       <Header className="h-[120px]">
         <div className="flex items-center">
           <Link href="/recipient">{'<- '}</Link>
-          <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p>
+          <p className="flex-1  text-center text-2xl font-semibold">Token List</p>
         </div>
       </Header>
       <section className="my-6">
@@ -18,10 +18,19 @@ const TokenList = () => {
             <h2 className="mb-2 text-2xl font-bold">Your Tokens</h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-1">
-            <TokenCard cardContainerClass="min-h-[50px]" tokenDetails={tokenDetails} />
-            <TokenCard cardContainerClass="min-h-[50px]" tokenDetails={tokenDetails} />
-            <TokenCard cardContainerClass="min-h-[50px]" tokenDetails={tokenDetails} />
+          <div className="grid grid-cols-1 gap-3">
+            <TokenCard
+              cardContainerClass="min-h-[50px] justify-between"
+              tokenDetails={tokenDetails}
+            />
+            <TokenCard
+              cardContainerClass="min-h-[50px] justify-between"
+              tokenDetails={tokenDetails}
+            />
+            <TokenCard
+              cardContainerClass="min-h-[50px] justify-between"
+              tokenDetails={tokenDetails}
+            />
           </div>
         </div>
       </section>

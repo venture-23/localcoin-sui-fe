@@ -1,5 +1,6 @@
 import Card from 'components/card';
 import Header from 'components/layout/header';
+
 import Link from 'next/link';
 
 const SignupPage = () => {
@@ -22,16 +23,19 @@ const SignupPage = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <Card
+              iconContainerClass=" h-[56px] w-[56px]"
               cardContainerClass="justify-center min-h-[134px]"
               title="Merchant"
               link="/merchant"
             />
             <Card
+              iconContainerClass=" h-[56px] w-[56px]"
               cardContainerClass="justify-center min-h-[134px]"
               title="Recipient"
               link="/recipient"
             />
             <Card
+              iconContainerClass=" h-[56px] w-[56px]"
               cardContainerClass="justify-center min-h-[134px]"
               title="Campaign Creator"
               link="/campaigns"

@@ -34,13 +34,16 @@ const RecipientPage = () => {
             />
           </div>
 
-          <div className="">
-            <h2 className="mb-2 text-2xl font-bold">Settlements</h2>
+          <div className="mb-4">
+            <h2 className=" text-2xl font-bold">Settlements</h2>
           </div>
 
           <div className="grid grid-cols-1 gap-3">
-            <button className="h-[52px] rounded-md bg-blue-500 py-4 text-white">
-              Request for settlement
+            <button className=" rounded-md bg-blue-500 py-4 text-white">
+              <span>+</span> Request for settlement
+            </button>
+            <button className=" rounded-md border border-blue-500 py-4 text-blue-500">
+              <span>+</span> Finish settlement
             </button>
           </div>
         </div>
