@@ -16,7 +16,7 @@ const RecipientPage = () => {
     <>
       <Header className="h-[120px]">
         <div className="flex items-center">
-          <Link href="/">{'<- '}</Link>
+          {/* <Link href="/">{'<- '}</Link> */}
           <p className="flex-1  text-center text-2xl font-semibold">Recipient profile</p>
         </div>
       </Header>
