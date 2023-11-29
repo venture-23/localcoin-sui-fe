@@ -2,7 +2,11 @@ const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+  content: [
+    './app/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './container/**/*.{js,ts,jsx,tsx}'
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -28,6 +32,11 @@ module.exports = {
         carousel: 'marquee 60s linear infinite',
         blink: 'blink 1.4s both infinite'
       }
+    }
+  },
+  colors: {
+    primary: {
+      50: '#f1eeff'
     }
   },
   future: {
