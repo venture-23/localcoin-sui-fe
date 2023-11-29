@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Header from 'components/layout/header';
 import Link from 'next/link';
 
@@ -13,6 +14,13 @@ export default function Merchant() {
       <section>
         <div></div>
       </section>
+=======
+import MerchantPage from 'container/merchantpage';
+export default function Recipient() {
+  return (
+    <>
+      <MerchantPage />
+>>>>>>> 50925df1402f2a6f0ef2523818691352a689cb31
     </>
   );
 }
