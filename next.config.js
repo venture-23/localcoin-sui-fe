@@ -13,6 +13,9 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: []
   },
+  compiler: {
+    styledComponents: true
+  },
   async redirects() {
     return [];
   }
