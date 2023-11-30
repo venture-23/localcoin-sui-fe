@@ -7,6 +7,7 @@ const baseUrl = 'http://localhost:3000';
 // const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
 // const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
 import './globals.css';
+import Footer from 'components/layout/footer';
 
 export const metadata = {
   // metadataBase: new URL(baseUrl),
@@ -40,9 +41,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
         {/* <Navbar /> */}
         <Suspense>
-          <div className="">
-            <main>{children}</main>
-          </div>
+          <main className="h-[100vh]">
+            {children}
+            <Footer />
+          </main>
         </Suspense>
       </body>
     </html>

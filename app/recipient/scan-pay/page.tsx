@@ -1,13 +1,15 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 
+import Link from 'next/link';
 export default function ScanPay() {
   const [imageUrl, setImageUrl] = useState('');
   // const [scanResultFile, setScanResultFile] = useState('');
   const [scanResultWebCam, setScanResultWebCam] = useState('');
-  // const qrRef = useRef(null);
+  const { push } = useRouter();
 
   useEffect(() => {
     generateQrCode();
@@ -30,18 +32,25 @@ export default function ScanPay() {
   //   }
   // };
   // const onScanFile = () => {
+  //   console.log(qrRef.current, 'current');
   //   qrRef.current.openImageDialog();
   // };
-  const handleErrorWebCam = (error) => {
+  const handleErrorWebCam = (error: any) => {
     console.log(error);
   };
-  const handleScanWebCam = (result) => {
+  const handleScanWebCam = (result: string) => {
     if (result) {
-      setScanResultWebCam(result);
+      setScanResultWebCam('result');
+      push('/recipient/confirmation');
     }
   };
   return (
     <>
+      {/* <Header className="h-[120px]"> */}
+      <div className="flex items-center">
+        <Link href="/recipient">{'<-'}</Link>
+      </div>
+      {/* </Header> */}
       <QrReader
         onResult={(result, error) => {
           if (!!result) {
