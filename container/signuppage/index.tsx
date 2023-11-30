@@ -25,16 +25,19 @@ const SignupPage = () => {
               cardContainerClass="justify-center min-h-[134px]"
               title="Merchant"
               link="/merchant"
+              query={{ type: 'Merchant' }}
             />
             <Card
               cardContainerClass="justify-center min-h-[134px]"
               title="Recipient"
-              link="/recipient"
+              link="/merchant"
+              query={{ type: 'Recipient' }}
             />
             <Card
               cardContainerClass="justify-center min-h-[134px]"
               title="Campaign Creator"
-              link="/campaigns"
+              link="/merchant"
+              query={{ type: 'Campaigns' }}
             />
           </div>
         </div>

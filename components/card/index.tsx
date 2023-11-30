@@ -6,6 +6,7 @@ interface CardProps {
   cardInsideClass?: string;
   iconContainerClass?: string;
   cardContainerClass?: string;
+  query?: any;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -13,10 +14,11 @@ const Card: React.FC<CardProps> = ({
   link,
   cardContainerClass,
   cardInsideClass,
-  iconContainerClass
+  iconContainerClass,
+  query
 }) => {
   return (
-    <Link href={link}>
+    <Link href={query ? { pathname: link, query: query } : link}>
       <div className={`flex  items-center ${cardContainerClass} rounded-md bg-white p-4 shadow-lg`}>
         <div className={`flex flex-col items-center ${cardInsideClass}`}>
           <div className={`${iconContainerClass}`}>Icon</div>

@@ -28,7 +28,7 @@ export default function HomePageContain() {
       // console.log({ json });
     }
 
-    getAccountInfo();
+    // getAccountInfo();
   }, []);
 
   return <div></div>;
