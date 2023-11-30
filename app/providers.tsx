@@ -9,6 +9,8 @@ interface MyContextData {
   userEnterPin?: string;
   checkPinCode?: boolean;
   setCheckPinCode?: any;
+  redirectTo?: any;
+  setRedirectTo?: any;
 }
 
 // Create a context with an initial value

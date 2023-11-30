@@ -10,6 +10,7 @@ export default function RootLayoutClient({ children }: React.PropsWithChildren) 
   const [showPinLockScreen, setshowPinScreen] = useState(false);
   const [userEnterPin, setUserEnterPin] = useState<any>('');
   const [checkPinCode, setCheckPinCode] = useState(false);
+  const [redirectTo, setRedirectTo] = useState(false);
 
   const router = useRouter();
   useEffect(() => {
@@ -18,6 +19,7 @@ export default function RootLayoutClient({ children }: React.PropsWithChildren) 
       console.log({ res });
       setshowPinScreen(true);
       setCheckPinCode(true);
+      setRedirectTo(true);
     } else {
       router.push('/');
     }
@@ -25,7 +27,15 @@ export default function RootLayoutClient({ children }: React.PropsWithChildren) 
 
   return (
     <MyContext.Provider
-      value={{ setshowPinScreen, setUserEnterPin, setCheckPinCode, userEnterPin, checkPinCode }}
+      value={{
+        setshowPinScreen,
+        setUserEnterPin,
+        setCheckPinCode,
+        setRedirectTo,
+        userEnterPin,
+        redirectTo,
+        checkPinCode
+      }}
     >
       {(showPinLockScreen || checkPinCode) && <PinLockScreen />}
       {children}

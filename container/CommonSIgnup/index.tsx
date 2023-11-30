@@ -34,7 +34,7 @@ const MerchantSignup = ({ param }) => {
 
   useEffect(() => {
     if (userEnterPin) {
-      const resp = encodeToken(data, userEnterPin);
+      const resp = encodeToken({ ...data, userType: param }, userEnterPin);
       console.log('first', resp);
       if (resp) {
         localStorage.setItem('local-coin', resp);

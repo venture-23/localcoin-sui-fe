@@ -1,23 +1,40 @@
 'use client';
 
 import { useMyContext } from 'hooks/useMyContext';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { checkPinCorrect } from 'services/encrypt-decrypt-data';
 import './app.css';
 
 export default function PinLockScreen(props: any) {
   const { children } = props;
-  const { setshowPinScreen, setUserEnterPin, checkPinCode, setCheckPinCode } = useMyContext();
+  const {
+    setshowPinScreen,
+    setUserEnterPin,
+    checkPinCode,
+    setCheckPinCode,
+    redirectTo,
+    setRedirectTo
+  } = useMyContext();
   const [pinData, setPinData] = useState<any>([]);
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleClick = (value: string | number) => {
     if (pinData.length + 1 === 4) {
       setError('');
       const enterPin = pinData + value.toString();
       setPinData(enterPin);
+
       if (checkPinCode) {
-        if (checkPinCorrect(enterPin)) {
+        const decodedRes = checkPinCorrect(enterPin);
+
+        if (decodedRes) {
+          if (redirectTo) {
+            setRedirectTo(false);
+            router.push(`/${decodedRes.userType}`);
+          }
+
           setCheckPinCode(false);
           setshowPinScreen(false);
         } else {
@@ -27,13 +44,12 @@ export default function PinLockScreen(props: any) {
         setshowPinScreen(false);
         setUserEnterPin(enterPin);
       }
-    } else {
-      if (pinData.length + 1 <= 4) {
-        setError('');
-        setPinData((prevPin: string) => prevPin + value.toString());
-      }
+    } else if (pinData.length + 1 <= 4) {
+      setError('');
+      setPinData((prevPin: string) => prevPin + value.toString());
     }
   };
+
   const handleRemove = () => {
     if (pinData) {
       setError('');
