@@ -1,11 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import Header from 'components/layout/header';
 import useHandleCopy from 'hooks/useCopyText';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { encodeToken } from 'services/encrypt-decrypt-data';
 import generateKeyPair from 'services/generateKeypair';
 import { maskWalletAddress } from 'utils/clipper';
 import GenerateKeyPair from './components/generate-key-pair-page';
@@ -15,18 +18,31 @@ interface ErrorType {
   storeName?: string;
   proprietaryName?: string;
   phoneNumber?: string;
+  secretKey?: string;
 }
 
-const MerchantSignup = () => {
+const MerchantSignup = ({ param }) => {
   const [showScreen, setShowScreen] = useState(0);
-  const { setshowPinScreen } = useMyContext();
-  const [data, setData] = useState({
+  const { setshowPinScreen, userEnterPin } = useMyContext();
+  const [data, setData] = useState<any>({
     storeName: '',
     proprietaryName: '',
     phoneNumber: ''
   });
 
-  const params = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (userEnterPin) {
+      const resp = encodeToken(data, userEnterPin);
+      console.log('first', resp);
+      if (resp) {
+        localStorage.setItem('local-coin', resp);
+        router.push(`/${param}`);
+        // console.log({ data }, params.get('type'), params);
+      }
+    }
+  }, [userEnterPin]);
 
   const [error, setError] = useState<ErrorType>({});
   const [isCopied, handleCopy] = useHandleCopy({ showToast: true });
@@ -48,7 +64,7 @@ const MerchantSignup = () => {
     const errorChecked = validation();
     setError(errorChecked);
     if (Object.keys(errorChecked).length === 0) {
-      console.log('good to go');
+      console.log('good to go', data);
       // router.push('/generate-key-pair');
       setShowScreen(1);
     }
@@ -58,7 +74,7 @@ const MerchantSignup = () => {
     const resp = generateKeyPair();
     if (resp.secretKey) {
       setData({ ...data, ...resp });
-      setshowPinScreen(true);
+      // setshowPinScreen(true);
     }
   };
 
@@ -67,7 +83,7 @@ const MerchantSignup = () => {
       <Header className="h-[120px]">
         <div className="flex items-center">
           {showScreen === 0 ? (
-            <Link href={showScreen === 0 ? 'signup' : ''}>{'<- '}</Link>
+            <Link href={showScreen === 0 ? '/signup' : ''}>{'<- '}</Link>
           ) : (
             <div onClick={() => setShowScreen(showScreen - 1)}> {'<- '}</div>
           )}
@@ -79,7 +95,7 @@ const MerchantSignup = () => {
         {showScreen === 0 ? (
           <MerchantInfo
             data={data}
-            title={params.get('type') || ''}
+            title={param?.charAt(0).toUpperCase() + param?.slice(1)}
             error={error}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
@@ -101,6 +117,11 @@ const MerchantSignup = () => {
             </button>
           </div>
         </>
+      )}
+      {data.secretKey && (
+        <button type="button" onClick={() => setshowPinScreen(true)} className=" rounded-full">
+          Next
+        </button>
       )}
     </>
   );

@@ -5,6 +5,10 @@ interface MyContextData {
   value?: string;
   showPinLockScreen?: boolean;
   setshowPinScreen?: any;
+  setUserEnterPin?: any;
+  userEnterPin?: string;
+  checkPinCode?: boolean;
+  setCheckPinCode?: any;
 }
 
 // Create a context with an initial value

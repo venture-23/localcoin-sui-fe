@@ -1,7 +1,7 @@
 import Header from 'components/layout/header';
 import TokenCard from 'components/tokencard';
 
-const RecipientPage = () => {
+const MerchantPage = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
   const settlementDetails: any = { name: 'Request for settlement', value: '10.11' };
 
@@ -52,4 +52,4 @@ const RecipientPage = () => {
   );
 };
 
-export default RecipientPage;
+export default MerchantPage;

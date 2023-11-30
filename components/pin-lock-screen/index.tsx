@@ -2,28 +2,54 @@
 
 import { useMyContext } from 'hooks/useMyContext';
 import { useState } from 'react';
+import { checkPinCorrect } from 'services/encrypt-decrypt-data';
 import './app.css';
 
 export default function PinLockScreen(props: any) {
-  const { setshowPinScreen } = useMyContext();
+  const { children } = props;
+  const { setshowPinScreen, setUserEnterPin, checkPinCode, setCheckPinCode } = useMyContext();
   const [pinData, setPinData] = useState<any>([]);
+  const [error, setError] = useState('');
+
   const handleClick = (value: string | number) => {
-    // console.log({ value: value },value.);
-    if (pinData.length < 4) {
-      setPinData((prevPin: string) => prevPin + value.toString());
-      // setshowPinScreen(false);
+    if (pinData.length + 1 === 4) {
+      setError('');
+      const enterPin = pinData + value.toString();
+      setPinData(enterPin);
+      if (checkPinCode) {
+        if (checkPinCorrect(enterPin)) {
+          setCheckPinCode(false);
+          setshowPinScreen(false);
+        } else {
+          setError('Invalid Pin');
+        }
+      } else {
+        setshowPinScreen(false);
+        setUserEnterPin(enterPin);
+      }
     } else {
-      setshowPinScreen(false);
+      if (pinData.length + 1 <= 4) {
+        setError('');
+        setPinData((prevPin: string) => prevPin + value.toString());
+      }
     }
   };
   const handleRemove = () => {
-    if (pinData) setPinData((prevPin: string) => prevPin.slice(0, -1));
+    if (pinData) {
+      setError('');
+      setPinData((prevPin: string) => prevPin.slice(0, -1));
+    }
   };
   return (
     <>
       <div className="modal-overlay">
         <div className="modal-content text-center">
           <div>Enter Your Pin</div>
+          <br />
+          <br />
+          <br />
+          Entered Pin : {pinData}
+          <div>{error}</div>
           <div className="flex justify-center">
             <div className="grid grid-cols-3 gap-9">
               {new Array(9).fill('0').map((x, index) => (
@@ -39,7 +65,7 @@ export default function PinLockScreen(props: any) {
             </div>
           </div>
         </div>
-        {props.children}
+        {children}
       </div>
     </>
   );

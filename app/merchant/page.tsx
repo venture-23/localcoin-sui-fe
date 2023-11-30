@@ -1,9 +1,11 @@
-import MerchantSignup from 'container/CommonSIgnup';
+import MerchantPage from 'container/merchantpage';
 
 export default function Merchant() {
   return (
     <>
-      <MerchantSignup />
+      {/* <MerchantSignup /> */}
+      {/* MerchantPage */}
+      <MerchantPage />
     </>
   );
 }

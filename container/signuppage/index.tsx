@@ -26,22 +26,22 @@ const SignupPage = () => {
               iconContainerClass=" h-[56px] w-[56px]"
               cardContainerClass="justify-center min-h-[134px]"
               title="Merchant"
-              link="/merchant"
-              query={{ type: 'Merchant' }}
+              link="/signup/merchant"
+              // query={{ type: 'Merchant' }}
             />
             <Card
               iconContainerClass=" h-[56px] w-[56px]"
               cardContainerClass="justify-center min-h-[134px]"
               title="Recipient"
-              link="/merchant"
-              query={{ type: 'Recipient' }}
+              link="/signup/recipient"
+              // query={{ type: 'Recipient' }}
             />
             <Card
               iconContainerClass=" h-[56px] w-[56px]"
               cardContainerClass="justify-center min-h-[134px]"
               title="Campaign Creator"
-              link="/merchant"
-              query={{ type: 'Campaigns' }}
+              link="/signup/campaign"
+              // query={{ type: 'Campaigns' }}
             />
           </div>
         </div>
