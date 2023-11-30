@@ -7,7 +7,9 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ children, className }) => {
   return (
-    <header className={`${className} flex items-center rounded-b-md bg-blue-500  text-white`}>
+    <header
+      className={`${className} flex w-full items-center rounded-b-md bg-blue-500  text-white`}
+    >
       <div className="container mx-auto ">{children}</div>
     </header>
   );
