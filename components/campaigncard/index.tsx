@@ -23,7 +23,7 @@ const CampaignCard: React.FC<CardProps> = ({
       <div className={`flex ${cardContainerClass} rounded-md bg-white p-4 shadow-lg`}>
         {/* <div className={`flex flex-col items-center ${cardInsideClass}`}> */}
         {/* <div className={`${iconContainerClass}`}>Icon</div> */}
-        <p className="text-xm   mb-2 text-xl font-medium ">{campaignDetails.title}</p>
+        <p className="text-xm   mb-2 text-lg font-medium ">{campaignDetails.title}</p>
         {/* <p className="text-base text-gray-700">{description}</p> */}
         {/* </div> */}
         <div className={`flex flex-col items-center ${cardInsideClass}`}>

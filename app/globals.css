@@ -24,3 +24,40 @@ button {
 .container {
  max-width: calc(100% - 10%) !important;
 }
+
+
+main{
+  padding-bottom: 73px;
+}
+
+
+
+.bottom-sheet-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.bottom-sheet-backdrop.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  transition: height 0.3s ease-out;
+  z-index: 1000;
+  overflow: hidden;
+}

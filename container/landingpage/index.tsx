@@ -7,7 +7,7 @@ const LandingPage = () => {
       <Header className="h-[200px]">
         <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p>
       </Header>
-      <section className="my-6 h-[80vh]">
+      <section className="my-6 ">
         <div className="container mx-auto">
           <div className="mb-6">
             <h2 className="mb-2 text-2xl font-semibold">Get Started</h2>
