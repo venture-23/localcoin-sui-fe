@@ -10,6 +10,7 @@ function BottomSheet({ children }) {
   const isBackdropVisible = height !== '20vh';
 
   const handleTouchStart = (e) => {
+    console.log(e);
     setStartY(e.touches[0].clientY);
     setEndY(e.touches[0].clientY);
     setTouching(true);
