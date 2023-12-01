@@ -20,6 +20,39 @@ button {
   @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 dark:focus-visible:ring-neutral-600 dark:focus-visible:ring-offset-neutral-900;
 }
 
+:root {
+  --button-font-size: 16px; /* Font size for readability */
+  --button-padding-vertical: 10px; /* Vertical padding */
+  --button-padding-horizontal: 20px; /* Horizontal padding */
+  --button-background-color: #007bff; /* Background color */
+  --button-color: white; /* Text color */
+  --button-secondary-color: white; /* Text color */
+  --button-border-radius: 5px; /* Border radius for rounded corners */
+  --button-transparent: transparent;
+}
+
+button-primary  {
+  font-size: var(--button-font-size);
+  padding: var(--button-padding-vertical) var(--button-padding-horizontal);
+  background-color: var(--button-background-color) !important;
+  color: var(--button-color);
+  border: none;
+  border-radius: var(--button-border-radius);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-secondary {
+  background-color: var(--button-transparent) !important;
+  border: 1px solid var(--button-background-color);
+  color: var(button-secondary-color);
+}
+
+
 
 .container {
  max-width: calc(100% - 10%) !important;
