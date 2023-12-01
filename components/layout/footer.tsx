@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 export default async function Footer() {
   const asPath = usePathname();
   const [hideFooter, setHideFooter] = useState(false);
-  console.log(asPath, 'this is path');
   useEffect(() => {
     const footerCheck =
       asPath === '/' ||

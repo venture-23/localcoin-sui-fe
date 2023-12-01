@@ -21,8 +21,8 @@ interface ErrorType {
   secretKey?: string;
 }
 
-const MerchantSignup = ({ param }) => {
-  const [showScreen, setShowScreen] = useState(0);
+const MerchantSignup = ({ param }: any) => {
+  const [showScreen, setShowScreen] = useState(param === 'merchant' ? 0 : 1);
   const { setshowPinScreen, userEnterPin } = useMyContext();
   const [data, setData] = useState<any>({
     storeName: '',
@@ -35,7 +35,6 @@ const MerchantSignup = ({ param }) => {
   useEffect(() => {
     if (userEnterPin) {
       const resp = encodeToken({ ...data, userType: param }, userEnterPin);
-      console.log('first', resp);
       if (resp) {
         localStorage.setItem('local-coin', resp);
         router.push(`/${param}`);
@@ -77,17 +76,20 @@ const MerchantSignup = ({ param }) => {
       // setshowPinScreen(true);
     }
   };
-
+  console.log({ showScreen });
   return (
     <>
       <Header className="h-[120px]">
         <div className="flex items-center">
-          {showScreen === 0 ? (
-            <Link href={showScreen === 0 ? '/signup' : ''}>{'<- '}</Link>
+          {param === 'merchant' ? (
+            showScreen === 0 ? (
+              <Link href={showScreen === 0 ? '/signup' : ''}>{'<- '}</Link>
+            ) : (
+              <div onClick={() => setShowScreen(0)}> {'<- '}</div>
+            )
           ) : (
-            <div onClick={() => setShowScreen(showScreen - 1)}> {'<- '}</div>
+            <Link href={'/signup'}>{'<- '}</Link>
           )}
-
           <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p>
         </div>
       </Header>
