@@ -20,7 +20,7 @@ const MerchantInfo = ({ title, handleChange, handleSubmit, error, data }: any) =
             className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
             placeholder="Enter Store Name"
           />
-          <p className={` mt-2 text-sm text-pink-600 peer-invalid:visible`}>{error.storeName}</p>
+          <p className={` mt-2 text-xs text-pink-600 peer-invalid:visible`}>{error.storeName}</p>
         </label>
         <label className="block">
           <span className="block text-sm font-medium text-slate-700 after:ml-0.5 after:text-red-500 ">
@@ -35,7 +35,7 @@ const MerchantInfo = ({ title, handleChange, handleSubmit, error, data }: any) =
             className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
             placeholder="Enter Proprietary Name"
           />
-          <p className={` mt-2 text-sm text-pink-600 peer-invalid:visible`}>
+          <p className={` mt-2 text-xs text-pink-600 peer-invalid:visible`}>
             {error.proprietaryName}
           </p>
         </label>
@@ -52,9 +52,9 @@ const MerchantInfo = ({ title, handleChange, handleSubmit, error, data }: any) =
             className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
             placeholder="Enter Phone Number"
           />
-          <p className={`mt-2 text-sm text-pink-600 `}>{error.phoneNumber}</p>
+          <p className={`mt-2 text-xs text-pink-600 `}>{error.phoneNumber}</p>
         </label>
-        <button onClick={handleSubmit} type="button" className=" rounded-full">
+        <button onClick={handleSubmit} type="button">
           Save Changes
         </button>
       </div>
