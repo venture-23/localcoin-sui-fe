@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { checkPinCorrect } from 'services/encrypt-decrypt-data';
 import './app.css';
+import { BackspaceIcon } from '@heroicons/react/24/outline';
 
 export default function PinLockScreen(props: any) {
   const { children } = props;
@@ -58,25 +59,51 @@ export default function PinLockScreen(props: any) {
   };
   return (
     <>
-      <div className="modal-overlay">
-        <div className="modal-content text-center">
-          <div>Enter Your Pin</div>
-          <br />
-          <br />
-          <br />
-          Entered Pin : {pinData}
-          <div>{error}</div>
-          <div className="flex justify-center">
-            <div className="grid grid-cols-3 gap-9">
+      <div className=" fixed z-[1000] h-full w-full  bg-white ">
+        <div className="modal-content container mx-auto py-16">
+          <h1 className="mb-6 text-center font-bold">Please enter your PIN</h1>
+          <div className="grid grid-cols-4 gap-3 px-6">
+            {/* {pinData} */}
+            <div className="flex min-h-[56px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
+              {pinData.slice(0, 1)}
+            </div>
+            <div className="flex min-h-[56px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
+              {pinData.slice(1, 2)}
+            </div>
+            <div className="flex min-h-[56px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
+              {pinData.slice(2, 3)}
+            </div>
+            <div className="flex min-h-[56px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
+              {pinData.slice(3, 4)}
+            </div>
+          </div>
+          <div className="my-3 text-center text-sm text-red-500 ">{error}</div>
+          <div className="">
+            <div className="grid grid-cols-3 gap-4 rounded-md border bg-slate-50 p-4">
               {new Array(9).fill('0').map((x, index) => (
-                <div className="" key={index + 1 + ''} onClick={() => handleClick(index + 1 + '')}>
+                <div
+                  className="rounded-md  bg-white p-6 text-center"
+                  key={index + 1 + ''}
+                  onClick={() => handleClick(index + 1 + '')}
+                >
                   {' '}
                   {index + 1}
                 </div>
               ))}
-              <div className="flex gap-2">
-                <div onClick={() => handleClick(0 + '')}>0</div>
-                <div onClick={() => handleRemove()}>cross</div>
+              <div className="pointer-events-none bg-slate-50"></div>
+              <div className="  ">
+                <div
+                  className="col-span-3  rounded-md bg-white p-6 text-center"
+                  onClick={() => handleClick(0 + '')}
+                >
+                  0
+                </div>
+              </div>
+              <div
+                className="flex items-center justify-center rounded-md bg-white p-6"
+                onClick={() => handleRemove()}
+              >
+                <BackspaceIcon className="h-4 w-4" />
               </div>
             </div>
           </div>

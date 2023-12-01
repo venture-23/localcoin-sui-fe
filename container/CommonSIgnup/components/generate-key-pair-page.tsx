@@ -10,7 +10,7 @@ const GenerateKeyPairPage = ({ handleGenerateKey }: any) => {
         </div>
 
         <div className="grid  gap-4">
-          <button type="button" onClick={() => handleGenerateKey()} className=" rounded-full">
+          <button type="button" onClick={() => handleGenerateKey()} className=" button-primary">
             Generate
           </button>
         </div>

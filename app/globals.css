@@ -31,7 +31,7 @@ button {
   --button-transparent: transparent;
 }
 
-button-primary  {
+.button-primary  {
   font-size: var(--button-font-size);
   padding: var(--button-padding-vertical) var(--button-padding-horizontal);
   background-color: var(--button-background-color) !important;
