@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 // eslint-disable-next-line @next/next/no-async-client-component
 export default async function Footer() {
   const asPath = usePathname();
-  const [hideFooter, setHideFooter] = useState(false);
+  const [hideFooter, setHideFooter] = useState(true);
   useEffect(() => {
     const footerCheck =
       asPath === '/' ||
@@ -28,7 +28,7 @@ export default async function Footer() {
         >
           <div className="relative">
             <Link
-              href="/recipient/scan-pay"
+              href={asPath.includes('recipient') ? '/recipient/scan-pay' : '/merchant/scan-pay'}
               className="absolute -top-[30px] left-1/2 flex h-20 w-20 -translate-x-1/2 items-center rounded-full border-[6px] border-white bg-blue-500 p-3"
             >
               <QrCodeIcon className="text-white" />
