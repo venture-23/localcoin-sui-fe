@@ -1,0 +1,56 @@
+name: "Deploy to netlify"
+
+on: 
+  push:
+    branches:
+    - "main"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+  
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 19
+          cache: 'npm'
+  
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ${{ format('{0}/{1}', env.working_dir, 'node_modules') }}
+          key: build-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            build-
+  
+      - name: install dependencies
+        run: yarn --prefer-offline
+      
+      - name: build assets
+        run: CI=false yarn run build
+  
+  
+      # - name: Deploy production to Netlify
+      #   uses: South-Paw/action-netlify-deploy@v1.2.0
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      #     netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+      #     build-dir: './.next'
+      #     comment-on-commit: true
+      # - name: Deploy to Netlify
+      #   uses: veloii/action-netlify-deploy@v2.2.1
+      #   with:
+      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25.1.1    
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional 
+          vercel-args: '--prod' #Optional
+          vercel-org-id: ${{ secrets.ORG_ID}}  #Required
+          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
+  
