@@ -32,7 +32,7 @@ export default function confirmation() {
             </div>
             <div>
               <p className="font-bold">Token </p>
-              <p>50$</p>
+              <p>$ 50</p>
             </div>
           </div>
           <div className="mt-6">
