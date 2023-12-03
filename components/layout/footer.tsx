@@ -17,6 +17,7 @@ export default async function Footer() {
       asPath.includes('confirmation') ||
       asPath.includes('signuppage');
     if (footerCheck) setHideFooter(footerCheck);
+    else setHideFooter(false);
     return () => setHideFooter(false);
   }, [asPath]);
   return (
