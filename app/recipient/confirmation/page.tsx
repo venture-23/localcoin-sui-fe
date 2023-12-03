@@ -59,7 +59,7 @@ export default function confirmation() {
               <h1 className="text-2xl font-bold">Payment Sucessful</h1>
               <p className="text-slate-500">Payment to 0z5122x7xa8sv0 was successful.</p>
             </div>
-            <Link href="/recipient" onClick={() => setopenConfirmation(false)}>
+            <Link href="/recipient">
               <button className="button-primary w-full">Done</button>
             </Link>
           </div>
