@@ -6,7 +6,7 @@ import { QrReader } from 'react-qr-reader';
 
 import BottomSheet from 'components/bottomsheet';
 import Link from 'next/link';
-export default function ScanPay() {
+export default function ScanPayMerchant() {
   const [imageUrl, setImageUrl] = useState('');
   // const [scanResultFile, setScanResultFile] = useState('');
   const [scanResultWebCam, setScanResultWebCam] = useState('');
@@ -42,7 +42,7 @@ export default function ScanPay() {
   const handleScanWebCam = (result: string) => {
     if (result) {
       setScanResultWebCam('result');
-      push('/recipient/confirmation');
+      push('/merchant/confirmation');
     }
   };
 
@@ -52,7 +52,7 @@ export default function ScanPay() {
       <div className=" absolute top-12 z-[10] mx-auto w-[95%] ">
         <div className="flex   items-center justify-between">
           <p className="flex-1 text-center">Scan QR code to pay</p>
-          <Link href="/recipient" className="">
+          <Link href="/merchant" className="">
             {'X'}
           </Link>
         </div>

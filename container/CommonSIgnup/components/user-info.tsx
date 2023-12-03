@@ -54,7 +54,7 @@ const MerchantInfo = ({ title, handleChange, handleSubmit, error, data }: any) =
           />
           <p className={`mt-2 text-xs text-pink-600 `}>{error.phoneNumber}</p>
         </label>
-        <button onClick={handleSubmit} type="button">
+        <button onClick={handleSubmit} type="button" className="button-primary">
           Save Changes
         </button>
       </div>
