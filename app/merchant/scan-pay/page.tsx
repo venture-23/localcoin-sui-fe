@@ -58,7 +58,7 @@ export default function ScanPayMerchant() {
         </div>
       </div>
       {/* </Header> */}
-      <QrReader
+      {/* <QrReader
         onResult={(result, error) => {
           if (!!result) {
             handleScanWebCam(result?.text);
@@ -70,12 +70,12 @@ export default function ScanPayMerchant() {
         }}
         scanDelay={300}
         style={{ width: '100%', height: '100%' }}
-      />
+      /> */}
       {/* <h3>Scanned By WebCam Code: {scanResultWebCam}</h3> */}
       {/* {imageUrl ? <img src={imageUrl} alt="img" style={{ width: '100%' }} /> : null} */}
       {imageUrl ? (
         <div>
-          <BottomSheet>
+          <BottomSheet divClass="!h-[100vh]">
             <div className="container mx-auto">
               <p className="pt-4 text-center "> Swipe or click to share QR code </p>
               <img src={imageUrl} alt="img" style={{ width: '100%' }} />

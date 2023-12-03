@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 // import './BottomSheet.css'; // Ensure this points to the correct CSS file
+interface props {
+  divClass?: any;
+}
 
-function BottomSheet({ children }) {
+function BottomSheet({ children, divClass }) {
   const [height, setHeight] = useState('20vh');
   const [startY, setStartY] = useState(0);
   const [endY, setEndY] = useState(0);
@@ -41,7 +44,7 @@ function BottomSheet({ children }) {
     <>
       <div className={backdropClass} onClick={() => setHeight('20vh')}></div>
       <div
-        className="bottom-sheet"
+        className={`bottom-sheet ${divClass} `}
         style={{ height }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
