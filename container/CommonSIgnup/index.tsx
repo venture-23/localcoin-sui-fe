@@ -13,6 +13,7 @@ import generateKeyPair from 'services/generateKeypair';
 import { maskWalletAddress } from 'utils/clipper';
 import GenerateKeyPair from './components/generate-key-pair-page';
 import MerchantInfo from './components/user-info';
+import { ClipboardIcon } from '@heroicons/react/24/outline';
 
 interface ErrorType {
   storeName?: string;
@@ -103,28 +104,43 @@ const MerchantSignup = ({ param }: any) => {
             handleSubmit={handleSubmit}
           />
         ) : (
-          <GenerateKeyPair handleGenerateKey={handleGenerateKey} />
+          (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
         )}
       </section>
       {data.secretKey && (
-        <>
-          <div>
-            Public Key : {maskWalletAddress(data.publicKey)}{' '}
-            <button onClick={handleCopy}>copy</button>
+        <div className="container mx-auto rounded-md bg-white p-4">
+          <p className="mb-4 text-slate-600">Please securely copy this code</p>
+          <div className="grid gap-3">
+            <div className="flex justify-between">
+              <span className="font-bold">Public Key :</span>
+              <span className="text-sm">{maskWalletAddress(data.publicKey)}</span>{' '}
+              <button onClick={handleCopy}>
+                <ClipboardIcon className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-bold">Secret Key :</span>{' '}
+              <span className="text-sm">{maskWalletAddress(data.secretKey)}</span>{' '}
+              <button disabled={isCopied} onClick={handleCopy}>
+                <ClipboardIcon className="h-6 w-6" />
+              </button>
+            </div>
           </div>
-          <div>
-            Secret Key : {maskWalletAddress(data.secretKey)}{' '}
-            <button disabled={isCopied} onClick={handleCopy}>
-              Copy
+        </div>
+      )}
+      <div className="container mx-auto">
+        <div className="mt-6">
+          {data.secretKey && (
+            <button
+              type="button"
+              onClick={() => setshowPinScreen(true)}
+              className=" button-primary  w-full "
+            >
+              Next
             </button>
-          </div>
-        </>
-      )}
-      {data.secretKey && (
-        <button type="button" onClick={() => setshowPinScreen(true)} className=" rounded-full">
-          Next
-        </button>
-      )}
+          )}
+        </div>
+      </div>
     </>
   );
 };

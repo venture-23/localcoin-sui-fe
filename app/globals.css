@@ -31,7 +31,7 @@ button {
   --button-transparent: transparent;
 }
 
-button-primary  {
+.button-primary  {
   font-size: var(--button-font-size);
   padding: var(--button-padding-vertical) var(--button-padding-horizontal);
   background-color: var(--button-background-color) !important;
@@ -44,6 +44,7 @@ button-primary  {
   margin: 4px 2px;
   cursor: pointer;
   transition: background-color 0.3s;
+  width: 100%;
 }
 
 .button-secondary {

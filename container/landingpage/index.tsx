@@ -1,3 +1,10 @@
+import {
+  ArrowDownLeftIcon,
+  ArrowRightIcon,
+  ArrowRightOnRectangleIcon,
+  CheckCircleIcon,
+  UserIcon
+} from '@heroicons/react/24/outline';
 import Card from 'components/card';
 import Header from 'components/layout/header';
 
@@ -25,18 +32,21 @@ const LandingPage = () => {
               iconContainerClass="rounded-md p-3.5 bg-gray-200 flex items-center justify-center h-[56px] w-[56px]"
               title="Sign up for new account"
               link="/signup"
+              iconName={<UserIcon />}
             />
             <Card
               cardInsideClass="!flex-row gap-3"
               iconContainerClass="rounded-md p-3.5 bg-gray-200 flex items-center justify-center h-[56px] w-[56px]"
               title=" Log in as user"
               link="/"
+              iconName={<ArrowRightOnRectangleIcon />}
             />
             <Card
               cardInsideClass="!flex-row gap-3"
               iconContainerClass="rounded-md p-3.5 bg-gray-200 flex items-center justify-center h-[56px] w-[56px]"
               title=" Check ongoing campaigns"
               link="/"
+              iconName={<CheckCircleIcon />}
             />
           </div>
         </div>

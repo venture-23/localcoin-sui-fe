@@ -44,8 +44,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Suspense>
           <main className="">
             {/* {children} */}
-            <RootLayoutClient>{children}</RootLayoutClient>
-            <Footer />
+            <RootLayoutClient>
+              {children}
+              <Footer />
+            </RootLayoutClient>
           </main>
         </Suspense>
       </body>

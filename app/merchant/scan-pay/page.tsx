@@ -6,7 +6,7 @@ import { QrReader } from 'react-qr-reader';
 
 import BottomSheet from 'components/bottomsheet';
 import Link from 'next/link';
-export default function ScanPay() {
+export default function ScanPayMerchant() {
   const [imageUrl, setImageUrl] = useState('');
   // const [scanResultFile, setScanResultFile] = useState('');
   const [scanResultWebCam, setScanResultWebCam] = useState('');
@@ -42,7 +42,7 @@ export default function ScanPay() {
   const handleScanWebCam = (result: string) => {
     if (result) {
       setScanResultWebCam('result');
-      push('/recipient/confirmation');
+      push('/merchant/confirmation');
     }
   };
 
@@ -52,13 +52,13 @@ export default function ScanPay() {
       <div className=" absolute top-12 z-[10] mx-auto w-[95%] ">
         <div className="flex   items-center justify-between">
           <p className="flex-1 text-center">Scan QR code to pay</p>
-          <Link href="/recipient" className="">
+          <Link href="/merchant" className="">
             {'X'}
           </Link>
         </div>
       </div>
       {/* </Header> */}
-      <QrReader
+      {/* <QrReader
         onResult={(result, error) => {
           if (!!result) {
             handleScanWebCam(result?.text);
@@ -70,12 +70,12 @@ export default function ScanPay() {
         }}
         scanDelay={300}
         style={{ width: '100%', height: '100%' }}
-      />
+      /> */}
       {/* <h3>Scanned By WebCam Code: {scanResultWebCam}</h3> */}
       {/* {imageUrl ? <img src={imageUrl} alt="img" style={{ width: '100%' }} /> : null} */}
       {imageUrl ? (
         <div>
-          <BottomSheet>
+          <BottomSheet divClass="!h-[100vh]">
             <div className="container mx-auto">
               <p className="pt-4 text-center "> Swipe or click to share QR code </p>
               <img src={imageUrl} alt="img" style={{ width: '100%' }} />

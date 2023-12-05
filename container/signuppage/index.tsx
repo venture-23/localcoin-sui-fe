@@ -1,3 +1,8 @@
+import {
+  BuildingStorefrontIcon,
+  GlobeEuropeAfricaIcon,
+  UserCircleIcon
+} from '@heroicons/react/24/outline';
 import Card from 'components/card';
 import Header from 'components/layout/header';
 
@@ -27,6 +32,8 @@ const SignupPage = () => {
               cardContainerClass="justify-center min-h-[134px]"
               title="Merchant"
               link="/signup/merchant"
+              iconName={<BuildingStorefrontIcon />}
+
               // query={{ type: 'Merchant' }}
             />
             <Card
@@ -34,6 +41,8 @@ const SignupPage = () => {
               cardContainerClass="justify-center min-h-[134px]"
               title="Recipient"
               link="/signup/recipient"
+              iconName={<UserCircleIcon />}
+
               // query={{ type: 'Recipient' }}
             />
             <Card
@@ -41,6 +50,8 @@ const SignupPage = () => {
               cardContainerClass="justify-center min-h-[134px]"
               title="Campaign Creator"
               link="/signup/campaign"
+              iconName={<GlobeEuropeAfricaIcon />}
+
               // query={{ type: 'Campaigns' }}
             />
           </div>

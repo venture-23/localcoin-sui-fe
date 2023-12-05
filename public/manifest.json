@@ -1,8 +1,8 @@
 {
   "id": "any_id",
-  "name": "Next.js PWA - Tutorial",
+  "name": "Local Coin",
   "short_name": "Local Coin",
-  "description": "This next.js app is a PWA.",
+  "description": "This is Loacl Coin PWA.",
   "icons": [
     {
       "src": "./logo192.png",
@@ -10,7 +10,7 @@
       "type": "image/png"
     },
     {
-      "src": "./logo512x512.png",
+      "src": "./logo512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
@@ -22,14 +22,14 @@
       "type": "image/png"
     },
     {
-      "src": "./logo512x512.png",
+      "src": "./logo512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ],
   "theme_color": "#FFFFFF",
   "background_color": "#FFFFFF",
-  "start_url": "/",
+  "start_url": "http://localhost:3000",
   "scope": ".",
   "display": "standalone",
   "orientation": "portrait"
