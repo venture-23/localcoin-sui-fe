@@ -36,9 +36,11 @@ module.exports = {
     }
   },
   colors: {
-    primary: {
-      50: '#f1eeff'
-    }
+    primary: '#1384F5', // Replace with your primary color
+    secondary: '#4EABFE', // Replace with your secondary color
+    text: '#212B34',
+    bgGray: '#F7F8FA',
+    bgWhite: '#FFFFFF'
   },
   future: {
     hoverOnlyWhenSupported: true

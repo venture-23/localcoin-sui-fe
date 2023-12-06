@@ -61,7 +61,14 @@ button {
 
 
 main{
-  padding-bottom: 73px;
+  /* padding-bottom: 73px; */
+  height: 100dvh;
+  overflow-y: scroll;
+  background-color: white;
+}
+section {
+  height: 100%;
+  @apply pt-16;
 }
 
 
