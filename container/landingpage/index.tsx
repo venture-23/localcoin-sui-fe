@@ -1,52 +1,41 @@
-import {
-  ArrowDownLeftIcon,
-  ArrowRightIcon,
-  ArrowRightOnRectangleIcon,
-  CheckCircleIcon,
-  UserIcon
-} from '@heroicons/react/24/outline';
-import Card from 'components/card';
-import Header from 'components/layout/header';
+import { QrCodeIcon } from '@heroicons/react/24/outline';
+import Button from 'components/botton';
+
+import Image from 'next/image';
 
 const LandingPage = () => {
   return (
     <>
-      <Header className="h-[200px]">
-        <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p>
-      </Header>
-      <section className="my-6 ">
+      <section className="bg-white">
         <div className="container mx-auto">
-          <div className="mb-6">
-            <h2 className="mb-2 text-2xl font-semibold">Get Started</h2>
-            <p className="block text-base font-medium text-gray-600">
-              LocalCoin is just around the corner.
-            </p>
-            <p className="text-sbase lock font-medium text-gray-600">
-              Choose an option bellow to get started
+          <div className="flex justify-center pt-[40px]">
+            <Image
+              src={'/Get_Started/Get_Started.png'}
+              width={350}
+              height={302}
+              alt="get started image"
+            />
+          </div>
+          <div className="mb-12 mt-4 text-center">
+            <h2 className="text-heading mb-5 ">Get Started</h2>
+            <p className="text-color text-lg opacity-[.6]">
+              LocalCoin is just around the corner. Choose an option below to get started .
             </p>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <Card
-              cardInsideClass="!flex-row gap-3"
-              iconContainerClass="rounded-md p-3.5 bg-gray-200 flex items-center justify-center h-[56px] w-[56px]"
-              title="Sign up for new account"
+          <div className=" flex flex-col gap-5">
+            <Button text="Login" link="/" />
+            <Button
+              text="Check for ongoing campaigns"
+              buttonIcon={<QrCodeIcon className="text-color h-5 w-5" />}
+              buttonType="secondary"
+              link="/"
+            />
+
+            <Button
+              text="Sign up for account"
               link="/signup"
-              iconName={<UserIcon />}
-            />
-            <Card
-              cardInsideClass="!flex-row gap-3"
-              iconContainerClass="rounded-md p-3.5 bg-gray-200 flex items-center justify-center h-[56px] w-[56px]"
-              title=" Log in as user"
-              link="/"
-              iconName={<ArrowRightOnRectangleIcon />}
-            />
-            <Card
-              cardInsideClass="!flex-row gap-3"
-              iconContainerClass="rounded-md p-3.5 bg-gray-200 flex items-center justify-center h-[56px] w-[56px]"
-              title=" Check ongoing campaigns"
-              link="/"
-              iconName={<CheckCircleIcon />}
+              underline={`underline  bg-transparent !text-[#212B34]  font-semibold `}
             />
           </div>
         </div>

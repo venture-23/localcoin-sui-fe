@@ -8,6 +8,7 @@ const baseUrl = 'http://localhost:3000';
 // const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
 import Footer from 'components/layout/footer';
 import './globals.css';
+import '../styles/index.scss';
 import RootLayoutClient from './pin-lock-layout';
 
 export const metadata = {

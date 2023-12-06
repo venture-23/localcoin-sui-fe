@@ -1,4 +1,4 @@
-import { CheckBadgeIcon, ClockIcon, UserIcon } from '@heroicons/react/24/outline';
+import { CheckBadgeIcon, ChevronRightIcon, ClockIcon, UserIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 interface CardProps {
@@ -22,16 +22,15 @@ const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <Link href={query ? { pathname: link, query: query } : link}>
-      <div className={`flex  items-center ${cardContainerClass} rounded-md bg-white p-4 shadow-lg`}>
-        <div className={`flex flex-col items-center ${cardInsideClass}`}>
-          <div className={`${iconContainerClass}`}>
-            {/* <UserIcon /> */}
-            {iconName}
-            {/* <ClockIcon /> */}
-            {/* <CheckBadgeIcon /> */}
-          </div>
-          <p className="text-xm mb-0 mt-2 text-center font-medium ">{title}</p>
-          {/* <p className="text-base text-gray-700">{description}</p> */}
+      <div
+        className={`flex  items-center justify-between ${cardContainerClass} rounded-md bg-white px-8 py-5 `}
+      >
+        <div className={`flex items-center gap-5 ${iconContainerClass}`}>
+          <div>{iconName}</div>
+          <p className="mb-0 text-lg  font-semibold ">{title}</p>
+        </div>
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EFF8FF]">
+          <ChevronRightIcon className="h-3 w-3" />
         </div>
       </div>
     </Link>

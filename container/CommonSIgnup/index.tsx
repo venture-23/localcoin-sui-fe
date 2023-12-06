@@ -80,21 +80,23 @@ const MerchantSignup = ({ param }: any) => {
   console.log({ showScreen });
   return (
     <>
-      <Header className="h-[120px]">
-        <div className="flex items-center">
-          {param === 'merchant' ? (
-            showScreen === 0 ? (
-              <Link href={showScreen === 0 ? '/signup' : ''}>{'<- '}</Link>
+      {/* <Header className="h-[120px]"> */}
+      {/* </Header> */}
+      <section className="">
+        <div className="container mx-auto">
+          <div className="mb-6 flex items-center">
+            {param === 'merchant' ? (
+              showScreen === 0 ? (
+                <Link href={showScreen === 0 ? '/signup' : ''}>{'<- '}</Link>
+              ) : (
+                <div onClick={() => setShowScreen(0)}> {'<- '}</div>
+              )
             ) : (
-              <div onClick={() => setShowScreen(0)}> {'<- '}</div>
-            )
-          ) : (
-            <Link href={'/signup'}>{'<- '}</Link>
-          )}
-          <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p>
+              <Link href={'/signup'}>{'<- '}</Link>
+            )}
+            {/* <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p> */}
+          </div>
         </div>
-      </Header>
-      <section className="my-6">
         {showScreen === 0 ? (
           <MerchantInfo
             data={data}
