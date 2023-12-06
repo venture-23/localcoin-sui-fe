@@ -103,10 +103,10 @@ export default function PinLockScreen(props: any) {
                   </div>
                 </div>
                 <div
-                  className="flex items-center justify-center rounded-md bg-white p-6"
+                  className=" flex items-center justify-center rounded-md bg-[#1384F5] p-6 text-white"
                   onClick={() => handleRemove()}
                 >
-                  <BackspaceIcon className="h-4 w-4" />
+                  <BackspaceIcon className="h-6 w-6" />
                 </div>
               </div>
             </div>
