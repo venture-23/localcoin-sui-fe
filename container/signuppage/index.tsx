@@ -28,7 +28,7 @@ const SignupPage = () => {
             </h1>
             {/*  */}
           </div>
-          <div className="flex h-[400px] flex-col justify-between">
+          <div className="flex flex-col justify-between gap-24">
             <div className="grid gap-5">
               <Card
                 title="Merchant"

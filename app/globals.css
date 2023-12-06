@@ -68,7 +68,7 @@ main{
 }
 section {
   height: 100%;
-  @apply pt-16;
+  @apply pt-6 bg-[#F7F8FA];
 }
 
 
