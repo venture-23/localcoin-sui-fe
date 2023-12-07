@@ -1,27 +1,23 @@
 'use-client';
-import React from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
-import {
-  ArrowDownOnSquareIcon,
-  LockClosedIcon,
-  ShareIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline';
-import Button from 'components/botton';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
+import React, { Fragment } from 'react';
 
 interface PopupBoxProps {
   isOpenPopup?: boolean;
   setIsOpenPopup?: any;
   PopupTitle?: string;
   children?: React.ReactNode;
+  imageUrl?: string;
 }
 
 const PopupBox: React.FC<PopupBoxProps> = ({
   isOpenPopup,
   setIsOpenPopup,
   PopupTitle,
-  children
+  children,
+  imageUrl
 }) => {
   return (
     <>
@@ -63,8 +59,8 @@ const PopupBox: React.FC<PopupBoxProps> = ({
                       </div>
                     </div>
                   </Dialog.Title>
-                  <div className="mt-8 text-center">
-                    <p className="text-sm text-gray-500">QR CODE HERE</p>
+                  <div className="mt-8 flex justify-center">
+                    <Image src={imageUrl} alt="img" width={220} height={220} />
                   </div>
 
                   <div className="my-8 text-center">
@@ -73,7 +69,7 @@ const PopupBox: React.FC<PopupBoxProps> = ({
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap items-center justify-center gap-2 ">
+                  <div className="flex flex-nowrap items-center   justify-center gap-2 [@media(max-width:500px)]:flex-wrap ">
                     {/* <button
                       type="button"
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"

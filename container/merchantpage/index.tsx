@@ -1,15 +1,14 @@
 'use client';
 
 import { Tab } from '@headlessui/react';
-import { Fragment, useState } from 'react';
-import Header from 'components/layout/header';
-import TokenCard from 'components/tokencard';
-import TabsNew from 'components/tabs';
+import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import Drawer from 'components/drawer';
-import Link from 'next/link';
-import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
 import Popover from 'components/popover';
+import TokenCard from 'components/tokencard';
+import Link from 'next/link';
+import QRCode from 'qrcode';
+import { useEffect, useState } from 'react';
 
 const MerchantPage = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
@@ -19,7 +18,19 @@ const MerchantPage = () => {
   const [open, setOpen] = useState(false);
 
   const [isOpenPopup, setIsOpenPopup] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
 
+  useEffect(() => {
+    generateQrCode();
+  }, []);
+  const generateQrCode = async () => {
+    try {
+      const response = await QRCode.toDataURL('this is address of user');
+      setImageUrl(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       {/* <Header className="h-[120px]">
@@ -161,11 +172,14 @@ const MerchantPage = () => {
           PopupTitle="Share QR Code"
           setIsOpenPopup={setIsOpenPopup}
           isOpenPopup={isOpenPopup}
+          imageUrl={imageUrl}
         >
-          <Button
-            buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
-            text="Save image"
-          />
+          <a href={imageUrl} download className="w-full">
+            <Button
+              buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
+              text="Save image"
+            />
+          </a>
           <Button
             text="Share"
             buttonType="secondary"

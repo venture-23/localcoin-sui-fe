@@ -2,11 +2,7 @@
 import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode';
 import { useEffect, useState } from 'react';
-import { QrReader } from 'react-qr-reader';
 
-import BottomSheet from 'components/bottomsheet';
-import Link from 'next/link';
-import Drawer from 'components/drawer';
 export default function ScanPayMerchant() {
   const [imageUrl, setImageUrl] = useState('');
   // const [scanResultFile, setScanResultFile] = useState('');
@@ -19,9 +15,11 @@ export default function ScanPayMerchant() {
 
   const generateQrCode = async () => {
     try {
+      debugger;
       const response = await QRCode.toDataURL('this is address of user');
       setImageUrl(response);
     } catch (error) {
+      debugger;
       console.log(error);
     }
   };
