@@ -15,7 +15,7 @@ const SignupPage = () => {
       {/* <Header className="h-[120px]">
         <div className="flex items-center">
           <Link href="/">{'<- '}</Link>
-          <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p>
+          <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p>
         </div>
       </Header> */}
 
@@ -33,20 +33,20 @@ const SignupPage = () => {
               <Card
                 title="Merchant"
                 link="/signup/merchant"
-                iconName={<BuildingStorefrontIcon className="h-8 w-8 text-[#1384F5]" />}
+                iconName={<BuildingStorefrontIcon className="text-primary h-8 w-8" />}
               />
               <Card
                 title="Recipient"
                 link="/signup/recipient"
-                iconName={<UserCircleIcon className="h-8 w-8 text-[#1384F5]" />}
+                iconName={<UserCircleIcon className="text-primary h-8 w-8" />}
               />
               <Card
                 title="Campaign Creator"
                 link="/signup/campaign"
-                iconName={<GlobeEuropeAfricaIcon className="h-8 w-8 text-[#1384F5]" />}
+                iconName={<GlobeEuropeAfricaIcon className="text-primary h-8 w-8" />}
               />
             </div>
-            <div className="text-color flex items-baseline justify-center  text-lg font-semibold">
+            <div className="text-color flex items-baseline justify-center text-lg font-semibold">
               <p className="font-normal">Already have an account? </p>{' '}
               <Link href="/">
                 <span>Login</span>

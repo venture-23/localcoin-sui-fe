@@ -66,9 +66,6 @@ const Drawer: React.FC<DrawerProps> = ({ open, setOpen, panelTitle, children }) 
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
                         {/* Replace with your content */} {children}
-                        <div className="absolute inset-0 px-4 sm:px-6">
-                          <div className="h-full " aria-hidden="true" />
-                        </div>
                         {/* /End replace */}
                       </div>
                     </div>

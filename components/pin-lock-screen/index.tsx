@@ -60,9 +60,9 @@ export default function PinLockScreen(props: any) {
   return (
     <>
       <div className=" fixed z-[1000] grid h-full  w-full place-items-end bg-white ">
-        <div className=" container mx-auto">
+        <div className="container mx-auto ">
           <div className="modal-content pb-10">
-            <div className=" text-center">
+            <div className="text-center ">
               <h1 className="text-heading">Please enter your PIN</h1>
             </div>
             <div className="mx-auto my-10 grid max-w-sm grid-cols-4 gap-3">
@@ -85,7 +85,7 @@ export default function PinLockScreen(props: any) {
               <div className="grid grid-cols-3 gap-4 rounded-md border bg-slate-50 p-4">
                 {new Array(9).fill('0').map((x, index) => (
                   <div
-                    className="rounded-md  bg-white p-6 text-center"
+                    className="rounded-md bg-white p-6 text-center"
                     key={index + 1 + ''}
                     onClick={() => handleClick(index + 1 + '')}
                   >
@@ -94,16 +94,16 @@ export default function PinLockScreen(props: any) {
                   </div>
                 ))}
                 <div className="pointer-events-none bg-slate-50"></div>
-                <div className="  ">
+                <div className="">
                   <div
-                    className="col-span-3  rounded-md bg-white p-6 text-center"
+                    className="col-span-3 rounded-md bg-white p-6 text-center"
                     onClick={() => handleClick(0 + '')}
                   >
                     0
                   </div>
                 </div>
                 <div
-                  className=" flex items-center justify-center rounded-md bg-[#1384F5] p-6 text-white"
+                  className="bg-primary flex items-center justify-center rounded-md p-6  text-white"
                   onClick={() => handleRemove()}
                 >
                   <BackspaceIcon className="h-6 w-6" />

@@ -95,7 +95,7 @@ const MerchantSignup = ({ param }: any) => {
             ) : (
               <Link href={'/signup'}>{'<- '}</Link>
             )}
-            {/* <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p> */}
+            {/* <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p> */}
           </div>
 
           {showScreen === 0 ? (
@@ -113,10 +113,12 @@ const MerchantSignup = ({ param }: any) => {
             <div className="rounded-md bg-white p-10">
               <p className="text-color mb-4 text-lg">Please securely copy this code</p>
               <div className="grid gap-3">
-                <div className="flex justify-between">
-                  <span className="font-bold">Public Key :</span>
-                  <span className="text-sm">{maskWalletAddress(data.publicKey)}</span>{' '}
-                  <button onClick={handleCopy}>
+                <div className="bg-bgGray block rounded-[4px] p-4">
+                  <div>
+                    <p className="font-bold">Public Key :</p>
+                    <p className="text-sm">{maskWalletAddress(data.publicKey)}</p>{' '}
+                  </div>
+                  <button onClick={handleCopy} className="outline-dashed">
                     <ClipboardIcon className="h-6 w-6" />
                   </button>
                 </div>
@@ -138,7 +140,7 @@ const MerchantSignup = ({ param }: any) => {
               // <button
               //   type="button"
               //   onClick={() => setshowPinScreen(true)}
-              //   className=" button-primary  w-full "
+              //   className="w-full button-primary"
               // >
               //   Next
               // </button>
