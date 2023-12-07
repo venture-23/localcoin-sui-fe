@@ -4,11 +4,9 @@ import TokenCard from 'components/tokencard';
 import Link from 'next/link';
 import FundedCampagins from './funded-campagns';
 import Card from 'components/card';
-import {
-  BuildingStorefrontIcon,
-  GlobeEuropeAfricaIcon,
-  UserCircleIcon
-} from '@heroicons/react/24/outline';
+import RecipientToken from 'components/icons/recipient-token';
+import RecipientOngoing from 'components/icons/recipient-ongoing';
+import RecipientFunded from 'components/icons/recipient-funded';
 
 const RecipientPage = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
@@ -34,29 +32,17 @@ const RecipientPage = () => {
           </div>
           <div className="mb-6 border-b pb-6 ">
             <div className="grid gap-3 ">
-              <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} />
+              {/* <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} /> */}
               <div className="grid gap-5">
-                <Card
-                  title="Your Tokens"
-                  link="/signup/merchant"
-                  iconName={<BuildingStorefrontIcon className="text-primary h-8 w-8" />}
-                />
-                <Card
-                  title="Ongoing Campaigns"
-                  link="/signup/recipient"
-                  iconName={<UserCircleIcon className="text-primary h-8 w-8" />}
-                />
-                <Card
-                  title="Funded Campaigns "
-                  link="/signup/campaign"
-                  iconName={<GlobeEuropeAfricaIcon className="text-primary h-8 w-8" />}
-                />
+                <Card title="Your Tokens" link="/" iconName={<RecipientToken />} />
+                <Card title="Ongoing Campaigns" link="/" iconName={<RecipientOngoing />} />
+                <Card title="Funded Campaigns" link="/" iconName={<RecipientFunded />} />
               </div>
             </div>
           </div>
 
-          <div className="mb-6 border-b pb-6 ">
-            <div className="mb-4 flex justify-between">
+          {/* <div className="">
+            <div className="flex justify-between mb-4">
               <h2 className="mb-2 text-2xl font-bold">Ongoing Campaigns</h2>
               <Link href="/recipient/campaigns">
                 <p className="mb-2"> View All</p>
@@ -77,10 +63,10 @@ const RecipientPage = () => {
                 campaignDetails={campaignDetails}
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="mb-6 border-b pb-6 ">
-            <div className="mb-4 flex justify-between">
+          {/* <div className="pb-6 mb-6 border-b ">
+            <div className="flex justify-between mb-4">
               <h2 className="mb-2 text-2xl font-bold">Funded Campaigns</h2>
               <Link href="/recipient/campaigns">
                 <p className="mb-2"> View All</p>
@@ -90,7 +76,7 @@ const RecipientPage = () => {
             <div className="grid grid-cols-1 gap-3">
               <FundedCampagins title="Nourish" date="20 Dec" amount="XLM 80" />
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </>
