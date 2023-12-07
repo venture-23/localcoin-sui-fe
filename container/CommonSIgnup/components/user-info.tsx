@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const MerchantInfo = ({ title, handleChange, handleSubmit, error, data }: any) => {
   return (
-    <div className="container mx-auto">
+    <div className="bg-white">
       <div className="rounded-top-[4px]">
         <div className="relative">
           <Image
@@ -27,7 +27,7 @@ const MerchantInfo = ({ title, handleChange, handleSubmit, error, data }: any) =
         <p className="max-w-sm text-gray-700">Please enter your details below.</p>
       </div> */}
 
-      <div className="mt-8 grid gap-5">
+      <div className="mt-8 grid gap-5 px-6 pb-6">
         <label className="block">
           <span className="text-color block text-sm font-medium after:ml-0.5 after:text-red-500 ">
             Store Name
@@ -77,7 +77,7 @@ const MerchantInfo = ({ title, handleChange, handleSubmit, error, data }: any) =
         </label>
 
         <div onClick={handleSubmit}>
-          <Button text="Save" />
+          <Button text="Sign up" />
         </div>
       </div>
     </div>

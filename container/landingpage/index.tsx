@@ -8,7 +8,7 @@ const LandingPage = () => {
     <>
       <section className="bg-white">
         <div className="container mx-auto">
-          <div className="flex justify-center pt-[40px]">
+          <div className="flex justify-center ">
             <Image
               src={'/Get_Started/Get_Started.png'}
               width={350}

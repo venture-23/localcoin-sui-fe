@@ -14,6 +14,7 @@ import { maskWalletAddress } from 'utils/clipper';
 import GenerateKeyPair from './components/generate-key-pair-page';
 import MerchantInfo from './components/user-info';
 import { ClipboardIcon } from '@heroicons/react/24/outline';
+import Button from 'components/botton';
 
 interface ErrorType {
   storeName?: string;
@@ -96,53 +97,55 @@ const MerchantSignup = ({ param }: any) => {
             )}
             {/* <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p> */}
           </div>
-        </div>
-        {showScreen === 0 ? (
-          <MerchantInfo
-            data={data}
-            title={param?.charAt(0).toUpperCase() + param?.slice(1)}
-            error={error}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-          />
-        ) : (
-          (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
-        )}
-      </section>
-      {data.secretKey && (
-        <div className="container mx-auto rounded-md bg-white p-4">
-          <p className="mb-4 text-slate-600">Please securely copy this code</p>
-          <div className="grid gap-3">
-            <div className="flex justify-between">
-              <span className="font-bold">Public Key :</span>
-              <span className="text-sm">{maskWalletAddress(data.publicKey)}</span>{' '}
-              <button onClick={handleCopy}>
-                <ClipboardIcon className="h-6 w-6" />
-              </button>
+
+          {showScreen === 0 ? (
+            <MerchantInfo
+              data={data}
+              title={param?.charAt(0).toUpperCase() + param?.slice(1)}
+              error={error}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+            />
+          ) : (
+            (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
+          )}
+          {data.secretKey && (
+            <div className="rounded-md bg-white p-10">
+              <p className="text-color mb-4 text-lg">Please securely copy this code</p>
+              <div className="grid gap-3">
+                <div className="flex justify-between">
+                  <span className="font-bold">Public Key :</span>
+                  <span className="text-sm">{maskWalletAddress(data.publicKey)}</span>{' '}
+                  <button onClick={handleCopy}>
+                    <ClipboardIcon className="h-6 w-6" />
+                  </button>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-bold">Secret Key :</span>{' '}
+                  <span className="text-sm">{maskWalletAddress(data.secretKey)}</span>{' '}
+                  <button disabled={isCopied} onClick={handleCopy}>
+                    <ClipboardIcon className="h-6 w-6" />
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="font-bold">Secret Key :</span>{' '}
-              <span className="text-sm">{maskWalletAddress(data.secretKey)}</span>{' '}
-              <button disabled={isCopied} onClick={handleCopy}>
-                <ClipboardIcon className="h-6 w-6" />
-              </button>
-            </div>
+          )}
+          <div className="mt-6">
+            {data.secretKey && (
+              <div onClick={() => setshowPinScreen(true)}>
+                <Button text="Sign Up" />
+              </div>
+              // <button
+              //   type="button"
+              //   onClick={() => setshowPinScreen(true)}
+              //   className=" button-primary  w-full "
+              // >
+              //   Next
+              // </button>
+            )}
           </div>
         </div>
-      )}
-      <div className="container mx-auto">
-        <div className="mt-6">
-          {data.secretKey && (
-            <button
-              type="button"
-              onClick={() => setshowPinScreen(true)}
-              className=" button-primary  w-full "
-            >
-              Next
-            </button>
-          )}
-        </div>
-      </div>
+      </section>
     </>
   );
 };
