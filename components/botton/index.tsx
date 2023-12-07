@@ -25,10 +25,10 @@ const Button: React.FC<ButtonProps> = ({
           type="button"
           className={`w-full rounded-[4px] ${
             buttonType === 'primary'
-              ? 'bg-[#1384F5] font-bold text-white'
+              ? 'bg-primary font-bold text-white'
               : ' bg-[#F7F8FA] font-semibold text-[#212B34]'
           }  flex items-center justify-center gap-4 
-          px-6 py-3.5 text-base ${underline} `}
+          px-6 py-3.5 text-lg ${underline} `}
         >
           <span>{buttonIcon}</span>
           <span>{text}</span>

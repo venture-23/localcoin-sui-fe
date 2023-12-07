@@ -8,7 +8,8 @@ import TabsNew from 'components/tabs';
 import Button from 'components/botton';
 import Drawer from 'components/drawer';
 import Link from 'next/link';
-import { QrCodeIcon } from '@heroicons/react/24/outline';
+import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
+import Popover from 'components/popover';
 
 const MerchantPage = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
@@ -16,6 +17,8 @@ const MerchantPage = () => {
 
   const [active, setActive] = useState(1);
   const [open, setOpen] = useState(false);
+
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
 
   return (
     <>
@@ -29,19 +32,19 @@ const MerchantPage = () => {
         <div className="container mx-auto">
           {/* tabs */}
 
-          <div className=" mb-6 flex items-center justify-between">
+          <div className="mb-6 flex items-center justify-between ">
             <p className="text-heading">Merchant Profile</p>
             <div className="h-12 w-12 rounded-full bg-gray-600"></div>
           </div>
-          <div className=" ">
+          <div className="">
             <Tab.Group>
               <div className="w-full max-w-xs">
-                <Tab.List className="flex space-x-1  bg-transparent">
+                <Tab.List className="flex space-x-1 bg-transparent">
                   <Tab
                     onClick={() => setActive(1)}
                     className={`w-full rounded-[4px]  py-3 text-lg font-semibold leading-5 !outline-none !outline-0 !ring-0 !ring-offset-0
        
-      ${active === 1 ? 'bg-[#1384F5] text-white shadow' : 'text-color '}`}
+      ${active === 1 ? 'bg-primary text-white shadow' : 'text-color '}`}
                   >
                     Your Tokens
                   </Tab>
@@ -49,7 +52,7 @@ const MerchantPage = () => {
                   <Tab
                     onClick={() => setActive(2)}
                     className={`r w-full rounded-[4px]  py-3 text-lg font-semibold !outline-none !outline-0 !ring-0 !ring-offset-0
-      ${active === 2 ? 'bg-[#1384F5] text-white shadow' : 'text-color '}`}
+      ${active === 2 ? 'bg-primary text-white shadow' : 'text-color '}`}
                   >
                     Settlements
                   </Tab>
@@ -119,12 +122,13 @@ const MerchantPage = () => {
           <Link
             // href={asPath.includes('recipient') ? '/recipient/scan-pay' : '/merchant/scan-pay'}
             href=""
-            className="  flex  w-fit  items-center gap-2 rounded-full  bg-blue-500 px-6 py-3"
+            className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
           >
             <QrCodeIcon className="h-6 w-6 text-white" />
             <span className="text-base font-semibold text-white">Share QR</span>
           </Link>
         </div>
+
         <Drawer open={open} setOpen={setOpen} panelTitle="Share QR Code">
           <label className="block">
             <span className="text-color block text-sm font-medium after:ml-0.5 after:text-red-500 ">
@@ -143,10 +147,31 @@ const MerchantPage = () => {
               {/* {error.proprietaryName} */}
             </p>
           </label>
-          <div className="mt-6">
+          <div
+            className="mt-6"
+            onClick={() => {
+              setIsOpenPopup(true);
+              setOpen(false);
+            }}
+          >
             <Button text="Share QR Code" />
           </div>
         </Drawer>
+        <Popover
+          PopupTitle="Share QR Code"
+          setIsOpenPopup={setIsOpenPopup}
+          isOpenPopup={isOpenPopup}
+        >
+          <Button
+            buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
+            text="Save image"
+          />
+          <Button
+            text="Share"
+            buttonType="secondary"
+            buttonIcon={<ShareIcon width={24} height={24} />}
+          />
+        </Popover>
       </section>
     </>
   );
