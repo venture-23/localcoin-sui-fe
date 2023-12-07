@@ -35,7 +35,7 @@ const LandingPage = () => {
             <Button
               text="Sign up for account"
               link="/signup"
-              underline={`underline  bg-transparent !text-[#212B34]  font-semibold `}
+              underline={`underline bg-white !text-[#212B34]  font-semibold `}
             />
           </div>
         </div>
