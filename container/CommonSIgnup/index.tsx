@@ -111,41 +111,50 @@ const MerchantSignup = ({ param }: any) => {
           )}
           {data.secretKey && (
             <div className="rounded-md bg-white p-10">
-              <p className="text-color mb-4 text-lg">Please securely copy this code</p>
+              <p className="text-text mb-4 text-lg font-bold">Please securely copy this code</p>
               <div className="grid gap-3">
-                <div className="bg-bgGray block rounded-[4px] p-4">
+                <div className="bg-bgGray flex flex-col gap-1 rounded-[4px]  p-4 ">
                   <div>
-                    <p className="font-bold">Public Key :</p>
+                    <p className="mb-2 font-bold">Public Key :</p>
                     <p className="text-sm">{maskWalletAddress(data.publicKey)}</p>{' '}
                   </div>
-                  <button onClick={handleCopy} className="outline-dashed">
+                  <button
+                    onClick={handleCopy}
+                    className="bg-primary self-end rounded-full p-2 text-white"
+                  >
                     <ClipboardIcon className="h-6 w-6" />
                   </button>
                 </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Secret Key :</span>{' '}
-                  <span className="text-sm">{maskWalletAddress(data.secretKey)}</span>{' '}
-                  <button disabled={isCopied} onClick={handleCopy}>
+                <div className="bg-bgGray flex flex-col gap-1 rounded-[4px]  p-4 ">
+                  <div>
+                    <p className="mb-2 font-bold">Secret Key :</p>
+                    <p className="text-sm">{maskWalletAddress(data.secretKey)}</p>{' '}
+                  </div>
+                  <button
+                    disabled={isCopied}
+                    onClick={handleCopy}
+                    className="bg-primary self-end rounded-full p-2 text-white"
+                  >
                     <ClipboardIcon className="h-6 w-6" />
                   </button>
                 </div>
+              </div>
+              <div className="mt-6">
+                {data.secretKey && (
+                  <div onClick={() => setshowPinScreen(true)}>
+                    <Button text="Sign Up" />
+                  </div>
+                  // <button
+                  //   type="button"
+                  //   onClick={() => setshowPinScreen(true)}
+                  //   className="w-full button-primary"
+                  // >
+                  //   Next
+                  // </button>
+                )}
               </div>
             </div>
           )}
-          <div className="mt-6">
-            {data.secretKey && (
-              <div onClick={() => setshowPinScreen(true)}>
-                <Button text="Sign Up" />
-              </div>
-              // <button
-              //   type="button"
-              //   onClick={() => setshowPinScreen(true)}
-              //   className="w-full button-primary"
-              // >
-              //   Next
-              // </button>
-            )}
-          </div>
         </div>
       </section>
     </>

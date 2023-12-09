@@ -174,10 +174,12 @@ const MerchantPage = () => {
           isOpenPopup={isOpenPopup}
           imageUrl={imageUrl}
         >
-          <Button
-            buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
-            text="Save image"
-          />
+          <a href={imageUrl} download className="w-full">
+            <Button
+              buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
+              text="Save image"
+            />
+          </a>
           <Button
             text="Share"
             buttonType="secondary"
