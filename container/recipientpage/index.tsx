@@ -8,7 +8,8 @@ import RecipientToken from 'components/icons/recipient-token';
 import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientFunded from 'components/icons/recipient-funded';
 import Button from 'components/botton';
-import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+import { HeartIcon, ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 const RecipientPage = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
@@ -29,8 +30,27 @@ const RecipientPage = () => {
       <section className="">
         <div className="container mx-auto">
           <div className="mb-6 flex items-center justify-between ">
-            <p className="text-heading">Recipient Profile</p>
+            <p className="text-heading mt-3">Recipient Profile</p>
             <div className="h-12 w-12 rounded-full bg-gray-600"></div>
+          </div>
+          <div
+            className=" mb-6 w-full max-w-[208px]  rounded-lg p-5 text-white"
+            style={{
+              background: 'linear-gradient(180deg, #1384F5 0%, #4EABFE 100%)'
+            }}
+          >
+            <div className="flex flex-col items-center justify-center ">
+              <div>
+                <HeartIcon width={64} height={64} />
+              </div>
+              <p className="text-lg font-semibold"> Health</p>
+            </div>
+            <div className="mt-4 flex items-center justify-between ">
+              <p className="font-normal">Balance</p>
+              <div className="flex items-center gap-1 ">
+                <Image alt="coin" src="/coin.png" width={16} height={16} /> <p>120</p>
+              </div>
+            </div>
           </div>
           <div className="mb-6 ">
             <div className="grid gap-3 ">
