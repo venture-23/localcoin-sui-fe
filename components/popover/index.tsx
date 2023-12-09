@@ -2,11 +2,11 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import React, { Fragment } from 'react';
+import React, { Dispatch, Fragment, SetStateAction } from 'react';
 
 interface PopupBoxProps {
   isOpenPopup?: boolean;
-  setIsOpenPopup?: any;
+  setIsOpenPopup: Dispatch<SetStateAction<boolean>>;
   PopupTitle?: string;
   children?: React.ReactNode;
   imageUrl?: string;
@@ -64,7 +64,7 @@ const PopupBox: React.FC<PopupBoxProps> = ({
                   </div>
 
                   <div className="my-8 text-center">
-                    <p className="text-textSecondary text-lg font-medium">
+                    <p className="text-lg font-medium text-textSecondary">
                       Scan this QR code to receive payments
                     </p>
                   </div>

@@ -7,6 +7,8 @@ import Card from 'components/card';
 import RecipientToken from 'components/icons/recipient-token';
 import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientFunded from 'components/icons/recipient-funded';
+import Button from 'components/botton';
+import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 
 const RecipientPage = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
@@ -30,14 +32,26 @@ const RecipientPage = () => {
             <p className="text-heading">Recipient Profile</p>
             <div className="h-12 w-12 rounded-full bg-gray-600"></div>
           </div>
-          <div className="mb-6 border-b pb-6 ">
+          <div className="mb-6 ">
             <div className="grid gap-3 ">
               {/* <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} /> */}
               <div className="grid gap-5">
                 <Card title="Your Tokens" link="/" iconName={<RecipientToken />} />
-                <Card title="Ongoing Campaigns" link="/" iconName={<RecipientOngoing />} />
+                <Card
+                  title="Ongoing Campaigns"
+                  link="/recipient/campaigns"
+                  iconName={<RecipientOngoing />}
+                />
                 <Card title="Funded Campaigns" link="/" iconName={<RecipientFunded />} />
               </div>
+            </div>
+            <div className="fixed bottom-0 left-0 w-full">
+              <Button
+                link="/merchant/scan-pay"
+                text="scan to pay"
+                underline="rounded-none capitalize py-5"
+                buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
+              />
             </div>
           </div>
 

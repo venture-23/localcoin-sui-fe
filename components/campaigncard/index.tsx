@@ -1,3 +1,5 @@
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface tokenProps {
@@ -20,17 +22,32 @@ const CampaignCard: React.FC<CardProps> = ({
 }) => {
   return (
     <Link href={`/recipient/campaign/${campaignDetails.id}`}>
-      <div className={`flex ${cardContainerClass} rounded-md bg-white p-4 shadow-lg`}>
+      <div className={`flex ${cardContainerClass} rounded bg-white p-5  `}>
         {/* <div className={`flex flex-col items-center ${cardInsideClass}`}> */}
         {/* <div className={`${iconContainerClass}`}>Icon</div> */}
-        <p className="text-xm   mb-2 text-lg font-medium ">{campaignDetails.title}</p>
         {/* <p className="text-base text-gray-700">{description}</p> */}
         {/* </div> */}
-        <div className={`flex flex-col items-center ${cardInsideClass}`}>
-          <p className="text-xm justify-right mb-0 font-normal text-slate-400 ">
-            {campaignDetails.description}
-          </p>
+        <div className="flex w-full items-center justify-between">
+          <div className="flex items-center gap-1">
+            <div>
+              <Image
+                alt="camapaign avatar image"
+                src={''}
+                className="h-10 w-10 rounded-full bg-bgGray"
+              />
+            </div>
+            <div className="max-w-sm">
+              <p className="text-lg font-semibold text-text">{campaignDetails.title}</p>
+              <p className="mb-0 text-sm font-normal text-textSecondary ">
+                {campaignDetails.description}
+              </p>
+            </div>
+          </div>
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EFF8FF]">
+            <ChevronRightIcon className="h-3 w-3" />
+          </div>
         </div>
+        <div className={`flex flex-col items-center ${cardInsideClass}`}></div>
       </div>
     </Link>
   );
