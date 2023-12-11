@@ -1,6 +1,5 @@
 'use client';
 import { QrCodeIcon } from '@heroicons/react/24/outline';
-import Button from 'components/botton';
 import Drawer from 'components/drawer';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
