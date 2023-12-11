@@ -1,14 +1,9 @@
-import CampaignCard from 'components/campaigncard';
-import Header from 'components/layout/header';
-import TokenCard from 'components/tokencard';
-import Link from 'next/link';
-import FundedCampagins from './funded-campagns';
-import Card from 'components/card';
-import RecipientToken from 'components/icons/recipient-token';
-import RecipientOngoing from 'components/icons/recipient-ongoing';
-import RecipientFunded from 'components/icons/recipient-funded';
-import Button from 'components/botton';
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+import Button from 'components/botton';
+import Card from 'components/card';
+import RecipientFunded from 'components/icons/recipient-funded';
+import RecipientOngoing from 'components/icons/recipient-ongoing';
+import RecipientToken from 'components/icons/recipient-token';
 
 const RecipientPage = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
@@ -47,7 +42,7 @@ const RecipientPage = () => {
             </div>
             <div className="fixed bottom-0 left-0 w-full">
               <Button
-                link="/merchant/scan-pay"
+                link="/recipient/scan-pay"
                 text="scan to pay"
                 underline="rounded-none capitalize py-5"
                 buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
