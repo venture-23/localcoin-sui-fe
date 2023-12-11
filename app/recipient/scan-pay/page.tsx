@@ -82,7 +82,7 @@ export default function ScanPayMerchant() {
       {/* </Header> */}
       <div ref={cameraRef}>
         <QrReader
-          className="hello"
+          // className="hello"
           onResult={(result, error) => {
             if (!!result) {
               handleScanWebCam(result?.text);
@@ -98,7 +98,8 @@ export default function ScanPayMerchant() {
           videoContainerStyle={{ width: '100%', height: '100vh', paddingTop: '0' }}
           videoStyle={{
             height: '100%',
-            width: '100%'
+            width: '100%',
+            objectFit: 'cover'
           }}
         />
 
