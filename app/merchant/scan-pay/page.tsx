@@ -89,9 +89,15 @@ export default function ScanPayMerchant() {
           }
         }}
         scanDelay={300}
+        containerStyle={{ paddingTop: '0' }}
         constraints={{ facingMode: 'rear' }}
-        videoContainerStyle={{ width: '100%', height: '100%' }}
+        videoContainerStyle={{ width: '100%', height: '100vh', paddingTop: '0' }}
         ref={{ cameraRef }}
+        videoStyle={{
+          height: '100%',
+          width: '100%',
+          objectFit: 'cover'
+        }}
       />
       {/* <h3>Scanned By WebCam Code: {scanResultWebCam}</h3> */}
       {/* {imageUrl ? <img src={imageUrl} alt="img" style={{ width: '100%' }} /> : null} */}
