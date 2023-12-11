@@ -1,6 +1,6 @@
-import CampaignCard from 'components/campaigncard';
+import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+import Button from 'components/botton';
 import DetailCampaign from 'components/campaigncard/detail';
-import Header from 'components/layout/header';
 import Link from 'next/link';
 
 const CampaignDetail = (props: any) => {
@@ -15,15 +15,19 @@ const CampaignDetail = (props: any) => {
   };
   return (
     <>
-      <Header className="h-[120px]">
+      {/* <Header className="h-[120px]">
         <div className="flex items-center">
-          <Link href="/recipient">{'<- '}</Link>
-          <p className="flex-1  text-center text-2xl font-semibold">Campaign Details</p>
+          <p className="flex-1 text-2xl font-semibold text-center">Campaign Details</p>
         </div>
-      </Header>
+      </Header> */}
 
-      <section className="my-6">
+      <section>
         <div className="container mx-auto">
+          <Link href="/recipient">{'<- '}</Link>
+          <div className="mb-6 ">
+            <p className="text-heading">Campaign Detail </p>
+            {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
+          </div>
           {/* <div className="mb-6">
             <h2 className="mb-2 text-2xl font-bold">Campaign {props.campaignId}</h2>
           </div> */}
@@ -37,6 +41,12 @@ const CampaignDetail = (props: any) => {
             <DetailCampaign campaignDetails={campaignDetails} />
           </div>
         </div>
+        <Button
+          link="/recipient/scan-pay"
+          text="scan to pay"
+          underline="rounded-none capitalize py-5"
+          buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
+        />
       </section>
     </>
   );

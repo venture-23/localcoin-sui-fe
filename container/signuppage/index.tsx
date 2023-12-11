@@ -3,57 +3,55 @@ import {
   GlobeEuropeAfricaIcon,
   UserCircleIcon
 } from '@heroicons/react/24/outline';
+import Button from 'components/botton';
 import Card from 'components/card';
-import Header from 'components/layout/header';
+// import Header from 'components/layout/header';
 
 import Link from 'next/link';
 
 const SignupPage = () => {
   return (
     <>
-      <Header className="h-[120px]">
+      {/* <Header className="h-[120px]">
         <div className="flex items-center">
           <Link href="/">{'<- '}</Link>
-          <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p>
+          <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p>
         </div>
-      </Header>
-      <section className="my-6 pb-12">
-        <div className="container mx-auto">
-          <div className="mb-6">
-            <h1 className="mb-2 text-2xl font-bold">Signup</h1>
-            <p className="max-w-sm text-gray-700">
-              LocalCoin is just around the corner. Choose an option below to get started .
-            </p>
+      </Header> */}
+
+      <section className="bg-[#F7F8FA] ">
+        <div className="container mx-auto ">
+          {/* <Link href="/">{'<- '}</Link> */}
+          <div className="mb-10 ">
+            <h1 className=" text-heading">
+              Signup <span className="font-normal">with your desired role.</span>{' '}
+            </h1>
+            {/*  */}
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <Card
-              iconContainerClass=" h-[56px] w-[56px]"
-              cardContainerClass="justify-center min-h-[134px]"
-              title="Merchant"
-              link="/signup/merchant"
-              iconName={<BuildingStorefrontIcon />}
-
-              // query={{ type: 'Merchant' }}
-            />
-            <Card
-              iconContainerClass=" h-[56px] w-[56px]"
-              cardContainerClass="justify-center min-h-[134px]"
-              title="Recipient"
-              link="/signup/recipient"
-              iconName={<UserCircleIcon />}
-
-              // query={{ type: 'Recipient' }}
-            />
-            <Card
-              iconContainerClass=" h-[56px] w-[56px]"
-              cardContainerClass="justify-center min-h-[134px]"
-              title="Campaign Creator"
-              link="/signup/campaign"
-              iconName={<GlobeEuropeAfricaIcon />}
-
-              // query={{ type: 'Campaigns' }}
-            />
+          <div className="flex flex-col justify-between gap-24">
+            <div className="grid gap-5">
+              <Card
+                title="Merchant"
+                link="/signup/merchant"
+                iconName={<BuildingStorefrontIcon className="text-primary h-8 w-8" />}
+              />
+              <Card
+                title="Recipient"
+                link="/signup/recipient"
+                iconName={<UserCircleIcon className="text-primary h-8 w-8" />}
+              />
+              <Card
+                title="Campaign Creator"
+                link="/signup/campaign"
+                iconName={<GlobeEuropeAfricaIcon className="text-primary h-8 w-8" />}
+              />
+            </div>
+            <div className="text-color flex items-baseline justify-center text-lg font-semibold">
+              <p className="font-normal">Already have an account? </p>{' '}
+              <Link href="/">
+                <span>Login</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
