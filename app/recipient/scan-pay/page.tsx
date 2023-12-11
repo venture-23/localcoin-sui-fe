@@ -92,7 +92,7 @@ export default function ScanPayMerchant() {
             }
           }}
           scanDelay={500}
-          constraints={{ facingMode: 'user' }}
+          constraints={{ facingMode: 'environment' }}
           containerStyle={{ paddingTop: '0' }}
           videoContainerStyle={{ width: '100%', height: '100vh', paddingTop: '0' }}
           videoStyle={{
