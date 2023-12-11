@@ -1,12 +1,15 @@
 // import Navbar from 'components/layout/navbar';
 import { GeistSans } from 'geist/font';
 import { ReactNode, Suspense } from 'react';
-import './globals.css';
 
 const { SITE_NAME } = process.env;
 const baseUrl = 'http://localhost:3000';
 // const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
 // const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
+import Footer from 'components/layout/footer';
+import './globals.css';
+import '../styles/index.scss';
+import RootLayoutClient from './pin-lock-layout';
 
 export const metadata = {
   // metadataBase: new URL(baseUrl),
@@ -40,11 +43,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
         {/* <Navbar /> */}
         <Suspense>
-          <div className="flex min-h-screen items-center justify-center bg-gray-100">
-            <div className="w-full max-w-md rounded-md bg-white p-8 shadow-md">
-              <main>{children}</main>
-            </div>
-          </div>
+          <main className="">
+            {/* {children} */}
+            <RootLayoutClient>
+              {children}
+              <Footer />
+            </RootLayoutClient>
+          </main>
         </Suspense>
       </body>
     </html>

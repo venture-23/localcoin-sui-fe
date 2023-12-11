@@ -1,4 +1,3 @@
-import HomePageContain from '../container/homepage';
 import LandingPage from '../container/landingpage';
 
 export const runtime = 'edge';
@@ -14,7 +13,7 @@ export default function HomePage() {
   return (
     <>
       <LandingPage />
-      <HomePageContain />
+      {/* <HomePageContain /> */}
     </>
   );
 }

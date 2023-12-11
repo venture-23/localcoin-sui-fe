@@ -2,9 +2,26 @@ const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+  darkMode: ['class', '[data-mode="dark"]'],
+  content: [
+    './app/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './container/**/*.{js,ts,jsx,tsx}'
+  ],
   theme: {
     extend: {
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(to right, #1384F5, #4EABFE)'
+        // Define your gradient background here
+      },
+      colors: {
+        primary: '#1384F5', // Replace with your primary color
+        secondary: '#4EABFE', // Replace with your secondary color
+        text: '#212B34',
+        textSecondary: 'rgba(33, 53, 52, 0.48)',
+        bgGray: '#F7F8FA',
+        bgWhite: '#FFFFFF'
+      },
       fontFamily: {
         sans: ['var(--font-geist-sans)']
       },
@@ -30,6 +47,7 @@ module.exports = {
       }
     }
   },
+
   future: {
     hoverOnlyWhenSupported: true
   },

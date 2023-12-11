@@ -1,3 +1,8 @@
+import RecipientPage from 'container/recipientpage';
 export default function Recipient() {
-  return <>This is Recipient page.</>;
+  return (
+    <>
+      <RecipientPage />
+    </>
+  );
 }

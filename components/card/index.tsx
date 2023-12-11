@@ -1,22 +1,39 @@
+import { CheckBadgeIcon, ChevronRightIcon, ClockIcon, UserIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 interface CardProps {
   title: string;
   link: string;
+  cardInsideClass?: string;
+  iconContainerClass?: string;
+  cardContainerClass?: string;
+  query?: any;
+  iconName?: any;
 }
 
-const Card: React.FC<CardProps> = ({ title, link }) => {
+const Card: React.FC<CardProps> = ({
+  title,
+  link,
+  cardContainerClass,
+  cardInsideClass,
+  iconContainerClass,
+  query,
+  iconName
+}) => {
   return (
-    <div className="m-4 max-w-md overflow-hidden rounded bg-white shadow-lg">
-      <div className="flex items-center p-4">
-        <div className="ml-4">
-          <Link href={link}>
-            <div className="text-xm ">{title}</div>
-          </Link>
-          {/* <p className="text-base text-gray-700">{description}</p> */}
+    <Link href={query ? { pathname: link, query: query } : link}>
+      <div
+        className={`flex  items-center justify-between ${cardContainerClass} rounded-md bg-white px-8 py-5 `}
+      >
+        <div className={`flex items-center gap-5 ${iconContainerClass}`}>
+          <div>{iconName}</div>
+          <p className="mb-0 text-lg  font-semibold ">{title}</p>
+        </div>
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EFF8FF]">
+          <ChevronRightIcon className="h-3 w-3" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
