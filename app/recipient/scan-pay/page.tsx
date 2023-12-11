@@ -1,7 +1,6 @@
 'use client';
 import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
-import Drawer from 'components/drawer';
 import PopupBox from 'components/popover';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -93,7 +92,7 @@ export default function ScanPayMerchant() {
             }
           }}
           scanDelay={500}
-          constraints={{ facingMode: 'rear' }}
+          constraints={{ facingMode: 'user' }}
           containerStyle={{ paddingTop: '0' }}
           videoContainerStyle={{ width: '100%', height: '100vh', paddingTop: '0' }}
           videoStyle={{
