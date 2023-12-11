@@ -1,8 +1,6 @@
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
-import CampaignCard from 'components/campaigncard';
 import DetailCampaign from 'components/campaigncard/detail';
-import Header from 'components/layout/header';
 import Link from 'next/link';
 
 const CampaignDetail = (props: any) => {
@@ -44,7 +42,7 @@ const CampaignDetail = (props: any) => {
           </div>
         </div>
         <Button
-          link="/merchant/scan-pay"
+          link="/recipient/scan-pay"
           text="scan to pay"
           underline="rounded-none capitalize py-5"
           buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}

@@ -32,8 +32,10 @@ const CampaignCard: React.FC<CardProps> = ({
             <div>
               <Image
                 alt="camapaign avatar image"
-                src={''}
-                className="h-10 w-10 rounded-full bg-bgGray"
+                src={'/campagin_dummy.jpg'}
+                width={40}
+                height={40}
+                className="h-10 w-10 rounded-full bg-bgGray object-cover"
               />
             </div>
             <div className="max-w-sm">

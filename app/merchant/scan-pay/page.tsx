@@ -4,7 +4,7 @@ import Drawer from 'components/drawer';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 
 export default function ScanPayMerchant() {
@@ -15,6 +15,7 @@ export default function ScanPayMerchant() {
   const [open, setOpen] = useState(false);
 
   const [isOpenPopup, setIsOpenPopup] = useState(false);
+  const cameraRef = useRef(null);
 
   useEffect(() => {
     generateQrCode();
@@ -48,9 +49,22 @@ export default function ScanPayMerchant() {
   const handleScanWebCam = (result: string) => {
     if (result) {
       setScanResultWebCam('result');
+      close;
       push('/merchant/confirmation');
     }
   };
+  async function close() {
+    console.log('closing');
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: true
+    });
+    stream.getTracks().forEach(function (track) {
+      track.stop();
+      track.enabled = false;
+    });
+    cameraRef.current.stopCamera();
+  }
 
   return (
     <>
@@ -75,7 +89,9 @@ export default function ScanPayMerchant() {
           }
         }}
         scanDelay={300}
-        style={{ width: '100%', height: '100%' }}
+        constraints={{ facingMode: 'rear' }}
+        videoContainerStyle={{ width: '100%', height: '100%' }}
+        ref={{ cameraRef }}
       />
       {/* <h3>Scanned By WebCam Code: {scanResultWebCam}</h3> */}
       {/* {imageUrl ? <img src={imageUrl} alt="img" style={{ width: '100%' }} /> : null} */}
