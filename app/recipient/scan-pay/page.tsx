@@ -73,8 +73,8 @@ export default function ScanPayMerchant() {
       {/* <Header className="h-[120px]"> */}
       <div className=" absolute top-12 z-[10] mx-auto w-[95%] ">
         <div className="flex items-center justify-between">
-          <p className="flex-1 text-center">Scan QR code to pay</p>
-          <Link href="/recipient" className="">
+          <p className="flex-1 text-center text-white">Scan QR code to pay</p>
+          <Link href="/recipient" className="text-white ">
             {'X'}
           </Link>
         </div>
@@ -103,7 +103,10 @@ export default function ScanPayMerchant() {
           }}
         />
 
-        <span className="try-css bg-tranparent absolute inset-0 m-auto h-[200px] w-1/2 rounded-md border-2 border-white "></span>
+        <span
+          className="try-css bg-tranparent absolute inset-0 m-auto h-[200px] w-1/2 rounded-md border-2 border-white  
+        shadow-[0_4px_0px_500px_rgba(0,0,0,0.5)] "
+        ></span>
 
         {/* <span className="absolute inset-0 w-full h-full font-bold bg-black/5"></span> */}
       </div>
