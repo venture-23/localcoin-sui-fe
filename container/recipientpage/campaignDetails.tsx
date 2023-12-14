@@ -23,7 +23,7 @@ const CampaignDetail = (props: any) => {
 
       <section>
         <div className="container mx-auto">
-          <Link href="/recipient">{'<- '}</Link>
+          <Link href="/recipient/campaigns">{'<- '}</Link>
           <div className="mb-6 ">
             <p className="text-heading">Campaign Detail </p>
             {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
