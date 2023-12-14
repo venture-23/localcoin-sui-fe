@@ -14,6 +14,7 @@ import { maskWalletAddress } from 'utils/clipper';
 import GenerateKeyPair from './components/generate-key-pair-page';
 import MerchantInfo from './components/user-info';
 import { ClipboardIcon } from '@heroicons/react/24/outline';
+import Button from 'components/botton';
 
 interface ErrorType {
   storeName?: string;
@@ -80,67 +81,82 @@ const MerchantSignup = ({ param }: any) => {
   console.log({ showScreen });
   return (
     <>
-      <Header className="h-[120px]">
-        <div className="flex items-center">
-          {param === 'merchant' ? (
-            showScreen === 0 ? (
-              <Link href={showScreen === 0 ? '/signup' : ''}>{'<- '}</Link>
+      {/* <Header className="h-[120px]"> */}
+      {/* </Header> */}
+      <section className="">
+        <div className="container mx-auto">
+          <div className="mb-6 flex items-center">
+            {param === 'merchant' ? (
+              showScreen === 0 ? (
+                <Link href={showScreen === 0 ? '/signup' : ''}>{'<- '}</Link>
+              ) : (
+                <div onClick={() => setShowScreen(0)}> {'<- '}</div>
+              )
             ) : (
-              <div onClick={() => setShowScreen(0)}> {'<- '}</div>
-            )
-          ) : (
-            <Link href={'/signup'}>{'<- '}</Link>
-          )}
-          <p className="flex-1  text-center text-2xl font-semibold">LocalCoin</p>
-        </div>
-      </Header>
-      <section className="my-6">
-        {showScreen === 0 ? (
-          <MerchantInfo
-            data={data}
-            title={param?.charAt(0).toUpperCase() + param?.slice(1)}
-            error={error}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-          />
-        ) : (
-          (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
-        )}
-      </section>
-      {data.secretKey && (
-        <div className="container mx-auto rounded-md bg-white p-4">
-          <p className="mb-4 text-slate-600">Please securely copy this code</p>
-          <div className="grid gap-3">
-            <div className="flex justify-between">
-              <span className="font-bold">Public Key :</span>
-              <span className="text-sm">{maskWalletAddress(data.publicKey)}</span>{' '}
-              <button onClick={handleCopy}>
-                <ClipboardIcon className="h-6 w-6" />
-              </button>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-bold">Secret Key :</span>{' '}
-              <span className="text-sm">{maskWalletAddress(data.secretKey)}</span>{' '}
-              <button disabled={isCopied} onClick={handleCopy}>
-                <ClipboardIcon className="h-6 w-6" />
-              </button>
-            </div>
+              <Link href={'/signup'}>{'<- '}</Link>
+            )}
+            {/* <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p> */}
           </div>
-        </div>
-      )}
-      <div className="container mx-auto">
-        <div className="mt-6">
+
+          {showScreen === 0 ? (
+            <MerchantInfo
+              data={data}
+              title={param?.charAt(0).toUpperCase() + param?.slice(1)}
+              error={error}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+            />
+          ) : (
+            (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
+          )}
           {data.secretKey && (
-            <button
-              type="button"
-              onClick={() => setshowPinScreen(true)}
-              className=" button-primary  w-full "
-            >
-              Next
-            </button>
+            <div className="rounded-md bg-white p-10">
+              <p className="text-text mb-4 text-lg font-bold">Please securely copy this code</p>
+              <div className="grid gap-3">
+                <div className="bg-bgGray flex flex-col gap-1 rounded-[4px]  p-4 ">
+                  <div>
+                    <p className="mb-2 font-bold">Public Key :</p>
+                    <p className="text-sm">{maskWalletAddress(data.publicKey)}</p>{' '}
+                  </div>
+                  <button
+                    onClick={handleCopy}
+                    className="bg-primary self-end rounded-full p-2 text-white"
+                  >
+                    <ClipboardIcon className="h-6 w-6" />
+                  </button>
+                </div>
+                <div className="bg-bgGray flex flex-col gap-1 rounded-[4px]  p-4 ">
+                  <div>
+                    <p className="mb-2 font-bold">Secret Key :</p>
+                    <p className="text-sm">{maskWalletAddress(data.secretKey)}</p>{' '}
+                  </div>
+                  <button
+                    disabled={isCopied}
+                    onClick={handleCopy}
+                    className="bg-primary self-end rounded-full p-2 text-white"
+                  >
+                    <ClipboardIcon className="h-6 w-6" />
+                  </button>
+                </div>
+              </div>
+              <div className="mt-6">
+                {data.secretKey && (
+                  <div onClick={() => setshowPinScreen(true)}>
+                    <Button text="Sign Up" />
+                  </div>
+                  // <button
+                  //   type="button"
+                  //   onClick={() => setshowPinScreen(true)}
+                  //   className="w-full button-primary"
+                  // >
+                  //   Next
+                  // </button>
+                )}
+              </div>
+            </div>
           )}
         </div>
-      </div>
+      </section>
     </>
   );
 };

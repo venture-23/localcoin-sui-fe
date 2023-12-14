@@ -1,0 +1,15 @@
+$heading: 30px;
+$headingWeight: 700;
+$headingSpacing: 0.6px;
+$textColor: #212b34;
+
+.text-heading {
+  font-size: $heading;
+  font-weight: $headingWeight;
+  letter-spacing: $headingSpacing;
+  color: $textColor;
+}
+
+.text-color {
+  color: $textColor;
+}
