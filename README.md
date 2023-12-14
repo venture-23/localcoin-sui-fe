@@ -35,6 +35,12 @@ LocalCoin is a closed cycle token system designed to enable on-chain control and
 - Campaign manager will settle local currency with the merchant.
 - Tokens that come to this settlement account cannot be transferred and have reached their end of life.
 
- # Mobile App Design
+# Mobile App Design
 
- https://www.figma.com/file/DuJv4E8Fx0y93HLiJ30734/LocalCoin-Test?type=design&node-id=0-1&mode=design&t=DBc7C1eMJf4PL375-0
+## Wireframe Design
+
+https://www.figma.com/file/DuJv4E8Fx0y93HLiJ30734/LocalCoin-Test?type=design&node-id=0-1&mode=design&t=DBc7C1eMJf4PL375-0
+
+## Final Design
+
+https://www.figma.com/file/Wdq44TfGM3o85fXDna3Gd6/Mobile_App_UX%2FUI_Final?type=design&node-id=71-1273&mode=design&t=5SliUVkDdLSvN3uk-0

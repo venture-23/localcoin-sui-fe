@@ -19,16 +19,21 @@ const TokenList = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-3">
+            <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} />
             <TokenCard
-              cardContainerClass="min-h-[50px] justify-between"
+              iconContainerClass="bg-red-500"
+              cardContainerClass=" justify-between"
               tokenDetails={tokenDetails}
             />
             <TokenCard
-              cardContainerClass="min-h-[50px] justify-between"
+              iconContainerClass="bg-green-500"
+              cardContainerClass=" justify-between"
               tokenDetails={tokenDetails}
             />
+            <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} />
             <TokenCard
-              cardContainerClass="min-h-[50px] justify-between"
+              iconContainerClass="bg-red-500"
+              cardContainerClass=" justify-between"
               tokenDetails={tokenDetails}
             />
           </div>
