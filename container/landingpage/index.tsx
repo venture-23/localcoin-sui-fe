@@ -24,12 +24,12 @@ const LandingPage = () => {
           </div>
 
           <div className=" flex flex-col gap-5">
-            <Button text="Login" link="/" />
+            <Button text="Login" link="/signup" />
             <Button
               text="Check for ongoing campaigns"
               buttonIcon={<QrCodeIcon className="text-color h-5 w-5" />}
               buttonType="secondary"
-              link="/"
+              link="/campaign"
             />
 
             <Button

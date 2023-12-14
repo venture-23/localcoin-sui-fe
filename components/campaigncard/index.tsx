@@ -1,7 +1,9 @@
+'use client';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
-
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 interface tokenProps {
   id: string;
   title: string;
@@ -20,8 +22,18 @@ const CampaignCard: React.FC<CardProps> = ({
   cardInsideClass
   // iconContainerClass
 }) => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const url = `${pathname}?${searchParams}`;
+    console.log(url);
+    // You can now use the current URL
+    // ...
+  }, [pathname, searchParams]);
+
   return (
-    <Link href={`/recipient/campaign/${campaignDetails.id}`}>
+    <Link href={`${pathname}/${campaignDetails.id}`}>
       <div className={`flex ${cardContainerClass} rounded bg-white p-5  `}>
         {/* <div className={`flex flex-col items-center ${cardInsideClass}`}> */}
         {/* <div className={`${iconContainerClass}`}>Icon</div> */}
