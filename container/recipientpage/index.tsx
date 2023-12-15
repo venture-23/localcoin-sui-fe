@@ -5,6 +5,7 @@ import RecipientFunded from 'components/icons/recipient-funded';
 import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientToken from 'components/icons/recipient-token';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const RecipientPage = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
@@ -60,6 +61,9 @@ const RecipientPage = () => {
                 />
                 <Card title="Funded Campaigns" link="/" iconName={<RecipientFunded />} />
               </div>
+            </div>
+            <div>
+              <Link href="/loader">open</Link>
             </div>
             <div className="fixed bottom-0 left-0 w-full">
               <Button
