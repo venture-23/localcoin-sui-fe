@@ -1,5 +1,6 @@
 'use client';
 import Button from 'components/botton';
+import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -8,8 +9,8 @@ import { campaignServices } from 'services/campaign-services';
 const CreateCampaignPage = () => {
   const router = useRouter();
 
+  const { userInfo } = useMyContext();
   const [showLoader, setShowLoader] = useState(false);
-
   const [data, setData] = useState({
     name: '',
     totalAmount: '',
@@ -38,7 +39,7 @@ const CreateCampaignPage = () => {
     setError(errorChecked);
     if (Object.keys(errorChecked).length === 0) {
       setShowLoader(true);
-      campaignServices.createCampaigns(data).then((x) => {
+      campaignServices.createCampaigns(data, userInfo.secretKey, userInfo.publicKey).then((x) => {
         if (x._value === undefined) {
           setShowLoader(false);
           console.log(x);

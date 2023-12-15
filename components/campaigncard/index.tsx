@@ -31,7 +31,6 @@ const CampaignCard: React.FC<CardProps> = ({
 
   useEffect(() => {
     const url = `${pathname}?${searchParams}`;
-    console.log(url);
     // You can now use the current URL
     // ...
   }, [pathname, searchParams]);

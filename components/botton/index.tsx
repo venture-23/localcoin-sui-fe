@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
 
@@ -9,6 +11,7 @@ interface ButtonProps {
   buttonType?: any;
   underline?: any;
   disabled?: boolean;
+  handleClick?: () => void;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -18,12 +21,17 @@ const Button: React.FC<ButtonProps> = ({
   query,
   buttonType = 'primary',
   underline,
-  disabled = false
+  disabled = false,
+  handleClick
 }) => {
   return (
     <>
-      <Link className="w-full" href={query ? { pathname: link, query: query } : link || ''}>
+      <Link
+        className="w-full"
+        href={handleClick ? '#' : query ? { pathname: link, query: query } : link || ''}
+      >
         <button
+          onClick={() => (handleClick ? handleClick() : null)}
           disabled={disabled}
           type="button"
           className={`w-full rounded-[4px] ${

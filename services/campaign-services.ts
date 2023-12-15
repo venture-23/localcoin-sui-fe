@@ -20,9 +20,9 @@ export const campaignServices = (() => {
     payload = ''
   }: any) => {
     try {
+      debugger;
       const sourceKeypair = SorobanClient.Keypair.fromSecret(secretKey);
       const sourcePublicKey = sourceKeypair.publicKey();
-
       const contractId = 'CAPWEGXEOWLOMEJRDST4XDNAGUX6YNWXWASYV7B7QTKN34OKTWVOKYUU';
       const server = new SorobanClient.Server(serverUrl, {
         allowHttp: true
@@ -70,16 +70,18 @@ export const campaignServices = (() => {
     return makeTransaction({ secretKey, parameterType: 'get_campaigns' });
   };
 
-  const createCampaigs = (data: any) => {
+  const createCampaigs = (data: any, secretKey: string, publicKey: string) => {
     return makeTransaction({
+      secretKey,
       parameterType: 'create_campaign',
       payload: [
         StringToScVal(data.name),
         StringToScVal(data.description),
-        numberToU32(+data.recipients),
+        numberToU32(parseFloat(data.recipients)),
         accountToScVal(localCoinAddress),
-        numberToI128(+data.totalAmount),
-        accountToScVal('GCSEKCSARTFPCCY2ZMC5GPUBYD2DJBTVFUXFO5O3R2Q72QTU4BDPUXXY')
+        numberToI128(parseFloat(data.totalAmount)),
+        // accountToScVal('GCSEKCSARTFPCCY2ZMC5GPUBYD2DJBTVFUXFO5O3R2Q72QTU4BDPUXXY')
+        accountToScVal(publicKey)
       ]
     });
   };

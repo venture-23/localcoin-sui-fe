@@ -1,4 +1,5 @@
-import CampaignDetails from 'container/recipientpage/campaignDetails';
+import CampaignDetails from 'container/Campaign/CampaignDetails';
+
 export default function campaignDetails({ params }: { params: { campaignid: string } }) {
   return (
     <>

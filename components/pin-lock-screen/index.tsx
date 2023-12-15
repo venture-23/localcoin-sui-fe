@@ -64,7 +64,7 @@ export default function PinLockScreen(props: any) {
       <div className=" fixed z-[1000] grid h-full  w-full place-items-end bg-white ">
         <div className="container mx-auto ">
           <div className="modal-content pb-10">
-            <div className="text-center ">
+            <div className="text-center " onClick={() => localStorage.removeItem('local-coin')}>
               <h1 className="text-heading">Please Enter Your PIN</h1>
             </div>
             <div className="mx-auto my-10 grid max-w-sm grid-cols-4 gap-3">

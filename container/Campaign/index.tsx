@@ -36,6 +36,12 @@ const CampaignList = () => {
     // setShowLoader(false);
     // if (resp?.length) setCampaignList(resp);
   };
+
+  const campaignDetails: any = {
+    id: 1,
+    title: '12'
+  };
+
   return (
     <>
       {showLoader && 'Loading . . . . .'}
@@ -49,6 +55,12 @@ const CampaignList = () => {
             List Campaign
           </button>
           <div className="grid grid-cols-1 gap-3">
+            <CampaignCard
+              link="campaign/"
+              cardContainerClass="min-h-[50px] flex-col"
+              campaignDetails={campaignDetails}
+            />
+
             {campaignList.map((eachCampaign, eachid) => (
               <React.Fragment key={eachid + 1 + ''}>
                 <CampaignCard link="campaign/" campaignDetails={eachCampaign} />
