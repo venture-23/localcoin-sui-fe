@@ -11,12 +11,12 @@ export default function RootLayoutClient({ children }: React.PropsWithChildren) 
   const [userEnterPin, setUserEnterPin] = useState<any>('');
   const [checkPinCode, setCheckPinCode] = useState(false);
   const [redirectTo, setRedirectTo] = useState(false);
+  const [userInfo, setUserInfo] = useState<any>({});
 
   const router = useRouter();
   useEffect(() => {
     const res = getLocalStorageValue('local-coin');
     if (res) {
-      console.log({ res });
       setshowPinScreen(true);
       setCheckPinCode(true);
       setRedirectTo(true);
@@ -33,12 +33,15 @@ export default function RootLayoutClient({ children }: React.PropsWithChildren) 
         setCheckPinCode,
         setRedirectTo,
         userEnterPin,
+        setUserInfo,
+        userInfo,
         redirectTo,
         checkPinCode
       }}
     >
       {(showPinLockScreen || checkPinCode) && <PinLockScreen />}
-      {!(showPinLockScreen || checkPinCode) && children}
+      {/* {!(showPinLockScreen || checkPinCode) && children} */}
+      {children}
     </MyContext.Provider>
   );
 }

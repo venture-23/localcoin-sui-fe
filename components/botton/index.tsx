@@ -8,6 +8,7 @@ interface ButtonProps {
   query?: any;
   buttonType?: any;
   underline?: any;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,12 +17,14 @@ const Button: React.FC<ButtonProps> = ({
   link,
   query,
   buttonType = 'primary',
-  underline
+  underline,
+  disabled = false
 }) => {
   return (
     <>
       <Link className="w-full" href={query ? { pathname: link, query: query } : link || ''}>
         <button
+          disabled={disabled}
           type="button"
           className={`w-full rounded-[4px] ${
             buttonType === 'primary'

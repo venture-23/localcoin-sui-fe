@@ -1,14 +1,28 @@
+// eslint-disable-next-line unicorn/filename-case
+import { serverUrl } from 'utils/constants';
+
 /* eslint-disable unicorn/filename-case */
 var SorobanClient = require('soroban-client');
-
-const generateKeyPair = () => {
-  // const server = new SorobanClient.Server('https://soroban-testnet.stellar.org');
+serverUrl;
+const generateKeyPair = async () => {
   try {
-    const secretKey = SorobanClient.Keypair.random().secret();
-    const publicKey = SorobanClient.Keypair.random().publicKey();
+    const server = new SorobanClient.Server(serverUrl, {
+      allowHttp: true
+    });
+    const pair = SorobanClient.Keypair.random();
+    const secretKey = pair.secret();
+    const publicKey = pair.publicKey();
+    const response = await fetch(
+      `https://friendbot.stellar.org?addr=${encodeURIComponent(publicKey)}`
+    );
+    const responseJSON = await response.json();
+    console.log('SUCCESS! You have a new account :)\n', responseJSON);
+    const account = await server.getAccount(publicKey);
+    console.log({ secretKey, account, publicKey });
     return { secretKey, publicKey };
-  } catch (error) {
-    throw Error();
+  } catch (e: any) {
+    console.warn('ERROR!', e);
+    throw new Error(e);
   }
 };
 

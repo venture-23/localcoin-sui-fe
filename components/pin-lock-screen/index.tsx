@@ -1,11 +1,11 @@
 'use client';
 
+import { BackspaceIcon } from '@heroicons/react/24/outline';
 import { useMyContext } from 'hooks/useMyContext';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { checkPinCorrect } from 'services/encrypt-decrypt-data';
 import './app.css';
-import { BackspaceIcon } from '@heroicons/react/24/outline';
 
 export default function PinLockScreen(props: any) {
   const { children } = props;
@@ -15,7 +15,8 @@ export default function PinLockScreen(props: any) {
     checkPinCode,
     setCheckPinCode,
     redirectTo,
-    setRedirectTo
+    setRedirectTo,
+    setUserInfo
   } = useMyContext();
   const [pinData, setPinData] = useState<any>([]);
   const [error, setError] = useState('');
@@ -29,8 +30,9 @@ export default function PinLockScreen(props: any) {
 
       if (checkPinCode) {
         const decodedRes = checkPinCorrect(enterPin);
-
         if (decodedRes) {
+          console.log({ decodedRes });
+          setUserInfo(decodedRes);
           if (redirectTo) {
             setRedirectTo(false);
             router.push(`/${decodedRes.userType}`);
@@ -63,7 +65,7 @@ export default function PinLockScreen(props: any) {
         <div className="container mx-auto ">
           <div className="modal-content pb-10">
             <div className="text-center ">
-              <h1 className="text-heading">Please enter your PIN</h1>
+              <h1 className="text-heading">Please Enter Your PIN</h1>
             </div>
             <div className="mx-auto my-10 grid max-w-sm grid-cols-4 gap-3">
               {/* {pinData} */}
@@ -103,7 +105,7 @@ export default function PinLockScreen(props: any) {
                   </div>
                 </div>
                 <div
-                  className="bg-primary flex items-center justify-center rounded-md p-6  text-white"
+                  className="flex items-center justify-center rounded-md bg-primary p-6  text-white"
                   onClick={() => handleRemove()}
                 >
                   <BackspaceIcon className="h-6 w-6" />
