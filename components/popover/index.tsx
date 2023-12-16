@@ -8,6 +8,7 @@ interface PopupBoxProps {
   isOpenPopup?: boolean;
   setIsOpenPopup: Dispatch<SetStateAction<boolean>>;
   PopupTitle?: string;
+  popupDescription?: string;
   children?: React.ReactNode;
   imageUrl?: string;
 }
@@ -17,7 +18,8 @@ const PopupBox: React.FC<PopupBoxProps> = ({
   setIsOpenPopup,
   PopupTitle,
   children,
-  imageUrl
+  imageUrl,
+  popupDescription
 }) => {
   return (
     <>
@@ -59,15 +61,18 @@ const PopupBox: React.FC<PopupBoxProps> = ({
                       </div>
                     </div>
                   </Dialog.Title>
-                  <div className="mt-8 flex justify-center">
-                    <Image src={imageUrl} alt="img" width={220} height={220} />
-                  </div>
 
-                  <div className="my-8 text-center">
-                    <p className="text-lg font-medium text-textSecondary">
-                      Scan this QR code to receive payments
-                    </p>
-                  </div>
+                  {imageUrl && (
+                    <div className="mt-8 flex justify-center">
+                      <Image src={imageUrl} alt="img" width={220} height={220} />
+                    </div>
+                  )}
+
+                  {popupDescription && (
+                    <div className="my-8 text-center">
+                      <p className="text-lg font-medium text-textSecondary">{popupDescription}</p>
+                    </div>
+                  )}
 
                   <div className="flex flex-nowrap items-center   justify-center gap-2 [@media(max-width:500px)]:flex-wrap ">
                     {/* <button
