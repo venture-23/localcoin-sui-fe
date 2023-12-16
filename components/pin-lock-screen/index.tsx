@@ -55,7 +55,7 @@ export default function PinLockScreen(props: any) {
           setUserEnterPin(enterPin);
           setUserInfo((prevValue: any) => ({ ...prevValue }));
           setTimeout(() => {
-            router.push('/recipient');
+            router.push(`/${userInfo.userType}`);
             setshowPinScreen(false);
             clearInterval(intervalId);
           }, 500);
