@@ -20,7 +20,7 @@ export const campaignServices = (() => {
     payload = ''
   }: any) => {
     try {
-      debugger;
+      // debugger;
       const sourceKeypair = SorobanClient.Keypair.fromSecret(secretKey);
       const sourcePublicKey = sourceKeypair.publicKey();
       const contractId = 'CAPWEGXEOWLOMEJRDST4XDNAGUX6YNWXWASYV7B7QTKN34OKTWVOKYUU';
