@@ -8,8 +8,7 @@ import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/router';
 import { ClipboardIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
-import { useEffect, useState } from 'react';
-import { encodeToken } from 'services/encrypt-decrypt-data';
+import { useState } from 'react';
 import generateKeyPair from 'services/generateKeypair';
 import { maskWalletAddress } from 'utils/clipper';
 import GenerateKeyPair from './components/generate-key-pair-page';
@@ -26,25 +25,12 @@ const MerchantSignup = ({ param }: any) => {
   const router = useRouter();
   const [showSpinner, seShowSpinner] = useState(false);
   const [showScreen, setShowScreen] = useState(param === 'merchant' ? 0 : 1);
-  const { setshowPinScreen, userEnterPin } = useMyContext();
+  const { setshowPinScreen, userEnterPin, userInfo, setUserInfo } = useMyContext();
   const [data, setData] = useState<any>({
     storeName: '',
     proprietaryName: '',
     phoneNumber: ''
   });
-
-  useEffect(() => {
-    if (userEnterPin && data.secretKey) {
-      console.log({ data });
-      const resp = encodeToken({ ...data, userType: param }, userEnterPin);
-      if (resp) {
-        localStorage.setItem('local-coin', resp);
-        router.push(`/${param}`);
-        // console.log({ data }, params.get('type'), params);
-      }
-    }
-  }, [userEnterPin, data]);
-  console.log(userEnterPin, data);
 
   const [error, setError] = useState<ErrorType>({});
   const [isCopied, handleCopy] = useHandleCopy({ showToast: true });
@@ -81,6 +67,11 @@ const MerchantSignup = ({ param }: any) => {
       setData({ ...data, ...resp });
       // setshowPinScreen(true);
     }
+  };
+
+  const handleSignUp = () => {
+    setUserInfo({ ...data, userType: param });
+    setshowPinScreen(true);
   };
   return (
     <>
@@ -144,7 +135,7 @@ const MerchantSignup = ({ param }: any) => {
               </div>
               <div className="mt-6">
                 {data.secretKey && (
-                  <div onClick={() => setshowPinScreen(true)}>
+                  <div onClick={() => handleSignUp()}>
                     <Button text="Sign Up" />
                   </div>
                 )}

@@ -40,8 +40,7 @@ export default function RootLayoutClient({ children }: React.PropsWithChildren) 
       }}
     >
       {(showPinLockScreen || checkPinCode) && <PinLockScreen />}
-      {/* {!(showPinLockScreen || checkPinCode) && children} */}
-      {children}
+      {!(showPinLockScreen || checkPinCode) && children}
     </MyContext.Provider>
   );
 }

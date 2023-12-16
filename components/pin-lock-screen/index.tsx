@@ -1,10 +1,9 @@
 'use client';
-
 import { BackspaceIcon } from '@heroicons/react/24/outline';
 import { useMyContext } from 'hooks/useMyContext';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { checkPinCorrect } from 'services/encrypt-decrypt-data';
+import { useEffect, useState } from 'react';
+import { checkPinCorrect, encodeToken } from 'services/encrypt-decrypt-data';
 import './app.css';
 
 export default function PinLockScreen(props: any) {
@@ -16,11 +15,19 @@ export default function PinLockScreen(props: any) {
     setCheckPinCode,
     redirectTo,
     setRedirectTo,
-    setUserInfo
+    setUserInfo,
+    userInfo
   } = useMyContext();
   const [pinData, setPinData] = useState<any>([]);
   const [error, setError] = useState('');
   const router = useRouter();
+
+  let intervalId: any; // Variable to store the interval ID
+  useEffect(() => {
+    return () => {
+      clearInterval(intervalId); // Clear the interval on component unmount
+    };
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
   const handleClick = (value: string | number) => {
     if (pinData.length + 1 === 4) {
@@ -37,15 +44,24 @@ export default function PinLockScreen(props: any) {
             setRedirectTo(false);
             router.push(`/${decodedRes.userType}`);
           }
-
           setCheckPinCode(false);
           setshowPinScreen(false);
         } else {
           setError('Invalid Pin');
         }
       } else {
-        setshowPinScreen(false);
-        setUserEnterPin(enterPin);
+        try {
+          localStorage.setItem('local-coin', encodeToken(userInfo, enterPin));
+          setUserEnterPin(enterPin);
+          setUserInfo((prevValue: any) => ({ ...prevValue }));
+          setTimeout(() => {
+            router.push('/recipient');
+            setshowPinScreen(false);
+            clearInterval(intervalId);
+          }, 500);
+        } catch (error: any) {
+          throw new Error(error);
+        }
       }
     } else if (pinData.length + 1 <= 4) {
       setError('');
@@ -59,6 +75,7 @@ export default function PinLockScreen(props: any) {
       setPinData((prevPin: string) => prevPin.slice(0, -1));
     }
   };
+
   return (
     <>
       <div className=" fixed z-[1000] grid h-full  w-full place-items-end bg-white ">
@@ -68,7 +85,6 @@ export default function PinLockScreen(props: any) {
               <h1 className="text-heading">Please Enter Your PIN</h1>
             </div>
             <div className="mx-auto my-10 grid max-w-sm grid-cols-4 gap-3">
-              {/* {pinData} */}
               <div className="flex  h-[62px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
                 {pinData.slice(0, 1)}
               </div>
