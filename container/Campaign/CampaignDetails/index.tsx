@@ -15,6 +15,7 @@ const CampaignDetail = (props: any) => {
 
   useEffect(() => {
     if (scanData) {
+      buttonRef.current.close();
       setOpenDrawer(true);
     }
   }, [scanData]);

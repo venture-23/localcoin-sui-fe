@@ -23,6 +23,7 @@ function DrawerQRScan(props: any, ref: any) {
   function openModal() {
     setIsOpen(true);
   }
+  console.log({ isOpen });
 
   return (
     <>
@@ -78,7 +79,9 @@ function DrawerQRScan(props: any, ref: any) {
                         </p>
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                        <ScanToPay setScanData={props.setScanData} closeScanner={closeModal} />
+                        {isOpen && (
+                          <ScanToPay setScanData={props.setScanData} closeScanner={closeModal} />
+                        )}
                       </div>
                     </div>
                   </Dialog.Panel>

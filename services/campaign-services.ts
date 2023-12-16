@@ -95,7 +95,8 @@ export const campaignServices = (() => {
 const decoderHelper = (params: any, response: any) => {
   switch (params) {
     case 'get_campaigns':
-      const campaignList = response.returnValue?._value.map((x: any) =>
+      console.log(response.returnValue, 'from the get_campaigns');
+      const campaignList = response.returnValue?._value?.map((x: any) =>
         SorobanClient.StrKey.encodeEd25519PublicKey(x?._value?._value)
       );
       return campaignList;

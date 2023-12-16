@@ -3,20 +3,19 @@ import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/re
 import Button from 'components/botton';
 import PopupBox from 'components/popover';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 
 export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
   const [imageUrl, setImageUrl] = useState('');
-  // const [scanResultFile, setScanResultFile] = useState('');
-  const [scanResultWebCam, setScanResultWebCam] = useState('');
-  const { push } = useRouter();
-  const [open, setOpen] = useState(false);
-
+  const [getScanedResult, setGetScanedResult] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const cameraRef = useRef();
+  const ref = useRef(null);
+  const lastResult = useRef();
+
+  const [delayScan, setDelayScan] = useState(500);
 
   useEffect(() => {
     generateQrCode();
@@ -32,18 +31,6 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
       console.log(error);
     }
   };
-  // const handleErrorFile = (error) => {
-  //   console.log(error);
-  // };
-  // const handleScanFile = (result) => {
-  //   if (result) {
-  //     setScanResultFile(result);
-  //   }
-  // };
-  // const onScanFile = () => {
-  //   console.log(qrRef.current, 'current');
-  //   qrRef.current.openImageDialog();
-  // };
   const handleErrorWebCam = (error: any) => {
     console.log(error);
   };
@@ -51,6 +38,7 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
     if (result) {
       // setScanResultWebCam('result');
       setScanData(result);
+      setGetScanedResult(true);
       closeScanner();
       close();
       console.log({ result });
@@ -62,13 +50,16 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
       audio: false,
       video: true
     });
+    console.log({ stream });
     stream.getTracks().forEach(function (track) {
       track.stop();
       track.enabled = false;
     });
-    cameraRef.current.remove();
+    {
+      console.log({ cameraRef, ref });
+    }
+    cameraRef?.current?.remove();
   }
-
   return (
     <>
       {/* <Header className="h-[120px]"> */}
@@ -79,20 +70,41 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
         </div>
       </div>
       {/* </Header> */}
-      <div ref={cameraRef}>
+      {(!getScanedResult && (
         <QrReader
-          // className="hello"
+          scanDelay={delayScan}
+          constraints={{
+            facingMode: 'environment'
+          }}
           onResult={(result, error) => {
-            if (!!result) {
-              handleScanWebCam(result?.text);
-            }
+            if (!result) return;
 
+            // This callback will keep existing even after
+            // this component is unmounted
+            // So ignore it (only in this reference) if result keeps repeating
+            if (lastResult.current === result.text) {
+              return;
+            }
+            setScanData(result);
+            setGetScanedResult(true);
+            closeScanner();
+            close();
+            lastResult.current = result.text;
             if (!!error) {
               handleErrorWebCam(error);
             }
+            // onResult(result.text);
           }}
-          scanDelay={500}
-          constraints={{ facingMode: 'environment' }}
+          /*  onResult={(result, error) => {
+              if (!!result) {
+                handleScanWebCam(result?.text);
+                setDelayScan(false);
+              }
+
+              if (!!error) {
+                handleErrorWebCam(error);
+              }
+            }} */
           containerStyle={{ paddingTop: '0' }}
           videoContainerStyle={{ width: '100%', height: '100vh', paddingTop: '0' }}
           videoStyle={{
@@ -101,14 +113,15 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
             objectFit: 'cover'
           }}
         />
+      )) ||
+        null}
 
-        <span
-          className="try-css bg-tranparent absolute inset-0 m-auto h-[200px] w-1/2 rounded-md border-2 border-white  
+      <span
+        className="try-css bg-tranparent absolute inset-0 m-auto h-[200px] w-1/2 rounded-md border-2 border-white  
         shadow-[0_4px_0px_500px_rgba(0,0,0,0.5)] "
-        ></span>
+      ></span>
 
-        {/* <span className="absolute inset-0 w-full h-full font-bold bg-black/5"></span> */}
-      </div>
+      {/* <span className="absolute inset-0 w-full h-full font-bold bg-black/5"></span> */}
       {/* <h3>Scanned By WebCam Code: {scanResultWebCam}</h3> */}
       {/* {imageUrl ? <img src={imageUrl} alt="img" style={{ width: '100%' }} /> : null} */}
 
@@ -116,7 +129,6 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
         <>
           <div className="fixed bottom-7 right-7 " onClick={() => setIsOpenPopup(true)}>
             <Link
-              // href={asPath.includes('recipient') ? '/recipient/scan-pay' : '/merchant/scan-pay'}
               href=""
               className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
             >
