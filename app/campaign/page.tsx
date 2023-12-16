@@ -1,4 +1,9 @@
-import CampaignList from 'container/campaignspage/campaignList';
-export default function Campaigns() {
-  return <CampaignList />;
+import CampaignPage from 'container/Campaign/';
+
+export default function Campaign() {
+  return (
+    <>
+      <CampaignPage />
+    </>
+  );
 }

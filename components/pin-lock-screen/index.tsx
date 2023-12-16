@@ -1,11 +1,12 @@
 'use client';
 
+import { BackspaceIcon } from '@heroicons/react/24/outline';
 import { useMyContext } from 'hooks/useMyContext';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { checkPinCorrect } from 'services/encrypt-decrypt-data';
 import './app.css';
-import { BackspaceIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 export default function PinLockScreen(props: any) {
   const { children } = props;
@@ -15,7 +16,8 @@ export default function PinLockScreen(props: any) {
     checkPinCode,
     setCheckPinCode,
     redirectTo,
-    setRedirectTo
+    setRedirectTo,
+    setUserInfo
   } = useMyContext();
   const [pinData, setPinData] = useState<any>([]);
   const [error, setError] = useState('');
@@ -29,8 +31,9 @@ export default function PinLockScreen(props: any) {
 
       if (checkPinCode) {
         const decodedRes = checkPinCorrect(enterPin);
-
         if (decodedRes) {
+          console.log({ decodedRes });
+          setUserInfo(decodedRes);
           if (redirectTo) {
             setRedirectTo(false);
             router.push(`/${decodedRes.userType}`);
@@ -59,30 +62,33 @@ export default function PinLockScreen(props: any) {
   };
   return (
     <>
-      <div className=" fixed z-[1000] grid h-full  w-full place-items-end bg-white ">
+      <div className=" fixed z-[1000] grid   h-screen  w-full  place-items-center  bg-white ">
         <div className="container mx-auto ">
-          <div className="modal-content pb-10">
-            <div className="text-center ">
-              <h1 className="text-heading">Please enter your PIN</h1>
+          <div className="modal-content">
+            <div className="my-6 flex items-center justify-center">
+              <Image src={'/enterPIN.png'} width={250} height={250} alt="image verify" />
             </div>
-            <div className="mx-auto my-10 grid max-w-sm grid-cols-4 gap-3">
+            <div className="text-center " onClick={() => localStorage.removeItem('local-coin')}>
+              <h1 className="text-xl font-bold">Please Enter Your PIN</h1>
+            </div>
+            <div className="mx-auto my-4 flex justify-center gap-2">
               {/* {pinData} */}
-              <div className="flex  h-[62px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
+              <div className="flex  h-[50px] w-[50px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
                 {pinData.slice(0, 1)}
               </div>
-              <div className="flex  h-[62px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
+              <div className="flex  h-[50px] w-[50px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
                 {pinData.slice(1, 2)}
               </div>
-              <div className="flex  h-[62px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
+              <div className="flex  h-[50px] w-[50px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
                 {pinData.slice(2, 3)}
               </div>
-              <div className="flex  h-[62px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
+              <div className="flex  h-[50px] w-[50px] items-center justify-center rounded-md bg-slate-100 text-lg font-bold">
                 {pinData.slice(3, 4)}
               </div>
             </div>
-            <div className="my-3 text-center text-sm text-red-500 ">{error}</div>
+            <p className="my-1 text-center text-sm font-bold text-red-500 ">{error}</p>
             <div className="">
-              <div className="grid grid-cols-3 gap-4 rounded-md border bg-slate-50 p-4">
+              <div className="grid w-full grid-cols-3 gap-3 rounded-md border bg-slate-50 p-3">
                 {new Array(9).fill('0').map((x, index) => (
                   <div
                     className="rounded-md bg-white p-6 text-center"
@@ -103,7 +109,7 @@ export default function PinLockScreen(props: any) {
                   </div>
                 </div>
                 <div
-                  className="bg-primary flex items-center justify-center rounded-md p-6  text-white"
+                  className="flex items-center justify-center rounded-md bg-primary p-6 text-white"
                   onClick={() => handleRemove()}
                 >
                   <BackspaceIcon className="h-6 w-6" />

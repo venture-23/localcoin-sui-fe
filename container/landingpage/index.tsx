@@ -11,8 +11,8 @@ const LandingPage = () => {
           <div className="flex justify-center ">
             <Image
               src={'/Get_Started/Get_Started.png'}
-              width={350}
-              height={302}
+              width={250}
+              height={202}
               alt="get started image"
             />
           </div>
@@ -23,7 +23,7 @@ const LandingPage = () => {
             </p>
           </div>
 
-          <div className=" flex flex-col gap-5">
+          <div className="flex flex-col gap-5 ">
             <Button text="Login" link="/signup" />
             <Button
               text="Check for ongoing campaigns"

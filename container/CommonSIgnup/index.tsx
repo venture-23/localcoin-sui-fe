@@ -1,20 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
-import Header from 'components/layout/header';
 import useHandleCopy from 'hooks/useCopyText';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/router';
+import { ClipboardIcon } from '@heroicons/react/24/outline';
+import Button from 'components/botton';
 import { useEffect, useState } from 'react';
 import { encodeToken } from 'services/encrypt-decrypt-data';
 import generateKeyPair from 'services/generateKeypair';
 import { maskWalletAddress } from 'utils/clipper';
 import GenerateKeyPair from './components/generate-key-pair-page';
 import MerchantInfo from './components/user-info';
-import { ClipboardIcon } from '@heroicons/react/24/outline';
-import Button from 'components/botton';
 
 interface ErrorType {
   storeName?: string;
@@ -24,6 +23,8 @@ interface ErrorType {
 }
 
 const MerchantSignup = ({ param }: any) => {
+  const router = useRouter();
+  const [showSpinner, seShowSpinner] = useState(false);
   const [showScreen, setShowScreen] = useState(param === 'merchant' ? 0 : 1);
   const { setshowPinScreen, userEnterPin } = useMyContext();
   const [data, setData] = useState<any>({
@@ -32,10 +33,9 @@ const MerchantSignup = ({ param }: any) => {
     phoneNumber: ''
   });
 
-  const router = useRouter();
-
   useEffect(() => {
-    if (userEnterPin) {
+    if (userEnterPin && data.secretKey) {
+      console.log({ data });
       const resp = encodeToken({ ...data, userType: param }, userEnterPin);
       if (resp) {
         localStorage.setItem('local-coin', resp);
@@ -43,7 +43,8 @@ const MerchantSignup = ({ param }: any) => {
         // console.log({ data }, params.get('type'), params);
       }
     }
-  }, [userEnterPin]);
+  }, [userEnterPin, data]);
+  console.log(userEnterPin, data);
 
   const [error, setError] = useState<ErrorType>({});
   const [isCopied, handleCopy] = useHandleCopy({ showToast: true });
@@ -71,14 +72,16 @@ const MerchantSignup = ({ param }: any) => {
     }
   };
 
-  const handleGenerateKey = () => {
-    const resp = generateKeyPair();
+  const handleGenerateKey = async () => {
+    seShowSpinner(true);
+    const resp = await generateKeyPair();
+    console.log({ resp });
     if (resp.secretKey) {
+      seShowSpinner(false);
       setData({ ...data, ...resp });
       // setshowPinScreen(true);
     }
   };
-  console.log({ showScreen });
   return (
     <>
       {/* <Header className="h-[120px]"> */}
@@ -97,7 +100,7 @@ const MerchantSignup = ({ param }: any) => {
             )}
             {/* <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p> */}
           </div>
-
+          {showSpinner && 'Generating Key . . . '}
           {showScreen === 0 ? (
             <MerchantInfo
               data={data}
@@ -110,30 +113,34 @@ const MerchantSignup = ({ param }: any) => {
             (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
           )}
           {data.secretKey && (
-            <div className="rounded-md bg-white p-10">
-              <p className="text-text mb-4 text-lg font-bold">Please securely copy this code</p>
+            <div className="rounded-md bg-white p-6">
+              <p className="mb-4 text-lg font-bold text-text">Please securely copy this code</p>
               <div className="grid gap-3">
-                <div className="bg-bgGray flex flex-col gap-1 rounded-[4px]  p-4 ">
+                <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
                   <div>
-                    <p className="mb-2 font-bold">Public Key :</p>
-                    <p className="text-sm">{maskWalletAddress(data.publicKey)}</p>{' '}
+                    <p className="mb-2 font-medium">Public Key :</p>
+                    <p className="text-sm text-textSecondary">
+                      {maskWalletAddress(data.publicKey)}
+                    </p>{' '}
                   </div>
                   <button
                     onClick={handleCopy}
-                    className="bg-primary self-end rounded-full p-2 text-white"
+                    className="absolute top-1/2 -translate-y-1/2 self-end rounded-full bg-primary p-2 text-white"
                   >
                     <ClipboardIcon className="h-6 w-6" />
                   </button>
                 </div>
-                <div className="bg-bgGray flex flex-col gap-1 rounded-[4px]  p-4 ">
+                <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
                   <div>
-                    <p className="mb-2 font-bold">Secret Key :</p>
-                    <p className="text-sm">{maskWalletAddress(data.secretKey)}</p>{' '}
+                    <p className="mb-2 font-medium">Secret Key :</p>
+                    <p className="text-sm text-textSecondary">
+                      {maskWalletAddress(data.secretKey)}
+                    </p>{' '}
                   </div>
                   <button
                     disabled={isCopied}
                     onClick={handleCopy}
-                    className="bg-primary self-end rounded-full p-2 text-white"
+                    className="absolute top-1/2 -translate-y-1/2 self-end rounded-full bg-primary p-2 text-white"
                   >
                     <ClipboardIcon className="h-6 w-6" />
                   </button>
@@ -144,13 +151,6 @@ const MerchantSignup = ({ param }: any) => {
                   <div onClick={() => setshowPinScreen(true)}>
                     <Button text="Sign Up" />
                   </div>
-                  // <button
-                  //   type="button"
-                  //   onClick={() => setshowPinScreen(true)}
-                  //   className="w-full button-primary"
-                  // >
-                  //   Next
-                  // </button>
                 )}
               </div>
             </div>

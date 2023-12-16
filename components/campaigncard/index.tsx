@@ -10,16 +10,20 @@ interface tokenProps {
   description: string;
 }
 interface CardProps {
-  campaignDetails: tokenProps;
+  // campaignDetails: tokenProps;
+  campaignDetails: any;
   cardInsideClass?: string;
   iconContainerClass?: string;
   cardContainerClass?: string;
+  id?: string;
+  link?: string;
 }
 
 const CampaignCard: React.FC<CardProps> = ({
   campaignDetails,
   cardContainerClass,
-  cardInsideClass
+  cardInsideClass,
+  link
   // iconContainerClass
 }) => {
   const pathname = usePathname();
@@ -27,13 +31,12 @@ const CampaignCard: React.FC<CardProps> = ({
 
   useEffect(() => {
     const url = `${pathname}?${searchParams}`;
-    console.log(url);
     // You can now use the current URL
     // ...
   }, [pathname, searchParams]);
 
   return (
-    <Link href={`${pathname}/${campaignDetails.id}`}>
+    <Link href={`${link ? link : pathname}${campaignDetails.id || campaignDetails}`}>
       <div className={`flex ${cardContainerClass} rounded bg-white p-5  `}>
         {/* <div className={`flex flex-col items-center ${cardInsideClass}`}> */}
         {/* <div className={`${iconContainerClass}`}>Icon</div> */}
@@ -55,6 +58,9 @@ const CampaignCard: React.FC<CardProps> = ({
               <p className="mb-0 text-sm font-normal text-textSecondary ">
                 {campaignDetails.description}
               </p>
+              {!campaignDetails.title && (
+                <p className="mb-0 text-sm font-normal text-textSecondary ">{campaignDetails}</p>
+              )}
             </div>
           </div>
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EFF8FF]">

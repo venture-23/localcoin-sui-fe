@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
 
@@ -8,6 +10,8 @@ interface ButtonProps {
   query?: any;
   buttonType?: any;
   underline?: any;
+  disabled?: boolean;
+  handleClick?: () => void;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,22 +20,49 @@ const Button: React.FC<ButtonProps> = ({
   link,
   query,
   buttonType = 'primary',
-  underline
+  underline,
+  disabled = false,
+  handleClick
 }) => {
   return (
     <>
-      <Link className="w-full" href={query ? { pathname: link, query: query } : link || ''}>
+      <Link
+        className="w-full"
+        href={handleClick ? '#' : query ? { pathname: link, query: query } : link || ''}
+      >
         <button
+          onClick={() => (handleClick ? handleClick() : null)}
+          disabled={disabled}
           type="button"
           className={`w-full rounded-[4px] ${
             buttonType === 'primary'
               ? 'bg-primary font-bold text-white'
               : ' bg-[#F7F8FA] font-semibold text-[#212B34]'
           }  flex items-center justify-center gap-4 
-          px-6 py-3.5 text-lg ${underline} `}
+          px-6 py-3.5 text-base ${underline} `}
         >
-          <span>{buttonIcon}</span>
-          <span>{text}</span>
+          <div>{buttonIcon}</div>
+          <p className="m-0">{text}</p>
+          <svg
+            className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
         </button>
       </Link>
     </>

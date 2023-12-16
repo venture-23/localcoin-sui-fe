@@ -165,7 +165,7 @@ const MerchantPage = () => {
               setOpen(false);
             }}
           >
-            <Button text="Share QR Code" />
+            <Button text="Share QR Code DRAW" />
           </div>
         </Drawer>
         <Popover
