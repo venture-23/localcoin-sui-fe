@@ -3,13 +3,14 @@ import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import CampaignCard from 'components/campaigncard';
 import { useMyContext } from 'hooks/useMyContext';
+import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { campaignServices } from 'services/campaign-services';
 
 const CampaignList = () => {
   const [showLoader, setShowLoader] = useState(false);
   const [campaignList, setCampaignList] = useState([]);
-
+  const pathname = usePathname();
   const { userInfo } = useMyContext();
   useEffect(() => {
     if (userInfo.secretKey) {
@@ -41,7 +42,7 @@ const CampaignList = () => {
     id: 1,
     title: '12'
   };
-
+  console.log(pathname, 'this is pathname');
   return (
     <>
       {showLoader && 'Loading . . . . .'}
