@@ -39,5 +39,5 @@ yarn-error.log*
 next-env.d.ts
 
 
-sw.js.map
-sw.js
+/public/sw.js.map
+/public/sw.js
