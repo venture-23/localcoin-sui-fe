@@ -62,9 +62,7 @@ const RecipientPage = () => {
                 <Card title="Funded Campaigns" link="/" iconName={<RecipientFunded />} />
               </div>
             </div>
-            <div>
-              <Link href="/loader">open</Link>
-            </div>
+
             <div className="fixed bottom-0 left-0 w-full">
               <Button
                 link="/recipient/scan-pay"

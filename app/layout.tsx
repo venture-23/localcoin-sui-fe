@@ -7,8 +7,8 @@ const baseUrl = 'http://localhost:3000';
 // const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
 // const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
 import Footer from 'components/layout/footer';
-import './globals.css';
 import '../styles/index.scss';
+import './globals.css';
 import RootLayoutClient from './pin-lock-layout';
 
 export const metadata = {

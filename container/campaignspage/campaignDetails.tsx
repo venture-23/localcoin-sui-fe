@@ -1,5 +1,3 @@
-import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
-import Button from 'components/botton';
 import DetailCampaign from 'components/campaigncard/detail';
 import Link from 'next/link';
 
@@ -23,7 +21,7 @@ const CampaignDetail = (props: any) => {
 
       <section>
         <div className="container mx-auto">
-          <Link href="/recipient/campaigns">{'<- '}</Link>
+          <Link href="/campaign">{'<- '}</Link>
           <div className="mb-6 ">
             <p className="text-heading">Campaign Detail </p>
             {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
@@ -41,12 +39,6 @@ const CampaignDetail = (props: any) => {
             <DetailCampaign campaignDetails={campaignDetails} />
           </div>
         </div>
-        <Button
-          link="/recipient/scan-pay"
-          text="scan to pay"
-          underline="rounded-none capitalize py-5"
-          buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
-        />
       </section>
     </>
   );
