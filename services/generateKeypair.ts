@@ -9,14 +9,14 @@ const generateKeyPair = async () => {
     const pair = SorobanClient.Keypair.random();
     const secretKey = pair.secret();
     const publicKey = pair.publicKey();
-    // const response = await fetch(
-    //   `https://friendbot.stellar.org?addr=${encodeURIComponent(publicKey)}`
-    // );
-    // const responseJSON = await response.json();
-    // if (responseJSON) {
-    //   return { secretKey, publicKey };
-    // }
-    return { secretKey, publicKey };
+    const response = await fetch(
+      `https://friendbot.stellar.org?addr=${encodeURIComponent(publicKey)}`
+    );
+    const responseJSON = await response.json();
+    if (responseJSON) {
+      return { secretKey, publicKey };
+    }
+    // return { secretKey, publicKey };
   } catch (e: any) {
     console.warn('ERROR!', e);
     throw new Error(e);

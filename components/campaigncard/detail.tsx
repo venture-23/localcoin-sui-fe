@@ -28,6 +28,7 @@ const Tag: React.FC<TagProps> = ({ title, element }) => {
 };
 
 const DetailCampaign: React.FC<CampaignDetailProps> = ({ campaignDetails }) => {
+  console.log({ campaignDetails });
   return (
     <div className="rounded-t-lg bg-white ">
       <div className="relative ">
@@ -35,8 +36,12 @@ const DetailCampaign: React.FC<CampaignDetailProps> = ({ campaignDetails }) => {
         <div className="absolute left-0 top-0 flex h-full w-full flex-col justify-between rounded-t-lg bg-primary/80 px-6 py-6 text-white ">
           <span></span>
           <div>
-            <p className="break-words text-xl font-bold">Billboard Junction</p>
-            <p className="break-words text-sm font-medium">By : Robert D. Schawlow</p>
+            <p className="break-words text-xl font-bold">
+              {campaignDetails?.name || 'Billboard Junction'}{' '}
+            </p>
+            {campaignDetails.no_of_recipients && (
+              <p className="break-words text-sm font-medium">{campaignDetails.no_of_recipients}</p>
+            )}
           </div>
         </div>
       </div>

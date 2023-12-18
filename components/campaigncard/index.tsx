@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
+import { maskWalletAddress } from 'utils/clipper';
 interface tokenProps {
   id: string;
   title: string;
@@ -17,13 +18,15 @@ interface CardProps {
   cardContainerClass?: string;
   id?: string;
   link?: string;
+  clippedId?: boolean;
 }
 
 const CampaignCard: React.FC<CardProps> = ({
   campaignDetails,
   cardContainerClass,
   cardInsideClass,
-  link
+  link,
+  clippedId = false
   // iconContainerClass
 }) => {
   const pathname = usePathname();
@@ -59,7 +62,9 @@ const CampaignCard: React.FC<CardProps> = ({
                 {campaignDetails.description}
               </p>
               {!campaignDetails.title && (
-                <p className="mb-0 text-sm font-normal text-textSecondary ">{campaignDetails}</p>
+                <p className="mb-0 text-sm font-normal text-textSecondary ">
+                  {clippedId ? maskWalletAddress(campaignDetails) : campaignDetails}
+                </p>
               )}
             </div>
           </div>
