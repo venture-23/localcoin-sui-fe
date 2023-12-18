@@ -160,6 +160,7 @@ const CreateCampaignPage = () => {
           </div>
         </PopupBox>
       </div>
+
       <div
         onClick={() => {
           setIsOpenPopup(true);
