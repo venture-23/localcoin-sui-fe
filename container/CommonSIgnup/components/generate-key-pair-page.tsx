@@ -3,10 +3,11 @@ import Button from 'components/botton';
 const GenerateKeyPairPage = ({ handleGenerateKey }: any) => {
   return (
     <>
-      <div className="rounded-lg bg-white p-10 ">
+      <div className="rounded-lg bg-white p-6 ">
         <div className="mb-6">
-          <h1 className="text-heading mb-6">Generate Keypair</h1>
-          <p className="text-textSecondary max-w-sm text-lg font-semibold">
+          <div>Image here</div>
+          <h1 className="mb-2 text-2xl font-bold">Generate Keypair</h1>
+          <p className="max-w-sm text-sm font-medium text-textSecondary">
             Clicking the button below will Generates a keypair associated with the stellar
             blockchain.
           </p>

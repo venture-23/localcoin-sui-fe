@@ -104,30 +104,34 @@ const MerchantSignup = ({ param }: any) => {
             (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
           )}
           {data.secretKey && (
-            <div className="rounded-md bg-white p-10">
+            <div className="rounded-md bg-white p-6">
               <p className="mb-4 text-lg font-bold text-text">Please securely copy this code</p>
               <div className="grid gap-3">
-                <div className="flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
+                <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
                   <div>
-                    <p className="mb-2 font-bold">Public Key :</p>
-                    <p className="text-sm">{maskWalletAddress(data.publicKey)}</p>{' '}
+                    <p className="mb-2 font-medium">Public Key :</p>
+                    <p className="text-sm text-textSecondary">
+                      {maskWalletAddress(data.publicKey)}
+                    </p>{' '}
                   </div>
                   <button
                     onClick={handleCopy}
-                    className="self-end rounded-full bg-primary p-2 text-white"
+                    className="absolute top-1/2 -translate-y-1/2 self-end rounded-full bg-primary p-2 text-white"
                   >
                     <ClipboardIcon className="h-6 w-6" />
                   </button>
                 </div>
-                <div className="flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
+                <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
                   <div>
-                    <p className="mb-2 font-bold">Secret Key :</p>
-                    <p className="text-sm">{maskWalletAddress(data.secretKey)}</p>{' '}
+                    <p className="mb-2 font-medium">Secret Key :</p>
+                    <p className="text-sm text-textSecondary">
+                      {maskWalletAddress(data.secretKey)}
+                    </p>{' '}
                   </div>
                   <button
                     disabled={isCopied}
                     onClick={handleCopy}
-                    className="self-end rounded-full bg-primary p-2 text-white"
+                    className="absolute top-1/2 -translate-y-1/2 self-end rounded-full bg-primary p-2 text-white"
                   >
                     <ClipboardIcon className="h-6 w-6" />
                   </button>
