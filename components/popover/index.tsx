@@ -1,30 +1,46 @@
 'use-client';
 import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, ShieldExclamationIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import React, { Dispatch, Fragment, SetStateAction } from 'react';
+import React, { Fragment, forwardRef, useImperativeHandle, useState } from 'react';
 
 interface PopupBoxProps {
   isOpenPopup?: boolean;
-  setIsOpenPopup: Dispatch<SetStateAction<boolean>>;
-  PopupTitle?: string;
-  popupDescription?: string;
+  title?: string;
+  message?: string;
   children?: React.ReactNode;
   imageUrl?: string;
 }
 
-const PopupBox: React.FC<PopupBoxProps> = ({
-  isOpenPopup,
-  setIsOpenPopup,
-  PopupTitle,
-  children,
-  imageUrl,
-  popupDescription
-}) => {
+function PopupBox(props: PopupBoxProps, ref: any) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [messageInfo, setMessageInfo] = useState<any>({
+    type: '',
+    message: ''
+  });
+  useImperativeHandle(
+    ref,
+    () => ({
+      open: (value: any) => {
+        setMessageInfo({ ...value, type: value.type, message: value.message });
+        openModal();
+      },
+      close: () => closeModal()
+    }),
+    []
+  );
+  function closeModal() {
+    setIsOpen(false);
+    setMessageInfo({});
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
   return (
     <>
-      <Transition appear show={isOpenPopup} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => setIsOpenPopup(false)}>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={() => closeModal()}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -51,39 +67,42 @@ const PopupBox: React.FC<PopupBoxProps> = ({
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                     <div className="flex items-center justify-between">
-                      <span></span>
-                      <p className="m-0 text-center"> {PopupTitle}</p>
+                      <p className="m-0 text-center"> {messageInfo.title}</p>
                       <div
                         className="flex h-10 w-10 items-center justify-center "
-                        onClick={() => setIsOpenPopup(false)}
+                        onClick={() => setIsOpen(false)}
                       >
                         <XMarkIcon width="24px" height="24px" />
                       </div>
                     </div>
                   </Dialog.Title>
 
-                  {imageUrl && (
+                  {messageInfo.imageUrl && (
                     <div className="mt-8 flex justify-center">
-                      <Image src={imageUrl} alt="img" width={220} height={220} />
-                    </div>
-                  )}
-
-                  {popupDescription && (
-                    <div className="my-8 text-center">
-                      <p className="text-lg font-medium text-textSecondary">{popupDescription}</p>
+                      <Image src={messageInfo.imageUrl} alt="img" width={220} height={220} />
                     </div>
                   )}
 
                   <div className="flex flex-nowrap items-center   justify-center gap-2 [@media(max-width:500px)]:flex-wrap ">
-                    {/* <button
-                      type="button"
-                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={() => setIsOpenPopup(false)}
-                    >
-                      Got it, thanks!
-                    </button> */}
+                    {(messageInfo.type === 'alert' && (
+                      <ShieldExclamationIcon width={150} height={150} className="text-orange-500" />
+                    )) ||
+                      null}
+                    {(messageInfo.type === 'success' && (
+                      <CheckCircleIcon width={150} height={150} className="text-green-500" />
+                    )) ||
+                      null}
 
-                    {children}
+                    {messageInfo.type === 'error' && (
+                      <XMarkIcon width={150} height={150} className="text-red-500" />
+                    )}
+                    <div className="my-8 text-center">
+                      <p className="text-lg font-medium text-textSecondary">
+                        {messageInfo.message}
+                      </p>
+                    </div>
+
+                    {props.children}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -93,6 +112,6 @@ const PopupBox: React.FC<PopupBoxProps> = ({
       </Transition>
     </>
   );
-};
+}
 
-export default PopupBox;
+export default forwardRef(PopupBox);

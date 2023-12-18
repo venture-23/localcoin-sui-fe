@@ -1,4 +1,7 @@
 'use client';
+
+import { decoderHelper } from './response-decoder';
+
 var SorobanClient = require('soroban-client');
 const serverUrl = 'https://soroban-testnet.stellar.org';
 
@@ -17,13 +20,12 @@ export const campaignServices = (() => {
     // secretKey = 'SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W',
     secretKey,
     parameterType,
-    payload = ''
+    payload = '',
+    contractId = 'CAPWEGXEOWLOMEJRDST4XDNAGUX6YNWXWASYV7B7QTKN34OKTWVOKYUU'
   }: any) => {
     try {
-      // debugger;
       const sourceKeypair = SorobanClient.Keypair.fromSecret(secretKey);
       const sourcePublicKey = sourceKeypair.publicKey();
-      const contractId = 'CAPWEGXEOWLOMEJRDST4XDNAGUX6YNWXWASYV7B7QTKN34OKTWVOKYUU';
       const server = new SorobanClient.Server(serverUrl, {
         allowHttp: true
       });
@@ -80,28 +82,25 @@ export const campaignServices = (() => {
         numberToU32(parseFloat(data.recipients)),
         accountToScVal(localCoinAddress),
         numberToI128(parseFloat(data.totalAmount)),
-        // accountToScVal('GCSEKCSARTFPCCY2ZMC5GPUBYD2DJBTVFUXFO5O3R2Q72QTU4BDPUXXY')
         accountToScVal(publicKey)
       ]
     });
   };
 
+  const getCampaignInfo = (
+    secretKey: string,
+    contractId: string = 'CDHF7HBD2L7SE5HEL2TZKJNKAJSQMMHYA5CHMGQXLR6MD7DGLKNZOZKA'
+  ) => {
+    return makeTransaction({
+      parameterType: 'get_campaign_info',
+      contractId,
+      secretKey
+    });
+  };
+
   return {
     getCampaigns: getCampaigns,
-    createCampaigns: createCampaigs
+    createCampaigns: createCampaigs,
+    getCampaignInfo
   };
 })();
-
-const decoderHelper = (params: any, response: any) => {
-  switch (params) {
-    case 'get_campaigns':
-      console.log(response.returnValue, 'from the get_campaigns');
-      const campaignList = response.returnValue?._value?.map((x: any) =>
-        SorobanClient.StrKey.encodeEd25519PublicKey(x?._value?._value)
-      );
-      return campaignList;
-
-    default:
-      return response.returnValue;
-  }
-};

@@ -16,6 +16,7 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
   const lastResult = useRef();
 
   const [delayScan, setDelayScan] = useState(500);
+  const popOverRef = useRef<any>(null);
 
   useEffect(() => {
     generateQrCode();
@@ -23,11 +24,9 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
 
   const generateQrCode = async () => {
     try {
-      // debugger;
       const response = await QRCode.toDataURL('this is address of user');
       setImageUrl(response);
     } catch (error) {
-      // debugger;
       console.log(error);
     }
   };
@@ -36,7 +35,6 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
   };
   const handleScanWebCam = (result: string) => {
     if (result) {
-      // setScanResultWebCam('result');
       setScanData(result);
       setGetScanedResult(true);
       closeScanner();
@@ -127,7 +125,10 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
 
       {imageUrl ? (
         <>
-          <div className="fixed bottom-7 right-7 " onClick={() => setIsOpenPopup(true)}>
+          <div
+            className="fixed bottom-7 right-7 "
+            onClick={() => popOverRef.current.open({ title: 'Share QR Code', imageUrl })}
+          >
             <Link
               href=""
               className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
@@ -136,12 +137,7 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
               <span className="text-base font-semibold text-white">Share QR</span>
             </Link>
           </div>
-          <PopupBox
-            PopupTitle="Share QR Code"
-            setIsOpenPopup={setIsOpenPopup}
-            isOpenPopup={isOpenPopup}
-            imageUrl={imageUrl}
-          >
+          <PopupBox ref={popOverRef}>
             <a href={imageUrl} download className="w-full">
               <Button
                 buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}

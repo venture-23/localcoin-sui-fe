@@ -23,7 +23,6 @@ function DrawerQRScan(props: any, ref: any) {
   function openModal() {
     setIsOpen(true);
   }
-  console.log({ isOpen });
 
   return (
     <>

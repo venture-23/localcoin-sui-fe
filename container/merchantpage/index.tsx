@@ -4,11 +4,11 @@ import { Tab } from '@headlessui/react';
 import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import Drawer from 'components/drawer';
-import Popover from 'components/popover';
+import PopupBox from 'components/popover';
 import TokenCard from 'components/tokencard';
 import Link from 'next/link';
 import QRCode from 'qrcode';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const MerchantPage = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
@@ -19,6 +19,7 @@ const MerchantPage = () => {
 
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
+  const popOverRef = useRef<any>(null);
 
   useEffect(() => {
     generateQrCode();
@@ -161,14 +162,28 @@ const MerchantPage = () => {
           <div
             className="mt-6"
             onClick={() => {
-              setIsOpenPopup(true);
               setOpen(false);
+              // setIsOpenPopup(true);
+              popOverRef.current.open({ title: 'Share QR Code', imageUrl });
             }}
           >
             <Button text="Share QR Code DRAW" />
           </div>
         </Drawer>
-        <Popover
+        <PopupBox ref={popOverRef}>
+          <a href={imageUrl} download className="w-full">
+            <Button
+              buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
+              text="Save image"
+            />
+          </a>
+          <Button
+            text="Share"
+            buttonType="secondary"
+            buttonIcon={<ShareIcon width={24} height={24} />}
+          />
+        </PopupBox>
+        {/* <Popover
           PopupTitle="Share QR Code"
           setIsOpenPopup={setIsOpenPopup}
           isOpenPopup={isOpenPopup}
@@ -185,7 +200,7 @@ const MerchantPage = () => {
             buttonType="secondary"
             buttonIcon={<ShareIcon width={24} height={24} />}
           />
-        </Popover>
+        </Popover> */}
       </section>
     </>
   );

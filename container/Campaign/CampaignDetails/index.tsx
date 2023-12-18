@@ -4,14 +4,28 @@ import Button from 'components/botton';
 import DetailCampaign from 'components/campaigncard/detail';
 import Drawer from 'components/drawer';
 import DrawerQRScan from 'components/drawer-qr-scan';
+import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import { campaignServices } from 'services/campaign-services';
 
 const CampaignDetail = (props: any) => {
+  const { userInfo } = useMyContext();
   const [scanData, setScanData] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({});
+  const [campaignInfo, setCampaignInfo] = useState({});
+
+  useEffect(() => {
+    const getInfo = async () => {
+      campaignServices
+        .getCampaignInfo(userInfo.secretKey)
+        .then((x) => setCampaignInfo(x))
+        .catch((error) => console.log(error));
+    };
+    getInfo();
+  }, []);
 
   useEffect(() => {
     if (scanData) {
@@ -80,7 +94,7 @@ const CampaignDetail = (props: any) => {
               campaignDetails={campaignDetails}
             /> */}
 
-            <DetailCampaign campaignDetails={campaignDetails} />
+            <DetailCampaign campaignDetails={campaignInfo} />
             <div
               className="fixed bottom-7 right-7 "
               onClick={() => {
