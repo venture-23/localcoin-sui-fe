@@ -39,7 +39,7 @@ const CampaignCard: React.FC<CardProps> = ({
   }, [pathname, searchParams]);
 
   return (
-    <Link href={`${link ? link : pathname}${campaignDetails.id || campaignDetails}`}>
+    <Link href={`${link ? link : pathname}/${campaignDetails.id || campaignDetails}`}>
       <div className={`flex ${cardContainerClass} rounded bg-white p-5  `}>
         {/* <div className={`flex flex-col items-center ${cardInsideClass}`}> */}
         {/* <div className={`${iconContainerClass}`}>Icon</div> */}
