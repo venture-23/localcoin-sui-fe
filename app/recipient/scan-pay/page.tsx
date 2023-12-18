@@ -1,4 +1,5 @@
 'use client';
+import { XCircleIcon } from '@heroicons/react/20/solid';
 import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import PopupBox from 'components/popover';
@@ -73,8 +74,8 @@ export default function ScanPayMerchant() {
       <div className=" absolute top-12 z-[10] mx-auto w-[95%] ">
         <div className="flex items-center justify-between">
           <p className="flex-1 text-center text-white">Scan QR code to pay</p>
-          <Link href="/recipient" className="text-white ">
-            {'X'}
+          <Link href="/recipient" className="flex items-center justify-center rounded-full ">
+            <XCircleIcon width={24} height={24} color="white" />
           </Link>
         </div>
       </div>

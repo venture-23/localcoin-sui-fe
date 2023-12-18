@@ -13,6 +13,7 @@ import generateKeyPair from 'services/generateKeypair';
 import { maskWalletAddress } from 'utils/clipper';
 import GenerateKeyPair from './components/generate-key-pair-page';
 import MerchantInfo from './components/user-info';
+import Image from 'next/image';
 
 interface ErrorType {
   storeName?: string;
@@ -91,7 +92,16 @@ const MerchantSignup = ({ param }: any) => {
             )}
             {/* <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p> */}
           </div>
-          {showSpinner && 'Generating Key . . . '}
+          {showSpinner && (
+            <>
+              <div className="fixed inset-0 mx-auto flex flex-col items-center justify-center bg-white">
+                <div>
+                  <Image src={'/generateQR.gif'} width={250} height={250} />
+                </div>
+                <p className="my-4 text-2xl ">Generating key for you</p>
+              </div>
+            </>
+          )}
           {showScreen === 0 ? (
             <MerchantInfo
               data={data}
@@ -140,7 +150,7 @@ const MerchantSignup = ({ param }: any) => {
               <div className="mt-6">
                 {data.secretKey && (
                   <div onClick={() => handleSignUp()}>
-                    <Button text="Sign Up" />
+                    <Button text="Complete" />
                   </div>
                 )}
               </div>
