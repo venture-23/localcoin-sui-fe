@@ -13,7 +13,7 @@ export default function ScanPayMerchant() {
   // const [scanResultFile, setScanResultFile] = useState('');
   const [scanResultWebCam, setScanResultWebCam] = useState('');
   const { push } = useRouter();
-  const [open, setOpen] = useState(false);
+  const popOverRef = useRef<any>(null);
 
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const cameraRef = useRef();
@@ -114,7 +114,10 @@ export default function ScanPayMerchant() {
 
       {imageUrl ? (
         <>
-          <div className="fixed bottom-7 right-7 " onClick={() => setIsOpenPopup(true)}>
+          <div
+            className="fixed bottom-7 right-7 "
+            onClick={() => popOverRef.current.open({ title: 'Share QR Code', imageUrl })}
+          >
             <Link
               // href={asPath.includes('recipient') ? '/recipient/scan-pay' : '/merchant/scan-pay'}
               href=""
@@ -124,23 +127,20 @@ export default function ScanPayMerchant() {
               <span className="text-base font-semibold text-white">Share QR</span>
             </Link>
           </div>
-          <PopupBox
-            PopupTitle="Share QR Code"
-            setIsOpenPopup={setIsOpenPopup}
-            isOpenPopup={isOpenPopup}
-            imageUrl={imageUrl}
-          >
-            <a href={imageUrl} download className="w-full">
+          <PopupBox ref={popOverRef}>
+            <>
+              <a href={imageUrl} download className="w-full">
+                <Button
+                  buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
+                  text="Save image"
+                />
+              </a>
               <Button
-                buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
-                text="Save image"
+                text="Share"
+                buttonType="secondary"
+                buttonIcon={<ShareIcon width={24} height={24} />}
               />
-            </a>
-            <Button
-              text="Share"
-              buttonType="secondary"
-              buttonIcon={<ShareIcon width={24} height={24} />}
-            />
+            </>
           </PopupBox>
 
           {/* <Drawer open={open} setOpen={setOpen} panelTitle="Share your QR Code">

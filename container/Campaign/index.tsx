@@ -1,16 +1,18 @@
 'use client';
-import { CheckBadgeIcon, PlusIcon, ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import CampaignCard from 'components/campaigncard';
+import Popover from 'components/popover';
+import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import { useMyContext } from 'hooks/useMyContext';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { campaignServices } from 'services/campaign-services';
 
 const CampaignList = () => {
   const [showLoader, setShowLoader] = useState(false);
   const [campaignList, setCampaignList] = useState([]);
-
   const { userInfo } = useMyContext();
+  const popOverRef = useRef(null);
   useEffect(() => {
     if (userInfo.secretKey) {
       handlelClick();
@@ -29,22 +31,14 @@ const CampaignList = () => {
         setShowLoader(false);
       })
       .catch((e) => {
-        console.log('Error:', e);
+        setShowLoader(false);
+        popOverRef.current.open({ ...e, title: 'Error', type: 'error' });
       });
-    // const resp = await campaignServices.getCampaigns(userInfo.secretKey);
-    // console.log({ resp });
-    // setShowLoader(false);
-    // if (resp?.length) setCampaignList(resp);
   };
-
-  const campaignDetails: any = {
-    id: 1,
-    title: '12'
-  };
-
   return (
     <>
       <section>
+        <Popover ref={popOverRef} />
         <div className="container mx-auto">
           <div className="mb-6 flex items-center justify-between ">
             <p className="text-heading">Your Campaigns </p>
@@ -62,30 +56,10 @@ const CampaignList = () => {
             List Campaign
           </Button>
           <div className="grid grid-cols-1 gap-3">
-            {!showLoader && (
-              <>
-                <div className="relative w-full rounded bg-white p-4 ">
-                  <div className="flex animate-pulse items-center gap-3 space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-slate-200"></div>
-                    <div className="!ml-0 flex-1 py-1">
-                      <div className="h-4 w-[30%] rounded bg-slate-200"></div>
-                      <div className="mt-1 h-2 w-[20%] rounded bg-slate-200"></div>
-                    </div>
-                  </div>
-                  <span className="absolute right-6 top-1/2 h-6 w-6 -translate-y-1/2 animate-pulse rounded-full bg-slate-200"></span>
-                </div>
-              </>
-            )}
-
-            <CampaignCard
-              link="campaign/"
-              cardContainerClass="min-h-[50px] flex-col"
-              campaignDetails={campaignDetails}
-            />
-
+            {showLoader && <CampaignListSkeleton defaultData={7} />}
             {campaignList?.map((eachCampaign, eachid) => (
               <React.Fragment key={eachid + 1 + ''}>
-                <CampaignCard link="campaign/" campaignDetails={eachCampaign} />
+                <CampaignCard clippedId link="campaign/" campaignDetails={eachCampaign} />
               </React.Fragment>
             ))}
 

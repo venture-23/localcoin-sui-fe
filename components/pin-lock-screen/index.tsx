@@ -1,11 +1,11 @@
 'use client';
 import { BackspaceIcon } from '@heroicons/react/24/outline';
 import { useMyContext } from 'hooks/useMyContext';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { checkPinCorrect, encodeToken } from 'services/encrypt-decrypt-data';
 import './app.css';
-import Image from 'next/image';
 
 export default function PinLockScreen(props: any) {
   const { children } = props;
@@ -55,8 +55,8 @@ export default function PinLockScreen(props: any) {
           localStorage.setItem('local-coin', encodeToken(userInfo, enterPin));
           setUserEnterPin(enterPin);
           setUserInfo((prevValue: any) => ({ ...prevValue }));
+          router.push(`/${userInfo.userType}`);
           setTimeout(() => {
-            router.push(`/${userInfo.userType}`);
             setshowPinScreen(false);
             clearInterval(intervalId);
           }, 500);

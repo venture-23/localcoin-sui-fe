@@ -1,16 +1,7 @@
 'use client';
-import {
-  CheckCircleIcon,
-  LockClosedIcon,
-  ShieldExclamationIcon,
-  XCircleIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline';
 // import { Popover } from '@headlessui/react';
 import Button from 'components/botton';
-import PopupBox from 'components/popover';
 // import PopupBox from 'components/popover';
-import Popover from 'components/popover';
 
 import Select from 'components/select';
 import { useMyContext } from 'hooks/useMyContext';
@@ -21,7 +12,6 @@ import { campaignServices } from 'services/campaign-services';
 
 const CreateCampaignPage = () => {
   const router = useRouter();
-  const [isOpenPopup, setIsOpenPopup] = useState(false);
 
   const { userInfo } = useMyContext();
   const [showLoader, setShowLoader] = useState(false);
@@ -143,57 +133,6 @@ const CreateCampaignPage = () => {
             <Button disabled={showLoader} text="Create" />
           </div>
         </div>
-      </div>
-
-      <div
-        onClick={() => {
-          setIsOpenPopup(true);
-        }}
-      >
-        Sucess PopupBox
-        <PopupBox PopupTitle="Alert" setIsOpenPopup={setIsOpenPopup} isOpenPopup={isOpenPopup}>
-          <div>
-            <CheckCircleIcon width={150} height={150} className="text-green-500" />
-          </div>
-          <div className="text-center">
-            <p className="py-3 text-textSecondary">This is alert message and its on popup view</p>
-          </div>
-        </PopupBox>
-      </div>
-      <div
-        onClick={() => {
-          setIsOpenPopup(true);
-        }}
-      >
-        FailedPopover
-        <PopupBox
-          PopupTitle="Payment Failed"
-          setIsOpenPopup={setIsOpenPopup}
-          isOpenPopup={isOpenPopup}
-        >
-          <div>
-            <XMarkIcon width={150} height={150} className="text-red-500" />
-          </div>
-          <div className="text-center">
-            <p className="py-3 text-textSecondary">This is failed message and its on popup view</p>
-          </div>
-        </PopupBox>
-      </div>
-
-      <div
-        onClick={() => {
-          setIsOpenPopup(true);
-        }}
-      >
-        Alert
-        <PopupBox PopupTitle="Alert" setIsOpenPopup={setIsOpenPopup} isOpenPopup={isOpenPopup}>
-          <div>
-            <ShieldExclamationIcon width={150} height={150} className="text-orange-500" />
-          </div>
-          <div className="text-center">
-            <p className="py-3 text-textSecondary">This is alert message and its on popup view</p>
-          </div>
-        </PopupBox>
       </div>
     </section>
   );
