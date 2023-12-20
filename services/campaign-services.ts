@@ -1,12 +1,10 @@
 'use client';
 
-import { campaignContractId, issuanceManagementContract } from 'utils/constants';
+import { campaignContractId, issuanceManagementContract, localCoinAddress } from 'utils/constants';
 import { decoderHelper } from './response-decoder';
 
 var SorobanClient = require('soroban-client');
 const serverUrl = 'https://soroban-testnet.stellar.org';
-
-const localCoinAddress = 'CC4CBVODKWPVRRITF5ABX3JW664MCPV464QE5DUBYMH57XHSZKEZUILT';
 
 export const campaignServices = (() => {
   const accountToScVal = (account: string) => new SorobanClient.Address(account).toScVal();
@@ -69,14 +67,15 @@ export const campaignServices = (() => {
   };
 
   const getCampaigns = (secretKey: string) => {
-    return makeTransaction({ secretKey, parameterType: 'get_campaigns' });
+    return makeTransaction({ secretKey, parameterType: 'get_campaigns_name' });
   };
 
   const createCampaigs = (data: any, secretKey: string, publicKey: string) => {
+    console.log({ data });
+    debugger;
     return makeTransaction({
       secretKey,
       parameterType: 'create_campaign',
-
       /* 
        'create_campaign',
           ...[
@@ -92,7 +91,8 @@ export const campaignServices = (() => {
       payload: [
         StringToScVal(data.name),
         StringToScVal(data.description),
-        numberToU32(parseFloat(data.recipients)),
+        StringToScVal(data.participant),
+        // numberToU32(parseFloat(data.participant)),
         accountToScVal(localCoinAddress),
         numberToI128(parseFloat(data.totalAmount)),
         accountToScVal(publicKey)

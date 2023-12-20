@@ -2,13 +2,13 @@ import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Fragment } from 'react';
 
-const Select = ({ optionsList = [], value = '', handleChange }) => {
+const Select = ({ optionsList = [], defaultvalue = '', handleChange }: any) => {
   return (
     <>
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="inline-flex w-full justify-start gap-x-1.5 rounded-md bg-white px-6 py-4 text-base font-medium text-textSecondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            {value || 'Select One'}
+            {defaultvalue || 'Select One'}
             <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
           </Menu.Button>
         </div>

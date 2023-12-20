@@ -39,7 +39,7 @@ const CampaignCard: React.FC<CardProps> = ({
   }, [pathname, searchParams]);
 
   return (
-    <Link href={`${link ? link : pathname}/${campaignDetails.id || campaignDetails}`}>
+    <Link href={`${link ? link : pathname}/${campaignDetails.id}`}>
       <div className={`flex ${cardContainerClass} rounded bg-white p-5  `}>
         {/* <div className={`flex flex-col items-center ${cardInsideClass}`}> */}
         {/* <div className={`${iconContainerClass}`}>Icon</div> */}
@@ -57,13 +57,13 @@ const CampaignCard: React.FC<CardProps> = ({
               />
             </div>
             <div className="max-w-sm">
-              <p className="text-lg font-semibold text-text">{campaignDetails.title}</p>
+              <p className="text-lg font-semibold text-text">{campaignDetails?.title}</p>
               <p className="mb-0 text-sm font-normal text-textSecondary ">
                 {campaignDetails.description}
               </p>
-              {!campaignDetails.title && (
+              {campaignDetails?.title && (
                 <p className="mb-0 text-sm font-normal text-textSecondary ">
-                  {clippedId ? maskWalletAddress(campaignDetails) : campaignDetails}
+                  {maskWalletAddress(campaignDetails?.contractId)}
                 </p>
               )}
             </div>

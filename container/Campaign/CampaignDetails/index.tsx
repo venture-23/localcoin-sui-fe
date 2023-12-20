@@ -19,7 +19,6 @@ const CampaignDetail = (props: any) => {
 
   useEffect(() => {
     const getInfo = async () => {
-      console.log({ 1: userInfo.secretKey, props });
       campaignServices
         // .getCampaignInfo(userInfo.secretKey, props.campaignId)
         .getCampaignInfo(userInfo.secretKey)

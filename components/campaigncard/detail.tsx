@@ -32,7 +32,13 @@ const DetailCampaign: React.FC<CampaignDetailProps> = ({ campaignDetails }) => {
   return (
     <div className="rounded-t-lg bg-white ">
       <div className="relative ">
-        <Image src={'/Get_Started/Get_Started.png'} className="" height={900} width={430} />
+        <Image
+          src={'/Get_Started/Get_Started.png'}
+          alt="no-image"
+          className=""
+          height={900}
+          width={430}
+        />
         <div className="absolute left-0 top-0 flex h-full w-full flex-col justify-between rounded-t-lg bg-primary/80 px-6 py-6 text-white ">
           <span></span>
           <div>

@@ -15,12 +15,12 @@ const CampaignList = () => {
   const popOverRef = useRef(null);
   useEffect(() => {
     if (userInfo.secretKey) {
-      // handleClick();
+      _get_campaign_list();
       // console.log({ userInfo });
     }
   }, [userInfo]);
 
-  const handleClick = async () => {
+  const _get_campaign_list = async () => {
     console.log('pressed');
     setShowLoader(true);
     await campaignServices
@@ -52,7 +52,7 @@ const CampaignList = () => {
               '!w-fit bg-transparent text-blue-500 border border-primary !text-primary mb-3'
             }
             type="button"
-            handleClick={() => handleClick()}
+            handleClick={() => _get_campaign_list()}
           >
             List Campaign
           </Button>

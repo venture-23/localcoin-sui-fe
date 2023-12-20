@@ -19,18 +19,23 @@ const decodeContract = (value: any) => {
 const decoderHelper = (params: string, response: ResponseType) => {
   try {
     switch (params) {
-      case 'get_campaigns':
-        const campaignList = response?.returnValue?._value?.map((x: any) =>
-          decodeContract(x?._value?._value)
-        );
+      case 'get_campaigns_name':
+        const campaignList = response?.returnValue?._value?.map((x: any) => ({
+          contractId: decodeContract(x?._attributes?.key?._value?._value),
+          title: x?._attributes?.val?._value?.toString()
+        }));
         return campaignList;
 
       case 'get_campaign_info':
         console.log({ response });
-        const allInfo = (response?.returnValue?._value || []).map((eachValue: any) => ({
-          [eachValue?._attributes?.key?._value?.toString()]:
-            eachValue?._attributes?.val?._value?.toString()
-        }));
+        const allInfo = (response?.returnValue?._value || []).map(
+          (eachValue: any, index: number) => ({
+            [index === 0 ? 'no_of_recipients' : index === 1 ? 'name' : 'description']:
+              eachValue?._value?.toString()
+            // [eachValue?._value?.toString()]: eachValue?._value?.toString()
+            // [eachValue?._value?.toString()]: eachValue?._value?.toString()
+          })
+        );
         console.log({ allInfo });
         const singleObject = makeSingleObject(allInfo);
         console.log({ singleObject });

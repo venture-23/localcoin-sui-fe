@@ -37,7 +37,8 @@ const CreateCampaignPage = () => {
     totalAmount: '',
     participant: '',
     description: '',
-    creatorAddress: ''
+    creatorAddress: '',
+    creatorName: ''
   });
   const [error, setError] = useState<any>({});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,17 +61,25 @@ const CreateCampaignPage = () => {
     setError(errorChecked);
     if (Object.keys(errorChecked).length === 0) {
       setShowLoader(true);
-      campaignServices.createCampaigns(data, userInfo.secretKey, userInfo.publicKey).then((x) => {
-        if (x._value === undefined) {
+      campaignServices
+        .createCampaigns(data, userInfo.secretKey, userInfo.publicKey)
+        .then((x) => {
+          if (x._value === undefined) {
+            setShowLoader(false);
+            console.log(x);
+            toast.success('Created a Campaign');
+            router.push('/campaign');
+          }
+        })
+        .catch((x) => {
           setShowLoader(false);
-          console.log(x);
-          router.push('/campaign');
-        }
-      });
+          toast.error('Error while creating');
+        });
     }
   };
   const handleDropdown = (value) => {
     console.log({ value });
+    setData({ ...data, creatorAddress: value.value, creatorName: value.name });
   };
   return (
     <section>
@@ -94,7 +103,6 @@ const CreateCampaignPage = () => {
             </div>
           </div>
         </div>
-        {showLoader && <div>Processing . . . . . </div>}
         <div className="grid gap-5 bg-white px-6 pb-6 pt-8">
           <InputForm
             name="name"
@@ -112,7 +120,11 @@ const CreateCampaignPage = () => {
             error={error}
             data={data}
           />
-          <Select optionsList={creatorAddressList} handleDropdown={handleDropdown} />
+          <Select
+            defaultvalue={data.creatorName || ''}
+            optionsList={creatorAddressList}
+            handleChange={handleDropdown}
+          />
           <InputForm
             name="participant"
             handleChange={handleChange}
@@ -132,7 +144,7 @@ const CreateCampaignPage = () => {
             data={data}
           />
           <div onClick={handleSubmit}>
-            <Button disabled={showLoader} text="Create" />
+            <Button disabled={showLoader} showLoader={showLoader} text="Create" />
           </div>
         </div>
       </div>
