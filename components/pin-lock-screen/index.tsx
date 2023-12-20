@@ -56,6 +56,7 @@ export default function PinLockScreen(props: any) {
           setUserEnterPin(enterPin);
           setUserInfo((prevValue: any) => ({ ...prevValue }));
           router.push(`/${userInfo.userType}`);
+          // setshowPinScreen(false);
           setTimeout(() => {
             setshowPinScreen(false);
             clearInterval(intervalId);
@@ -85,7 +86,13 @@ export default function PinLockScreen(props: any) {
             <div className="my-6 flex items-center justify-center">
               <Image src={'/enterPIN.png'} width={250} height={250} alt="image verify" />
             </div>
-            <div className="text-center " onClick={() => localStorage.removeItem('local-coin')}>
+            <div
+              className="text-center "
+              onClick={() => {
+                window.location.reload();
+                localStorage.removeItem('local-coin');
+              }}
+            >
               <h1 className="text-xl font-bold">Please Enter Your PIN</h1>
             </div>
             <div className="mx-auto my-4 flex justify-center gap-2">

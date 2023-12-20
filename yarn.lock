@@ -1184,6 +1184,11 @@
   resolved "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.6.0.tgz"
   integrity sha512-2/U3GXA6YiPYQDLGwtGlnNgKYBSwCFIHf8Y9LUY5VATHdtbLlU0Y1R3QoBnT0aB4qv/BEiVVsj7LJXoQCgJ2vA==
 
+"@stellar/js-xdr@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@stellar/js-xdr/-/js-xdr-3.0.1.tgz#d500f1e1332210cd56e0ef95e44c54506d9f48f3"
+  integrity sha512-dp5Eh7Nr1YjiIeqpdkj2cQYxfoPudDAH3ck8MWggp48Htw66Z/hUssNYUQG/OftLjEmHT90Z/dtey2Y77DOxIw==
+
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
   resolved "https://registry.npmjs.org/@surma/rollup-plugin-off-main-thread/-/rollup-plugin-off-main-thread-2.2.3.tgz"
@@ -1872,6 +1877,11 @@ cliui@^6.0.0:
     string-width "^4.2.0"
     strip-ansi "^6.0.0"
     wrap-ansi "^6.2.0"
+
+clsx@^1.1.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
+  integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
 
 clsx@^2.0.0:
   version "2.0.0"
@@ -3238,11 +3248,6 @@ jiti@^1.19.1:
   resolved "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
-js-xdr@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/js-xdr/-/js-xdr-3.0.1.tgz"
-  integrity sha512-U+myFf2xdgeXsCE4iKwt/j14BLvU0F/YZv9LJwJrQgqtKKwyetYP7LwJKbc9qUYYAsa6ixy57CrDMtg2x+01cA==
-
 js-yaml@^4.1.0:
   version "4.1.0"
   resolved "https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.0.tgz"
@@ -4071,6 +4076,13 @@ react-qr-reader@^3.0.0-beta-1:
     "@zxing/library" "^0.18.3"
     rollup "^2.67.2"
 
+react-toastify@^9.1.3:
+  version "9.1.3"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-9.1.3.tgz#1e798d260d606f50e0fab5ee31daaae1d628c5ff"
+  integrity sha512-fPfb8ghtn/XMxw3LkxQBk3IyagNpF/LIKjOBflbexr2AWxAH1MJgvnESwEwBn9liLFXgTKWgBSdZpw9m4OTHTg==
+  dependencies:
+    clsx "^1.1.1"
+
 react@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
@@ -4458,15 +4470,15 @@ sodium-native@^4.0.1:
   dependencies:
     node-gyp-build "^4.6.0"
 
-soroban-client@^1.0.0-beta.4:
-  version "1.0.0-beta.4"
-  resolved "https://registry.npmjs.org/soroban-client/-/soroban-client-1.0.0-beta.4.tgz"
-  integrity sha512-M1jLCwQtWZkQIJ6U72nYpvj+giYnB2/Vw4E1DBaiCgg5iWIWatDto+QTI/aUR9m7fNGTt/AhFtQzhjksK1rFkQ==
+soroban-client@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/soroban-client/-/soroban-client-1.0.0.tgz#2ac6f0ce2053f46e1d7886a4a9af47a4a516416f"
+  integrity sha512-dflXkSBpgmke9ATSaXdka4mvHOz9EyUFioho7ffLj0FwzwOMapSjFnE2TpQTrDKnV9C3HuAO44c8Fhl6IewebQ==
   dependencies:
     axios "^1.6.0"
     bignumber.js "^9.1.1"
     buffer "^6.0.3"
-    stellar-base v10.0.0-beta.4
+    stellar-base "10.0.0"
     urijs "^1.19.1"
 
 source-list-map@^2.0.0:
@@ -4530,15 +4542,15 @@ spdx-license-ids@^3.0.0:
   resolved "https://registry.npmjs.org/spdx-license-ids/-/spdx-license-ids-3.0.16.tgz"
   integrity sha512-eWN+LnM3GR6gPu35WxNgbGl8rmY1AEmoMDvL/QD6zYmPWgywxWqJWNdLGT+ke8dKNWrcYgYjPpG5gbTfghP8rw==
 
-stellar-base@v10.0.0-beta.4:
-  version "10.0.0-beta.4"
-  resolved "https://registry.npmjs.org/stellar-base/-/stellar-base-10.0.0-beta.4.tgz"
-  integrity sha512-3EXDFHSahVDMTHrHiFOO8kFf5KN+AL4x5kd5rxjElElPG+385cyWDbO83GrNmDGU/u9/XiVL+riJjz5gQTv6RQ==
+stellar-base@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-10.0.0.tgz#c12a188e2e7043c63a2f98bd4cf52c33cfe2f8b7"
+  integrity sha512-WQhxGXQLSwwmIxWbZqv0HcJtlSOiaUgv7yKCCEwP+OoYDHKBjPjQiZWyAkuEY+mRFX9L+hnejLaBorc3P2rk0g==
   dependencies:
+    "@stellar/js-xdr" "^3.0.1"
     base32.js "^0.1.0"
     bignumber.js "^9.1.2"
     buffer "^6.0.3"
-    js-xdr "^3.0.0"
     sha.js "^2.3.6"
     tweetnacl "^1.0.3"
   optionalDependencies:
@@ -4709,6 +4721,11 @@ supports-preserve-symlinks-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
+
+swiper@^11.0.5:
+  version "11.0.5"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-11.0.5.tgz#6ed1ad06e6906ba42fd4b93d4988f0626a49046e"
+  integrity sha512-rhCwupqSyRnWrtNzWzemnBLMoyYuoDgGgspAm/8iBD3jCvAWycPLH4Z3TB0O5520DHLzMx94yUMH/B9Efpa48w==
 
 tailwindcss@^3.3.5:
   version "3.3.5"

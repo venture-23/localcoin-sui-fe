@@ -1,5 +1,6 @@
 'use client';
 
+import { campaignContractId, issuanceManagementContract } from 'utils/constants';
 import { decoderHelper } from './response-decoder';
 
 var SorobanClient = require('soroban-client');
@@ -17,11 +18,10 @@ export const campaignServices = (() => {
     new SorobanClient.nativeToScVal(value, { type: 'string' });
 
   const makeTransaction = async ({
-    // secretKey = 'SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W',
     secretKey,
     parameterType,
     payload = '',
-    contractId = 'CAPWEGXEOWLOMEJRDST4XDNAGUX6YNWXWASYV7B7QTKN34OKTWVOKYUU'
+    contractId = campaignContractId
   }: any) => {
     try {
       const sourceKeypair = SorobanClient.Keypair.fromSecret(secretKey);
@@ -76,6 +76,19 @@ export const campaignServices = (() => {
     return makeTransaction({
       secretKey,
       parameterType: 'create_campaign',
+
+      /* 
+       'create_campaign',
+          ...[
+            StringToScVal('TEST'),
+            StringToScVal('THIS IS DESCRIPTION'),
+            numberToU32(1),
+            accountToScVal('CC4CBVODKWPVRRITF5ABX3JW664MCPV464QE5DUBYMH57XHSZKEZUILT'),
+            numberToI128(1),
+            accountToScVal('GCSEKCSARTFPCCY2ZMC5GPUBYD2DJBTVFUXFO5O3R2Q72QTU4BDPUXXY')
+          ] 
+      
+      */
       payload: [
         StringToScVal(data.name),
         StringToScVal(data.description),
@@ -89,7 +102,7 @@ export const campaignServices = (() => {
 
   const getCampaignInfo = (
     secretKey: string,
-    contractId: string = 'CDHF7HBD2L7SE5HEL2TZKJNKAJSQMMHYA5CHMGQXLR6MD7DGLKNZOZKA'
+    contractId: string = 'CAYB5NVCDFFO3IYCHY77LPK2KAXJ7PNHIHPWQEUIM6G372MI7YKQS2VN'
   ) => {
     return makeTransaction({
       parameterType: 'get_campaign_info',
@@ -98,9 +111,18 @@ export const campaignServices = (() => {
     });
   };
 
+  const geTokenNameAddress = (secretKey: string) => {
+    return makeTransaction({
+      parameterType: 'get_token_name_address',
+      contractId: issuanceManagementContract,
+      secretKey
+    });
+  };
+
   return {
     getCampaigns: getCampaigns,
     createCampaigns: createCampaigs,
-    getCampaignInfo
+    getCampaignInfo,
+    geTokenNameAddress: geTokenNameAddress
   };
 })();

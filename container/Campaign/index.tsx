@@ -15,18 +15,19 @@ const CampaignList = () => {
   const popOverRef = useRef(null);
   useEffect(() => {
     if (userInfo.secretKey) {
-      handlelClick();
+      // handleClick();
       // console.log({ userInfo });
     }
   }, [userInfo]);
 
-  const handlelClick = async () => {
+  const handleClick = async () => {
+    console.log('pressed');
     setShowLoader(true);
     await campaignServices
       // SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W
       .getCampaigns(userInfo.secretKey)
       // .getCampaigns('SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W')
-      .then((x) => {
+      .then((x: any) => {
         setCampaignList(x);
         setShowLoader(false);
       })
@@ -51,7 +52,7 @@ const CampaignList = () => {
               '!w-fit bg-transparent text-blue-500 border border-primary !text-primary mb-3'
             }
             type="button"
-            onClick={handlelClick}
+            handleClick={() => handleClick()}
           >
             List Campaign
           </Button>
