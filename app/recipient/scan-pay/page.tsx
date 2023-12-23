@@ -59,22 +59,22 @@ export default function ScanPayMerchant() {
   const handleScanWebCam = (result: string) => {
     if (result) {
       setScanResultWebCam('result');
-      close();
+      // close();
       push('/recipient/confirmation');
     }
   };
-  async function close() {
-    console.log('closing');
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: true
-    });
-    stream.getTracks().forEach(function (track) {
-      track.stop();
-      track.enabled = false;
-    });
-    cameraRef.current.remove();
-  }
+  // async function close() {
+  //   console.log('closing');
+  //   const stream = await navigator.mediaDevices.getUserMedia({
+  //     audio: false,
+  //     video: true
+  //   });
+  //   stream.getTracks().forEach(function (track) {
+  //     track.stop();
+  //     track.enabled = false;
+  //   });
+  //   cameraRef.current.remove();
+  // }
 
   return (
     <>

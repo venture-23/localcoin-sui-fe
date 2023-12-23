@@ -79,7 +79,7 @@ const CampaignDetail = (props: any) => {
           if (z._value === undefined) {
             setOpenDrawer(false);
             setShowLoader(false);
-            toast.success('Created a Campaign');
+            toast.success('Token Sent !!!');
             router.push('/campaign');
           }
         })
