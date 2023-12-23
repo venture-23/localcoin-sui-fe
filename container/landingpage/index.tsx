@@ -14,12 +14,15 @@ const LandingPage = () => {
   const merInfo = {
     publicKey: 'GDYE7UFCWHVZSIZZC2CC2T7KXNXXGH35AI6B7HYEOSPHBB6C6PHVOM5S',
     secretKey: 'SCXXWGY33KYLQGLAV5ACCIBES75EGN5MYQDIKBPUFH3OWGIANFCH27DA',
-    userType: 'campaign'
+    userType: 'merchant',
+    proprietaryName: 'Props mer',
+    phoneNumber: '9860105561',
+    storeName: 'Merchant'
   };
   const recInfo = {
     publicKey: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',
     secretKey: 'SB3ROUYQSLTY5WTGQSILQ34G46IKPRW4C6ROVOHUIZCMUHOMAQHAZUIJ',
-    userType: 'campaign'
+    userType: 'recipient'
   };
   const handleClick = (name: string) => {
     const mapValue: any = {
