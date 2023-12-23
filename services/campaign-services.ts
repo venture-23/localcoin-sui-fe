@@ -178,6 +178,20 @@ export const campaignServices = (() => {
     });
   };
 
+  const merchant_registration = (secretKey: string, publicKey: string, data: any) => {
+    return makeTransaction({
+      parameterType: 'recipient_to_merchant_transfer',
+      secretKey,
+      payload: [
+        accountToScVal(publicKey),
+        StringToScVal(data),
+        StringToScVal(data),
+        StringToScVal(data),
+        StringToScVal(data)
+      ]
+    });
+  };
+
   return {
     getCreatorCampaigns: getCreatorCampaigns,
     getAllCampaigns,
@@ -186,6 +200,7 @@ export const campaignServices = (() => {
     getTokenNameAddress: getTokenNameAddress,
     transfer_tokens_to_recipient,
     getReceipientToken,
-    transfer_tokens_from_recipient_to_merchant: transfer_to_merchant
+    transfer_tokens_from_recipient_to_merchant: transfer_to_merchant,
+    merchant_registration
   };
 })();
