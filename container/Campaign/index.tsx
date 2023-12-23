@@ -5,21 +5,14 @@ import CampaignCard from 'components/campaigncard';
 import Popover from 'components/popover';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import { useMyContext } from 'hooks/useMyContext';
-<<<<<<< HEAD
-import React, { useEffect, useRef, useState } from 'react';
-=======
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
->>>>>>> e6ccef1910b55fc7784cad9a4ab74dba619fa893
+import React, { useEffect, useRef, useState } from 'react';
 import { campaignServices } from 'services/campaign-services';
 
 const CampaignList = () => {
   const [showLoader, setShowLoader] = useState(false);
   const [campaignList, setCampaignList] = useState([]);
-<<<<<<< HEAD
-=======
   const pathname = usePathname();
->>>>>>> e6ccef1910b55fc7784cad9a4ab74dba619fa893
   const { userInfo } = useMyContext();
   const popOverRef = useRef(null);
   useEffect(() => {
@@ -45,15 +38,12 @@ const CampaignList = () => {
         popOverRef.current.open({ ...e, title: 'Error', type: 'error' });
       });
   };
-<<<<<<< HEAD
-=======
 
   const campaignDetails: any = {
     id: 1,
     title: '12'
   };
   console.log(pathname, 'this is pathname');
->>>>>>> e6ccef1910b55fc7784cad9a4ab74dba619fa893
   return (
     <>
       <section>
