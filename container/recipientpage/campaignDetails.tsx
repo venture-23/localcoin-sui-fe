@@ -34,13 +34,16 @@ const CampaignDetail = (props: any) => {
             </div>
           )}
         </div>
-        <Button
-          text="scan to pay"
-          link="/recipient/scan-pay"
-          disabled={props.isDetailsFetching}
-          underline="rounded-none capitalize py-5"
-          buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
-        />
+
+        {!props.isDetailsFetching && (
+          <Button
+            text="scan to pay"
+            link="/recipient/scan-pay"
+            disabled={props.isDetailsFetching}
+            underline="rounded-none capitalize py-5"
+            buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
+          />
+        )}
       </section>
     </>
   );

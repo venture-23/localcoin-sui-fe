@@ -23,7 +23,7 @@ const CampaignList = () => {
             <Link href="/recipient">
               <ArrowLeftIcon width={24} height={24} />
             </Link>
-            <div className="flex items-center justify-between pt-2 mb-6 ">
+            <div className="mb-6 flex items-center justify-between pt-2 ">
               <p className="text-heading">Ongoing Campaigns </p>
               {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
             </div>
