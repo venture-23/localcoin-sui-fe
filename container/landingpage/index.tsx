@@ -12,7 +12,7 @@ const LandingPage = () => {
     userType: 'campaign'
   };
   const handleClick = () => {
-    localStorage.setItem('local-coin', encodeToken(userInfo, 1111));
+    localStorage.setItem('local-coin', encodeToken(userInfo, '1111'));
     window.location.reload();
   };
 
