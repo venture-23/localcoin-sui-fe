@@ -12,14 +12,17 @@ const LandingPage = () => {
     userType: 'campaign'
   };
   const merInfo = {
-    publicKey: 'GCYVMD4FOY2B3HDZE7AYQJ5LW7OOTMGQAY5O57EDYGESM7DAKSBFB3KB',
-    secretKey: 'SBQH6RJAZCOTQ7FQQKZL5U62UZ6F3JSTGW64YV62RY6GPU344FE6MYDB',
-    userType: 'campaign'
+    publicKey: 'GDYE7UFCWHVZSIZZC2CC2T7KXNXXGH35AI6B7HYEOSPHBB6C6PHVOM5S',
+    secretKey: 'SCXXWGY33KYLQGLAV5ACCIBES75EGN5MYQDIKBPUFH3OWGIANFCH27DA',
+    userType: 'merchant',
+    proprietaryName: 'Props mer',
+    phoneNumber: '9860105561',
+    storeName: 'Merchant'
   };
   const recInfo = {
-    publicKey: 'GCYVMD4FOY2B3HDZE7AYQJ5LW7OOTMGQAY5O57EDYGESM7DAKSBFB3KB',
-    secretKey: 'SBQH6RJAZCOTQ7FQQKZL5U62UZ6F3JSTGW64YV62RY6GPU344FE6MYDB',
-    userType: 'campaign'
+    publicKey: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',
+    secretKey: 'SB3ROUYQSLTY5WTGQSILQ34G46IKPRW4C6ROVOHUIZCMUHOMAQHAZUIJ',
+    userType: 'recipient'
   };
   const handleClick = (name: string) => {
     const mapValue: any = {
