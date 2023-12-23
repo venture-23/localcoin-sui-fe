@@ -55,7 +55,7 @@ function PopupBox(props: PopupBoxProps, ref: any) {
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <div className="flex items-center justify-center min-h-full p-4 text-center">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -65,12 +65,12 @@ function PopupBox(props: PopupBoxProps, ref: any) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-md bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md p-6 overflow-hidden text-left align-middle transition-all transform bg-white rounded-md shadow-xl">
                   <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                     <div className="flex items-center justify-between">
                       <p className="m-0 text-center"> {messageInfo.title}</p>
                       <div
-                        className="flex h-10 w-10 items-center justify-center "
+                        className="flex items-center justify-center w-10 h-10 "
                         onClick={() => setIsOpen(false)}
                       >
                         <XMarkIcon width="24px" height="24px" />
@@ -79,7 +79,7 @@ function PopupBox(props: PopupBoxProps, ref: any) {
                   </Dialog.Title>
 
                   {messageInfo.imageUrl && (
-                    <div className="mt-8 flex justify-center">
+                    <div className="flex justify-center mt-8">
                       <Image src={messageInfo.imageUrl} alt="img" width={220} height={220} />
                     </div>
                   )}

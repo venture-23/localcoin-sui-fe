@@ -17,14 +17,14 @@ const SignupPage = () => {
     <>
       {/* <Header className="h-[120px]">
         <div className="flex items-center">
-          <Link href="/"><ArrowLeftIcon width={24} height={24} /></Link>
+          <Link href="/">{'<- '}</Link>
           <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p>
         </div>
       </Header> */}
 
       <section className="bg-[#F7F8FA] ">
         <div className="container mx-auto ">
-          {/* <Link href="/"><ArrowLeftIcon width={24} height={24} /></Link> */}
+          {/* <Link href="/">{'<- '}</Link> */}
           <div className="pt-10 mb-10 ">
             <h1 className=" text-heading">
               Signup <span className="font-normal">with your desired role.</span>{' '}
