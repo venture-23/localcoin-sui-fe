@@ -21,8 +21,13 @@ const decoderHelper = (params: string, response: ResponseType) => {
   try {
     switch (params) {
       case 'get_campaigns':
+        const allCampaignList = (response?.returnValue?._value || []).map((eachValue: any) => ({
+          id: decodeContract(eachValue?._value?._value),
+          campaign: decodeContract(eachValue?._value?._value)
+        }));
         console.log({ response, params });
-        break;
+        console.log({ allCampaignList });
+        return allCampaignList;
       case 'get_creator_campaigns':
         const campaignList: any = response?.returnValue?._value?.map((x: any) => {
           return x._value.map((eachInsideValue: any) => {

@@ -1,8 +1,10 @@
 'use client';
 
 import CampaignCard from 'components/campaigncard';
+import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import { useCamapigns } from 'hooks/useCampaigns';
 import Link from 'next/link';
+import React from 'react';
 
 const CampaignList = () => {
   const campaignDetails: any = {
@@ -12,15 +14,8 @@ const CampaignList = () => {
   };
 
   const { isFetching, campaignList } = useCamapigns({ getOnGoingCampaign: true });
-  console.log({ isFetching, campaignList });
   return (
     <>
-      {/* <Header className="h-[120px]">
-        <div className="flex items-center">
-          <p className="flex-1 text-2xl font-semibold text-center">Campagin Lists</p>
-        </div>
-      </Header> */}
-
       <section>
         <div className="container mx-auto">
           <Link href="/recipient">{'<- '}</Link>
@@ -29,9 +24,17 @@ const CampaignList = () => {
             <div className="h-12 w-12 rounded-full bg-gray-600"></div>
           </div>
           <div className="grid grid-cols-1 gap-3">
-            <CampaignCard campaignDetails={campaignDetails} />
-            <CampaignCard campaignDetails={campaignDetails} />
-            <CampaignCard campaignDetails={campaignDetails} />
+            {campaignList?.map((eachCampaign: any, eachid: number) => (
+              <React.Fragment key={eachid + 1 + ''}>
+                <CampaignCard
+                  clippedId
+                  link={`/${eachCampaign.id}`}
+                  campaignDetails={eachCampaign}
+                />
+              </React.Fragment>
+            ))}
+            {!isFetching && campaignList?.length === 0 && <div>No Campaign Created</div>}
+            {isFetching && <CampaignListSkeleton defaultData={2} />}
           </div>
         </div>
       </section>
