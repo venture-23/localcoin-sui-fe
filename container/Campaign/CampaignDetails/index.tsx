@@ -25,8 +25,8 @@ const CampaignDetail = (props: any) => {
     // recipientAddress: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',
     // amount: 1
   });
-  const { isFetching, campaignInfo } = useCamapigns({ id: props.campaignId });
-  console.log({ isFetching, campaignInfo });
+  const { isDetailsFetching, campaignInfo } = useCamapigns({ id: props.campaignId });
+  console.log({ isDetailsFetching, campaignInfo });
   useEffect(() => {
     if (scanData) {
       const scanDatParse: any = JSON.parse(scanData);
@@ -105,7 +105,7 @@ const CampaignDetail = (props: any) => {
           {/* <div className="mb-6">
             <h2 className="mb-2 text-2xl font-bold">Campaign {props.campaignId}</h2>
           </div> */}
-
+          {isDetailsFetching && <div>Skeleton</div>}
           <div className="grid grid-cols-1 gap-1">
             {/* <CampaignCard
               cardContainerClass="min-h-[50px] flex-col"
