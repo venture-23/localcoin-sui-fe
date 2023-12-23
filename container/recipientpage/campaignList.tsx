@@ -28,7 +28,7 @@ const CampaignList = () => {
               <React.Fragment key={eachid + 1 + ''}>
                 <CampaignCard
                   clippedId
-                  link={`/${eachCampaign.id}`}
+                  link={`/recipient/campaigns`}
                   campaignDetails={eachCampaign}
                 />
               </React.Fragment>

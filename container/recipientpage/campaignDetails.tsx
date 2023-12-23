@@ -38,7 +38,7 @@ const CampaignDetail = (props: any) => {
               campaignDetails={campaignDetails}
             /> */}
 
-            <DetailCampaign campaignDetails={campaignDetails} />
+            <DetailCampaign campaignDetails={props.campaignDetails || {}} />
           </div>
         </div>
         <Button
