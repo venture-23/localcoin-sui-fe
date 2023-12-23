@@ -10,7 +10,6 @@ import React, { useRef, useState } from 'react';
 
 const CampaignList = () => {
   const [showLoader, setShowLoader] = useState(false);
-  const [campaignList, setCampaignList] = useState([]);
   const pathname = usePathname();
   const { userInfo } = useMyContext();
   const popOverRef = useRef(null);
