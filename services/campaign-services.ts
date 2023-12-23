@@ -51,12 +51,9 @@ export const campaignServices = (() => {
       };
       if (response.status === SendTxStatus.Pending) {
         console.log('pending');
-        const txResponse = await server.getTransaction(response.hash);
-        // console.log('pending');
         while (true) {
           try {
             const txResponse = await server.getTransaction(response.hash);
-
             if (txResponse.status === 'SUCCESS') {
               console.log({ txResponse });
               console.log({ ret: txResponse?.returnValue });
@@ -129,11 +126,18 @@ export const campaignServices = (() => {
     });
   };
 
-  const transfer_tokens_to_recipient = (secretKey: string, address: string, amount: string) => {
+  const transfer_tokens_to_recipient = (
+    secretKey: string,
+    address: string,
+    amount: number,
+    contractId: string
+  ) => {
+    debugger;
     return makeTransaction({
       parameterType: 'transfer_tokens_to_recipient',
       secretKey,
-      payload: [StringToScVal(address), StringToScVal(amount + '')]
+      contractId,
+      payload: [accountToScVal(address), numberToI128(amount)]
     });
   };
 

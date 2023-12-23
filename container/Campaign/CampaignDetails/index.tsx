@@ -7,12 +7,16 @@ import DrawerQRScan from 'components/drawer-qr-scan';
 import InputForm from 'components/form/input';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 
 const CampaignDetail = (props: any) => {
   const { userInfo } = useMyContext();
+  const router = useRouter();
+  const [showLoader, setShowLoader] = useState(false);
+
   const [scanData, setScanData] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
   const [error, setError] = useState<any>({});
@@ -32,7 +36,7 @@ const CampaignDetail = (props: any) => {
     };
     getInfo();
   }, []);
-
+  console.log({ campaignInfo });
   useEffect(() => {
     if (scanData) {
       const scanDatParse: any = JSON.parse(scanData);
@@ -73,10 +77,21 @@ const CampaignDetail = (props: any) => {
     const err: any = validation();
     setError(err);
     if (Object.keys(err).length === 0) {
-      setOpenDrawer(false);
       campaignServices
-        .transfer_tokens_to_recipient(userInfo.secretKey, data.recipientAddress, data.amount)
-        .then((z) => console.log({ z }))
+        .transfer_tokens_to_recipient(
+          userInfo.secretKey,
+          data.recipientAddress,
+          data.amount,
+          props.campaignId
+        )
+        .then((z) => {
+          if (z._value === undefined) {
+            setOpenDrawer(false);
+            setShowLoader(false);
+            toast.success('Created a Campaign');
+            router.push('/campaign');
+          }
+        })
         .catch((e) => toast.error('Error on Token Transfer'));
       console.log('first');
     }
@@ -156,7 +171,7 @@ const CampaignDetail = (props: any) => {
                   handleSubmit();
                 }}
               >
-                <Button text="Pay Now" />
+                <Button text="Pay Now" disabled={showLoader} showLoader={showLoader} />
               </div>
             </Drawer>
           </div>
