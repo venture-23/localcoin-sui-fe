@@ -16,38 +16,28 @@ const CampaignDetail = (props: any) => {
   };
   return (
     <>
-      {/* <Header className="h-[120px]">
-        <div className="flex items-center">
-          <p className="flex-1 text-2xl font-semibold text-center">Campaign Details</p>
-        </div>
-      </Header> */}
-
       <section>
         <div className="container mx-auto">
           <div className="pt-10">
-            <Link href={props.back ? props.back : '/recipient/campaigns'}><ArrowLeftIcon width={24} height={24} /></Link>
-            <div className="pt-2 mb-6 ">
+            <Link href={props.back ? props.back : '/recipient/campaigns'}>
+              <ArrowLeftIcon width={24} height={24} />
+            </Link>
+            <div className="mb-6 pt-2 ">
               <p className="text-heading">Campaign Detail </p>
-              {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
             </div>
           </div>
-          {/* <div className="mb-6">
-            <h2 className="mb-2 text-2xl font-bold">Campaign {props.campaignId}</h2>
-          </div> */}
-
-          <div className="grid grid-cols-1 gap-1">
-            {/* <CampaignCard
-              cardContainerClass="min-h-[50px] flex-col"
-              campaignDetails={campaignDetails}
-            /> */}
+          {props.isDetailsFetching && !props?.campaignDetails?.name ? (
             <CampaignDetailSkeleton />
-
-            <DetailCampaign campaignDetails={props.campaignDetails || {}} />
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-1">
+              <DetailCampaign campaignDetails={props.campaignDetails || {}} />
+            </div>
+          )}
         </div>
         <Button
-          link="/recipient/scan-pay"
           text="scan to pay"
+          link="/recipient/scan-pay"
+          disabled={props.isDetailsFetching}
           underline="rounded-none capitalize py-5"
           buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
         />

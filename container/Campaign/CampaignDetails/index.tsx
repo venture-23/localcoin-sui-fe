@@ -5,6 +5,7 @@ import DetailCampaign from 'components/campaigncard/detail';
 import Drawer from 'components/drawer';
 import DrawerQRScan from 'components/drawer-qr-scan';
 import InputForm from 'components/form/input';
+import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
 import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
@@ -78,7 +79,7 @@ const CampaignDetail = (props: any) => {
           if (z._value === undefined) {
             setOpenDrawer(false);
             setShowLoader(false);
-            toast.success('Created a Campaign');
+            toast.success('Token Sent !!!');
             router.push('/campaign');
           }
         })
@@ -102,71 +103,68 @@ const CampaignDetail = (props: any) => {
           </Link>
           <div className="mb-6 ">
             <p className="text-heading">Campaign Detail </p>
-            {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
           </div>
-          {/* <div className="mb-6">
-            <h2 className="mb-2 text-2xl font-bold">Campaign {props.campaignId}</h2>
-          </div> */}
-          {isDetailsFetching && <div>Skeleton</div>}
-          <div className="grid grid-cols-1 gap-1">
-            {/* <CampaignCard
-              cardContainerClass="min-h-[50px] flex-col"
-              campaignDetails={campaignDetails}
-            /> */}
+          {(isDetailsFetching && !campaignInfo?.name && (
+            <>
+              <CampaignDetailSkeleton />
+            </>
+          )) || (
+            <>
+              <div className="grid grid-cols-1 gap-1">
+                <DetailCampaign campaignDetails={campaignInfo} />
+                <div
+                  className="fixed bottom-7 right-7 "
+                  onClick={() => {
+                    setScanData('');
+                    buttonRef.current.open(Drawer);
+                    // setOpenDrawer(true);
+                  }}
+                >
+                  <Link
+                    href=""
+                    className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
+                  >
+                    <QrCodeIcon className="h-6 w-6 text-white" />
+                    <span className="text-base font-semibold text-white">Scan To Pay</span>
+                  </Link>
+                </div>
 
-            <DetailCampaign campaignDetails={campaignInfo} />
-            <div
-              className="fixed bottom-7 right-7 "
-              onClick={() => {
-                setScanData('');
-                buttonRef.current.open(Drawer);
-                // setOpenDrawer(true);
-              }}
-            >
-              <Link
-                // href={asPath.includes('recipient') ? '/recipient/scan-pay' : '/merchant/scan-pay'}
-                href=""
-                className="flex items-center gap-2 px-6 py-3 bg-blue-500 rounded-full w-fit"
-              >
-                <QrCodeIcon className="w-6 h-6 text-white" />
-                <span className="text-base font-semibold text-white">Scan To Pay</span>
-              </Link>
-            </div>
+                <DrawerQRScan ref={buttonRef} setScanData={setScanData} panelTitle="Scan QR Code" />
 
-            <DrawerQRScan ref={buttonRef} setScanData={setScanData} panelTitle="Scan QR Code" />
+                <Drawer open={openDrawer} setOpen={setOpenDrawer} panelTitle="Send Token">
+                  <label className="block">
+                    <InputForm
+                      type="text"
+                      data={data}
+                      error={error}
+                      maxLength={300}
+                      name="recipientAddress"
+                      handleChange={handleChange}
+                      placeholder="Recipient Address"
+                    />
+                    <InputForm
+                      type="text"
+                      data={data}
+                      error={error}
+                      maxLength={300}
+                      name="amount"
+                      handleChange={handleChange}
+                      placeholder="Amount"
+                    />
+                  </label>
 
-            <Drawer open={openDrawer} setOpen={setOpenDrawer} panelTitle="Send Token">
-              <label className="block">
-                <InputForm
-                  type="text"
-                  data={data}
-                  error={error}
-                  maxLength={300}
-                  name="recipientAddress"
-                  handleChange={handleChange}
-                  placeholder="Recipient Address"
-                />
-                <InputForm
-                  type="text"
-                  data={data}
-                  error={error}
-                  maxLength={300}
-                  name="amount"
-                  handleChange={handleChange}
-                  placeholder="Amount"
-                />
-              </label>
-
-              <div
-                className="mt-6"
-                onClick={() => {
-                  handleSubmit();
-                }}
-              >
-                <Button text="Pay Now" disabled={showLoader} showLoader={showLoader} />
+                  <div
+                    className="mt-6"
+                    onClick={() => {
+                      handleSubmit();
+                    }}
+                  >
+                    <Button text="Pay Now" disabled={showLoader} showLoader={showLoader} />
+                  </div>
+                </Drawer>
               </div>
-            </Drawer>
-          </div>
+            </>
+          )}
         </div>
       </section>
     </>

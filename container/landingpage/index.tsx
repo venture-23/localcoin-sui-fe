@@ -3,17 +3,31 @@ import { QrCodeIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import GetStartedSVG from 'components/getStartedSVG';
 
-import Image from 'next/image';
 import { encodeToken } from 'services/encrypt-decrypt-data';
 
 const LandingPage = () => {
-  const userInfo = {
+  const campInfo = {
     publicKey: 'GCYVMD4FOY2B3HDZE7AYQJ5LW7OOTMGQAY5O57EDYGESM7DAKSBFB3KB',
     secretKey: 'SBQH6RJAZCOTQ7FQQKZL5U62UZ6F3JSTGW64YV62RY6GPU344FE6MYDB',
     userType: 'campaign'
   };
-  const handleClick = () => {
-    localStorage.setItem('local-coin', encodeToken(userInfo, 1111));
+  const merInfo = {
+    publicKey: 'GCYVMD4FOY2B3HDZE7AYQJ5LW7OOTMGQAY5O57EDYGESM7DAKSBFB3KB',
+    secretKey: 'SBQH6RJAZCOTQ7FQQKZL5U62UZ6F3JSTGW64YV62RY6GPU344FE6MYDB',
+    userType: 'campaign'
+  };
+  const recInfo = {
+    publicKey: 'GCYVMD4FOY2B3HDZE7AYQJ5LW7OOTMGQAY5O57EDYGESM7DAKSBFB3KB',
+    secretKey: 'SBQH6RJAZCOTQ7FQQKZL5U62UZ6F3JSTGW64YV62RY6GPU344FE6MYDB',
+    userType: 'campaign'
+  };
+  const handleClick = (name: string) => {
+    const mapValue: any = {
+      c: campInfo,
+      m: merInfo,
+      r: recInfo
+    };
+    localStorage.setItem('local-coin', encodeToken(mapValue[name], '1111'));
     window.location.reload();
   };
 
@@ -30,12 +44,26 @@ const LandingPage = () => {
               LocalCoin is just around the corner.
               <span
                 onClick={() => {
-                  handleClick();
+                  handleClick('c');
                 }}
               >
                 Choose
               </span>{' '}
-              an option below to get started .
+              <span
+                onClick={() => {
+                  handleClick('m');
+                }}
+              >
+                an&nbsp;
+              </span>
+              <span
+                onClick={() => {
+                  handleClick('r');
+                }}
+              >
+                option&nbsp;
+              </span>
+              below to get started .
             </p>
           </div>
 

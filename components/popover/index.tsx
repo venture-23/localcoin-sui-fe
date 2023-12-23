@@ -11,6 +11,7 @@ interface PopupBoxProps {
   messageTitle?: string;
   children?: React.ReactNode;
   imageUrl?: string;
+  downloadIcon?: any;
 }
 
 function PopupBox(props: PopupBoxProps, ref: any) {
@@ -82,6 +83,9 @@ function PopupBox(props: PopupBoxProps, ref: any) {
                     <div className="flex justify-center mt-8">
                       <Image src={messageInfo.imageUrl} alt="img" width={220} height={220} />
                     </div>
+                  )}
+                  {messageInfo.downloadIcon && (
+                    <div className="flex justify-center mt-8">{messageInfo.downloadIcon}</div>
                   )}
 
                   <div className="flex flex-col flex-nowrap   items-center justify-center gap-2 [@media(max-width:500px)]:flex-wrap ">
