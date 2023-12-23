@@ -21,8 +21,8 @@ const CampaignDetail = (props: any) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({
-    recipientAddress: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',
-    amount: 1
+    // recipientAddress: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',
+    // amount: 1
   });
   const [campaignInfo, setCampaignInfo] = useState({});
 
@@ -126,9 +126,9 @@ const CampaignDetail = (props: any) => {
             <div
               className="fixed bottom-7 right-7 "
               onClick={() => {
-                // setScanData('');
-                // buttonRef.current.open(Drawer);
-                setOpenDrawer(true);
+                setScanData('');
+                buttonRef.current.open(Drawer);
+                // setOpenDrawer(true);
               }}
             >
               <Link
