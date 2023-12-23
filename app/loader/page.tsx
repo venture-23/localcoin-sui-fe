@@ -1,12 +1,11 @@
-import React from 'react';
-
 const loader = () => {
   return (
-    <div className="flex h-screen items-center justify-center bg-black/5">
-      <button type="button" className="... bg-red-500" disabled>
-        <svg className="... mr-3 h-5 w-5 animate-spin" viewBox="0 0 24 24"></svg>
-        Processing...
-      </button>
+    <div className="min-w-screen flex min-h-screen items-center justify-center bg-gray-100 p-5">
+      <div className="flex animate-pulse space-x-2">
+        <div className="h-3 w-3 rounded-full bg-gray-500"></div>
+        <div className="h-3 w-3 rounded-full bg-gray-500"></div>
+        <div className="h-3 w-3 rounded-full bg-gray-500"></div>
+      </div>
     </div>
   );
 };
