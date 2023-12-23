@@ -13,7 +13,6 @@ import Link from 'next/link';
 
 const SignupPage = () => {
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
-
   return (
     <>
       {/* <Header className="h-[120px]">

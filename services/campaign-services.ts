@@ -132,6 +132,15 @@ export const campaignServices = (() => {
     });
   };
 
+  const getReceipientToken = (secretKey: string, publicKey: string) => {
+    return makeTransaction({
+      parameterType: 'get_balance_of_batch',
+      contractId: issuanceManagementContract,
+      secretKey,
+      payload: [accountToScVal(publicKey)]
+    });
+  };
+
   const transfer_tokens_to_recipient = (
     secretKey: string,
     address: string,
@@ -146,6 +155,7 @@ export const campaignServices = (() => {
       payload: [accountToScVal(address), numberToI128(amount)]
     });
   };
+  
 
   return {
     getCreatorCampaigns: getCreatorCampaigns,
@@ -153,6 +163,7 @@ export const campaignServices = (() => {
     createCampaigns: createCampaigs,
     getCampaignInfo,
     getTokenNameAddress: getTokenNameAddress,
-    transfer_tokens_to_recipient
+    transfer_tokens_to_recipient,
+    getReceipientToken
   };
 })();

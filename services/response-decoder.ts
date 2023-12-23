@@ -83,6 +83,14 @@ const decoderHelper = (params: string, response: ResponseType) => {
         console.log({ tokenData });
         return tokenData;
 
+      case 'get_balance_of_batch':
+        console.log({ response, params });
+        const tokenList = (response?.returnValue?._value || []).map((x) => ({
+          name: x._attributes?.key?._value?.toString()
+        }));
+        console.log(tokenList);
+        return tokenList;
+
       default:
         console.log({ response, params });
         return response.returnValue;
