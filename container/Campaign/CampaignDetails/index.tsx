@@ -81,7 +81,7 @@ const CampaignDetail = (props: any) => {
         .transfer_tokens_to_recipient(
           userInfo.secretKey,
           data.recipientAddress,
-          data.amount,
+          parseFloat(data.amount),
           props.campaignId
         )
         .then((z) => {
