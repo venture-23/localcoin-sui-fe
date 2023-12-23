@@ -1,11 +1,14 @@
 import Button from 'components/botton';
+import Image from 'next/image';
 
 const GenerateKeyPairPage = ({ handleGenerateKey }: any) => {
   return (
     <>
       <div className="rounded-lg bg-white p-6 ">
         <div className="mb-6">
-          <div>Image here</div>
+          {/* <div className="flex justify-center">
+            <Image src={'/generateQR.png'} width={250} height={250} alt="genetate image" />
+          </div> */}
           <h1 className="mb-2 text-2xl font-bold">Generate Keypair</h1>
           <p className="max-w-sm text-sm font-medium text-textSecondary">
             Clicking the button below will Generates a keypair associated with the stellar

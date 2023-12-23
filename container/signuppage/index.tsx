@@ -1,15 +1,19 @@
+'use client';
+
 import {
   BuildingStorefrontIcon,
   GlobeEuropeAfricaIcon,
   UserCircleIcon
 } from '@heroicons/react/24/outline';
-import Button from 'components/botton';
 import Card from 'components/card';
+import { useAddToHomescreenPrompt } from 'components/test';
 // import Header from 'components/layout/header';
 
 import Link from 'next/link';
 
 const SignupPage = () => {
+  const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
+
   return (
     <>
       {/* <Header className="h-[120px]">
@@ -26,6 +30,9 @@ const SignupPage = () => {
             <h1 className=" text-heading">
               Signup <span className="font-normal">with your desired role.</span>{' '}
             </h1>
+            {promptable && !isInstalled ? (
+              <buton onClick={() => promptToInstall()}>INSTALL APP</buton>
+            ) : null}
             {/*  */}
           </div>
           <div className="flex flex-col justify-between gap-24">

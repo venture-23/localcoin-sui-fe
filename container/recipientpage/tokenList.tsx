@@ -6,14 +6,14 @@ const TokenList = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
   return (
     <>
-      <Header className="h-[120px]">
+      {/* <Header className="h-[120px]">
         <div className="flex items-center">
-          <Link href="/recipient">{'<- '}</Link>
-          <p className="flex-1  text-center text-2xl font-semibold">Token List</p>
+        <p className="flex-1 text-2xl font-semibold text-center">Token List</p>
         </div>
-      </Header>
-      <section className="my-6">
+      </Header> */}
+      <section className="">
         <div className="container mx-auto">
+          <Link href="/recipient">{'<- '}</Link>
           <div className="mb-6">
             <h2 className="mb-2 text-2xl font-bold">Your Tokens</h2>
           </div>

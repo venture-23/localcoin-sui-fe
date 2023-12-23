@@ -2,11 +2,12 @@
 import { serverUrl } from 'utils/constants';
 
 /* eslint-disable unicorn/filename-case */
-var SorobanClient = require('soroban-client');
+var StellarSdk = require('stellar-sdk');
+
 serverUrl;
 const generateKeyPair = async () => {
   try {
-    const pair = SorobanClient.Keypair.random();
+    const pair = StellarSdk.Keypair.random();
     const secretKey = pair.secret();
     const publicKey = pair.publicKey();
     const response = await fetch(

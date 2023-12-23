@@ -24,18 +24,19 @@ const CampaignList = () => {
   const popOverRef = useRef(null);
   useEffect(() => {
     if (userInfo.secretKey) {
-      handlelClick();
+      _get_campaign_list();
       // console.log({ userInfo });
     }
   }, [userInfo]);
 
-  const handlelClick = async () => {
+  const _get_campaign_list = async () => {
+    console.log('pressed');
     setShowLoader(true);
     await campaignServices
       // SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W
-      .getCampaigns(userInfo.secretKey)
+      .getCampaigns(userInfo.secretKey, userInfo.publicKey)
       // .getCampaigns('SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W')
-      .then((x) => {
+      .then((x: any) => {
         setCampaignList(x);
         setShowLoader(false);
       })
@@ -69,7 +70,7 @@ const CampaignList = () => {
               '!w-fit bg-transparent text-blue-500 border border-primary !text-primary mb-3'
             }
             type="button"
-            onClick={handlelClick}
+            handleClick={() => _get_campaign_list()}
           >
             List Campaign
           </Button>

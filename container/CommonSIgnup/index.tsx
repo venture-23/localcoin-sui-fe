@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/router';
 import { ClipboardIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
+import { useAddToHomescreenPrompt } from 'components/test';
+import Image from 'next/image';
 import { useState } from 'react';
 import generateKeyPair from 'services/generateKeypair';
 import { maskWalletAddress } from 'utils/clipper';
@@ -23,6 +25,9 @@ interface ErrorType {
 
 const MerchantSignup = ({ param }: any) => {
   const router = useRouter();
+
+  const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
+
   const [showSpinner, seShowSpinner] = useState(false);
   const [showScreen, setShowScreen] = useState(param === 'merchant' ? 0 : 1);
   const { setshowPinScreen, userEnterPin, userInfo, setUserInfo } = useMyContext();
@@ -73,6 +78,7 @@ const MerchantSignup = ({ param }: any) => {
     setUserInfo({ ...data, userType: param });
     setshowPinScreen(true);
   };
+  console.log({ isInstalled, promptable });
   return (
     <>
       {/* <Header className="h-[120px]"> */}
@@ -80,6 +86,9 @@ const MerchantSignup = ({ param }: any) => {
       <section className="">
         <div className="container mx-auto">
           <div className="mb-6 flex items-center">
+            {promptable && !isInstalled ? (
+              <buton onClick={promptToInstall}>INSTALL APP</buton>
+            ) : null}
             {param === 'merchant' ? (
               showScreen === 0 ? (
                 <Link href={showScreen === 0 ? '/signup' : ''}>{'<- '}</Link>
@@ -91,7 +100,16 @@ const MerchantSignup = ({ param }: any) => {
             )}
             {/* <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p> */}
           </div>
-          {showSpinner && 'Generating Key . . . '}
+          {showSpinner && (
+            <>
+              <div className="fixed inset-0 mx-auto flex flex-col items-center justify-center bg-white">
+                <div>
+                  <Image src={'/generateQR.gif'} width={250} height={250} />
+                </div>
+                <p className="my-4 text-2xl ">Generating key for you</p>
+              </div>
+            </>
+          )}
           {showScreen === 0 ? (
             <MerchantInfo
               data={data}
@@ -115,10 +133,10 @@ const MerchantSignup = ({ param }: any) => {
                     </p>{' '}
                   </div>
                   <button
-                    onClick={handleCopy}
+                    onClick={() => handleCopy(data.publicKey)}
                     className="absolute top-1/2 -translate-y-1/2 self-end rounded-full bg-primary p-2 text-white"
                   >
-                    <ClipboardIcon className="h-6 w-6" />
+                    {isCopied ? '' : <ClipboardIcon className="h-6 w-6" />}
                   </button>
                 </div>
                 <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
@@ -130,17 +148,17 @@ const MerchantSignup = ({ param }: any) => {
                   </div>
                   <button
                     disabled={isCopied}
-                    onClick={handleCopy}
+                    onClick={() => handleCopy(data.secretKey)}
                     className="absolute top-1/2 -translate-y-1/2 self-end rounded-full bg-primary p-2 text-white"
                   >
-                    <ClipboardIcon className="h-6 w-6" />
+                    {isCopied ? '' : <ClipboardIcon className="h-6 w-6" />}
                   </button>
                 </div>
               </div>
               <div className="mt-6">
                 {data.secretKey && (
                   <div onClick={() => handleSignUp()}>
-                    <Button text="Sign Up" />
+                    <Button text="Complete" />
                   </div>
                 )}
               </div>
