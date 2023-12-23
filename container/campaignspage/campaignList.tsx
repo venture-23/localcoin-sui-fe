@@ -1,3 +1,4 @@
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import CampaignCard from 'components/campaigncard';
 import Link from 'next/link';
 
@@ -17,10 +18,12 @@ const CampaignList = () => {
 
       <section>
         <div className="container mx-auto">
-          <Link href="/">{'<- '}</Link>
-          <div className="mb-6 flex items-center justify-between ">
+          <Link href="/">
+            <ArrowLeftIcon width={24} height={24} />
+          </Link>
+          <div className="flex items-center justify-between mb-6 ">
             <p className="text-heading">Ongoing Campaigns </p>
-            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
+            <div className="w-12 h-12 bg-gray-600 rounded-full"></div>
           </div>
           <div className="grid grid-cols-1 gap-3">
             <CampaignCard campaignDetails={campaignDetails} />

@@ -83,7 +83,7 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
             if (lastResult.current === result.text) {
               return;
             }
-            setScanData(result);
+            setScanData(result.text);
             setGetScanedResult(true);
             closeScanner();
             close();

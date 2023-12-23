@@ -1,41 +1,39 @@
 'use client';
 
+import { campaignContractId, issuanceManagementContract, localCoinAddress } from 'utils/constants';
 import { decoderHelper } from './response-decoder';
+var StellarSdk = require('stellar-sdk');
 
-var SorobanClient = require('soroban-client');
+// var SorobanClient = require('soroban-client');
 const serverUrl = 'https://soroban-testnet.stellar.org';
 
-const localCoinAddress = 'CC4CBVODKWPVRRITF5ABX3JW664MCPV464QE5DUBYMH57XHSZKEZUILT';
-
 export const campaignServices = (() => {
-  const accountToScVal = (account: string) => new SorobanClient.Address(account).toScVal();
+  const accountToScVal = (account: string) => new StellarSdk.Address(account).toScVal();
   const numberToI128 = (value: number) =>
-    new SorobanClient.nativeToScVal(value * 10 ** 7, { type: 'i128' });
+    new StellarSdk.nativeToScVal(value * 10 ** 7, { type: 'i128' });
 
-  const numberToU32 = (value: number) => new SorobanClient.nativeToScVal(value, { type: 'u32' });
-  const StringToScVal = (value: string) =>
-    new SorobanClient.nativeToScVal(value, { type: 'string' });
+  const numberToU32 = (value: number) => new StellarSdk.nativeToScVal(value, { type: 'u32' });
+  const StringToScVal = (value: string) => new StellarSdk.nativeToScVal(value, { type: 'string' });
 
   const makeTransaction = async ({
-    // secretKey = 'SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W',
     secretKey,
     parameterType,
     payload = '',
-    contractId = 'CAPWEGXEOWLOMEJRDST4XDNAGUX6YNWXWASYV7B7QTKN34OKTWVOKYUU'
+    contractId = campaignContractId
   }: any) => {
     try {
-      const sourceKeypair = SorobanClient.Keypair.fromSecret(secretKey);
+      const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
       const sourcePublicKey = sourceKeypair.publicKey();
-      const server = new SorobanClient.Server(serverUrl, {
+      const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
         allowHttp: true
       });
       const account = await server.getAccount(sourcePublicKey);
 
-      const contract = new SorobanClient.Contract(contractId);
+      const contract = new StellarSdk.Contract(contractId);
       const fee = 1000000;
-      let transaction = new SorobanClient.TransactionBuilder(account, {
+      let transaction = new StellarSdk.TransactionBuilder(account, {
         fee,
-        networkPassphrase: SorobanClient.Networks.TESTNET
+        networkPassphrase: StellarSdk.Networks.TESTNET
       })
         .addOperation(contract.call(parameterType, ...((payload && payload) || [])))
         .setTimeout(30)
@@ -51,14 +49,27 @@ export const campaignServices = (() => {
         Error: 'ERROR'
       };
       if (response.status === SendTxStatus.Pending) {
-        console.log('pending');
-        let txResponse = await server.getTransaction(response.hash);
-        while (txResponse?.status === SorobanClient?.SorobanRpc?.GetTransactionStatus?.NOT_FOUND) {
-          txResponse = await server.getTransaction(response.hash);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-        }
-        if (txResponse?.status === SorobanClient?.SorobanRpc?.GetTransactionStatus?.SUCCESS) {
-          return decoderHelper(parameterType, txResponse);
+        while (true) {
+          try {
+            const txResponse = await server.getTransaction(response.hash);
+            if (txResponse.status === 'SUCCESS') {
+              console.log({ txResponse });
+              console.log({ ret: txResponse?.returnValue });
+
+              console.log('Transaction is successful:', txResponse);
+              // return txResponse.resultXdr.toXDR('base64');
+              return decoderHelper(parameterType, txResponse);
+            } else if (txResponse.status === 'NOT_FOUND') {
+              console.log('Transaction not found. Retrying...');
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+            } else {
+              console.error('Transaction failed:', txResponse);
+              return null;
+            }
+          } catch (error) {
+            console.error('Error while checking transaction status:', error);
+            return null;
+          }
         }
       }
     } catch (error: any) {
@@ -68,18 +79,33 @@ export const campaignServices = (() => {
     }
   };
 
-  const getCampaigns = (secretKey: string) => {
-    return makeTransaction({ secretKey, parameterType: 'get_campaigns' });
+  const getCreatorCampaigns = (secretKey: string, publicKey: string) => {
+    console.log({ secretKey, publicKey });
+    // return makeTransaction({ secretKey, parameterType: 'get_campaigns_name' });
+    return makeTransaction({
+      secretKey,
+      parameterType: 'get_creator_campaigns',
+      payload: [accountToScVal(publicKey)]
+    });
+  };
+
+  const getAllCampaigns = (secretKey: string) => {
+    return makeTransaction({
+      secretKey,
+      parameterType: 'get_campaigns'
+    });
   };
 
   const createCampaigs = (data: any, secretKey: string, publicKey: string) => {
+    console.log({ data });
     return makeTransaction({
       secretKey,
       parameterType: 'create_campaign',
       payload: [
         StringToScVal(data.name),
         StringToScVal(data.description),
-        numberToU32(parseFloat(data.recipients)),
+        StringToScVal(data.participant),
+        // numberToU32(parseFloat(data.participant)),
         accountToScVal(localCoinAddress),
         numberToI128(parseFloat(data.totalAmount)),
         accountToScVal(publicKey)
@@ -89,7 +115,7 @@ export const campaignServices = (() => {
 
   const getCampaignInfo = (
     secretKey: string,
-    contractId: string = 'CDHF7HBD2L7SE5HEL2TZKJNKAJSQMMHYA5CHMGQXLR6MD7DGLKNZOZKA'
+    contractId: string = 'CAYB5NVCDFFO3IYCHY77LPK2KAXJ7PNHIHPWQEUIM6G372MI7YKQS2VN'
   ) => {
     return makeTransaction({
       parameterType: 'get_campaign_info',
@@ -98,9 +124,46 @@ export const campaignServices = (() => {
     });
   };
 
+  const getTokenNameAddress = (secretKey: string) => {
+    return makeTransaction({
+      parameterType: 'get_token_name_address',
+      contractId: issuanceManagementContract,
+      secretKey
+    });
+  };
+
+  const getReceipientToken = (secretKey: string, publicKey: string) => {
+    return makeTransaction({
+      parameterType: 'get_balance_of_batch',
+      contractId: issuanceManagementContract,
+      secretKey,
+      payload: [accountToScVal(publicKey)]
+    });
+  };
+
+  const transfer_tokens_to_recipient = (
+    secretKey: string,
+    address: string,
+    amount: number,
+    contractId: string
+  ) => {
+    debugger;
+    return makeTransaction({
+      parameterType: 'transfer_tokens_to_recipient',
+      secretKey,
+      contractId,
+      payload: [accountToScVal(address), numberToI128(amount)]
+    });
+  };
+  
+
   return {
-    getCampaigns: getCampaigns,
+    getCreatorCampaigns: getCreatorCampaigns,
+    getAllCampaigns,
     createCampaigns: createCampaigs,
-    getCampaignInfo
+    getCampaignInfo,
+    getTokenNameAddress: getTokenNameAddress,
+    transfer_tokens_to_recipient,
+    getReceipientToken
   };
 })();

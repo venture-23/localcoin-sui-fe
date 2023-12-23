@@ -1,6 +1,7 @@
-import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import DetailCampaign from 'components/campaigncard/detail';
+import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
 import Link from 'next/link';
 
 const CampaignDetail = (props: any) => {
@@ -24,8 +25,8 @@ const CampaignDetail = (props: any) => {
       <section>
         <div className="container mx-auto">
           <div className="pt-10">
-            <Link href={props.back ? props.back : '/recipient/campaigns'}>{'<- '}</Link>
-            <div className="mb-6 pt-2 ">
+            <Link href={props.back ? props.back : '/recipient/campaigns'}><ArrowLeftIcon width={24} height={24} /></Link>
+            <div className="pt-2 mb-6 ">
               <p className="text-heading">Campaign Detail </p>
               {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
             </div>
@@ -39,8 +40,9 @@ const CampaignDetail = (props: any) => {
               cardContainerClass="min-h-[50px] flex-col"
               campaignDetails={campaignDetails}
             /> */}
+            <CampaignDetailSkeleton />
 
-            <DetailCampaign campaignDetails={campaignDetails} />
+            <DetailCampaign campaignDetails={props.campaignDetails || {}} />
           </div>
         </div>
         <Button

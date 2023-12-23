@@ -1,4 +1,6 @@
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import DetailCampaign from 'components/campaigncard/detail';
+import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
 import Link from 'next/link';
 
 const CampaignDetail = (props: any) => {
@@ -21,7 +23,9 @@ const CampaignDetail = (props: any) => {
 
       <section>
         <div className="container mx-auto">
-          <Link href="/campaign">{'<- '}</Link>
+          <Link href="/campaign">
+            <ArrowLeftIcon width={24} height={24} />
+          </Link>
           <div className="mb-6 ">
             <p className="text-heading">Campaign Detail </p>
             {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
@@ -35,6 +39,7 @@ const CampaignDetail = (props: any) => {
               cardContainerClass="min-h-[50px] flex-col"
               campaignDetails={campaignDetails}
             /> */}
+            <CampaignDetailSkeleton />
 
             <DetailCampaign campaignDetails={campaignDetails} />
           </div>

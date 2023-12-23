@@ -1,67 +1,64 @@
 'use client';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusCircleIcon } from '@heroicons/react/20/solid';
+import { DocumentArrowDownIcon, PhotoIcon, PlusIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import CampaignCard from 'components/campaigncard';
 import Popover from 'components/popover';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
-import { useMyContext } from 'hooks/useMyContext';
-import React, { useEffect, useRef, useState } from 'react';
-import { campaignServices } from 'services/campaign-services';
+import { useCamapigns } from 'hooks/useCampaigns';
+import React, { useRef } from 'react';
 
 const CampaignList = () => {
-  const [showLoader, setShowLoader] = useState(false);
-  const [campaignList, setCampaignList] = useState([]);
-  const { userInfo } = useMyContext();
   const popOverRef = useRef(null);
-  useEffect(() => {
-    if (userInfo.secretKey) {
-      handlelClick();
-      // console.log({ userInfo });
-    }
-  }, [userInfo]);
 
-  const handlelClick = async () => {
-    setShowLoader(true);
-    await campaignServices
-      // SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W
-      .getCampaigns(userInfo.secretKey)
-      // .getCampaigns('SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W')
-      .then((x) => {
-        setCampaignList(x);
-        setShowLoader(false);
-      })
-      .catch((e) => {
-        setShowLoader(false);
-        popOverRef.current.open({ ...e, title: 'Error', type: 'error' });
-      });
-  };
+  const { isFetching, campaignList } = useCamapigns({});
+
   return (
     <>
       <section>
         <Popover ref={popOverRef} />
         <div className="container mx-auto">
-          <div className="mb-6 flex items-center justify-between ">
+          <div className="mb-6 flex items-center justify-between pt-10 ">
             <p className="text-heading">Your Campaigns </p>
             <div className="h-12 w-12 rounded-full bg-gray-600"></div>
           </div>
-          <Button
+          {/*  <Button
             text="List Campaign"
             buttonIcon={<PlusIcon width={24} height={24} />}
             underline={
               '!w-fit bg-transparent text-blue-500 border border-primary !text-primary mb-3'
             }
             type="button"
-            onClick={handlelClick}
+            handleClick={() => _get_campaign_list()}
           >
             List Campaign
-          </Button>
+          </Button> */}
           <div className="grid grid-cols-1 gap-3">
-            {showLoader && <CampaignListSkeleton defaultData={7} />}
-            {campaignList?.map((eachCampaign, eachid) => (
+            {campaignList?.map((eachCampaign: any, eachid: number) => (
               <React.Fragment key={eachid + 1 + ''}>
                 <CampaignCard clippedId link="campaign/" campaignDetails={eachCampaign} />
               </React.Fragment>
             ))}
+            {!isFetching && campaignList?.length === 0 && (
+              <a
+                href="/campaign/create"
+                className="mt-40 flex flex-col items-center justify-center rounded-md bg-white p-4"
+              >
+                <Button
+                  // link="/campaign/create"
+                  text=""
+                  underline="bg-transparent p-0"
+                  buttonIcon={
+                    <PlusCircleIcon width={48} height={48} className="text-textSecondary" />
+                  }
+                />
+
+                <p className="text-center text-textSecondary">
+                  No Campaigns created. Add campaigns to see lists of campaigns
+                </p>
+              </a>
+            )}
+            {isFetching && <CampaignListSkeleton defaultData={2} />}
 
             <div className="fixed bottom-0 left-0 w-full">
               <Button

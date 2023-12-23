@@ -2,6 +2,7 @@
 
 import {
   ArrowDownOnSquareStackIcon,
+  ArrowLeftIcon,
   CheckCircleIcon,
   ShareIcon
 } from '@heroicons/react/24/outline';
@@ -22,11 +23,13 @@ export default function confirmation() {
     <>
       <section className="">
         <div className="container mx-auto">
-          <div className="mb-6 flex items-center pt-10">
-            <Link href="/">{'<- '}</Link>
-            <p className="flex-1 text-center text-2xl font-semibold">Confirmation Page</p>
+          <div className="flex items-center pt-10 mb-6">
+            <Link href="/">
+              <ArrowLeftIcon width={24} height={24} />
+            </Link>
+            <p className="flex-1 text-2xl font-semibold text-center">Confirmation Page</p>
           </div>
-          <div className="grid gap-4 rounded-md bg-white p-4">
+          <div className="grid gap-4 p-4 bg-white rounded-md">
             <div>
               <p className="font-bold">Store Name</p>
               <p>ABC store</p>

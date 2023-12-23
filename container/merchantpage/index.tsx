@@ -38,15 +38,15 @@ const MerchantPage = () => {
         <div className="flex items-center">
         </div>
       </Header> */}
-      {/* <Link href="/">{'<- '}</Link> */}
+      {/* <Link href="/"><ArrowLeftIcon width={24} height={24} /></Link> */}
 
       <section>
         <div className="container mx-auto">
           {/* tabs */}
 
-          <div className="flex items-center justify-between pt-10 mb-6 ">
+          <div className="mb-6 flex items-center justify-between pt-10 ">
             <p className="text-heading">Merchant Profile</p>
-            <div className="w-12 h-12 bg-gray-600 rounded-full"></div>
+            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
           </div>
           <div className="">
             <Tab.Group>
@@ -134,9 +134,9 @@ const MerchantPage = () => {
           <Link
             // href={asPath.includes('recipient') ? '/recipient/scan-pay' : '/merchant/scan-pay'}
             href=""
-            className="flex items-center gap-2 px-6 py-3 bg-blue-500 rounded-full w-fit"
+            className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
           >
-            <QrCodeIcon className="w-6 h-6 text-white" />
+            <QrCodeIcon className="h-6 w-6 text-white" />
             <span className="text-base font-semibold text-white">Share QR</span>
           </Link>
         </div>

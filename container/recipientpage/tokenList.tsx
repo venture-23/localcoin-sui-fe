@@ -1,43 +1,35 @@
-import Header from 'components/layout/header';
+'use client';
+
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import TokenCard from 'components/tokencard';
+import { useRecipient } from 'hooks/useReceipient';
 import Link from 'next/link';
 
 const TokenList = () => {
-  const tokenDetails: any = { name: 'Token1', value: '10.11' };
+  const { isFetching, tokenList } = useRecipient();
   return (
     <>
-      {/* <Header className="h-[120px]">
-        <div className="flex items-center">
-        <p className="flex-1 text-2xl font-semibold text-center">Token List</p>
-        </div>
-      </Header> */}
       <section className="">
         <div className="container mx-auto">
           <div className="pt-10">
-            <Link href="/recipient">{'<- '}</Link>
-            <div className="mb-6 pt-2">
+            <Link href="/recipient">
+              <ArrowLeftIcon width={24} height={24} />
+            </Link>
+            <div className="pt-2 mb-6">
               <h2 className="mb-2 text-2xl font-bold">Your Tokens</h2>
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-3">
-            <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} />
-            <TokenCard
-              iconContainerClass="bg-red-500"
-              cardContainerClass=" justify-between"
-              tokenDetails={tokenDetails}
-            />
-            <TokenCard
-              iconContainerClass="bg-green-500"
-              cardContainerClass=" justify-between"
-              tokenDetails={tokenDetails}
-            />
-            <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} />
-            <TokenCard
-              iconContainerClass="bg-red-500"
-              cardContainerClass=" justify-between"
-              tokenDetails={tokenDetails}
-            />
+            {tokenList?.map((eachToken: any, eachInd: number) => (
+              <TokenCard
+                key={eachInd + 1 + ''}
+                cardContainerClass=" justify-between"
+                tokenDetails={eachToken}
+              />
+            ))}
+            {isFetching && <CampaignListSkeleton defaultData={2} />}
           </div>
         </div>
       </section>

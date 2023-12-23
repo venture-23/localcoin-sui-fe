@@ -1,4 +1,7 @@
-var SorobanClient = require('soroban-client');
+import { toast } from 'react-toastify';
+
+// var SorobanClient = require('soroban-client');
+var StellarSdk = require('stellar-sdk');
 
 interface ResponseType {
   returnValue?: {
@@ -6,25 +9,95 @@ interface ResponseType {
   };
 }
 
+const makeSingleObject = (data: any) => {
+  return Object.assign({}, ...data);
+};
+
+const decodeContract = (value: any) => {
+  return StellarSdk.StrKey.encodeContract(value);
+};
+
 const decoderHelper = (params: string, response: ResponseType) => {
-  switch (params) {
-    case 'get_campaigns':
-      const campaignList = response?.returnValue?._value?.map((x: any) =>
-        SorobanClient.StrKey.encodeContract(x?._value?._value)
-      );
-      return campaignList;
+  try {
+    switch (params) {
+      case 'get_campaigns':
+        const allCampaignList = (response?.returnValue?._value || []).map((eachValue: any) => ({
+          id: decodeContract(eachValue?._value?._value),
+          campaign: decodeContract(eachValue?._value?._value)
+        }));
+        console.log({ response, params });
+        console.log({ allCampaignList });
+        return allCampaignList;
+      case 'get_creator_campaigns':
+        const campaignList: any = response?.returnValue?._value?.map((x: any) => {
+          return x._value.map((eachInsideValue: any) => {
+            if (eachInsideValue?._attributes?.key?._value?.toString() !== 'info') {
+              return {
+                [eachInsideValue?._attributes?.key?._value?.toString() || '']:
+                  (eachInsideValue?._attributes?.val?._value?._value &&
+                    decodeContract(eachInsideValue?._attributes?.val?._value?._value)) ||
+                  ''
+              };
+            } else {
+              return eachInsideValue?._attributes?.val?._value.map((y: any, index: number) => {
+                return {
+                  [index === 0 ? 'name' : index === 1 ? 'discription' : 'no_of_recipients']:
+                    y._value.toString()
+                };
+              });
+            }
+          });
+        });
+        const flatArray = campaignList.map((item: any) => {
+          const [campaignObj, detailsArray, tokenObj, tokenMintedObj] = item;
+          const result = {
+            id: campaignObj?.campaign,
+            campaign: campaignObj?.campaign,
+            name: detailsArray[0]?.name,
+            description: detailsArray[1]?.discription,
+            no_of_recipients: detailsArray[2]?.no_of_recipients,
+            token: tokenObj?.token,
+            token_minted: tokenMintedObj?.token_minted
+          };
 
-    case 'get_campaign_info':
-      const allInfo = (response?.returnValue?._value || []).map((eachValue: any) => ({
-        [eachValue?._attributes?.key?._value?.toString()]:
-          eachValue?._attributes?.val?._value?.toString()
-      }));
+          return result;
+        });
+        return flatArray || [];
+      case 'get_campaign_info':
+        const allInfo = (response?.returnValue?._value || []).map(
+          (eachValue: any, index: number) => ({
+            [index === 0 ? 'no_of_recipients' : index === 1 ? 'name' : 'description']:
+              eachValue?._value?.toString()
+            // [eachValue?._value?.toString()]: eachValue?._value?.toString()
+            // [eachValue?._value?.toString()]: eachValue?._value?.toString()
+          })
+        );
+        const singleObject = makeSingleObject(allInfo);
+        return singleObject;
 
-      const singleObject = Object.assign({}, ...allInfo);
-      return singleObject;
+      case 'get_token_name_address':
+        const tokenData = (response?.returnValue?._value || []).map((eachValue: any) => ({
+          name: eachValue?._attributes?.key?._value?.toString(),
+          value: decodeContract(eachValue?._attributes?.val?._value?._value)
+        }));
+        console.log({ tokenData });
+        return tokenData;
 
-    default:
-      return response.returnValue;
+      case 'get_balance_of_batch':
+        console.log({ response, params });
+        const tokenList = (response?.returnValue?._value || []).map((x) => ({
+          name: x._attributes?.key?._value?.toString()
+        }));
+        console.log(tokenList);
+        return tokenList;
+
+      default:
+        console.log({ response, params });
+        return response.returnValue;
+    }
+  } catch (error: any) {
+    toast.error('decode failed');
+    throw new Error(error);
   }
 };
 
