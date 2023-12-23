@@ -44,9 +44,9 @@ const MerchantPage = () => {
         <div className="container mx-auto">
           {/* tabs */}
 
-          <div className="mb-6 flex items-center justify-between ">
+          <div className="flex items-center justify-between pt-10 mb-6 ">
             <p className="text-heading">Merchant Profile</p>
-            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
+            <div className="w-12 h-12 bg-gray-600 rounded-full"></div>
           </div>
           <div className="">
             <Tab.Group>
@@ -134,9 +134,9 @@ const MerchantPage = () => {
           <Link
             // href={asPath.includes('recipient') ? '/recipient/scan-pay' : '/merchant/scan-pay'}
             href=""
-            className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
+            className="flex items-center gap-2 px-6 py-3 bg-blue-500 rounded-full w-fit"
           >
-            <QrCodeIcon className="h-6 w-6 text-white" />
+            <QrCodeIcon className="w-6 h-6 text-white" />
             <span className="text-base font-semibold text-white">Share QR</span>
           </Link>
         </div>

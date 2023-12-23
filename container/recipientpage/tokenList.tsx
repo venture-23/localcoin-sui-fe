@@ -13,9 +13,11 @@ const TokenList = () => {
       </Header> */}
       <section className="">
         <div className="container mx-auto">
-          <Link href="/recipient">{'<- '}</Link>
-          <div className="mb-6">
-            <h2 className="mb-2 text-2xl font-bold">Your Tokens</h2>
+          <div className="pt-10">
+            <Link href="/recipient">{'<- '}</Link>
+            <div className="mb-6 pt-2">
+              <h2 className="mb-2 text-2xl font-bold">Your Tokens</h2>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 gap-3">

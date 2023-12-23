@@ -18,10 +18,12 @@ const CampaignList = () => {
 
       <section>
         <div className="container mx-auto">
-          <Link href="/recipient">{'<- '}</Link>
-          <div className="mb-6 flex items-center justify-between ">
-            <p className="text-heading">Your Campaigns </p>
-            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
+          <div className="pt-10">
+            <Link href="/recipient">{'<- '}</Link>
+            <div className="mb-6 flex items-center justify-between pt-2 ">
+              <p className="text-heading">Your Campaigns </p>
+              {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
+            </div>
           </div>
           <div className="grid grid-cols-1 gap-3">
             <CampaignCard campaignDetails={campaignDetails} />

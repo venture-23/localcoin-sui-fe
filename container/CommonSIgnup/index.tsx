@@ -80,7 +80,7 @@ const MerchantSignup = ({ param }: any) => {
       {/* </Header> */}
       <section className="">
         <div className="container mx-auto">
-          <div className="mb-6 flex items-center">
+          <div className="mb-6 flex items-center pt-10">
             {param === 'merchant' ? (
               showScreen === 0 ? (
                 <Link href={showScreen === 0 ? '/signup' : ''}>{'<- '}</Link>

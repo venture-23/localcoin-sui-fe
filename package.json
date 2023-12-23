@@ -31,8 +31,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-qr-reader": "^3.0.0-beta-1",
-    "soroban-client": "^1.0.0-beta.4",
-    "swiper": "^11.0.5"
+    "soroban-client": "^1.0.0-beta.4"
   },
   "devDependencies": {
     "@tailwindcss/container-queries": "^0.1.1",

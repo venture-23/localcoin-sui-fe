@@ -22,7 +22,7 @@ const SignupPage = () => {
       <section className="bg-[#F7F8FA] ">
         <div className="container mx-auto ">
           {/* <Link href="/">{'<- '}</Link> */}
-          <div className="mb-10 ">
+          <div className="mb-10 pt-10 ">
             <h1 className=" text-heading">
               Signup <span className="font-normal">with your desired role.</span>{' '}
             </h1>
