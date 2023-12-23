@@ -35,7 +35,7 @@ const SignupPage = () => {
     <>
       {/* <Header className="h-[120px]">
         <div className="flex items-center">
-          <Link href="/">{'<- '}</Link>
+          <Link href="/"><ArrowLeftIcon width={24} height={24} /></Link>
           <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p>
         </div>
       </Header> */}

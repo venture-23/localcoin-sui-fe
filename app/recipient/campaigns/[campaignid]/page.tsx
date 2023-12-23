@@ -8,7 +8,11 @@ export default function CampaignDetailsPage({ params }: { params: { campaignid: 
   return (
     <>
       {/* <h1>Fetch Details of the campaign {params.campaignid}</h1> */}
-      <CampaignDetails campaignDetails={campaignInfo} campaignId={params.campaignid} />
+      <CampaignDetails
+        isDetailsFetching={isDetailsFetching}
+        campaignDetails={campaignInfo}
+        campaignId={params.campaignid}
+      />
     </>
   );
 }

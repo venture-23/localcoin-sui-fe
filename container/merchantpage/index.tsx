@@ -68,13 +68,13 @@ const MerchantPage = () => {
         <div className="flex items-center">
         </div>
       </Header> */}
-      {/* <Link href="/">{'<- '}</Link> */}
+      {/* <Link href="/"><ArrowLeftIcon width={24} height={24} /></Link> */}
 
       <section>
         <div className="container mx-auto">
           {/* tabs */}
 
-          <div className="mb-6 flex items-center justify-between ">
+          <div className="mb-6 flex items-center justify-between pt-10 ">
             <p className="text-heading">Merchant Profile</p>
             <div className="h-12 w-12 rounded-full bg-gray-600"></div>
           </div>

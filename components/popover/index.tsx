@@ -8,6 +8,7 @@ interface PopupBoxProps {
   isOpenPopup?: boolean;
   title?: string;
   message?: string;
+  messageTitle?: string;
   children?: React.ReactNode;
   imageUrl?: string;
 }
@@ -83,7 +84,7 @@ function PopupBox(props: PopupBoxProps, ref: any) {
                     </div>
                   )}
 
-                  <div className="flex flex-nowrap items-center   justify-center gap-2 [@media(max-width:500px)]:flex-wrap ">
+                  <div className="flex flex-col flex-nowrap   items-center justify-center gap-2 [@media(max-width:500px)]:flex-wrap ">
                     {(messageInfo.type === 'alert' && (
                       <ShieldExclamationIcon width={150} height={150} className="text-orange-500" />
                     )) ||
@@ -96,7 +97,8 @@ function PopupBox(props: PopupBoxProps, ref: any) {
                     {messageInfo.type === 'error' && (
                       <XMarkIcon width={150} height={150} className="text-red-500" />
                     )}
-                    <div className="my-8 text-center">
+                    <div className="my-6 text-center">
+                      <p className="text-xl font-bold">{messageInfo.messageTitle}</p>
                       <p className="text-lg font-medium text-textSecondary">
                         {messageInfo.message}
                       </p>

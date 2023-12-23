@@ -1,5 +1,6 @@
 'use client';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusCircleIcon } from '@heroicons/react/20/solid';
+import { DocumentArrowDownIcon, PhotoIcon, PlusIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import CampaignCard from 'components/campaigncard';
 import Popover from 'components/popover';
@@ -21,7 +22,7 @@ const CampaignList = () => {
       <section>
         <Popover ref={popOverRef} />
         <div className="container mx-auto">
-          <div className="mb-6 flex items-center justify-between ">
+          <div className="mb-6 flex items-center justify-between pt-10 ">
             <p className="text-heading">Your Campaigns </p>
             <div className="h-12 w-12 rounded-full bg-gray-600"></div>
           </div>
@@ -42,7 +43,25 @@ const CampaignList = () => {
                 <CampaignCard clippedId link="campaign/" campaignDetails={eachCampaign} />
               </React.Fragment>
             ))}
-            {!isFetching && campaignList?.length === 0 && <div>No Campaign Created</div>}
+            {!isFetching && campaignList?.length === 0 && (
+              <a
+                href="/campaign/create"
+                className="mt-40 flex flex-col items-center justify-center rounded-md bg-white p-4"
+              >
+                <Button
+                  // link="/campaign/create"
+                  text=""
+                  underline="bg-transparent p-0"
+                  buttonIcon={
+                    <PlusCircleIcon width={48} height={48} className="text-textSecondary" />
+                  }
+                />
+
+                <p className="text-center text-textSecondary">
+                  No Campaigns created. Add campaigns to see lists of campaigns
+                </p>
+              </a>
+            )}
             {isFetching && <CampaignListSkeleton defaultData={2} />}
 
             <div className="fixed bottom-0 left-0 w-full">

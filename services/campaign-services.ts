@@ -147,7 +147,6 @@ export const campaignServices = (() => {
     amount: number,
     contractId: string
   ) => {
-    debugger;
     return makeTransaction({
       parameterType: 'transfer_tokens_to_recipient',
       secretKey,
@@ -155,7 +154,29 @@ export const campaignServices = (() => {
       payload: [accountToScVal(address), numberToI128(amount)]
     });
   };
-  
+
+  const transfer_to_merchant = (
+    secretKey: string,
+    amount: number,
+    contractId: string,
+    merchantAddress: string,
+    senderAddress: string
+  ) => {
+    /* 
+    need to send  token id
+    const contractId = 'CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL';
+    */
+    return makeTransaction({
+      parameterType: 'recipient_to_merchant_transfer',
+      secretKey,
+      contractId,
+      payload: [
+        accountToScVal(senderAddress),
+        accountToScVal(merchantAddress),
+        numberToI128(amount)
+      ]
+    });
+  };
 
   return {
     getCreatorCampaigns: getCreatorCampaigns,
@@ -164,6 +185,7 @@ export const campaignServices = (() => {
     getCampaignInfo,
     getTokenNameAddress: getTokenNameAddress,
     transfer_tokens_to_recipient,
-    getReceipientToken
+    getReceipientToken,
+    transfer_tokens_from_recipient_to_merchant: transfer_to_merchant
   };
 })();

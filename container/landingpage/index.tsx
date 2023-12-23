@@ -1,6 +1,7 @@
 'use client';
 import { QrCodeIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
+import GetStartedSVG from 'components/getStartedSVG';
 
 import Image from 'next/image';
 import { encodeToken } from 'services/encrypt-decrypt-data';
@@ -18,15 +19,10 @@ const LandingPage = () => {
 
   return (
     <>
-      <section className="bg-white">
-        <div className="container mx-auto">
+      <section className="grid place-items-center bg-white">
+        <div className="container mx-auto ">
           <div className="flex justify-center ">
-            <Image
-              src={'/Get_Started/Get_Started.png'}
-              width={250}
-              height={202}
-              alt="get started image"
-            />
+            <GetStartedSVG />
           </div>
           <div className="mb-12 mt-4 text-center">
             <h2 className="text-heading mb-5 ">Get Started</h2>
