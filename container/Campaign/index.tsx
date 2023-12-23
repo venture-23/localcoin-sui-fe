@@ -8,32 +8,10 @@ import { useCamapigns } from 'hooks/useCampaigns';
 import React, { useRef } from 'react';
 
 const CampaignList = () => {
-  // const [showLoader, setShowLoader] = useState(false);
-  // const [campaignList, setCampaignList] = useState([]);
-  // const { userInfo } = useMyContext();
   const popOverRef = useRef(null);
 
   const { isFetching, campaignList } = useCamapigns({});
-  // useEffect(() => {
-  //   if (userInfo.secretKey) {
-  //     _get_campaign_list();
-  //   }
-  // }, [userInfo]);
 
-  // const _get_campaign_list = async () => {
-  //   console.log('pressed');
-  //   setShowLoader(true);
-  //   await campaignServices
-  //     .getCreatorCampaigns(userInfo.secretKey, userInfo.publicKey)
-  //     .then((x: any) => {
-  //       setCampaignList(x);
-  //       setShowLoader(false);
-  //     })
-  //     .catch((e) => {
-  //       setShowLoader(false);
-  //       popOverRef.current.open({ ...e, title: 'Error', type: 'error' });
-  //     });
-  // };
   return (
     <>
       <section>
@@ -55,7 +33,7 @@ const CampaignList = () => {
             List Campaign
           </Button> */}
           <div className="grid grid-cols-1 gap-3">
-            {campaignList?.map((eachCampaign, eachid) => (
+            {campaignList?.map((eachCampaign: any, eachid: number) => (
               <React.Fragment key={eachid + 1 + ''}>
                 <CampaignCard clippedId link="campaign/" campaignDetails={eachCampaign} />
               </React.Fragment>

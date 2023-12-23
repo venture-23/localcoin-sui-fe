@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import { useMyContext } from './useMyContext';
 
-export function useCamapigns({ id = '' }: any) {
+export function useCamapigns({ id = '', getOnGoingCampaign = false }: any) {
   const { userInfo } = useMyContext();
 
   const campaignListInfo = useQuery({
@@ -15,10 +15,9 @@ export function useCamapigns({ id = '' }: any) {
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const response = await campaignServices.getCreatorCampaigns(
-        userInfo.secretKey,
-        userInfo.publicKey
-      );
+      const response = getOnGoingCampaign
+        ? await campaignServices.getAllCampaigns(userInfo.secretKey)
+        : await campaignServices.getCreatorCampaigns(userInfo.secretKey, userInfo.publicKey);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
       return response;

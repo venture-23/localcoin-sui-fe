@@ -1,9 +1,8 @@
 'use client';
 
 import CampaignCard from 'components/campaigncard';
-import { useMyContext } from 'hooks/useMyContext';
+import { useCamapigns } from 'hooks/useCampaigns';
 import Link from 'next/link';
-import { useState } from 'react';
 
 const CampaignList = () => {
   const campaignDetails: any = {
@@ -11,9 +10,9 @@ const CampaignList = () => {
     title: 'Billboard Junction',
     description: 'No of Recipient : 14'
   };
-  const [campaignList, setCampaignList] = useState([]);
-  const { userInfo } = useMyContext();
 
+  const { isFetching, campaignList } = useCamapigns({ getOnGoingCampaign: true });
+  console.log({ isFetching, campaignList });
   return (
     <>
       {/* <Header className="h-[120px]">
