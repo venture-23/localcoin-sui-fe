@@ -9,7 +9,7 @@ export function useCamapigns({ id = '', getOnGoingCampaign = false }: any) {
 
   const campaignListInfo = useQuery({
     queryKey: [`campaignListInfo`],
-    enabled: !id,
+    enabled: !id && userInfo.publicKey,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,

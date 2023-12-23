@@ -5,8 +5,10 @@ import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/re
 import Button from 'components/botton';
 import Drawer from 'components/drawer';
 import PopupBox from 'components/popover';
+import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import TokenCard from 'components/tokencard';
 import { useMyContext } from 'hooks/useMyContext';
+import { useRecipient } from 'hooks/useReceipient';
 import Link from 'next/link';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
@@ -24,6 +26,8 @@ const MerchantPage = () => {
   const { userInfo } = useMyContext();
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({ amount: '' });
+  const { isFetching, tokenList } = useRecipient();
+  console.log({ isFetching, tokenList });
   useEffect(() => {
     generateQrCode();
   }, []);
@@ -105,39 +109,14 @@ const MerchantPage = () => {
                   className={`
                      `}
                 >
-                  <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} />
-                  <TokenCard
-                    iconContainerClass="bg-red-500"
-                    cardContainerClass=" justify-between"
-                    tokenDetails={tokenDetails}
-                  />
-                  <TokenCard
-                    iconContainerClass="bg-green-500"
-                    cardContainerClass=" justify-between"
-                    tokenDetails={tokenDetails}
-                  />
-                  <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} />
-                  <TokenCard
-                    iconContainerClass="bg-red-500"
-                    cardContainerClass=" justify-between"
-                    tokenDetails={tokenDetails}
-                  />
-                  <TokenCard
-                    iconContainerClass="bg-green-500"
-                    cardContainerClass=" justify-between"
-                    tokenDetails={tokenDetails}
-                  />
-                  <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} />
-                  <TokenCard
-                    iconContainerClass="bg-red-500"
-                    cardContainerClass=" justify-between"
-                    tokenDetails={tokenDetails}
-                  />
-                  <TokenCard
-                    iconContainerClass="bg-green-500"
-                    cardContainerClass=" justify-between"
-                    tokenDetails={tokenDetails}
-                  />
+                  {tokenList?.map((eachToken: any, eachInd: number) => (
+                    <TokenCard
+                      key={eachInd + 1 + ''}
+                      cardContainerClass=" justify-between"
+                      tokenDetails={eachToken}
+                    />
+                  ))}
+                  {isFetching && <CampaignListSkeleton defaultData={2} />}
                 </Tab.Panel>
 
                 <Tab.Panel
