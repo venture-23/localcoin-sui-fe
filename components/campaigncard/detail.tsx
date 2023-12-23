@@ -45,23 +45,23 @@ const DetailCampaign: React.FC<CampaignDetailProps> = ({ campaignDetails }) => {
             <p className="break-words text-xl font-bold">
               {campaignDetails?.name || 'Billboard Junction'}{' '}
             </p>
-            {campaignDetails.no_of_recipients && (
-              <p className="break-words text-sm font-medium">{campaignDetails.no_of_recipients}</p>
+            {campaignDetails?.no_of_recipients && (
+              <p className="break-words text-sm font-medium">{campaignDetails?.no_of_recipients}</p>
             )}
           </div>
         </div>
       </div>
       <div className="grid gap-4 p-6">
         {/* <Tag title={'Name'} element={campaignDetails.title} /> */}
-        <Tag title={''} element={campaignDetails.description} />
+        <Tag title={''} element={campaignDetails?.description} />
         <div className="rounded border p-4">
-          <Tag title={'Campaign Owner'} element={campaignDetails.owner} />
+          <Tag title={'Campaign Owner'} element={campaignDetails?.owner} />
         </div>
         <div className="rounded border p-4">
-          <Tag title={'Recipient Number'} element={campaignDetails.recipient} />
+          <Tag title={'Recipient Number'} element={campaignDetails?.recipient} />
         </div>
         <div className="rounded border p-4">
-          <Tag title={'Token Type'} element={campaignDetails.tokentype} />
+          <Tag title={'Token Type'} element={campaignDetails?.tokentype} />
         </div>
       </div>
     </div>

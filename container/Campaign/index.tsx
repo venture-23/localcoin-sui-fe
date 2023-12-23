@@ -25,7 +25,7 @@ const CampaignList = () => {
     setShowLoader(true);
     await campaignServices
       // SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W
-      .getCampaigns(userInfo.secretKey)
+      .getCampaigns(userInfo.secretKey, userInfo.publicKey)
       // .getCampaigns('SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W')
       .then((x: any) => {
         setCampaignList(x);

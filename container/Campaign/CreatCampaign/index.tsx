@@ -22,7 +22,7 @@ const CreateCampaignPage = () => {
   useEffect(() => {
     if (userInfo.secretKey) {
       campaignServices
-        .geTokenNameAddress(userInfo.secretKey)
+        .getTokenNameAddress(userInfo.secretKey)
         .then((x) => {
           console.log({ x });
           setCreatorAddressList(x);

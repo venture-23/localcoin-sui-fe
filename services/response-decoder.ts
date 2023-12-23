@@ -19,12 +19,58 @@ const decodeContract = (value: any) => {
 const decoderHelper = (params: string, response: ResponseType) => {
   try {
     switch (params) {
-      case 'get_campaigns_name':
-        const campaignList = response?.returnValue?._value?.map((x: any) => ({
-          contractId: decodeContract(x?._attributes?.key?._value?._value),
-          title: x?._attributes?.val?._value?.toString()
-        }));
-        return campaignList;
+      case 'get_creator_campaigns':
+        console.log({ response });
+
+        const campaignList: any = response?.returnValue?._value?.map((x: any) => {
+          return x._value.map((eachInsideValue: any) => {
+            if (eachInsideValue?._attributes?.key?._value?.toString() !== 'info') {
+              return {
+                [eachInsideValue?._attributes?.key?._value?.toString() || '']:
+                  (eachInsideValue?._attributes?.val?._value?._value &&
+                    decodeContract(eachInsideValue?._attributes?.val?._value?._value)) ||
+                  ''
+              };
+            } else {
+              return eachInsideValue?._attributes?.val?._value.map((y: any, index: number) => {
+                return {
+                  [index === 0 ? 'name' : index === 1 ? 'discription' : 'no_of_recipients']:
+                    y._value.toString()
+                };
+              });
+            }
+          });
+        });
+        console.log({ campaignList });
+        const flatArray = campaignList.map((item: any) => {
+          const [campaignObj, detailsArray, tokenObj, tokenMintedObj] = item;
+          const result = {
+            id: campaignObj?.campaign,
+            campaign: campaignObj?.campaign,
+            name: detailsArray[0]?.name,
+            description: detailsArray[1]?.discription,
+            no_of_recipients: detailsArray[2]?.no_of_recipients,
+            token: tokenObj?.token,
+            token_minted: tokenMintedObj?.token_minted
+          };
+
+          return result;
+        });
+
+        console.log(flatArray);
+        // const campaignList = response?.returnValue?._value?.map((x: any) =>
+        //   x._value.map((eachInsideValue: any) => ({
+        //     title: eachInsideValue?._attributes?.key?._value?.toString() || ''
+        //     // contractId: decodeContract(eachInsideValue?._attributes?.val?._value?._value) || ''
+        //   }))
+        // );
+        return flatArray || [];
+      // case 'get_campaigns_name':
+      //   const campaignList = response?.returnValue?._value?.map((x: any) => ({
+      //     contractId: decodeContract(x?._attributes?.key?._value?._value),
+      //     title: x?._attributes?.val?._value?.toString()
+      //   }));
+      //   return campaignList;
 
       case 'get_campaign_info':
         console.log({ response });
@@ -50,6 +96,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
         return tokenData;
 
       default:
+        console.log({ response, params });
         return response.returnValue;
     }
   } catch (error: any) {

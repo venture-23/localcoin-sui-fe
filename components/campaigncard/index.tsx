@@ -57,13 +57,13 @@ const CampaignCard: React.FC<CardProps> = ({
               />
             </div>
             <div className="max-w-sm">
-              <p className="text-lg font-semibold text-text">{campaignDetails?.title}</p>
+              <p className="text-lg font-semibold text-text">{campaignDetails?.name}</p>
               <p className="mb-0 text-sm font-normal text-textSecondary ">
                 {campaignDetails.description}
               </p>
-              {campaignDetails?.title && (
+              {campaignDetails?.campaign && (
                 <p className="mb-0 text-sm font-normal text-textSecondary ">
-                  {maskWalletAddress(campaignDetails?.contractId)}
+                  {maskWalletAddress(campaignDetails?.campaign)}
                 </p>
               )}
             </div>

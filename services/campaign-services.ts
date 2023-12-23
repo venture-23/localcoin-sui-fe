@@ -2,18 +2,18 @@
 
 import { campaignContractId, issuanceManagementContract, localCoinAddress } from 'utils/constants';
 import { decoderHelper } from './response-decoder';
+var StellarSdk = require('stellar-sdk');
 
-var SorobanClient = require('soroban-client');
+// var SorobanClient = require('soroban-client');
 const serverUrl = 'https://soroban-testnet.stellar.org';
 
 export const campaignServices = (() => {
-  const accountToScVal = (account: string) => new SorobanClient.Address(account).toScVal();
+  const accountToScVal = (account: string) => new StellarSdk.Address(account).toScVal();
   const numberToI128 = (value: number) =>
-    new SorobanClient.nativeToScVal(value * 10 ** 7, { type: 'i128' });
+    new StellarSdk.nativeToScVal(value * 10 ** 7, { type: 'i128' });
 
-  const numberToU32 = (value: number) => new SorobanClient.nativeToScVal(value, { type: 'u32' });
-  const StringToScVal = (value: string) =>
-    new SorobanClient.nativeToScVal(value, { type: 'string' });
+  const numberToU32 = (value: number) => new StellarSdk.nativeToScVal(value, { type: 'u32' });
+  const StringToScVal = (value: string) => new StellarSdk.nativeToScVal(value, { type: 'string' });
 
   const makeTransaction = async ({
     secretKey,
@@ -22,18 +22,19 @@ export const campaignServices = (() => {
     contractId = campaignContractId
   }: any) => {
     try {
-      const sourceKeypair = SorobanClient.Keypair.fromSecret(secretKey);
+      debugger;
+      const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
       const sourcePublicKey = sourceKeypair.publicKey();
-      const server = new SorobanClient.Server(serverUrl, {
+      const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
         allowHttp: true
       });
       const account = await server.getAccount(sourcePublicKey);
 
-      const contract = new SorobanClient.Contract(contractId);
+      const contract = new StellarSdk.Contract(contractId);
       const fee = 1000000;
-      let transaction = new SorobanClient.TransactionBuilder(account, {
+      let transaction = new StellarSdk.TransactionBuilder(account, {
         fee,
-        networkPassphrase: SorobanClient.Networks.TESTNET
+        networkPassphrase: StellarSdk.Networks.TESTNET
       })
         .addOperation(contract.call(parameterType, ...((payload && payload) || [])))
         .setTimeout(30)
@@ -50,13 +51,30 @@ export const campaignServices = (() => {
       };
       if (response.status === SendTxStatus.Pending) {
         console.log('pending');
-        let txResponse = await server.getTransaction(response.hash);
-        while (txResponse?.status === SorobanClient?.SorobanRpc?.GetTransactionStatus?.NOT_FOUND) {
-          txResponse = await server.getTransaction(response.hash);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-        }
-        if (txResponse?.status === SorobanClient?.SorobanRpc?.GetTransactionStatus?.SUCCESS) {
-          return decoderHelper(parameterType, txResponse);
+        const txResponse = await server.getTransaction(response.hash);
+        // console.log('pending');
+        while (true) {
+          try {
+            const txResponse = await server.getTransaction(response.hash);
+
+            if (txResponse.status === 'SUCCESS') {
+              console.log({ txResponse });
+              console.log({ ret: txResponse?.returnValue });
+
+              console.log('Transaction is successful:', txResponse);
+              // return txResponse.resultXdr.toXDR('base64');
+              return decoderHelper(parameterType, txResponse);
+            } else if (txResponse.status === 'NOT_FOUND') {
+              console.log('Transaction not found. Retrying...');
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+            } else {
+              console.error('Transaction failed:', txResponse);
+              return null;
+            }
+          } catch (error) {
+            console.error('Error while checking transaction status:', error);
+            return null;
+          }
         }
       }
     } catch (error: any) {
@@ -66,28 +84,20 @@ export const campaignServices = (() => {
     }
   };
 
-  const getCampaigns = (secretKey: string) => {
-    return makeTransaction({ secretKey, parameterType: 'get_campaigns_name' });
+  const getCampaigns = (secretKey: string, publicKey: string) => {
+    // return makeTransaction({ secretKey, parameterType: 'get_campaigns_name' });
+    return makeTransaction({
+      secretKey,
+      parameterType: 'get_creator_campaigns',
+      payload: [accountToScVal(publicKey)]
+    });
   };
 
   const createCampaigs = (data: any, secretKey: string, publicKey: string) => {
     console.log({ data });
-    debugger;
     return makeTransaction({
       secretKey,
       parameterType: 'create_campaign',
-      /* 
-       'create_campaign',
-          ...[
-            StringToScVal('TEST'),
-            StringToScVal('THIS IS DESCRIPTION'),
-            numberToU32(1),
-            accountToScVal('CC4CBVODKWPVRRITF5ABX3JW664MCPV464QE5DUBYMH57XHSZKEZUILT'),
-            numberToI128(1),
-            accountToScVal('GCSEKCSARTFPCCY2ZMC5GPUBYD2DJBTVFUXFO5O3R2Q72QTU4BDPUXXY')
-          ] 
-      
-      */
       payload: [
         StringToScVal(data.name),
         StringToScVal(data.description),
@@ -111,7 +121,7 @@ export const campaignServices = (() => {
     });
   };
 
-  const geTokenNameAddress = (secretKey: string) => {
+  const getTokenNameAddress = (secretKey: string) => {
     return makeTransaction({
       parameterType: 'get_token_name_address',
       contractId: issuanceManagementContract,
@@ -119,10 +129,19 @@ export const campaignServices = (() => {
     });
   };
 
+  const transfer_tokens_to_recipient = (secretKey: string, address: string, amount: string) => {
+    return makeTransaction({
+      parameterType: 'transfer_tokens_to_recipient',
+      secretKey,
+      payload: [StringToScVal(address), StringToScVal(amount + '')]
+    });
+  };
+
   return {
     getCampaigns: getCampaigns,
     createCampaigns: createCampaigs,
     getCampaignInfo,
-    geTokenNameAddress: geTokenNameAddress
+    getTokenNameAddress: getTokenNameAddress,
+    transfer_tokens_to_recipient
   };
 })();

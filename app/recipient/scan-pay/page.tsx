@@ -3,6 +3,7 @@ import { XCircleIcon } from '@heroicons/react/20/solid';
 import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import PopupBox from 'components/popover';
+import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode';
@@ -11,6 +12,8 @@ import { QrReader } from 'react-qr-reader';
 
 export default function ScanPayMerchant() {
   const [imageUrl, setImageUrl] = useState('');
+  const { userInfo } = useMyContext();
+
   // const [scanResultFile, setScanResultFile] = useState('');
   const [scanResultWebCam, setScanResultWebCam] = useState('');
   const { push } = useRouter();
@@ -25,8 +28,13 @@ export default function ScanPayMerchant() {
 
   const generateQrCode = async () => {
     try {
+      const staticData = {
+        type: 'receipient',
+        publicKey: userInfo.publicKey,
+        secretKey: userInfo.secretKey
+      };
       // debugger;
-      const response = await QRCode.toDataURL('this is address of user');
+      const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);
     } catch (error) {
       // debugger;
