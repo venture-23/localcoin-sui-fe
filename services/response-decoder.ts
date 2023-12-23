@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify';
 
-var SorobanClient = require('soroban-client');
+// var SorobanClient = require('soroban-client');
+var StellarSdk = require('stellar-sdk');
 
 interface ResponseType {
   returnValue?: {
@@ -13,7 +14,7 @@ const makeSingleObject = (data: any) => {
 };
 
 const decodeContract = (value: any) => {
-  return SorobanClient.StrKey.encodeContract(value);
+  return StellarSdk.StrKey.encodeContract(value);
 };
 
 const decoderHelper = (params: string, response: ResponseType) => {
