@@ -23,7 +23,7 @@ module.exports = {
         bgWhite: '#FFFFFF'
       },
       fontFamily: {
-        sans: ['var(--font-geist-sans)']
+        sans: ['Inter', 'sans-serif']
       },
       keyframes: {
         fadeIn: {

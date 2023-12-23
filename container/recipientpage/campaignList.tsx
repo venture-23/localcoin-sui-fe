@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import CampaignCard from 'components/campaigncard';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import { useCamapigns } from 'hooks/useCampaigns';
@@ -18,10 +19,14 @@ const CampaignList = () => {
     <>
       <section>
         <div className="container mx-auto">
-          <Link href="/recipient">{'<- '}</Link>
-          <div className="mb-6 flex items-center justify-between ">
-            <p className="text-heading">Your Campaigns </p>
-            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
+          <div className="pt-10">
+            <Link href="/recipient">
+              <ArrowLeftIcon width={24} height={24} />
+            </Link>
+            <div className="flex items-center justify-between pt-2 mb-6 ">
+              <p className="text-heading">Ongoing Campaigns </p>
+              {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
+            </div>
           </div>
           <div className="grid grid-cols-1 gap-3">
             {campaignList?.map((eachCampaign: any, eachid: number) => (

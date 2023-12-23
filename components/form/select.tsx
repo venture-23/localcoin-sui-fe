@@ -6,8 +6,9 @@ const Select = ({ optionsList = [], defaultvalue = '', handleChange }: any) => {
   return (
     <>
       <Menu as="div" className="relative inline-block text-left">
+        <label className="!mb-[2px]">Select type</label>
         <div>
-          <Menu.Button className="inline-flex w-full justify-start gap-x-1.5 rounded-md bg-white px-6 py-4 text-base font-medium text-textSecondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+          <Menu.Button className="inline-flex w-full justify-start justify-between gap-x-1.5 rounded-md bg-white px-6 py-4 text-base font-medium text-textSecondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
             {defaultvalue || 'Select One'}
             <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
           </Menu.Button>

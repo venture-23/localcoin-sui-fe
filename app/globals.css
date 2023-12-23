@@ -68,7 +68,7 @@ main{
 }
 section {
   height: 100%;
-  @apply pt-10 bg-[#F7F8FA];
+  @apply  bg-[#F7F8FA];
 }
 
 

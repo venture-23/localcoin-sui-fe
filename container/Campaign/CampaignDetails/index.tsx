@@ -1,5 +1,5 @@
 'use client';
-import { QrCodeIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, QrCodeIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import DetailCampaign from 'components/campaigncard/detail';
 import Drawer from 'components/drawer';
@@ -97,7 +97,9 @@ const CampaignDetail = (props: any) => {
 
       <section>
         <div className="container mx-auto">
-          <Link href="/campaign">{'<- '}</Link>
+          <Link href="/campaign">
+            <ArrowLeftIcon width={24} height={24} />
+          </Link>
           <div className="mb-6 ">
             <p className="text-heading">Campaign Detail </p>
             {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
@@ -124,9 +126,9 @@ const CampaignDetail = (props: any) => {
               <Link
                 // href={asPath.includes('recipient') ? '/recipient/scan-pay' : '/merchant/scan-pay'}
                 href=""
-                className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
+                className="flex items-center gap-2 px-6 py-3 bg-blue-500 rounded-full w-fit"
               >
-                <QrCodeIcon className="h-6 w-6 text-white" />
+                <QrCodeIcon className="w-6 h-6 text-white" />
                 <span className="text-base font-semibold text-white">Scan To Pay</span>
               </Link>
             </div>

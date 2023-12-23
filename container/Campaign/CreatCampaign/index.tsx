@@ -1,4 +1,6 @@
 'use client';
+import { ArrowLeftIcon } from '@heroicons/react/20/solid';
+import { ArrowLeftCircleIcon, ArrowUpLeftIcon } from '@heroicons/react/24/outline';
 // import { Popover } from '@headlessui/react';
 import Button from 'components/botton';
 import InputForm from 'components/form/input';
@@ -84,7 +86,11 @@ const CreateCampaignPage = () => {
   return (
     <section>
       <div className="container mx-auto">
-        <Link href="/campaign">{'<- '}</Link>
+        <div className="pt-10 mb-4">
+          <Link href="/campaign">
+            <ArrowLeftIcon width={24} height={24} />
+          </Link>
+        </div>
 
         <div className="rounded-top-[4px]">
           <div className="relative">
@@ -103,9 +109,11 @@ const CreateCampaignPage = () => {
             </div>
           </div>
         </div>
-        <div className="grid gap-5 bg-white px-6 pb-6 pt-8">
+        <div className="grid gap-5 px-6 pt-8 pb-6 bg-white">
           <InputForm
             name="name"
+            label={'Title'}
+            labelClass={'!mb-[2px]'}
             handleChange={handleChange}
             placeholder={'Enter Title'}
             maxLength={300}
@@ -114,6 +122,8 @@ const CreateCampaignPage = () => {
           />
           <TextArea
             name="description"
+            label={'Campaign Description'}
+            labelClass={'!mb-[2px]'}
             handleChange={handleChange}
             placeholder={'Campaign Description'}
             maxLength={300}
@@ -127,6 +137,8 @@ const CreateCampaignPage = () => {
           />
           <InputForm
             name="participant"
+            label={'No of Recipients'}
+            labelClass={'!mb-[2px]'}
             handleChange={handleChange}
             placeholder={'No of Recipients'}
             maxLength={3}
@@ -137,6 +149,8 @@ const CreateCampaignPage = () => {
           <InputForm
             name="totalAmount"
             handleChange={handleChange}
+            label={'Total Amount'}
+            labelClass={'!mb-[2px]'}
             placeholder={'Total Amount'}
             maxLength={5}
             error={error}

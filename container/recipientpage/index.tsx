@@ -5,7 +5,52 @@ import RecipientFunded from 'components/icons/recipient-funded';
 import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientToken from 'components/icons/recipient-token';
 import Image from 'next/image';
-import Link from 'next/link';
+import React, { useRef, useState } from 'react';
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+const slides = [
+  {
+    title: 'One Tap Setup',
+    img: '/slide-img/one-tap.jpeg',
+    imageWidth: 343,
+    imageHeight: 375
+  },
+  {
+    title: 'Personalized Spatial Audio',
+    img: '/slide-img/spatial-audio.jpeg',
+    imageWidth: 211,
+    imageHeight: 375
+  },
+  {
+    title: 'Audio Sharing',
+    img: '/slide-img/audio-sharing.jpeg',
+    imageWidth: 265,
+    imageHeight: 352,
+    centered: true
+  },
+  {
+    title: 'Automatic Switching',
+    img: '/slide-img/automatic-switching.jpeg',
+    imageWidth: 336,
+    imageHeight: 100,
+    centered: true
+  },
+  {
+    title: 'Siri',
+    img: '/slide-img/siri.jpeg',
+    imageWidth: 168,
+    imageHeight: 168,
+    centered: true
+  },
+  {
+    title: 'Accessibility',
+    img: '/slide-img/a11y.jpeg',
+    imageWidth: 135,
+    imageHeight: 135,
+    centered: true
+  }
+];
 
 const RecipientPage = () => {
   const tokenDetails: any = { name: 'Token1', value: '10.11' };
@@ -22,12 +67,18 @@ const RecipientPage = () => {
           <p className="flex-1 text-2xl font-semibold text-center">Recipient profile</p>
         </div>
       </Header> */}
-      {/* <Link href="/">{'<- '}</Link> */}
+      {/* <Link href="/"><ArrowLeftIcon width={24} height={24} /></Link> */}
       <section className="">
         <div className="container mx-auto">
-          <div className="mb-6 flex items-center justify-between ">
-            <p className="text-heading mt-3">Recipient Profile</p>
-            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
+          <div className="mb-6 flex items-center justify-between pt-10 ">
+            <p className="text-heading">Recipient Profile</p>
+            <Image
+              src={`/avatar.webp`}
+              width={48}
+              height={48}
+              alt="Profile Image"
+              className="!h-12 !w-12 rounded-full  object-cover"
+            />
           </div>
           <div
             className=" mb-6 w-full max-w-[208px]  rounded-lg p-5 text-white"
