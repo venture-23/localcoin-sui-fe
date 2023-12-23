@@ -6,6 +6,7 @@ import Button from 'components/botton';
 import Drawer from 'components/drawer';
 import PopupBox from 'components/popover';
 import TokenCard from 'components/tokencard';
+import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
@@ -20,17 +21,46 @@ const MerchantPage = () => {
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const popOverRef = useRef<any>(null);
-
+  const { userInfo } = useMyContext();
+  const [error, setError] = useState<any>({});
+  const [data, setData] = useState<any>({ amount: '' });
   useEffect(() => {
     generateQrCode();
   }, []);
   const generateQrCode = async () => {
     try {
-      const response = await QRCode.toDataURL('this is address of user');
+      const staticData = {
+        type: 'merchant',
+        publicKey: userInfo.publicKey,
+        amount: data.amount || 0
+      };
+      const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);
     } catch (error) {
+      // debugger;
       console.log(error);
     }
+  };
+  const handleChange = (e: any) => {
+    delete error[e.target.name];
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+  const proceedQr = () => {
+    const err: any = validation();
+    if (!err.amount) {
+      setOpen(false);
+      // setIsOpenPopup(true);
+      popOverRef.current.open({ title: 'Share QR Code', imageUrl });
+    } else {
+      setError(err);
+    }
+  };
+
+  const validation = () => {
+    const err: any = {};
+    if (!data.amount) err.amount = 'Enter amount';
+
+    return err;
   };
   return (
     <>
@@ -141,30 +171,26 @@ const MerchantPage = () => {
           </Link>
         </div>
 
-        <Drawer open={open} setOpen={setOpen} panelTitle="Share QR Code">
+        <Drawer open={open} setOpen={() => proceedQr()} panelTitle="Share QR Code">
           <label className="block">
             <span className="text-color block text-sm font-medium after:ml-0.5 after:text-red-500 ">
               Token Amount
             </span>
             <input
               type="text"
-              // onChange={handleChange}
-              name="proprietaryName"
+              onChange={(e) => handleChange(e)}
+              name="amount"
               maxLength={300}
-              // value={data.proprietaryName}
+              value={data.amount}
               className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
               placeholder=" Token Amount"
             />
-            <p className={` mt-2 text-xs text-pink-600 peer-invalid:visible`}>
-              {/* {error.proprietaryName} */}
-            </p>
+            <p className={` mt-2 text-xs text-pink-600 peer-invalid:visible`}>{error.amount}</p>
           </label>
           <div
             className="mt-6"
             onClick={() => {
-              setOpen(false);
-              // setIsOpenPopup(true);
-              popOverRef.current.open({ title: 'Share QR Code', imageUrl });
+              proceedQr();
             }}
           >
             <Button text="Share QR Code DRAW" />
