@@ -1,4 +1,5 @@
 import { HeartIcon, ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+import RecipientCarousel from 'components/RecipientCarousel';
 import Button from 'components/botton';
 import Card from 'components/card';
 import RecipientFunded from 'components/icons/recipient-funded';
@@ -67,10 +68,10 @@ const RecipientPage = () => {
           <p className="flex-1 text-2xl font-semibold text-center">Recipient profile</p>
         </div>
       </Header> */}
-      {/* <Link href="/"><ArrowLeftIcon width={24} height={24} /></Link> */}
+      {/* <Link href="/">{'<- '}</Link> */}
       <section className="">
         <div className="container mx-auto">
-          <div className="mb-6 flex items-center justify-between pt-10 ">
+          <div className="flex items-center justify-between pt-10 mb-6 ">
             <p className="text-heading">Recipient Profile</p>
             <Image
               src={`/avatar.webp`}
@@ -80,7 +81,7 @@ const RecipientPage = () => {
               className="!h-12 !w-12 rounded-full  object-cover"
             />
           </div>
-          <div
+          {/* <div
             className=" mb-6 w-full max-w-[208px]  rounded-lg p-5 text-white"
             style={{
               background: 'linear-gradient(180deg, #1384F5 0%, #4EABFE 100%)'
@@ -92,13 +93,15 @@ const RecipientPage = () => {
               </div>
               <p className="text-lg font-semibold"> Health</p>
             </div>
-            <div className="mt-4 flex items-center justify-between ">
+            <div className="flex items-center justify-between mt-4 ">
               <p className="font-normal">Balance</p>
               <div className="flex items-center gap-1 ">
                 <Image alt="coin" src="/coin.png" width={16} height={16} /> <p>120</p>
               </div>
             </div>
-          </div>
+          </div> */}
+
+          <RecipientCarousel />
 
           <div className="mb-6 ">
             <div className="grid gap-3 ">
