@@ -1,6 +1,9 @@
+'use client';
+
 import CampaignCard from 'components/campaigncard';
-import Header from 'components/layout/header';
+import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const CampaignList = () => {
   const campaignDetails: any = {
@@ -8,6 +11,9 @@ const CampaignList = () => {
     title: 'Billboard Junction',
     description: 'No of Recipient : 14'
   };
+  const [campaignList, setCampaignList] = useState([]);
+  const { userInfo } = useMyContext();
+
   return (
     <>
       {/* <Header className="h-[120px]">

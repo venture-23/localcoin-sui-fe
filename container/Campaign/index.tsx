@@ -4,38 +4,36 @@ import Button from 'components/botton';
 import CampaignCard from 'components/campaigncard';
 import Popover from 'components/popover';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
-import { useMyContext } from 'hooks/useMyContext';
-import React, { useEffect, useRef, useState } from 'react';
-import { campaignServices } from 'services/campaign-services';
+import { useCamapigns } from 'hooks/useCampaigns';
+import React, { useRef } from 'react';
 
 const CampaignList = () => {
-  const [showLoader, setShowLoader] = useState(false);
-  const [campaignList, setCampaignList] = useState([]);
-  const { userInfo } = useMyContext();
+  // const [showLoader, setShowLoader] = useState(false);
+  // const [campaignList, setCampaignList] = useState([]);
+  // const { userInfo } = useMyContext();
   const popOverRef = useRef(null);
-  useEffect(() => {
-    if (userInfo.secretKey) {
-      _get_campaign_list();
-      // console.log({ userInfo });
-    }
-  }, [userInfo]);
 
-  const _get_campaign_list = async () => {
-    console.log('pressed');
-    setShowLoader(true);
-    await campaignServices
-      // SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W
-      .getCampaigns(userInfo.secretKey, userInfo.publicKey)
-      // .getCampaigns('SDA3X6LFDLN5SL6KK3CZ4QUBRBWAAUSOL7YOI25TQMMMYYBDFDRY2H7W')
-      .then((x: any) => {
-        setCampaignList(x);
-        setShowLoader(false);
-      })
-      .catch((e) => {
-        setShowLoader(false);
-        popOverRef.current.open({ ...e, title: 'Error', type: 'error' });
-      });
-  };
+  const { isFetching, campaignList } = useCamapigns({});
+  // useEffect(() => {
+  //   if (userInfo.secretKey) {
+  //     _get_campaign_list();
+  //   }
+  // }, [userInfo]);
+
+  // const _get_campaign_list = async () => {
+  //   console.log('pressed');
+  //   setShowLoader(true);
+  //   await campaignServices
+  //     .getCreatorCampaigns(userInfo.secretKey, userInfo.publicKey)
+  //     .then((x: any) => {
+  //       setCampaignList(x);
+  //       setShowLoader(false);
+  //     })
+  //     .catch((e) => {
+  //       setShowLoader(false);
+  //       popOverRef.current.open({ ...e, title: 'Error', type: 'error' });
+  //     });
+  // };
   return (
     <>
       <section>
@@ -45,7 +43,7 @@ const CampaignList = () => {
             <p className="text-heading">Your Campaigns </p>
             <div className="h-12 w-12 rounded-full bg-gray-600"></div>
           </div>
-          <Button
+          {/*  <Button
             text="List Campaign"
             buttonIcon={<PlusIcon width={24} height={24} />}
             underline={
@@ -55,14 +53,15 @@ const CampaignList = () => {
             handleClick={() => _get_campaign_list()}
           >
             List Campaign
-          </Button>
+          </Button> */}
           <div className="grid grid-cols-1 gap-3">
-            {showLoader && <CampaignListSkeleton defaultData={7} />}
             {campaignList?.map((eachCampaign, eachid) => (
               <React.Fragment key={eachid + 1 + ''}>
                 <CampaignCard clippedId link="campaign/" campaignDetails={eachCampaign} />
               </React.Fragment>
             ))}
+            {!isFetching && campaignList?.length === 0 && <div>No Campaign Created</div>}
+            {isFetching && <CampaignListSkeleton defaultData={2} />}
 
             <div className="fixed bottom-0 left-0 w-full">
               <Button

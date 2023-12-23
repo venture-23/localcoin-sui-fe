@@ -22,7 +22,6 @@ export const campaignServices = (() => {
     contractId = campaignContractId
   }: any) => {
     try {
-      debugger;
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
       const sourcePublicKey = sourceKeypair.publicKey();
       const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
@@ -50,7 +49,6 @@ export const campaignServices = (() => {
         Error: 'ERROR'
       };
       if (response.status === SendTxStatus.Pending) {
-        console.log('pending');
         while (true) {
           try {
             const txResponse = await server.getTransaction(response.hash);
@@ -81,12 +79,20 @@ export const campaignServices = (() => {
     }
   };
 
-  const getCampaigns = (secretKey: string, publicKey: string) => {
+  const getCreatorCampaigns = (secretKey: string, publicKey: string) => {
+    console.log({ secretKey, publicKey });
     // return makeTransaction({ secretKey, parameterType: 'get_campaigns_name' });
     return makeTransaction({
       secretKey,
       parameterType: 'get_creator_campaigns',
       payload: [accountToScVal(publicKey)]
+    });
+  };
+
+  const getAllCampaigns = (secretKey: string) => {
+    return makeTransaction({
+      secretKey,
+      parameterType: 'get_campaigns'
     });
   };
 
@@ -142,7 +148,8 @@ export const campaignServices = (() => {
   };
 
   return {
-    getCampaigns: getCampaigns,
+    getCreatorCampaigns: getCreatorCampaigns,
+    getAllCampaigns,
     createCampaigns: createCampaigs,
     getCampaignInfo,
     getTokenNameAddress: getTokenNameAddress,
