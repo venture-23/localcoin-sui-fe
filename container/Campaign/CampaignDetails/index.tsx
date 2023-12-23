@@ -5,6 +5,7 @@ import DetailCampaign from 'components/campaigncard/detail';
 import Drawer from 'components/drawer';
 import DrawerQRScan from 'components/drawer-qr-scan';
 import InputForm from 'components/form/input';
+import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -24,19 +25,8 @@ const CampaignDetail = (props: any) => {
     // recipientAddress: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',
     // amount: 1
   });
-  const [campaignInfo, setCampaignInfo] = useState({});
-
-  useEffect(() => {
-    const getInfo = async () => {
-      campaignServices
-        .getCampaignInfo(userInfo.secretKey, props.campaignId)
-        // .getCampaignInfo(userInfo.secretKey)
-        .then((x) => setCampaignInfo(x))
-        .catch((error) => console.log(error));
-    };
-    getInfo();
-  }, []);
-  console.log({ campaignInfo });
+  const { isFetching, campaignInfo } = useCamapigns({ id: props.campaignId });
+  console.log({ isFetching, campaignInfo });
   useEffect(() => {
     if (scanData) {
       const scanDatParse: any = JSON.parse(scanData);

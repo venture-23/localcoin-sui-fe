@@ -20,9 +20,15 @@ const decodeContract = (value: any) => {
 const decoderHelper = (params: string, response: ResponseType) => {
   try {
     switch (params) {
+      case 'get_campaigns':
+        const allCampaignList = (response?.returnValue?._value || []).map((eachValue: any) => ({
+          id: decodeContract(eachValue?._value?._value),
+          campaign: decodeContract(eachValue?._value?._value)
+        }));
+        console.log({ response, params });
+        console.log({ allCampaignList });
+        return allCampaignList;
       case 'get_creator_campaigns':
-        console.log({ response });
-
         const campaignList: any = response?.returnValue?._value?.map((x: any) => {
           return x._value.map((eachInsideValue: any) => {
             if (eachInsideValue?._attributes?.key?._value?.toString() !== 'info') {
@@ -42,7 +48,6 @@ const decoderHelper = (params: string, response: ResponseType) => {
             }
           });
         });
-        console.log({ campaignList });
         const flatArray = campaignList.map((item: any) => {
           const [campaignObj, detailsArray, tokenObj, tokenMintedObj] = item;
           const result = {
@@ -57,24 +62,8 @@ const decoderHelper = (params: string, response: ResponseType) => {
 
           return result;
         });
-
-        console.log(flatArray);
-        // const campaignList = response?.returnValue?._value?.map((x: any) =>
-        //   x._value.map((eachInsideValue: any) => ({
-        //     title: eachInsideValue?._attributes?.key?._value?.toString() || ''
-        //     // contractId: decodeContract(eachInsideValue?._attributes?.val?._value?._value) || ''
-        //   }))
-        // );
         return flatArray || [];
-      // case 'get_campaigns_name':
-      //   const campaignList = response?.returnValue?._value?.map((x: any) => ({
-      //     contractId: decodeContract(x?._attributes?.key?._value?._value),
-      //     title: x?._attributes?.val?._value?.toString()
-      //   }));
-      //   return campaignList;
-
       case 'get_campaign_info':
-        console.log({ response });
         const allInfo = (response?.returnValue?._value || []).map(
           (eachValue: any, index: number) => ({
             [index === 0 ? 'no_of_recipients' : index === 1 ? 'name' : 'description']:
@@ -83,9 +72,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
             // [eachValue?._value?.toString()]: eachValue?._value?.toString()
           })
         );
-        console.log({ allInfo });
         const singleObject = makeSingleObject(allInfo);
-        console.log({ singleObject });
         return singleObject;
 
       case 'get_token_name_address':
