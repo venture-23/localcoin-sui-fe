@@ -146,7 +146,7 @@ const MerchantPage = () => {
             className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
           >
             <QrCodeIcon className="h-6 w-6 text-white" />
-            <span className="text-base font-semibold text-white">Share QR</span>
+            <span className="text-base font-semibold text-white">Request to Pay</span>
           </Link>
         </div>
 
@@ -172,7 +172,7 @@ const MerchantPage = () => {
               proceedQr();
             }}
           >
-            <Button text="Share QR Code DRAW" />
+            <Button text="Share QR Code" />
           </div>
         </Drawer>
         <PopupBox ref={popOverRef}>
