@@ -8,12 +8,14 @@ const InputForm = ({
   type = 'text',
   placeholder,
   label,
-  labelClass
+  labelClass,
+  readOnly = false
 }: any) => {
   return (
     <div>
       <label className={`block ${labelClass}`}>{label}</label>
       <input
+        {...((readOnly && { readOnly }) || {})}
         type={type}
         name={name}
         maxLength={maxLength}

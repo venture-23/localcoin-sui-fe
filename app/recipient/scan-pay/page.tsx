@@ -93,6 +93,7 @@ export default function ScanPayMerchant() {
           // className="hello"
           onResult={(result, error) => {
             if (!!result) {
+              console.log({ result: result.text });
               handleScanWebCam(result?.text);
             }
 

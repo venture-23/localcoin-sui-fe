@@ -10,7 +10,8 @@ interface ResponseType {
 }
 
 const makeSingleObject = (data: any) => {
-  return Object.assign({}, ...data);
+  if (data) return Object.assign({}, ...data);
+  return {};
 };
 
 const decodeContract = (value: any) => {
@@ -84,11 +85,15 @@ const decoderHelper = (params: string, response: ResponseType) => {
         return tokenData;
 
       case 'get_balance_of_batch':
-        console.log({ response, params });
         const tokenList = (response?.returnValue?._value || []).map((x) => ({
           name: x._attributes?.key?._value?.toString()
         }));
-        console.log(tokenList);
+        const test = StellarSdk.xdr.ScVal.scvString('hello');
+        // const res: any = (response?.returnValue?._value || []).map((entry, i) =>
+        //   this.scValToNative(entry, fields[i].type())
+        // );
+        // console.log(tokenList, res);
+        console.log({ test });
         return tokenList;
 
       case 'merchant_registration':
@@ -98,8 +103,21 @@ const decoderHelper = (params: string, response: ResponseType) => {
         console.log('verify_merchant');
         toast.success('Verified Mechant from admin, Successfully');
         return response.returnValue?._value;
+      case 'get_merchants_assocoated':
+        console.log({ response });
+        const merchantAssco = (response?.returnValue?._value || []).map(
+          (eachValue: any) =>
+            StellarSdk.StrKey.encodeEd25519PublicKey(eachValue?._value?._value?._value) || ''
+        );
+        console.log({ merchantAssco });
+        return merchantAssco;
+      case 'get_merchant_info':
+        const merchantInfo = (response?.returnValue?._value || []).map((eachValue: any) => ({
+          [eachValue?._attributes?.key?._value?.toString()]:
+            eachValue?._attributes?.val?._value?.toString()
+        }));
+        return makeSingleObject(merchantInfo);
       default:
-        return response.returnValue;
     }
   } catch (error: any) {
     toast.error('decode failed');
@@ -108,3 +126,11 @@ const decoderHelper = (params: string, response: ResponseType) => {
 };
 
 export { decoderHelper };
+
+/*  server.simulateTransaction(transaction).then((sim: any) => {
+        console.log({ sim });
+        console.log('cost:', sim.cost);
+        console.log('result:', sim.result);
+        console.log('error:', sim.error);
+        console.log('latestLedger:', sim.latestLedger);
+      }); */

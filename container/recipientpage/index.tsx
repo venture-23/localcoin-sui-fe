@@ -1,77 +1,55 @@
-import { HeartIcon, ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+'use client';
+import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import RecipientCarousel from 'components/RecipientCarousel';
 import Button from 'components/botton';
 import Card from 'components/card';
+import Drawer from 'components/drawer';
+import DrawerQrScan from 'components/drawer-qr-scan';
+import InputForm from 'components/form/input';
 import RecipientFunded from 'components/icons/recipient-funded';
 import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientToken from 'components/icons/recipient-token';
+import { useMerchant } from 'hooks/useMerchant';
 import Image from 'next/image';
-import React, { useRef, useState } from 'react';
-// Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { useEffect, useRef, useState } from 'react';
 
-const slides = [
-  {
-    title: 'One Tap Setup',
-    img: '/slide-img/one-tap.jpeg',
-    imageWidth: 343,
-    imageHeight: 375
-  },
-  {
-    title: 'Personalized Spatial Audio',
-    img: '/slide-img/spatial-audio.jpeg',
-    imageWidth: 211,
-    imageHeight: 375
-  },
-  {
-    title: 'Audio Sharing',
-    img: '/slide-img/audio-sharing.jpeg',
-    imageWidth: 265,
-    imageHeight: 352,
-    centered: true
-  },
-  {
-    title: 'Automatic Switching',
-    img: '/slide-img/automatic-switching.jpeg',
-    imageWidth: 336,
-    imageHeight: 100,
-    centered: true
-  },
-  {
-    title: 'Siri',
-    img: '/slide-img/siri.jpeg',
-    imageWidth: 168,
-    imageHeight: 168,
-    centered: true
-  },
-  {
-    title: 'Accessibility',
-    img: '/slide-img/a11y.jpeg',
-    imageWidth: 135,
-    imageHeight: 135,
-    centered: true
-  }
-];
+// Import Swiper React components
 
 const RecipientPage = () => {
-  const tokenDetails: any = { name: 'Token1', value: '10.11' };
-  const campaignDetails: any = {
-    id: 1,
-    title: 'Nourish Every Soul',
-    description:
-      'Join us in our mission to provide hope and nourishment to those in need with our "Nourish Eve...'
-  };
+  const buttonRef = useRef<any>(null);
+  const [scanData, setScanData] = useState('');
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [data, setData] = useState<any>({});
+  const [error, setError] = useState({});
+  const [showLoader, setShowLoader] = useState(false);
+
+  useEffect(() => {
+    if (scanData) {
+      const scannedData = JSON.parse(scanData);
+      setData({ ...data, merchantAddress: scannedData?.publicKey });
+      setOpenDrawer(true);
+    }
+  }, [scanData]);
+
+  const { merchant_info, isGettingInfo, merchant_associated } = useMerchant({
+    merchantAddress: data?.merchantAddress
+  });
+
+  console.log({ merchant_info, isGettingInfo, merchant_associated });
+
+  useEffect(() => {
+    if (merchant_info && Object.keys(merchant_info)?.length > 0) {
+      setData({ ...data, ...merchant_info });
+    }
+  }, [merchant_info]);
+
+  const handleSubmit = () => {};
+  const handleChange = () => {};
   return (
     <>
-      {/* <Header className="h-[120px]">
-        <div className="flex items-center">
-          <p className="flex-1 text-2xl font-semibold text-center">Recipient profile</p>
-        </div>
-      </Header> */}
-      {/* <Link href="/">{'<- '}</Link> */}
       <section className="">
         <div className="container mx-auto">
-          <div className="flex items-center justify-between pt-10 mb-6 ">
+          <div className="mb-6 flex items-center justify-between pt-10 ">
             <p className="text-heading">Recipient Profile</p>
             <Image
               src={`/avatar.webp`}
@@ -118,51 +96,101 @@ const RecipientPage = () => {
             </div>
 
             <div className="fixed bottom-0 left-0 w-full">
+              <DrawerQrScan
+                shareQr={false}
+                ref={buttonRef}
+                setScanData={setScanData}
+                panelTitle="Scan QR Code"
+              />
               <Button
-                link="/recipient/scan-pay"
+                handleClick={() => {
+                  setScanData('');
+                  buttonRef.current.open();
+                }}
                 text="scan to pay"
                 underline="rounded-none capitalize py-5"
                 buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
               />
             </div>
           </div>
-
-          {/* <div className="">
-            <div className="flex justify-between mb-4">
-              <h2 className="mb-2 text-2xl font-bold">Ongoing Campaigns</h2>
-              <Link href="/recipient/campaigns">
-                <p className="mb-2"> View All</p>
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3">
-              <CampaignCard
-                cardContainerClass="min-h-[50px] flex-col "
-                campaignDetails={campaignDetails}
+          <Drawer
+            open={openDrawer}
+            setOpen={() => {
+              setOpenDrawer(false);
+              setScanData('');
+              setData({});
+            }}
+            panelTitle="Send Token"
+          >
+            {isGettingInfo && <>Skeleton . . . . </>}
+            <label className="block">
+              <InputForm
+                label={'Store Name'}
+                type="text"
+                readOnly
+                data={data}
+                error={error}
+                maxLength={300}
+                name="store_name"
+                handleChange={handleChange}
+                placeholder="Store Name"
               />
-              <CampaignCard
-                cardContainerClass="min-h-[50px] min-h-[50px] flex-col"
-                campaignDetails={campaignDetails}
+              <InputForm
+                label={'Proprietary Name'}
+                type="text"
+                data={data}
+                readOnly
+                error={error}
+                maxLength={300}
+                name="proprietor"
+                handleChange={handleChange}
+                placeholder="Recipient Address"
               />
-              <CampaignCard
-                cardContainerClass="min-h-[50px] min-h-[50px] flex-col"
-                campaignDetails={campaignDetails}
+              <InputForm
+                label={'Phone Number'}
+                type="text"
+                readOnly
+                data={data}
+                error={error}
+                maxLength={300}
+                name="phone_no"
+                handleChange={handleChange}
+                placeholder="Phone Number"
               />
-            </div>
-          </div> */}
+              <InputForm
+                label={'Location'}
+                type="text"
+                data={data}
+                readOnly
+                error={error}
+                maxLength={300}
+                name="location"
+                handleChange={handleChange}
+                placeholder="Location"
+              />
 
-          {/* <div className="pb-6 mb-6 border-b ">
-            <div className="flex justify-between mb-4">
-              <h2 className="mb-2 text-2xl font-bold">Funded Campaigns</h2>
-              <Link href="/recipient/campaigns">
-                <p className="mb-2"> View All</p>
-              </Link>
-            </div>
+              <InputForm
+                label={'Merchant Address'}
+                type="text"
+                data={data}
+                readOnly
+                error={error}
+                maxLength={300}
+                name="merchantAddress"
+                handleChange={handleChange}
+                placeholder="Merchant Address"
+              />
+            </label>
 
-            <div className="grid grid-cols-1 gap-3">
-              <FundedCampagins title="Nourish" date="20 Dec" amount="XLM 80" />
+            <div
+              className="mt-6"
+              onClick={() => {
+                handleSubmit();
+              }}
+            >
+              <Button text="Pay Now" disabled={showLoader} showLoader={showLoader} />
             </div>
-          </div> */}
+          </Drawer>
         </div>
       </section>
     </>
