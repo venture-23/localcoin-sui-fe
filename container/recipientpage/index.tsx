@@ -6,12 +6,15 @@ import Card from 'components/card';
 import Drawer from 'components/drawer';
 import DrawerQrScan from 'components/drawer-qr-scan';
 import InputForm from 'components/form/input';
+import Select from 'components/form/select';
 import RecipientFunded from 'components/icons/recipient-funded';
 import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientToken from 'components/icons/recipient-token';
 import { useMerchant } from 'hooks/useMerchant';
+import { useRecipient } from 'hooks/useReceipient';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
 // Import Swiper React components
 
@@ -22,29 +25,79 @@ const RecipientPage = () => {
   const [data, setData] = useState<any>({});
   const [error, setError] = useState({});
   const [showLoader, setShowLoader] = useState(false);
+  const [submitForm, setSubmitForm] = useState(false);
+  const { isFetching, tokenList } = useRecipient({ data, sendTokenToMer: submitForm });
+  const [isGoodToGo, setisGoodToGo] = useState(false);
+
+  const [isSecondVisible, setIsSecondVisible] = useState(false);
+
+  const { merchant_info, isGettingInfo, merchant_associated, setFetch_merchant_info } = useMerchant(
+    {
+      merchantAddress: data?.merchantAddress
+    }
+  );
+
+  const handleNextClick = () => {
+    setIsSecondVisible(true);
+  };
 
   useEffect(() => {
     if (scanData) {
       const scannedData = JSON.parse(scanData);
-      setData({ ...data, merchantAddress: scannedData?.publicKey });
-      setOpenDrawer(true);
+      if (scannedData?.publicKey) {
+        console.log({ publicKey: scannedData?.publicKey });
+        setFetch_merchant_info(true);
+        setData({ ...data, merchantAddress: scannedData?.publicKey });
+        setOpenDrawer(true);
+      } else {
+        toast.error('Invalid QR');
+      }
     }
   }, [scanData]);
 
-  const { merchant_info, isGettingInfo, merchant_associated } = useMerchant({
-    merchantAddress: data?.merchantAddress
-  });
-
-  console.log({ merchant_info, isGettingInfo, merchant_associated });
-
   useEffect(() => {
-    if (merchant_info && Object.keys(merchant_info)?.length > 0) {
-      setData({ ...data, ...merchant_info });
+    if (tokenList?.length) {
+      setData({ ...data, tokenName: tokenList[0]?.name });
     }
-  }, [merchant_info]);
+  }, [tokenList]);
 
-  const handleSubmit = () => {};
-  const handleChange = () => {};
+  console.log({ merchant_info, merchant_associated, data });
+  useEffect(() => {
+    if (merchant_info && Object.keys(merchant_info)?.length > 0 && merchant_associated) {
+      debugger;
+      if (merchant_associated?.length) {
+        if (merchant_associated.includes(data.merchantAddress)) {
+          setisGoodToGo(true);
+          console.log(merchant_associated.includes(data.merchantAddress));
+        } else {
+          toast.error(
+            `You can't transfer to the scan Merchant, Choose Another one token or Scan another Merchant`,
+            {
+              autoClose: 5000,
+              pauseOnHover: true
+            }
+          );
+        }
+      } else {
+        toast.error(`You can't transfer to the scan Merchant`);
+      }
+      setData({ ...data, ...merchant_info, merchant_associated });
+    }
+  }, [merchant_info, merchant_associated]);
+
+  const handleSubmit = () => {
+    setSubmitForm(true);
+  };
+  const handleChange = (e: any) => {
+    const {
+      target: { name, value }
+    } = e;
+    setData({ ...data, [name]: value });
+  };
+  const handleDropdown = (value: any) => {
+    console.log({ value });
+    setData({ ...data, creatorAddress: value.value || value, tokenName: value.name || value });
+  };
   return (
     <>
       <section className="">
@@ -59,28 +112,7 @@ const RecipientPage = () => {
               className="!h-12 !w-12 rounded-full  object-cover"
             />
           </div>
-          {/* <div
-            className=" mb-6 w-full max-w-[208px]  rounded-lg p-5 text-white"
-            style={{
-              background: 'linear-gradient(180deg, #1384F5 0%, #4EABFE 100%)'
-            }}
-          >
-            <div className="flex flex-col items-center justify-center ">
-              <div>
-                <HeartIcon width={64} height={64} />
-              </div>
-              <p className="text-lg font-semibold"> Health</p>
-            </div>
-            <div className="flex items-center justify-between mt-4 ">
-              <p className="font-normal">Balance</p>
-              <div className="flex items-center gap-1 ">
-                <Image alt="coin" src="/coin.png" width={16} height={16} /> <p>120</p>
-              </div>
-            </div>
-          </div> */}
-
           <RecipientCarousel />
-
           <div className="mb-6 ">
             <div className="grid gap-3 ">
               {/* <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} /> */}
@@ -95,7 +127,7 @@ const RecipientPage = () => {
               </div>
             </div>
 
-            <div className="fixed bottom-0 left-0 w-full">
+            <div className="fixed bottom-0 left-0 w-full [@media(min-width:1024px)]:left-1/2 [@media(min-width:1024px)]:max-w-[375px] [@media(min-width:1024px)]:-translate-x-1/2">
               <DrawerQrScan
                 shareQr={false}
                 ref={buttonRef}
@@ -119,68 +151,105 @@ const RecipientPage = () => {
               setOpenDrawer(false);
               setScanData('');
               setData({});
+              setFetch_merchant_info(false);
             }}
             panelTitle="Send Token"
           >
-            {isGettingInfo && <>Skeleton . . . . </>}
-            <label className="block">
-              <InputForm
-                label={'Store Name'}
-                type="text"
-                readOnly
-                data={data}
-                error={error}
-                maxLength={300}
-                name="store_name"
-                handleChange={handleChange}
-                placeholder="Store Name"
-              />
-              <InputForm
-                label={'Proprietary Name'}
-                type="text"
-                data={data}
-                readOnly
-                error={error}
-                maxLength={300}
-                name="proprietor"
-                handleChange={handleChange}
-                placeholder="Recipient Address"
-              />
-              <InputForm
-                label={'Phone Number'}
-                type="text"
-                readOnly
-                data={data}
-                error={error}
-                maxLength={300}
-                name="phone_no"
-                handleChange={handleChange}
-                placeholder="Phone Number"
-              />
-              <InputForm
-                label={'Location'}
-                type="text"
-                data={data}
-                readOnly
-                error={error}
-                maxLength={300}
-                name="location"
-                handleChange={handleChange}
-                placeholder="Location"
-              />
+            {isGettingInfo && <div className="">Skeleton . . . . </div>}
+            <div>
+              <p className="m-0 mb-3 font-semibold">Receiver Detail</p>
+              <div className="mb-4 rounded-md bg-gray-50 p-4">
+                <div className="grid grid-cols-2 gap-y-2">
+                  <InputForm
+                    label={'Store Name'}
+                    labelClass={`text-sm font-semibold`}
+                    type="text"
+                    readOnly
+                    data={data}
+                    error={error}
+                    maxLength={300}
+                    name="store_name"
+                    handleChange={handleChange}
+                    placeholder="Longest name possible"
+                    inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip`}
+                  />
+
+                  <InputForm
+                    label={'Proprietary Name'}
+                    labelClass={`text-sm font-semibold`}
+                    type="text"
+                    data={data}
+                    readOnly
+                    error={error}
+                    maxLength={300}
+                    name="proprietor"
+                    handleChange={handleChange}
+                    placeholder="Longest name possible"
+                    inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip`}
+                  />
+
+                  <InputForm
+                    labelClass={`text-sm font-semibold`}
+                    inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip`}
+                    label={'Phone Number'}
+                    type="text"
+                    readOnly
+                    data={data}
+                    error={error}
+                    maxLength={300}
+                    name="phone_no"
+                    handleChange={handleChange}
+                    placeholder="Phone Number"
+                  />
+
+                  <InputForm
+                    label={'Location'}
+                    type="text"
+                    data={data}
+                    readOnly
+                    error={error}
+                    maxLength={300}
+                    name="location"
+                    handleChange={handleChange}
+                    placeholder="Location"
+                    inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip`}
+                    labelClass={`text-sm font-semibold`}
+                  />
+
+                  <div className="col-span-2">
+                    <InputForm
+                      labelClass={`text-sm font-semibold`}
+                      inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip col-span-2`}
+                      label={'Merchant Address'}
+                      type="text"
+                      data={data}
+                      readOnly
+                      error={error}
+                      maxLength={300}
+                      name="merchantAddress"
+                      handleChange={handleChange}
+                      placeholder="Merchant Address"
+                    />
+                  </div>
+                </div>
+              </div>
 
               <InputForm
-                label={'Merchant Address'}
+                label={'Amount'}
                 type="text"
                 data={data}
-                readOnly
                 error={error}
                 maxLength={300}
-                name="merchantAddress"
+                name="amount"
                 handleChange={handleChange}
-                placeholder="Merchant Address"
+                placeholder="Amount"
               />
-            </label>
+              <Select
+                optionsList={tokenList}
+                handleChange={handleDropdown}
+                defaultvalue={data.tokenName || ''}
+              />
+            </div>
 
             <div
               className="mt-6"
@@ -188,7 +257,7 @@ const RecipientPage = () => {
                 handleSubmit();
               }}
             >
-              <Button text="Pay Now" disabled={showLoader} showLoader={showLoader} />
+              <Button text="Pay Now" disabled={showLoader} showLoader={isFetching} />
             </div>
           </Drawer>
         </div>

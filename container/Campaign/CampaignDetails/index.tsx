@@ -5,6 +5,7 @@ import DetailCampaign from 'components/campaigncard/detail';
 import Drawer from 'components/drawer';
 import DrawerQRScan from 'components/drawer-qr-scan';
 import InputForm from 'components/form/input';
+import PageHeader from 'components/pageheader';
 import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
 import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
@@ -98,12 +99,8 @@ const CampaignDetail = (props: any) => {
 
       <section>
         <div className="container mx-auto">
-          <Link href="/campaign">
-            <ArrowLeftIcon width={24} height={24} />
-          </Link>
-          <div className="mb-6 ">
-            <p className="text-heading">Campaign Detail </p>
-          </div>
+          <PageHeader backLink={`/campaign`} pageHeaderTitle={'Campaign Detail'} />
+
           {(isDetailsFetching && !campaignInfo?.name && (
             <>
               <CampaignDetailSkeleton />

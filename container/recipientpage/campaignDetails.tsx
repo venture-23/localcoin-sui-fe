@@ -1,6 +1,7 @@
 import { ArrowLeftIcon, ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import DetailCampaign from 'components/campaigncard/detail';
+import PageHeader from 'components/pageheader';
 import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
 import Link from 'next/link';
 
@@ -18,14 +19,8 @@ const CampaignDetail = (props: any) => {
     <>
       <section>
         <div className="container mx-auto">
-          <div className="pt-10">
-            <Link href={props.back ? props.back : '/recipient/campaigns'}>
-              <ArrowLeftIcon width={24} height={24} />
-            </Link>
-            <div className="mb-6 pt-2 ">
-              <p className="text-heading">Campaign Detail </p>
-            </div>
-          </div>
+          <PageHeader backLink={`/recipient/campaigns`} pageHeaderTitle={'Campagin Details'} />
+
           {props.isDetailsFetching && !props?.campaignDetails?.name ? (
             <CampaignDetailSkeleton />
           ) : (
@@ -35,15 +30,15 @@ const CampaignDetail = (props: any) => {
           )}
         </div>
 
-        {!props.isDetailsFetching && (
+        {/* {!props.isDetailsFetching && (
           <Button
             text="scan to pay"
             link="/recipient/scan-pay"
             disabled={props.isDetailsFetching}
-            underline="rounded-none capitalize py-5"
+            underline="rounded-none capitalize py-5 fixed bottom-0"
             buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
           />
-        )}
+        )} */}
       </section>
     </>
   );

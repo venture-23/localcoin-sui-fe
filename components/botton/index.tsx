@@ -10,6 +10,8 @@ interface ButtonProps {
   query?: any;
   buttonType?: any;
   underline?: any;
+  textOrder?: any;
+  iconOrder?: any;
   disabled?: boolean;
   handleClick?: () => void;
   showLoader?: boolean;
@@ -22,6 +24,8 @@ const Button: React.FC<ButtonProps> = ({
   query,
   buttonType = 'primary',
   underline,
+  textOrder,
+  iconOrder,
   disabled = false,
   handleClick,
   showLoader = false
@@ -43,8 +47,8 @@ const Button: React.FC<ButtonProps> = ({
           }  flex items-center justify-center gap-4 
           px-6 py-3.5 text-base ${underline} `}
         >
-          <div>{buttonIcon}</div>
-          <p className="m-0">{text}</p>
+          <div className={`${iconOrder}`}>{buttonIcon}</div>
+          <p className={`${textOrder} m-0`}>{text}</p>
           {showLoader && (
             <svg
               className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
