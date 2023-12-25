@@ -1,16 +1,10 @@
 'use client';
 
-import {
-  ArrowDownOnSquareStackIcon,
-  ArrowLeftIcon,
-  CheckCircleIcon,
-  ShareIcon
-} from '@heroicons/react/24/outline';
-import Header from 'components/layout/header';
-import Link from 'next/link';
-import { useEffect, useState, useRef } from 'react';
-import PopupBox from 'components/popover';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
+import PopupBox from 'components/popover';
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 
 export default function confirmation() {
   const [openConfirmation, setopenConfirmation] = useState(false);
@@ -23,13 +17,13 @@ export default function confirmation() {
     <>
       <section className="">
         <div className="container mx-auto">
-          <div className="flex items-center pt-10 mb-6">
-            <Link href="/">
+          <div className="mb-6 flex items-center pt-10">
+            <Link href="/recipient">
               <ArrowLeftIcon width={24} height={24} />
             </Link>
-            <p className="flex-1 text-2xl font-semibold text-center">Confirmation Page</p>
+            <p className="flex-1 text-center text-2xl font-semibold">Confirmation Page</p>
           </div>
-          <div className="grid gap-4 p-4 bg-white rounded-md">
+          <div className="grid gap-4 rounded-md bg-white p-4">
             <div>
               <p className="font-bold">Store Name</p>
               <p>ABC store</p>

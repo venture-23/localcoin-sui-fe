@@ -24,10 +24,15 @@ export default function ScanPayMerchant() {
 
   const generateQrCode = async () => {
     try {
+      console.log({ userInfo });
       const staticData = {
         type: 'merchant',
         publicKey: userInfo.publicKey,
-        amount: 0.1
+        amount: 0.1,
+        proprietaryName: userInfo.proprietaryName,
+        phoneNumber: userInfo.phoneNumber,
+        storeName: userInfo.storeName,
+        location: userInfo.location
       };
       const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);

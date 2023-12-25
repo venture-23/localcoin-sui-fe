@@ -34,7 +34,11 @@ const MerchantPage = () => {
       const staticData = {
         type: 'merchant',
         publicKey: userInfo.publicKey,
-        amount: data.amount || 0
+        amount: data.amount || 0,
+        proprietaryName: userInfo.proprietaryName,
+        phoneNumber: userInfo.phoneNumber,
+        storeName: userInfo.storeName,
+        location: userInfo.location
       };
       const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);

@@ -7,7 +7,7 @@ import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 
-export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
+export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: any) {
   const [imageUrl, setImageUrl] = useState('');
   const [getScanedResult, setGetScanedResult] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
@@ -19,9 +19,8 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
   const popOverRef = useRef<any>(null);
 
   useEffect(() => {
-    generateQrCode();
-  }, []);
-
+    if (shareQr) generateQrCode();
+  }, [shareQr]);
   const generateQrCode = async () => {
     try {
       const response = await QRCode.toDataURL('this is address of user');
@@ -53,9 +52,6 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
       track.stop();
       track.enabled = false;
     });
-    {
-      console.log({ cameraRef, ref });
-    }
     cameraRef?.current?.remove();
   }
   return (
@@ -134,7 +130,7 @@ export default function ScanPayMerchant({ closeScanner, setScanData }: any) {
               className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
             >
               <QrCodeIcon className="h-6 w-6 text-white" />
-              <span className="text-base font-semibold text-white">Share QR</span>
+              <span className="text-base font-semibold text-white">Share QR asd</span>
             </Link>
           </div>
           <PopupBox ref={popOverRef}>

@@ -17,7 +17,8 @@ const LandingPage = () => {
     userType: 'merchant',
     proprietaryName: 'Props mer',
     phoneNumber: '9860105561',
-    storeName: 'Merchant'
+    storeName: 'Merchant',
+    location: 'pokhara'
   };
   const recInfo = {
     publicKey: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',

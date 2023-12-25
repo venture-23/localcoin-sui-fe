@@ -63,11 +63,11 @@ export const campaignServices = (() => {
               console.log({ txResponse });
               console.log({ ret: txResponse?.returnValue });
 
-              console.log('Transaction is successful:', txResponse);
+              console.log('Transaction is successful:', txResponse, parameterType);
               // return txResponse.resultXdr.toXDR('base64');
               return decoderHelper(parameterType, txResponse);
             } else if (txResponse.status === 'NOT_FOUND') {
-              console.log('Transaction not found. Retrying...');
+              console.log('Transaction not found. Retrying...', parameterType);
               await new Promise((resolve) => setTimeout(resolve, 1000));
             } else {
               console.error('Transaction failed:', txResponse);
@@ -177,7 +177,7 @@ export const campaignServices = (() => {
     return makeTransaction({
       parameterType: 'recipient_to_merchant_transfer',
       secretKey,
-      contractId,
+      contractId, //token id
       payload: [
         accountToScVal(senderAddress),
         accountToScVal(merchantAddress),
@@ -203,12 +203,31 @@ export const campaignServices = (() => {
   };
 
   const verify_merchant = (data: any) => {
-    console.log('yes i am from merchant verify');
     return makeTransaction({
       contractId: userRegistryContractId,
       parameterType: 'verify_merchant',
       secretKey: superAdminSecret,
       payload: [accountToScVal(data.publicKey)]
+    });
+  };
+
+  const get_merchant_associated = (data: any) => {
+    console.log('yes get_merchant_associated', { data });
+    return makeTransaction({
+      contractId: issuanceManagementContract,
+      parameterType: 'get_merchants_assocoated',
+      secretKey: data.secretKey,
+      payload: [accountToScVal('CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL')] //token_contract_id
+    });
+  };
+
+  const get_merchant_info = (secretKey: any, merchantAddress: string) => {
+    console.log('yes i am from get_merchant_info ', { secretKey });
+    return makeTransaction({
+      contractId: userRegistryContractId, //token_contract_id
+      parameterType: 'get_merchant_info',
+      secretKey: secretKey,
+      payload: [accountToScVal(merchantAddress)]
     });
   };
 
@@ -222,6 +241,8 @@ export const campaignServices = (() => {
     getReceipientToken,
     transfer_tokens_from_recipient_to_merchant: transfer_to_merchant,
     merchant_registration,
-    verify_merchant
+    verify_merchant,
+    get_merchant_associated,
+    get_merchant_info
   };
 })();

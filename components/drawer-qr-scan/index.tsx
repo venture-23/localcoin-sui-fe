@@ -79,7 +79,11 @@ function DrawerQRScan(props: any, ref: any) {
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
                         {isOpen && (
-                          <ScanToPay setScanData={props.setScanData} closeScanner={closeModal} />
+                          <ScanToPay
+                            shareQr={props.shareQr}
+                            setScanData={props.setScanData}
+                            closeScanner={closeModal}
+                          />
                         )}
                       </div>
                     </div>

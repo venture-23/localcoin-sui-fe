@@ -1,6 +1,7 @@
 'use client';
 
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
+import PageHeader from 'components/pageheader';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import TokenCard from 'components/tokencard';
 import { useRecipient } from 'hooks/useReceipient';
@@ -12,14 +13,7 @@ const TokenList = () => {
     <>
       <section className="">
         <div className="container mx-auto">
-          <div className="pt-10">
-            <Link href="/recipient">
-              <ArrowLeftIcon width={24} height={24} />
-            </Link>
-            <div className="pt-2 mb-6">
-              <h2 className="mb-2 text-2xl font-bold">Your Tokens</h2>
-            </div>
-          </div>
+          <PageHeader pageHeaderTitle={'Your Tokens'} />
 
           <div className="grid grid-cols-1 gap-3">
             {tokenList?.map((eachToken: any, eachInd: number) => (
