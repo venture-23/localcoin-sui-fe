@@ -207,9 +207,9 @@ const MerchantPage = () => {
 
               shareOnMobile(
                 {
-                  text: 'Scan QR code to make payment',
+                  text: 'Scan to make payment',
                   url: imageUrl,
-                  title: 'Scan to Pay',
+                  title: 'https://localcoin-mobileapp.vercel.app/',
                   images: [imgBase64]
                 },
                 (message) => alert(message)
