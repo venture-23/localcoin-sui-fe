@@ -68,32 +68,20 @@ const MerchantPage = () => {
 
     return err;
   };
-  const imageUrlToBase64 = async (url: string) => {
-    const data = await fetch(url);
-    const blob = await data.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = () => {
-        const base64data = reader.result;
-        resolve(base64data);
-      };
-      reader.onerror = reject;
+  const validBase64 = (url: string) => {
+    url.split(',')[1];
+  };
+  const handleShare = async () => {
+    const imgBase64 = validBase64(imageUrl);
+    shareOnMobile({
+      text: 'Scan QR code to make payment',
+      url: imageUrl,
+      title: 'Scan to Pay',
+      images: [imgBase64]
     });
   };
-  // const handleShare = async () => {
-  //   // const imgBase64 = imageUrlToBase64(imageUrl);
-  //   const imgBase64 = await imageUrlToBase64(imageUrl);
-  //   console.log(imgBase64, 'thisi is 64 image');
-  //   shareOnMobile({
-  //     text: 'Scan QR code to make payment',
-  //     url: imageUrl,
-  //     title: 'Scan to Pay',
-  //     images: [imgBase64]
-  //   });
-  // };
   const downloadBase64File = async (fileName: string) => {
-    const imgBase64 = await imageUrlToBase64(imageUrl);
+    const imgBase64 = imageUrl;
     const linkSource = `${imgBase64}`;
     const downloadLink = document.createElement('a');
     downloadLink.href = linkSource;
@@ -102,7 +90,6 @@ const MerchantPage = () => {
   };
   const [verifyMerchant, setVerifyMerchant] = useState(false);
   useMerchant({ verify_merchant: verifyMerchant });
-  const imgBase64 = imageUrlToBase64(imageUrl);
   return (
     <>
       {/* <Header className="h-[120px]">
@@ -223,33 +210,7 @@ const MerchantPage = () => {
             />
           </a>
           <Button
-            handleClick={() => {
-              shareOnMobile(
-                {
-                  text: 'Hey checkout our package react-mobile-share',
-                  url: 'https://www.npmjs.com/package/react-mobile-share',
-                  title: 'React-Mobile-Share',
-                  images: [imgBase64]
-                },
-                (message) => alert(message)
-              );
-            }}
-            text="Share"
-            buttonType="secondary"
-            buttonIcon={<ShareIcon width={24} height={24} />}
-          />
-          <Button
-            handleClick={() =>
-              shareOnMobile(
-                {
-                  text: 'Hey checkout our package react-mobile-share',
-                  url: 'https://www.npmjs.com/package/react-mobile-share',
-                  title: 'React-Mobile-Share',
-                  images: [imgBase64]
-                },
-                (message) => alert(message)
-              )
-            }
+            handleClick={handleShare}
             text="Share"
             buttonType="secondary"
             buttonIcon={<ShareIcon width={24} height={24} />}
