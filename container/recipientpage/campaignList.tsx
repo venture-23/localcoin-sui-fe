@@ -2,6 +2,7 @@
 
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import CampaignCard from 'components/campaigncard';
+import PageHeader from 'components/pageheader';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import { useCamapigns } from 'hooks/useCampaigns';
 import Link from 'next/link';
@@ -19,15 +20,7 @@ const CampaignList = () => {
     <>
       <section>
         <div className="container mx-auto">
-          <div className="pt-10">
-            <Link href="/recipient">
-              <ArrowLeftIcon width={24} height={24} />
-            </Link>
-            <div className="mb-6 flex items-center justify-between pt-2 ">
-              <p className="text-heading">Ongoing Campaigns </p>
-              {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
-            </div>
-          </div>
+          <PageHeader backLink={`/recipient`} pageHeaderTitle={'Ongoing Campaign'} />
           <div className="grid grid-cols-1 gap-3">
             {campaignList?.map((eachCampaign: any, eachid: number) => (
               <React.Fragment key={eachid + 1 + ''}>

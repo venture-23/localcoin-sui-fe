@@ -32,28 +32,37 @@ const DetailCampaign: React.FC<CampaignDetailProps> = ({ campaignDetails }) => {
   return (
     <div className="rounded-t-lg bg-white ">
       <div className="relative ">
-        <Image
+        {/* <Image
           src={'/Get_Started/Get_Started.png'}
           alt="no-image"
           className=""
           height={900}
           width={430}
-        />
-        <div className="absolute left-0 top-0 flex h-full w-full flex-col justify-between rounded-t-lg bg-primary/80 px-6 py-6 text-white ">
-          <span></span>
+        /> */}
+        <div
+          style={{ backgroundImage: 'url("/heading_bg.png")', backgroundSize: 'cover' }}
+          className="left-0 top-0 flex h-full w-full flex-col justify-between rounded-t-lg bg-primary/80 px-6 py-6 text-black"
+        >
           <div>
-            <p className="break-words text-xl font-bold">
+            <p className="text-xl font-bold !text-white">
               {campaignDetails?.name || 'Billboard Junction'}{' '}
             </p>
             {campaignDetails?.no_of_recipients && (
-              <p className="break-words text-sm font-medium">{campaignDetails?.no_of_recipients}</p>
+              <p className="mt-3 break-words text-sm font-medium text-white">
+                {campaignDetails?.no_of_recipients}
+              </p>
             )}
           </div>
         </div>
       </div>
       <div className="grid gap-4 p-6">
         {/* <Tag title={'Name'} element={campaignDetails.title} /> */}
-        <Tag title={''} element={campaignDetails?.description} />
+        <div className="">
+          <p className="m-0 text-sm font-semibold"> Description</p>
+          <p className="m-0 text-sm">
+            <Tag title={''} element={campaignDetails?.description} />
+          </p>
+        </div>
         <div className="rounded border p-4">
           <Tag title={'Campaign Owner'} element={campaignDetails?.owner} />
         </div>

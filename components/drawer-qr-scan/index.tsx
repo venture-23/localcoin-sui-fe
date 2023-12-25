@@ -53,7 +53,11 @@ function DrawerQRScan(props: any, ref: any) {
                   leaveTo="translate-y-full"
                 >
                   <Dialog.Panel className="pointer-events-auto w-screen ">
-                    <div className="flex h-full w-full flex-col overflow-y-scroll rounded-t-lg bg-white py-6 shadow-xl">
+                    <div
+                      className={`flex h-full w-full flex-col overflow-y-scroll rounded-t-lg bg-white ${
+                        isOpen ? '' : 'py-6'
+                      } shadow-xl`}
+                    >
                       <div className="px-4 sm:px-6">
                         <div className="flex items-start justify-between">
                           <Dialog.Title className="text-lg font-semibold text-gray-900">
@@ -77,7 +81,7 @@ function DrawerQRScan(props: any, ref: any) {
                           Please specify the number of token to be received to share QR code.
                         </p>
                       </div>
-                      <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                      <div className={`relative mt-6 flex-1 ${isOpen ? '' : ' px-4 sm:px-6'} `}>
                         {isOpen && (
                           <ScanToPay
                             shareQr={props.shareQr}

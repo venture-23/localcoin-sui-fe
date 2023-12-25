@@ -46,23 +46,21 @@ const CampaignCard: React.FC<CardProps> = ({
         {/* <p className="text-base text-gray-700">{description}</p> */}
         {/* </div> */}
         <div className="flex w-full items-center justify-between">
-          <div className="flex items-center gap-1">
+          <div className="flex items-start gap-2">
             <div>
               <Image
                 alt="camapaign avatar image"
                 src={'/campagin_dummy.jpg'}
                 width={40}
                 height={40}
-                className="h-10 w-10 rounded-full bg-bgGray object-cover"
+                className="h-12 w-12 rounded-full bg-bgGray object-cover"
               />
             </div>
             <div className="max-w-sm">
-              <p className="text-lg font-semibold text-text">{campaignDetails?.name}</p>
-              <p className="mb-0 text-sm font-normal text-textSecondary ">
-                {campaignDetails.description}
-              </p>
+              <p className="text-base font-semibold text-text">{campaignDetails?.name}</p>
+              <p className="mb-0 text-sm text-textSecondary ">{campaignDetails.description}</p>
               {campaignDetails?.campaign && (
-                <p className="mb-0 text-sm font-normal text-textSecondary ">
+                <p className="mb-0 text-xs text-textSecondary ">
                   {maskWalletAddress(campaignDetails?.campaign)}
                 </p>
               )}

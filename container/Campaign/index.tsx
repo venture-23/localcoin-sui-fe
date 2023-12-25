@@ -7,6 +7,7 @@ import Popover from 'components/popover';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import React, { useRef, useState } from 'react';
 
@@ -45,23 +46,18 @@ const CampaignList = () => {
               </React.Fragment>
             ))}
             {!isFetching && campaignList?.length === 0 && (
-              <a
-                href="/campaign/create"
-                className="mt-40 flex flex-col items-center justify-center rounded-md bg-white p-4"
-              >
-                <Button
-                  // link="/campaign/create"
-                  text=""
-                  underline="bg-transparent p-0"
-                  buttonIcon={
-                    <PlusCircleIcon width={48} height={48} className="text-textSecondary" />
-                  }
-                />
+              <>
+                <div className="flex flex-col items-center justify-center gap-4 rounded-md bg-white px-4 py-10">
+                  <Image src={'/empty_campaign.png'} width={80} height={80} alt="empty campaign" />
+                  <p className="text-center text-textSecondary">
+                    No Campaigns created. Add campaigns to see lists of campaigns
+                  </p>
+                </div>
 
-                <p className="text-center text-textSecondary">
-                  No Campaigns created. Add campaigns to see lists of campaigns
-                </p>
-              </a>
+                <div className="absolute bottom-20 left-1/2 -translate-x-1/2">
+                  <Image src={'/empty_campaign._2.png'} width={200} height={200} />
+                </div>
+              </>
             )}
             {isFetching && <CampaignListSkeleton defaultData={2} />}
 

@@ -37,13 +37,13 @@ const LandingPage = () => {
 
   return (
     <>
-      <section className="grid place-items-center bg-white">
+      <section className="grid place-items-center">
         <div className="container mx-auto ">
           <div className="flex justify-center ">
             <GetStartedSVG />
           </div>
-          <div className="mb-12 mt-4 text-center">
-            <h2 className="text-heading mb-5 ">Get Started</h2>
+          <div className="mb-6 mt-4 text-center">
+            <h2 className="text-heading mb-0 ">Get Started</h2>
             <p className="text-color text-lg opacity-[.6]">
               LocalCoin is just around the corner.
               <span
@@ -83,7 +83,7 @@ const LandingPage = () => {
             <Button
               text="Sign up for account"
               link="/signup"
-              underline={`underline bg-white !text-[#212B34]  font-semibold `}
+              underline={`underline bg-transparent !text-[#212B34]  font-semibold `}
             />
           </div>
         </div>
