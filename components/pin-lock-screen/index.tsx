@@ -1,5 +1,6 @@
 'use client';
 import { BackspaceIcon } from '@heroicons/react/24/outline';
+import { useMerchant } from 'hooks/useMerchant';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -22,7 +23,8 @@ export default function PinLockScreen(props: any) {
   const [pinData, setPinData] = useState<any>([]);
   const [error, setError] = useState('');
   const router = useRouter();
-
+  const [registerMerchant, setRegisterMerchant] = useState(false);
+  useMerchant({ registerMerchant, data: userInfo });
   let intervalId: any; // Variable to store the interval ID
   useEffect(() => {
     return () => {
@@ -55,6 +57,9 @@ export default function PinLockScreen(props: any) {
           localStorage.setItem('local-coin', encodeToken(userInfo, enterPin));
           setUserEnterPin(enterPin);
           setUserInfo((prevValue: any) => ({ ...prevValue }));
+          if (userInfo.userType === 'merchant') {
+            setRegisterMerchant(true);
+          }
           router.push(`/${userInfo.userType}`);
           // setshowPinScreen(false);
           setTimeout(() => {

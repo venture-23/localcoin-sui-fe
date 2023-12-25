@@ -80,7 +80,6 @@ const MerchantSignup = ({ param }: any) => {
     setUserInfo({ ...data, userType: param });
     setshowPinScreen(true);
   };
-  console.log({ isInstalled, promptable });
   return (
     <>
       {/* <Header className="h-[120px]"> */}

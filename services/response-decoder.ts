@@ -91,8 +91,14 @@ const decoderHelper = (params: string, response: ResponseType) => {
         console.log(tokenList);
         return tokenList;
 
+      case 'merchant_registration':
+        toast.success('Registered, Waiting for verified account');
+        return response.returnValue?._value;
+      case 'verify_merchant':
+        console.log('verify_merchant');
+        toast.success('Verified Mechant from admin, Successfully');
+        return response.returnValue?._value;
       default:
-        console.log({ response, params });
         return response.returnValue;
     }
   } catch (error: any) {

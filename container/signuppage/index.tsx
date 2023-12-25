@@ -2,7 +2,6 @@
 import {
   ArrowDownOnSquareStackIcon,
   BuildingStorefrontIcon,
-  ChevronDoubleDownIcon,
   GlobeEuropeAfricaIcon,
   UserCircleIcon
 } from '@heroicons/react/24/outline';
@@ -45,39 +44,15 @@ const SignupPage = () => {
       <section className="bg-[#F7F8FA] ">
         <div className="container mx-auto ">
           {/* <Link href="/">{'<- '}</Link> */}
-          <div className="pt-10 mb-10 ">
+          <div className="mb-10 pt-10 ">
             <h1 className=" text-heading">
               Signup <span className="font-normal">with your desired role.</span>{' '}
             </h1>
             {promptable && !isInstalled ? (
               <>
-                {/* <buton onClick={() => promptToInstall()}>INSTALL APP</buton> */}
-
-                {/* <div className="mt-6">
-                  <button
-                    onClick={() => {
-                      // setOpen(false);
-                      // setIsOpenPopup(true);
-                      popOverRef.current.open({
-                        title: '',
-                        imageUrl: '',
-                        messageTitle: 'Payment Sucessful',
-                        message: 'Your Payment is sucessful',
-                        type: 'success'
-                      });
-                    }}
-                    className="button-primary "
-                  >
-                    Pay
-                  </button>
-                </div> */}
-
                 <PopupBox ref={popOverRef}>
                   <a onClick={() => promptToInstall()} download className="w-full">
-                    <Button
-                      // buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
-                      text="Add"
-                    />
+                    <Button text="Add" />
                   </a>
                 </PopupBox>
               </>
@@ -89,21 +64,21 @@ const SignupPage = () => {
               <Card
                 title="Merchant"
                 link="/signup/merchant"
-                iconName={<BuildingStorefrontIcon className="w-8 h-8 text-primary" />}
+                iconName={<BuildingStorefrontIcon className="h-8 w-8 text-primary" />}
               />
               <Card
                 title="Recipient"
                 link="/signup/recipient"
-                iconName={<UserCircleIcon className="w-8 h-8 text-primary" />}
+                iconName={<UserCircleIcon className="h-8 w-8 text-primary" />}
               />
               <Card
                 title="Campaign Creator"
                 link="/signup/campaign"
-                iconName={<GlobeEuropeAfricaIcon className="w-8 h-8 text-primary" />}
+                iconName={<GlobeEuropeAfricaIcon className="h-8 w-8 text-primary" />}
               />
             </div>
           </div>
-          <div className="absolute flex items-baseline justify-center w-full text-lg font-semibold -translate-x-1/2 text-color bottom-4 left-1/2">
+          <div className="text-color absolute bottom-4 left-1/2 flex w-full -translate-x-1/2 items-baseline justify-center text-lg font-semibold">
             <p className="font-normal">Already have an account? </p>{' '}
             <Link href="/">
               {' '}

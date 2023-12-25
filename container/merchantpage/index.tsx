@@ -7,6 +7,7 @@ import Drawer from 'components/drawer';
 import PopupBox from 'components/popover';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import TokenCard from 'components/tokencard';
+import { useMerchant } from 'hooks/useMerchant';
 import { useMyContext } from 'hooks/useMyContext';
 import { useRecipient } from 'hooks/useReceipient';
 import Link from 'next/link';
@@ -14,20 +15,17 @@ import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 
 const MerchantPage = () => {
-  const tokenDetails: any = { name: 'Token1', value: '10.11' };
-  const settlementDetails: any = { name: 'Request for settlement', value: '10.11' };
-
   const [active, setActive] = useState(1);
   const [open, setOpen] = useState(false);
 
-  const [isOpenPopup, setIsOpenPopup] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const popOverRef = useRef<any>(null);
   const { userInfo } = useMyContext();
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({ amount: '' });
   const { isFetching, tokenList } = useRecipient();
-  console.log({ isFetching, tokenList });
+  // const { isProcessing, merchantResponse } = useMerchant();
+  // console.log({ isFetching, tokenList, isProcessing, merchantResponse });
   useEffect(() => {
     generateQrCode();
   }, []);
@@ -66,6 +64,8 @@ const MerchantPage = () => {
 
     return err;
   };
+  const [verifyMerchant, setVerifyMerchant] = useState(false);
+  useMerchant({ verify_merchant: verifyMerchant });
   return (
     <>
       {/* <Header className="h-[120px]">
@@ -79,7 +79,9 @@ const MerchantPage = () => {
           {/* tabs */}
 
           <div className="mb-6 flex items-center justify-between pt-10 ">
-            <p className="text-heading">Merchant Profile</p>
+            <p onClick={() => setVerifyMerchant(true)} className="text-heading">
+              Merchant Profile
+            </p>
             <div className="h-12 w-12 rounded-full bg-gray-600"></div>
           </div>
           <div className="">

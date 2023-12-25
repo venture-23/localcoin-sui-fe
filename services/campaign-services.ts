@@ -1,6 +1,13 @@
 'use client';
 
-import { campaignContractId, issuanceManagementContract, localCoinAddress } from 'utils/constants';
+import { toast } from 'react-toastify';
+import {
+  campaignContractId,
+  issuanceManagementContract,
+  localCoinAddress,
+  superAdminSecret,
+  userRegistryContractId
+} from 'utils/constants';
 import { decoderHelper } from './response-decoder';
 var StellarSdk = require('stellar-sdk');
 
@@ -64,6 +71,7 @@ export const campaignServices = (() => {
               await new Promise((resolve) => setTimeout(resolve, 1000));
             } else {
               console.error('Transaction failed:', txResponse);
+              toast.error(`failed while performing ${parameterType}`);
               return null;
             }
           } catch (error) {
@@ -178,17 +186,29 @@ export const campaignServices = (() => {
     });
   };
 
-  const merchant_registration = (secretKey: string, publicKey: string, data: any) => {
+  const merchant_registration = (data: any) => {
+    console.log('yes i am from merchant registration');
     return makeTransaction({
-      parameterType: 'recipient_to_merchant_transfer',
-      secretKey,
+      contractId: userRegistryContractId,
+      parameterType: 'merchant_registration',
+      secretKey: data.secretKey,
       payload: [
-        accountToScVal(publicKey),
-        StringToScVal(data),
-        StringToScVal(data),
-        StringToScVal(data),
-        StringToScVal(data)
+        accountToScVal(data.publicKey),
+        StringToScVal(data.proprietaryName),
+        StringToScVal(data.phoneNumber),
+        StringToScVal(data.storeName),
+        StringToScVal(data.location)
       ]
+    });
+  };
+
+  const verify_merchant = (data: any) => {
+    console.log('yes i am from merchant verify');
+    return makeTransaction({
+      contractId: userRegistryContractId,
+      parameterType: 'verify_merchant',
+      secretKey: superAdminSecret,
+      payload: [accountToScVal(data.publicKey)]
     });
   };
 
@@ -201,6 +221,7 @@ export const campaignServices = (() => {
     transfer_tokens_to_recipient,
     getReceipientToken,
     transfer_tokens_from_recipient_to_merchant: transfer_to_merchant,
-    merchant_registration
+    merchant_registration,
+    verify_merchant
   };
 })();
