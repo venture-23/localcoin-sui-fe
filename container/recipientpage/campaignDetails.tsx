@@ -40,7 +40,7 @@ const CampaignDetail = (props: any) => {
             text="scan to pay"
             link="/recipient/scan-pay"
             disabled={props.isDetailsFetching}
-            underline="rounded-none capitalize py-5"
+            underline="rounded-none capitalize py-5 fixed bottom-0"
             buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
           />
         )}
