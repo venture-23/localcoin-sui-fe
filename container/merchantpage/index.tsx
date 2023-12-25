@@ -217,9 +217,9 @@ const MerchantPage = () => {
 
               shareOnMobile(
                 {
-                  text: 'Hey checkout our package react-mobile-share',
+                  text: 'Scan to make payment',
                   url: 'https://www.npmjs.com/package/react-mobile-share',
-                  title: 'React-Mobile-Share',
+                  title: 'Scan to Pay',
                   images: [imgBase64]
                 },
                 (message) => alert(message)
