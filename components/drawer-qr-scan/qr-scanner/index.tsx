@@ -1,5 +1,10 @@
 'use client';
-import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowDownOnSquareStackIcon,
+  QrCodeIcon,
+  ShareIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import PopupBox from 'components/popover';
 import Link from 'next/link';
@@ -60,7 +65,9 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
       <div className=" absolute top-12 z-[10] mx-auto w-[95%] ">
         <div className="flex items-center justify-between">
           <p className="flex-1 text-center text-white">Scan QR code to pay</p>
-          <div onClick={() => closeScanner()}>X</div>
+          <div onClick={() => closeScanner()}>
+            <XCircleIcon width={24} height={24} color="white" />
+          </div>
         </div>
       </div>
       {/* </Header> */}

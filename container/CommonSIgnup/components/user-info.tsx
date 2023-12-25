@@ -6,15 +6,18 @@ const MerchantInfo = ({ title, handleChange, handleSubmit, error, data }: any) =
     <div className="bg-white">
       <div className="rounded-top-[4px]">
         <div className="relative">
-          <Image
+          {/* <Image
             alt="heading image"
             width={388}
             height={234}
             src={'/heading_bg.png'}
             className="!w-full"
-          />
-          <div className="absolute left-7 top-7 w-[90%] ">
-            <h1 className=" text-heading !text-white">
+          /> */}
+          <div
+            className=""
+            style={{ backgroundImage: 'url("/heading_bg.png")', backgroundSize: 'cover' }}
+          >
+            <h1 className="text-heading p-6  !text-white">
               <span className="font-normal">Please enter your</span> Merchant details{' '}
               <span className="font-normal"> below.</span>{' '}
             </h1>

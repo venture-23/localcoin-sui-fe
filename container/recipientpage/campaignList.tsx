@@ -20,7 +20,7 @@ const CampaignList = () => {
     <>
       <section>
         <div className="container mx-auto">
-          <PageHeader pageHeaderTitle={'Ongoing Campaign'} />
+          <PageHeader backLink={`/recipient`} pageHeaderTitle={'Ongoing Campaign'} />
           <div className="grid grid-cols-1 gap-3">
             {campaignList?.map((eachCampaign: any, eachid: number) => (
               <React.Fragment key={eachid + 1 + ''}>

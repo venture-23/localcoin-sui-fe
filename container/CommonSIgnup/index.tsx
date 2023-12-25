@@ -6,7 +6,7 @@ import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/router';
-import { ArrowLeftIcon, ClipboardIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, ChevronLeftIcon, ClipboardIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import { useAddToHomescreenPrompt } from 'components/test';
 import Image from 'next/image';
@@ -35,7 +35,7 @@ const MerchantSignup = ({ param }: any) => {
     storeName: '',
     proprietaryName: '',
     phoneNumber: '',
-    location:''
+    location: ''
   });
 
   const [error, setError] = useState<ErrorType>({});
@@ -93,17 +93,17 @@ const MerchantSignup = ({ param }: any) => {
             {param === 'merchant' ? (
               showScreen === 0 ? (
                 <Link href={showScreen === 0 ? '/signup' : ''}>
-                  <ArrowLeftIcon width={24} height={24} />
+                  <ChevronLeftIcon width={24} height={24} />
                 </Link>
               ) : (
                 <div onClick={() => setShowScreen(0)}>
                   {' '}
-                  <ArrowLeftIcon width={24} height={24} />
+                  <ChevronLeftIcon width={24} height={24} />
                 </div>
               )
             ) : (
               <Link href={'/signup'}>
-                <ArrowLeftIcon width={24} height={24} />
+                <ChevronLeftIcon width={24} height={24} />
               </Link>
             )}
             {/* <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p> */}

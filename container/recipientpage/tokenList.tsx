@@ -13,7 +13,7 @@ const TokenList = () => {
     <>
       <section className="">
         <div className="container mx-auto">
-          <PageHeader pageHeaderTitle={'Your Tokens'} />
+          <PageHeader backLink={`/recipient`} pageHeaderTitle={'Your Tokens'} />
 
           <div className="grid grid-cols-1 gap-3">
             {tokenList?.map((eachToken: any, eachInd: number) => (

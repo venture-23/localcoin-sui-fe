@@ -19,7 +19,8 @@ const CampaignDetail = (props: any) => {
     <>
       <section>
         <div className="container mx-auto">
-          <PageHeader pageHeaderTitle={'Campagin Details'} />
+          <PageHeader backLink={`/recipient/campaigns`} pageHeaderTitle={'Campagin Details'} />
+
           {props.isDetailsFetching && !props?.campaignDetails?.name ? (
             <CampaignDetailSkeleton />
           ) : (
@@ -29,7 +30,7 @@ const CampaignDetail = (props: any) => {
           )}
         </div>
 
-        {!props.isDetailsFetching && (
+        {/* {!props.isDetailsFetching && (
           <Button
             text="scan to pay"
             link="/recipient/scan-pay"
@@ -37,7 +38,7 @@ const CampaignDetail = (props: any) => {
             underline="rounded-none capitalize py-5 fixed bottom-0"
             buttonIcon={<ViewfinderCircleIcon width={24} height={24} />}
           />
-        )}
+        )} */}
       </section>
     </>
   );

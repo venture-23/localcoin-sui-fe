@@ -4,13 +4,14 @@ import React from 'react';
 
 interface PageHeaderProps {
   pageHeaderTitle?: any;
+  backLink?: any;
 }
 
-const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle }) => {
+const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) => {
   return (
     <>
       <div className="mb-6 flex items-center gap-3 pt-10">
-        <Link href="/recipient">
+        <Link href={backLink}>
           <ChevronLeftIcon width={24} height={24} />
         </Link>
         <div className="">
