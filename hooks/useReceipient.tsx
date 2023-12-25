@@ -39,9 +39,9 @@ export function useRecipient({ data = {}, sendTokenToMer = false }: any) {
     queryFn: async () => {
       const response = await campaignServices.transfer_tokens_from_recipient_to_merchant(
         userInfo.secretKey,
-        data.amount,
-        data.contractId || 'CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL',
-        data.merchantAddress,
+        data?.amount,
+        data?.contractId || 'CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL',
+        data?.merchantAddress,
         userInfo.publicKey
       );
       if (response?.error) throw new Error(response.error || 'Something went wrong');
@@ -55,9 +55,9 @@ export function useRecipient({ data = {}, sendTokenToMer = false }: any) {
   });
 
   const { tokenList } = useMemo(() => {
-    const tokenList = receipientInfo.data;
+    const tokenList = receipientInfo?.data;
     return { tokenList };
-  }, [receipientInfo.data]);
+  }, [receipientInfo?.data]);
 
   return {
     tokenList: tokenList,

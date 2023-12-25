@@ -5,7 +5,7 @@ import { Fragment } from 'react';
 const Select = ({ optionsList = [], defaultvalue = '', handleChange }: any) => {
   return (
     <>
-      <Menu as="div" className="relative inline-block text-left">
+      <Menu as="div" className="relative inline-block w-full text-left">
         <label className="!mb-[2px]">Select type</label>
         <div>
           <Menu.Button className="inline-flex w-full justify-start justify-between gap-x-1.5 rounded-md bg-white px-6 py-4 text-base font-medium text-textSecondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">

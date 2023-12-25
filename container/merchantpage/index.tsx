@@ -23,7 +23,7 @@ const MerchantPage = () => {
   const { userInfo } = useMyContext();
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({ amount: '' });
-  const { isFetching, tokenList } = useRecipient();
+  const { isFetching, tokenList } = useRecipient({});
   // const { isProcessing, merchantResponse } = useMerchant();
   // console.log({ isFetching, tokenList, isProcessing, merchantResponse });
   useEffect(() => {
