@@ -40,9 +40,9 @@ export function useRecipient({ data = {}, sendTokenToMer = false }: any) {
       const response = await campaignServices.transfer_tokens_from_recipient_to_merchant(
         userInfo.secretKey,
         data.amount,
-        data.contractId,
+        data.contractId || 'CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL',
         data.merchantAddress,
-        data.senderAddress
+        userInfo.publicKey
       );
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
