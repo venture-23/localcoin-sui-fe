@@ -17,6 +17,14 @@
    
   }
 
-  
+
+  .move-left {
+    transform: translateX(-100%);
+  }
+
+  .child {
+    flex: 0 0 100%; /* Each child takes full container width */
+    transition: transform 0.5s ease;
+  }
   
   

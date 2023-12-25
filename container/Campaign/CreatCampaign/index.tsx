@@ -5,6 +5,7 @@ import Button from 'components/botton';
 import InputForm from 'components/form/input';
 import Select from 'components/form/select';
 import TextArea from 'components/form/text-area';
+import PageHeader from 'components/pageheader';
 // import PopupBox from 'components/popover';
 
 import { useMyContext } from 'hooks/useMyContext';
@@ -86,30 +87,31 @@ const CreateCampaignPage = () => {
   return (
     <section>
       <div className="container mx-auto">
-        <div className="mb-4 pt-10">
-          <Link href="/campaign">
-            <ArrowLeftIcon width={24} height={24} />
-          </Link>
-        </div>
+       
+
+        <PageHeader backLink={`/campaign`} pageHeaderTitle={'Create Campaign'} />
 
         <div className="rounded-top-[4px]">
           <div className="relative">
-            <Image
+            {/* <Image
               alt="heading image"
               width={388}
               height={104}
               src={'/heading_bg.png'}
               className="!w-full"
-            />
-            <div className="absolute left-7 top-7 w-[90%] ">
-              <h1 className=" text-xl !text-white">
-                <span className="font-normal">Please provide</span> following details details to{' '}
+            /> */}
+            <div
+              className="p-6 left-7 top-7"
+              style={{ backgroundImage: 'url("/heading_bg.png")', backgroundSize: 'cover' }}
+            >
+              <h1 className=" text-2xl font-bold  !text-white">
+                <span className="font-normal ">Please provide</span> following details details to{' '}
                 <span className="font-normal"> create camapaign.</span>{' '}
               </h1>
             </div>
           </div>
         </div>
-        <div className="grid gap-5 bg-white px-6 pb-6 pt-8">
+        <div className="grid gap-5 px-6 pt-8 pb-6 bg-white">
           <InputForm
             name="name"
             label={'Title'}

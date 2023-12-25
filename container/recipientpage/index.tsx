@@ -1,5 +1,6 @@
 'use client';
-import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon, ViewfinderCircleIcon } from '@heroicons/react/24/outline';
+import { transcode } from 'buffer';
 import RecipientCarousel from 'components/RecipientCarousel';
 import Button from 'components/botton';
 import Card from 'components/card';
@@ -28,6 +29,12 @@ const RecipientPage = () => {
   const [submitForm, setSubmitForm] = useState(false);
   const { isFetching, tokenList } = useRecipient({ data, sendTokenToMer: submitForm });
   const [isGoodToGo, setisGoodToGo] = useState(false);
+
+  const [isSecondVisible, setIsSecondVisible] = useState(false);
+
+  const handleNextClick = () => {
+    setIsSecondVisible(true);
+  };
 
   useEffect(() => {
     if (scanData) {
@@ -138,64 +145,85 @@ const RecipientPage = () => {
             }}
             panelTitle="Send Token"
           >
-            {isGettingInfo && <>Skeleton . . . . </>}
-            <label className="block">
-              <InputForm
-                label={'Store Name'}
-                type="text"
-                readOnly
-                data={data}
-                error={error}
-                maxLength={300}
-                name="store_name"
-                handleChange={handleChange}
-                placeholder="Store Name"
-              />
-              <InputForm
-                label={'Proprietary Name'}
-                type="text"
-                data={data}
-                readOnly
-                error={error}
-                maxLength={300}
-                name="proprietor"
-                handleChange={handleChange}
-                placeholder="Recipient Address"
-              />
-              <InputForm
-                label={'Phone Number'}
-                type="text"
-                readOnly
-                data={data}
-                error={error}
-                maxLength={300}
-                name="phone_no"
-                handleChange={handleChange}
-                placeholder="Phone Number"
-              />
-              <InputForm
-                label={'Location'}
-                type="text"
-                data={data}
-                readOnly
-                error={error}
-                maxLength={300}
-                name="location"
-                handleChange={handleChange}
-                placeholder="Location"
-              />
+            {isGettingInfo && <div className="">Skeleton . . . . </div>}
+            <div>
+              <p className="m-0 mb-3 font-semibold">Receiver Detail</p>
+              <div className="mb-4 rounded-md bg-gray-50 p-4">
+                <div className="grid grid-cols-2 gap-y-2">
+                  <InputForm
+                    label={'Store Name'}
+                    labelClass={`text-sm font-semibold`}
+                    type="text"
+                    readOnly
+                    data={data}
+                    error={error}
+                    maxLength={300}
+                    name="store_name"
+                    handleChange={handleChange}
+                    placeholder="Longest name possible"
+                    inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip`}
+                  />
 
-              <InputForm
-                label={'Merchant Address'}
-                type="text"
-                data={data}
-                readOnly
-                error={error}
-                maxLength={300}
-                name="merchantAddress"
-                handleChange={handleChange}
-                placeholder="Merchant Address"
-              />
+                  <InputForm
+                    label={'Proprietary Name'}
+                    labelClass={`text-sm font-semibold`}
+                    type="text"
+                    data={data}
+                    readOnly
+                    error={error}
+                    maxLength={300}
+                    name="proprietor"
+                    handleChange={handleChange}
+                    placeholder="Longest name possible"
+                    inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip`}
+                  />
+
+                  <InputForm
+                    labelClass={`text-sm font-semibold`}
+                    inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip`}
+                    label={'Phone Number'}
+                    type="text"
+                    readOnly
+                    data={data}
+                    error={error}
+                    maxLength={300}
+                    name="phone_no"
+                    handleChange={handleChange}
+                    placeholder="Phone Number"
+                  />
+
+                  <InputForm
+                    label={'Location'}
+                    type="text"
+                    data={data}
+                    readOnly
+                    error={error}
+                    maxLength={300}
+                    name="location"
+                    handleChange={handleChange}
+                    placeholder="Location"
+                    inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip`}
+                    labelClass={`text-sm font-semibold`}
+                  />
+
+                  <div className="col-span-2">
+                    <InputForm
+                      labelClass={`text-sm font-semibold`}
+                      inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip col-span-2`}
+                      label={'Merchant Address'}
+                      type="text"
+                      data={data}
+                      readOnly
+                      error={error}
+                      maxLength={300}
+                      name="merchantAddress"
+                      handleChange={handleChange}
+                      placeholder="Merchant Address"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <InputForm
                 label={'Amount'}
                 type="text"
@@ -211,7 +239,7 @@ const RecipientPage = () => {
                 handleChange={handleDropdown}
                 defaultvalue={data.tokenName || ''}
               />
-            </label>
+            </div>
 
             <div
               className="mt-6"

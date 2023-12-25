@@ -1,5 +1,6 @@
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import DetailCampaign from 'components/campaigncard/detail';
+import PageHeader from 'components/pageheader';
 import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
 import Link from 'next/link';
 
@@ -23,11 +24,13 @@ const CampaignDetail = (props: any) => {
 
       <section>
         <div className="container mx-auto">
-          <Link href="/campaign">
+          {/* <Link href="/campaign">
             <ArrowLeftIcon width={24} height={24} />
           </Link>
           <div className="mb-6 ">
-            <p className="text-heading">Campaign Detail </p>
+            <p className="text-heading">Campaign Detail </p> */}
+
+            <PageHeader backLink={`/campaign`} pageHeaderTitle={'Campaign Detail'} />
             {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
           </div>
           {/* <div className="mb-6">
