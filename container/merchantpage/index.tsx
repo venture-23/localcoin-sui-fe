@@ -13,7 +13,7 @@ import { useRecipient } from 'hooks/useReceipient';
 import Link from 'next/link';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
-
+import { shareOnMobile } from 'react-mobile-share';
 const MerchantPage = () => {
   const [active, setActive] = useState(1);
   const [open, setOpen] = useState(false);
@@ -68,37 +68,37 @@ const MerchantPage = () => {
 
     return err;
   };
-  const blobImage = (imageUrl: string) => {
-    const image = fetch(imageUrl)
-      .then(function (response) {
-        return response.blob();
-      })
-      .then(function (blob) {
-        return blob;
-      });
-    return image;
+  const imageUrlToBase64 = async (url: string) => {
+    const data = await fetch(url);
+    const blob = await data.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => {
+        const base64data = reader.result;
+        resolve(base64data);
+      };
+      reader.onerror = reject;
+    });
   };
   const handleShare = async () => {
-    const newFile = await blobImage(imageUrl);
-    console.log(newFile, 'this is blob file');
-    const data = {
-      files: [
-        new File([newFile], 'nuzlocke.png', {
-          type: newFile.type
-        })
-      ],
-      title: 'Nuzlocke',
-      text: 'Nuzlocke'
-    };
-
-    try {
-      if (!navigator.canShare(data)) {
-        console.error("Can't share");
-      }
-      await navigator.share(data);
-    } catch (err) {
-      console.error(err);
-    }
+    // const imgBase64 = imageUrlToBase64(imageUrl);
+    const imgBase64 = await imageUrlToBase64(imageUrl);
+    console.log(imgBase64, 'thisi is 64 image');
+    shareOnMobile({
+      text: 'Scan QR code to make payment',
+      url: imageUrl,
+      title: 'Scan to Pay',
+      images: [imgBase64]
+    });
+  };
+  const downloadBase64File = async (fileName: string) => {
+    const imgBase64 = await imageUrlToBase64(imageUrl);
+    const linkSource = `${imgBase64}`;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
   };
   const [verifyMerchant, setVerifyMerchant] = useState(false);
   useMerchant({ verify_merchant: verifyMerchant });
@@ -216,6 +216,7 @@ const MerchantPage = () => {
         <PopupBox ref={popOverRef}>
           <a href={imageUrl} download className="w-full">
             <Button
+              handleClick={() => downloadBase64File('ScanToPay.jpeg')}
               buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
               text="Save image"
             />
