@@ -1,6 +1,5 @@
 import Button from 'components/botton';
 import Image from 'next/image';
-import Link from 'next/link';
 
 const MerchantInfo = ({ title, handleChange, handleSubmit, error, data }: any) => {
   return (
@@ -74,6 +73,21 @@ const MerchantInfo = ({ title, handleChange, handleSubmit, error, data }: any) =
             placeholder="Enter Phone Number"
           />
           <p className={`mt-2 text-xs text-pink-600 `}>{error.phoneNumber}</p>
+        </label>
+        <label className="block">
+          <span className="text-color block text-sm font-medium after:ml-0.5 after:text-red-500 ">
+            Location
+          </span>
+          <input
+            type="text"
+            name="location"
+            maxLength={15}
+            value={data.location}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+            placeholder="Enter Location"
+          />
+          <p className={`mt-2 text-xs text-pink-600 `}>{error.location}</p>
         </label>
 
         <div onClick={handleSubmit}>

@@ -34,7 +34,8 @@ const MerchantSignup = ({ param }: any) => {
   const [data, setData] = useState<any>({
     storeName: '',
     proprietaryName: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    location:''
   });
 
   const [error, setError] = useState<ErrorType>({});
@@ -51,6 +52,7 @@ const MerchantSignup = ({ param }: any) => {
     if (!data.storeName) err.storeName = 'Enter Store Name';
     if (!data.proprietaryName) err.proprietaryName = 'Enter Proprietary Name';
     if (!data.phoneNumber) err.phoneNumber = 'Enter Phone Number';
+    if (!data.location) err.location = 'Enter Location';
     return err;
   };
   const handleSubmit = () => {
@@ -85,7 +87,7 @@ const MerchantSignup = ({ param }: any) => {
       {/* </Header> */}
       <section className="">
         <div className="container mx-auto">
-          <div className="flex items-center pt-10 mb-6">
+          <div className="mb-6 flex items-center pt-10">
             {promptable && !isInstalled ? (
               <buton onClick={promptToInstall}>INSTALL APP</buton>
             ) : null}
@@ -109,7 +111,7 @@ const MerchantSignup = ({ param }: any) => {
           </div>
           {showSpinner && (
             <>
-              <div className="fixed inset-0 flex flex-col items-center justify-center mx-auto bg-white">
+              <div className="fixed inset-0 mx-auto flex flex-col items-center justify-center bg-white">
                 <div>
                   <Image src={'/generateQR.gif'} width={250} height={250} />
                 </div>
@@ -129,7 +131,7 @@ const MerchantSignup = ({ param }: any) => {
             (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
           )}
           {data.secretKey && (
-            <div className="p-6 bg-white rounded-md">
+            <div className="rounded-md bg-white p-6">
               <p className="mb-4 text-lg font-bold text-text">Please securely copy this code</p>
               <div className="grid gap-3">
                 <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
@@ -141,9 +143,9 @@ const MerchantSignup = ({ param }: any) => {
                   </div>
                   <button
                     onClick={() => handleCopy(data.publicKey)}
-                    className="absolute self-end p-2 text-white -translate-y-1/2 rounded-full top-1/2 bg-primary"
+                    className="absolute top-1/2 -translate-y-1/2 self-end rounded-full bg-primary p-2 text-white"
                   >
-                    {isCopied ? '' : <ClipboardIcon className="w-6 h-6" />}
+                    {isCopied ? '' : <ClipboardIcon className="h-6 w-6" />}
                   </button>
                 </div>
                 <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
@@ -156,9 +158,9 @@ const MerchantSignup = ({ param }: any) => {
                   <button
                     disabled={isCopied}
                     onClick={() => handleCopy(data.secretKey)}
-                    className="absolute self-end p-2 text-white -translate-y-1/2 rounded-full top-1/2 bg-primary"
+                    className="absolute top-1/2 -translate-y-1/2 self-end rounded-full bg-primary p-2 text-white"
                   >
-                    {isCopied ? '' : <ClipboardIcon className="w-6 h-6" />}
+                    {isCopied ? '' : <ClipboardIcon className="h-6 w-6" />}
                   </button>
                 </div>
               </div>
