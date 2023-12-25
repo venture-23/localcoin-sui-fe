@@ -68,6 +68,38 @@ const MerchantPage = () => {
 
     return err;
   };
+  const blobImage = (imageUrl: string) => {
+    const image = fetch(imageUrl)
+      .then(function (response) {
+        return response.blob();
+      })
+      .then(function (blob) {
+        return blob;
+      });
+    return image;
+  };
+  const handleShare = async () => {
+    const newFile = await blobImage(imageUrl);
+    console.log(newFile, 'this is blob file');
+    const data = {
+      files: [
+        new File([newFile], 'nuzlocke.png', {
+          type: newFile.type
+        })
+      ],
+      title: 'Nuzlocke',
+      text: 'Nuzlocke'
+    };
+
+    try {
+      if (!navigator.canShare(data)) {
+        console.error("Can't share");
+      }
+      await navigator.share(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const [verifyMerchant, setVerifyMerchant] = useState(false);
   useMerchant({ verify_merchant: verifyMerchant });
   return (
@@ -189,6 +221,7 @@ const MerchantPage = () => {
             />
           </a>
           <Button
+            handleClick={handleShare}
             text="Share"
             buttonType="secondary"
             buttonIcon={<ShareIcon width={24} height={24} />}
