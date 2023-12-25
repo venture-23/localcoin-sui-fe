@@ -1,6 +1,5 @@
 'use client';
-import { ChevronRightIcon, ViewfinderCircleIcon } from '@heroicons/react/24/outline';
-import { transcode } from 'buffer';
+import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import RecipientCarousel from 'components/RecipientCarousel';
 import Button from 'components/botton';
 import Card from 'components/card';
@@ -32,6 +31,12 @@ const RecipientPage = () => {
 
   const [isSecondVisible, setIsSecondVisible] = useState(false);
 
+  const { merchant_info, isGettingInfo, merchant_associated, setFetch_merchant_info } = useMerchant(
+    {
+      merchantAddress: data?.merchantAddress
+    }
+  );
+
   const handleNextClick = () => {
     setIsSecondVisible(true);
   };
@@ -39,8 +44,14 @@ const RecipientPage = () => {
   useEffect(() => {
     if (scanData) {
       const scannedData = JSON.parse(scanData);
-      setData({ ...data, merchantAddress: scannedData?.publicKey });
-      setOpenDrawer(true);
+      if (scannedData?.publicKey) {
+        console.log({ publicKey: scannedData?.publicKey });
+        setFetch_merchant_info(true);
+        setData({ ...data, merchantAddress: scannedData?.publicKey });
+        setOpenDrawer(true);
+      } else {
+        toast.error('Invalid QR');
+      }
     }
   }, [scanData]);
 
@@ -50,12 +61,10 @@ const RecipientPage = () => {
     }
   }, [tokenList]);
 
-  const { merchant_info, isGettingInfo, merchant_associated } = useMerchant({
-    merchantAddress: data?.merchantAddress
-  });
   console.log({ merchant_info, merchant_associated, data });
   useEffect(() => {
-    if (merchant_info && Object.keys(merchant_info)?.length > 0) {
+    if (merchant_info && Object.keys(merchant_info)?.length > 0 && merchant_associated) {
+      debugger;
       if (merchant_associated?.length) {
         if (merchant_associated.includes(data.merchantAddress)) {
           setisGoodToGo(true);
@@ -74,7 +83,7 @@ const RecipientPage = () => {
       }
       setData({ ...data, ...merchant_info, merchant_associated });
     }
-  }, [merchant_info]);
+  }, [merchant_info, merchant_associated]);
 
   const handleSubmit = () => {
     setSubmitForm(true);
@@ -142,6 +151,7 @@ const RecipientPage = () => {
               setOpenDrawer(false);
               setScanData('');
               setData({});
+              setFetch_merchant_info(false);
             }}
             panelTitle="Send Token"
           >

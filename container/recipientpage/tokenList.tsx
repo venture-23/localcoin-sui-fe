@@ -8,7 +8,7 @@ import { useRecipient } from 'hooks/useReceipient';
 import Link from 'next/link';
 
 const TokenList = () => {
-  const { isFetching, tokenList } = useRecipient();
+  const { isFetching, tokenList } = useRecipient({});
   console.log({ tokenList });
   return (
     <>

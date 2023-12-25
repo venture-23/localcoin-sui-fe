@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import { useMyContext } from './useMyContext';
@@ -11,21 +11,22 @@ export function useMerchant({
   data = {}
 }) {
   const { userInfo } = useMyContext();
-
+  const [fetch_merchant_info, setFetch_merchant_info] = useState(false);
   const get_merchant_info = useQuery({
     queryKey: [`get_merchant_info`],
-    enabled: !!merchantAddress,
+    enabled: fetch_merchant_info,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
+      const response_merchant_assoc = await campaignServices.get_merchant_associated(userInfo);
       const merchantInfo = await campaignServices.get_merchant_info(
         userInfo.secretKey,
         merchantAddress
       );
-      const response_merchant_assoc = await campaignServices.get_merchant_associated(userInfo);
       if (merchantInfo?.error || merchantInfo?.response_merchant_assoc) {
+        toast.error('errored while multiple api hitting');
         throw new Error(merchantInfo.error || 'Something went wrong');
       }
       console.log({ merchantInfo, response_merchant_assoc });
@@ -85,7 +86,8 @@ export function useMerchant({
     merchant_Verify,
     merchant_info,
     isGettingInfo: get_merchant_info.isFetching,
-    merchant_associated
+    merchant_associated,
+    setFetch_merchant_info
   };
 }
 /* 

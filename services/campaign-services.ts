@@ -60,9 +60,6 @@ export const campaignServices = (() => {
           try {
             const txResponse = await server.getTransaction(response.hash);
             if (txResponse.status === 'SUCCESS') {
-              console.log({ txResponse });
-              console.log({ ret: txResponse?.returnValue });
-
               console.log('Transaction is successful:', txResponse, parameterType);
               // return txResponse.resultXdr.toXDR('base64');
               return decoderHelper(parameterType, txResponse);
@@ -70,7 +67,6 @@ export const campaignServices = (() => {
               console.log('Transaction not found. Retrying...', parameterType);
               await new Promise((resolve) => setTimeout(resolve, 1000));
             } else {
-              console.error('Transaction failed:', txResponse);
               toast.error(`failed while performing ${parameterType}`);
               return null;
             }
@@ -88,7 +84,6 @@ export const campaignServices = (() => {
   };
 
   const getCreatorCampaigns = (secretKey: string, publicKey: string) => {
-    console.log({ secretKey, publicKey });
     // return makeTransaction({ secretKey, parameterType: 'get_campaigns_name' });
     return makeTransaction({
       secretKey,
@@ -105,7 +100,6 @@ export const campaignServices = (() => {
   };
 
   const createCampaigs = (data: any, secretKey: string, publicKey: string) => {
-    console.log({ data });
     return makeTransaction({
       secretKey,
       parameterType: 'create_campaign',
@@ -187,7 +181,6 @@ export const campaignServices = (() => {
   };
 
   const merchant_registration = (data: any) => {
-    console.log('yes i am from merchant registration');
     return makeTransaction({
       contractId: userRegistryContractId,
       parameterType: 'merchant_registration',
@@ -212,7 +205,6 @@ export const campaignServices = (() => {
   };
 
   const get_merchant_associated = (data: any) => {
-    console.log('yes get_merchant_associated', { data });
     return makeTransaction({
       contractId: issuanceManagementContract,
       parameterType: 'get_merchants_assocoated',
@@ -222,7 +214,7 @@ export const campaignServices = (() => {
   };
 
   const get_merchant_info = (secretKey: any, merchantAddress: string) => {
-    console.log('yes i am from get_merchant_info ', { secretKey });
+    console.log({merchantAddress})
     return makeTransaction({
       contractId: userRegistryContractId, //token_contract_id
       parameterType: 'get_merchant_info',

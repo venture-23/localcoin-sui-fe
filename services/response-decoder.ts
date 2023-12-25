@@ -26,8 +26,6 @@ const decoderHelper = (params: string, response: ResponseType) => {
           id: decodeContract(eachValue?._value?._value),
           campaign: decodeContract(eachValue?._value?._value)
         }));
-        console.log({ response, params });
-        console.log({ allCampaignList });
         return allCampaignList;
       case 'get_creator_campaigns':
         const campaignList: any = response?.returnValue?._value?.map((x: any) => {
@@ -81,41 +79,39 @@ const decoderHelper = (params: string, response: ResponseType) => {
           name: eachValue?._attributes?.key?._value?.toString(),
           value: decodeContract(eachValue?._attributes?.val?._value?._value)
         }));
-        console.log({ tokenData });
         return tokenData;
 
       case 'get_balance_of_batch':
         const tokenList = (response?.returnValue?._value || []).map((x) => ({
           name: x._attributes?.key?._value?.toString()
         }));
-        const test = StellarSdk.xdr.ScVal.scvString('hello');
         // const res: any = (response?.returnValue?._value || []).map((entry, i) =>
         //   this.scValToNative(entry, fields[i].type())
         // );
         // console.log(tokenList, res);
-        console.log({ test });
         return tokenList;
 
       case 'merchant_registration':
         toast.success('Registered, Waiting for verified account');
         return response.returnValue?._value;
       case 'verify_merchant':
-        console.log('verify_merchant');
         toast.success('Verified Mechant from admin, Successfully');
         return response.returnValue?._value;
       case 'get_merchants_assocoated':
-        console.log({ response });
         const merchantAssco = (response?.returnValue?._value || []).map(
           (eachValue: any) =>
             StellarSdk.StrKey.encodeEd25519PublicKey(eachValue?._value?._value?._value) || ''
         );
-        console.log({ merchantAssco });
         return merchantAssco;
       case 'get_merchant_info':
         const merchantInfo = (response?.returnValue?._value || []).map((eachValue: any) => ({
           [eachValue?._attributes?.key?._value?.toString()]:
             eachValue?._attributes?.val?._value?.toString()
         }));
+        if (merchantInfo?.length === 0) {
+          toast.error(`Merchant Doesn't exist, select another merchan from response-decoder`);
+        }
+        console.log({ merchantInfo }, '111');
         return makeSingleObject(merchantInfo);
       default:
     }
