@@ -1,5 +1,4 @@
 'use client';
-import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 // import { Popover } from '@headlessui/react';
 import Button from 'components/botton';
 import InputForm from 'components/form/input';
@@ -9,8 +8,6 @@ import PageHeader from 'components/pageheader';
 // import PopupBox from 'components/popover';
 
 import { useMyContext } from 'hooks/useMyContext';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -67,6 +64,7 @@ const CreateCampaignPage = () => {
       campaignServices
         .createCampaigns(data, userInfo.secretKey, userInfo.publicKey)
         .then((x) => {
+          console.log(x);
           if (x._value === undefined) {
             setShowLoader(false);
             console.log(x);
@@ -87,8 +85,6 @@ const CreateCampaignPage = () => {
   return (
     <section>
       <div className="container mx-auto">
-       
-
         <PageHeader backLink={`/campaign`} pageHeaderTitle={'Create Campaign'} />
 
         <div className="rounded-top-[4px]">
@@ -101,7 +97,7 @@ const CreateCampaignPage = () => {
               className="!w-full"
             /> */}
             <div
-              className="p-6 left-7 top-7"
+              className="left-7 top-7 p-6"
               style={{ backgroundImage: 'url("/heading_bg.png")', backgroundSize: 'cover' }}
             >
               <h1 className=" text-2xl font-bold  !text-white">
@@ -111,7 +107,7 @@ const CreateCampaignPage = () => {
             </div>
           </div>
         </div>
-        <div className="grid gap-5 px-6 pt-8 pb-6 bg-white">
+        <div className="grid gap-5 bg-white px-6 pb-6 pt-8">
           <InputForm
             name="name"
             label={'Title'}

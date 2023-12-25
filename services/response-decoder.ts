@@ -114,6 +114,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
         console.log({ merchantInfo }, '111');
         return makeSingleObject(merchantInfo);
       default:
+        return response.returnValue;
     }
   } catch (error: any) {
     toast.error('decode failed');
