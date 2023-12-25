@@ -1,6 +1,5 @@
 'use client';
 import { ArrowLeftIcon } from '@heroicons/react/20/solid';
-import { ArrowLeftCircleIcon, ArrowUpLeftIcon } from '@heroicons/react/24/outline';
 // import { Popover } from '@headlessui/react';
 import Button from 'components/botton';
 import InputForm from 'components/form/input';
@@ -35,6 +34,7 @@ const CreateCampaignPage = () => {
   }, [userInfo]);
 
   const [showLoader, setShowLoader] = useState(false);
+  const [selectedToken, setSelectedToken] = useState({});
   const [data, setData] = useState({
     name: '',
     totalAmount: '',
@@ -87,11 +87,7 @@ const CreateCampaignPage = () => {
   return (
     <section>
       <div className="container mx-auto">
-        {/* <div className="pt-10 mb-4">
-          <Link href="/campaign">
-            <ArrowLeftIcon width={24} height={24} />
-          </Link>
-        </div> */}
+       
 
         <PageHeader backLink={`/campaign`} pageHeaderTitle={'Create Campaign'} />
 
@@ -105,7 +101,7 @@ const CreateCampaignPage = () => {
               className="!w-full"
             /> */}
             <div
-              className="left-7 top-7 p-6"
+              className="p-6 left-7 top-7"
               style={{ backgroundImage: 'url("/heading_bg.png")', backgroundSize: 'cover' }}
             >
               <h1 className=" text-2xl font-bold  !text-white">
@@ -115,7 +111,7 @@ const CreateCampaignPage = () => {
             </div>
           </div>
         </div>
-        <div className="grid gap-5 bg-white px-6 pb-6 pt-8">
+        <div className="grid gap-5 px-6 pt-8 pb-6 bg-white">
           <InputForm
             name="name"
             label={'Title'}

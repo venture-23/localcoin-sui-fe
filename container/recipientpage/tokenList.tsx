@@ -9,6 +9,7 @@ import Link from 'next/link';
 
 const TokenList = () => {
   const { isFetching, tokenList } = useRecipient();
+  console.log({ tokenList });
   return (
     <>
       <section className="">
