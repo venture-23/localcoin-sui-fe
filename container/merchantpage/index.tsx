@@ -196,7 +196,7 @@ const MerchantPage = () => {
         <PopupBox ref={popOverRef}>
           <a href={imageUrl} download className="w-full">
             <Button
-              handleClick={() => downloadBase64File('ScanToPay.jpeg')}
+              handleClick={() => downloadBase64File('ScanToPay')}
               buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
               text="Save image"
             />
