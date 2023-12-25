@@ -1,6 +1,8 @@
 'use client';
 import {
+  ArrowDownOnSquareStackIcon,
   BuildingStorefrontIcon,
+  ChevronDoubleDownIcon,
   GlobeEuropeAfricaIcon,
   UserCircleIcon
 } from '@heroicons/react/24/outline';
@@ -25,17 +27,17 @@ const SignupPage = () => {
     // setIsOpenPopup(true);
     popOverRef?.current?.open({
       title: '',
-      imageUrl: '',
-      messageTitle: 'Payment Sucessful',
-      message: 'Your Payment is sucessful',
-      type: 'success'
+      messageTitle: 'Install LocalCoin',
+      message: 'Add to your homescreen',
+      // type: 'success'
+      downloadIcon: <ArrowDownOnSquareStackIcon width={48} height={48} />
     });
   };
   return (
     <>
       {/* <Header className="h-[120px]">
         <div className="flex items-center">
-          <Link href="/"><ArrowLeftIcon width={24} height={24} /></Link>
+          <Link href="/">{'<- '}</Link>
           <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p>
         </div>
       </Header> */}
@@ -43,7 +45,7 @@ const SignupPage = () => {
       <section className="bg-[#F7F8FA] ">
         <div className="container mx-auto ">
           {/* <Link href="/">{'<- '}</Link> */}
-          <div className="mb-10 pt-10 ">
+          <div className="pt-10 mb-10 ">
             <h1 className=" text-heading">
               Signup <span className="font-normal">with your desired role.</span>{' '}
             </h1>
@@ -51,7 +53,7 @@ const SignupPage = () => {
               <>
                 {/* <buton onClick={() => promptToInstall()}>INSTALL APP</buton> */}
 
-                <div className="mt-6">
+                {/* <div className="mt-6">
                   <button
                     onClick={() => {
                       // setOpen(false);
@@ -68,19 +70,13 @@ const SignupPage = () => {
                   >
                     Pay
                   </button>
-                </div>
+                </div> */}
 
                 <PopupBox ref={popOverRef}>
-                  <a
-                    onClick={() => {
-                      popOverRef.current.close({});
-                    }}
-                    download
-                    className="w-full"
-                  >
+                  <a onClick={() => promptToInstall()} download className="w-full">
                     <Button
                       // buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
-                      text="Done"
+                      text="Add"
                     />
                   </a>
                 </PopupBox>
@@ -93,21 +89,21 @@ const SignupPage = () => {
               <Card
                 title="Merchant"
                 link="/signup/merchant"
-                iconName={<BuildingStorefrontIcon className="h-8 w-8 text-primary" />}
+                iconName={<BuildingStorefrontIcon className="w-8 h-8 text-primary" />}
               />
               <Card
                 title="Recipient"
                 link="/signup/recipient"
-                iconName={<UserCircleIcon className="h-8 w-8 text-primary" />}
+                iconName={<UserCircleIcon className="w-8 h-8 text-primary" />}
               />
               <Card
                 title="Campaign Creator"
                 link="/signup/campaign"
-                iconName={<GlobeEuropeAfricaIcon className="h-8 w-8 text-primary" />}
+                iconName={<GlobeEuropeAfricaIcon className="w-8 h-8 text-primary" />}
               />
             </div>
           </div>
-          <div className="text-color absolute bottom-4 left-1/2 flex w-full -translate-x-1/2 items-baseline justify-center text-lg font-semibold">
+          <div className="absolute flex items-baseline justify-center w-full text-lg font-semibold -translate-x-1/2 text-color bottom-4 left-1/2">
             <p className="font-normal">Already have an account? </p>{' '}
             <Link href="/">
               {' '}
