@@ -15,7 +15,7 @@ const CustomToaster: any = ({ message, info }: { message: any; info: any }) => {
   return (
     <ToastContainer
       position="top-center"
-      autoClose={1000}
+      autoClose={5000}
       hideProgressBar={true}
       newestOnTop={true}
       closeOnClick
