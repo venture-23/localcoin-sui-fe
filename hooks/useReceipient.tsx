@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import { useMyContext } from './useMyContext';
 
-export function useRecipient() {
+export function useRecipient({ data = {}, sendTokenToMer = false }: any) {
   const { userInfo } = useMyContext();
 
   const receipientInfo = useQuery({
@@ -28,17 +28,21 @@ export function useRecipient() {
       toast.error('Error While getting campaign list');
     }
   });
-  const sendToMerchant = useQuery({
-    queryKey: [`sendToMerchant`],
-    enabled: !!userInfo.publicKey,
+
+  const sendTokenToMerchant = useQuery({
+    queryKey: [`send-token-to_merchant`],
+    enabled: sendTokenToMer,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const response = await campaignServices.getReceipientToken(
+      const response = await campaignServices.transfer_tokens_from_recipient_to_merchant(
         userInfo.secretKey,
-        userInfo.publicKey
+        data.amount,
+        data.contractId,
+        data.merchantAddress,
+        data.senderAddress
       );
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
@@ -53,10 +57,10 @@ export function useRecipient() {
   const { tokenList } = useMemo(() => {
     const tokenList = receipientInfo.data;
     return { tokenList };
-  }, [receipientInfo.data, sendToMerchant.data]);
+  }, [receipientInfo.data]);
 
   return {
-    isFetching: receipientInfo.isFetching,
-    tokenList: tokenList
+    tokenList: tokenList,
+    isFetching: receipientInfo.isFetching || sendTokenToMerchant.isFetching
   };
 }

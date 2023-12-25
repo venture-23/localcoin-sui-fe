@@ -1,6 +1,5 @@
 'use client';
 import { ArrowLeftIcon } from '@heroicons/react/20/solid';
-import { ArrowLeftCircleIcon, ArrowUpLeftIcon } from '@heroicons/react/24/outline';
 // import { Popover } from '@headlessui/react';
 import Button from 'components/botton';
 import InputForm from 'components/form/input';
@@ -34,6 +33,7 @@ const CreateCampaignPage = () => {
   }, [userInfo]);
 
   const [showLoader, setShowLoader] = useState(false);
+  const [selectedToken, setSelectedToken] = useState({});
   const [data, setData] = useState({
     name: '',
     totalAmount: '',
@@ -86,7 +86,7 @@ const CreateCampaignPage = () => {
   return (
     <section>
       <div className="container mx-auto">
-        <div className="pt-10 mb-4">
+        <div className="mb-4 pt-10">
           <Link href="/campaign">
             <ArrowLeftIcon width={24} height={24} />
           </Link>
@@ -109,7 +109,7 @@ const CreateCampaignPage = () => {
             </div>
           </div>
         </div>
-        <div className="grid gap-5 px-6 pt-8 pb-6 bg-white">
+        <div className="grid gap-5 bg-white px-6 pb-6 pt-8">
           <InputForm
             name="name"
             label={'Title'}

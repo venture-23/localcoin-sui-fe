@@ -8,6 +8,7 @@ import Link from 'next/link';
 
 const TokenList = () => {
   const { isFetching, tokenList } = useRecipient();
+  console.log({ tokenList });
   return (
     <>
       <section className="">
@@ -16,7 +17,7 @@ const TokenList = () => {
             <Link href="/recipient">
               <ArrowLeftIcon width={24} height={24} />
             </Link>
-            <div className="pt-2 mb-6">
+            <div className="mb-6 pt-2">
               <h2 className="mb-2 text-2xl font-bold">Your Tokens</h2>
             </div>
           </div>

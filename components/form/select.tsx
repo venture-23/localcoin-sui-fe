@@ -36,7 +36,7 @@ const Select = ({ optionsList = [], defaultvalue = '', handleChange }: any) => {
                     
                       `}
                     >
-                      {eachOption.name}
+                      {eachOption.name || eachOption}
                     </a>
                   )}
                 </Menu.Item>
