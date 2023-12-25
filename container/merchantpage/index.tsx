@@ -218,7 +218,7 @@ const MerchantPage = () => {
               shareOnMobile(
                 {
                   text: 'Scan to make payment',
-                  url: 'https://www.npmjs.com/package/react-mobile-share',
+                  url: 'https://localcoin-mobileapp.vercel.app/merchant',
                   title: 'Scan to Pay',
                   images: [imgBase64]
                 },
