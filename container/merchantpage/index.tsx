@@ -196,7 +196,7 @@ const MerchantPage = () => {
         <PopupBox ref={popOverRef}>
           <a href={imageUrl} download className="w-full">
             <Button
-              handleClick={() => downloadBase64File('ScanToPay.jpeg')}
+              handleClick={() => downloadBase64File('ScanToPay')}
               buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
               text="Save image"
             />
@@ -207,9 +207,9 @@ const MerchantPage = () => {
 
               shareOnMobile(
                 {
-                  text: 'Scan QR code to make payment',
+                  text: 'Scan to make payment',
                   url: imageUrl,
-                  title: 'Scan to Pay',
+                  title: 'https://localcoin-mobileapp.vercel.app/',
                   images: [imgBase64]
                 },
                 (message) => alert(message)
