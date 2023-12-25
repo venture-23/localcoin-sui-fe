@@ -1,27 +1,45 @@
+'use client';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import Link from 'next/link';
-
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { maskWalletAddress } from 'utils/clipper';
 interface tokenProps {
   id: string;
   title: string;
   description: string;
 }
 interface CardProps {
-  campaignDetails: tokenProps;
+  // campaignDetails: tokenProps;
+  campaignDetails: any;
   cardInsideClass?: string;
   iconContainerClass?: string;
   cardContainerClass?: string;
+  id?: string;
+  link?: string;
+  clippedId?: boolean;
 }
 
 const CampaignCard: React.FC<CardProps> = ({
   campaignDetails,
   cardContainerClass,
-  cardInsideClass
+  cardInsideClass,
+  link,
+  clippedId = false
   // iconContainerClass
 }) => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const url = `${pathname}?${searchParams}`;
+    // You can now use the current URL
+    // ...
+  }, [pathname, searchParams]);
+
   return (
-    <Link href={`/recipient/campaign/${campaignDetails.id}`}>
+    <Link href={`${link ? link : pathname}/${campaignDetails.id}`}>
       <div className={`flex ${cardContainerClass} rounded bg-white p-5  `}>
         {/* <div className={`flex flex-col items-center ${cardInsideClass}`}> */}
         {/* <div className={`${iconContainerClass}`}>Icon</div> */}
@@ -39,10 +57,15 @@ const CampaignCard: React.FC<CardProps> = ({
               />
             </div>
             <div className="max-w-sm">
-              <p className="text-lg font-semibold text-text">{campaignDetails.title}</p>
+              <p className="text-lg font-semibold text-text">{campaignDetails?.name}</p>
               <p className="mb-0 text-sm font-normal text-textSecondary ">
                 {campaignDetails.description}
               </p>
+              {campaignDetails?.campaign && (
+                <p className="mb-0 text-sm font-normal text-textSecondary ">
+                  {maskWalletAddress(campaignDetails?.campaign)}
+                </p>
+              )}
             </div>
           </div>
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EFF8FF]">

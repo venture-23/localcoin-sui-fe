@@ -1,6 +1,7 @@
 'use client';
 import { QrCodeIcon } from '@heroicons/react/24/outline';
 import Drawer from 'components/drawer';
+import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode';
@@ -16,15 +17,24 @@ export default function ScanPayMerchant() {
 
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const cameraRef = useRef(null);
-
+  const { userInfo } = useMyContext();
   useEffect(() => {
     generateQrCode();
   }, []);
 
   const generateQrCode = async () => {
     try {
-      // debugger;
-      const response = await QRCode.toDataURL('this is address of user');
+      console.log({ userInfo });
+      const staticData = {
+        type: 'merchant',
+        publicKey: userInfo.publicKey,
+        amount: 0.1,
+        proprietaryName: userInfo.proprietaryName,
+        phoneNumber: userInfo.phoneNumber,
+        storeName: userInfo.storeName,
+        location: userInfo.location
+      };
+      const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);
     } catch (error) {
       // debugger;

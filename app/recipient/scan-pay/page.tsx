@@ -1,7 +1,9 @@
 'use client';
+import { XCircleIcon } from '@heroicons/react/20/solid';
 import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import PopupBox from 'components/popover';
+import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode';
@@ -10,10 +12,12 @@ import { QrReader } from 'react-qr-reader';
 
 export default function ScanPayMerchant() {
   const [imageUrl, setImageUrl] = useState('');
+  const { userInfo } = useMyContext();
+
   // const [scanResultFile, setScanResultFile] = useState('');
   const [scanResultWebCam, setScanResultWebCam] = useState('');
   const { push } = useRouter();
-  const [open, setOpen] = useState(false);
+  const popOverRef = useRef<any>(null);
 
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const cameraRef = useRef();
@@ -24,8 +28,13 @@ export default function ScanPayMerchant() {
 
   const generateQrCode = async () => {
     try {
+      const staticData = {
+        type: 'receipient',
+        publicKey: userInfo.publicKey,
+        secretKey: userInfo.secretKey
+      };
       // debugger;
-      const response = await QRCode.toDataURL('this is address of user');
+      const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);
     } catch (error) {
       // debugger;
@@ -50,31 +59,31 @@ export default function ScanPayMerchant() {
   const handleScanWebCam = (result: string) => {
     if (result) {
       setScanResultWebCam('result');
-      close();
+      // close();
       push('/recipient/confirmation');
     }
   };
-  async function close() {
-    console.log('closing');
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: true
-    });
-    stream.getTracks().forEach(function (track) {
-      track.stop();
-      track.enabled = false;
-    });
-    cameraRef.current.remove();
-  }
+  // async function close() {
+  //   console.log('closing');
+  //   const stream = await navigator.mediaDevices.getUserMedia({
+  //     audio: false,
+  //     video: true
+  //   });
+  //   stream.getTracks().forEach(function (track) {
+  //     track.stop();
+  //     track.enabled = false;
+  //   });
+  //   cameraRef.current.remove();
+  // }
 
   return (
     <>
       {/* <Header className="h-[120px]"> */}
       <div className=" absolute top-12 z-[10] mx-auto w-[95%] ">
         <div className="flex items-center justify-between">
-          <p className="flex-1 text-center">Scan QR code to pay</p>
-          <Link href="/recipient" className="">
-            {'X'}
+          <p className="flex-1 text-center text-white">Scan QR code to pay</p>
+          <Link href="/recipient" className="flex items-center justify-center rounded-full ">
+            <XCircleIcon width={24} height={24} color="white" />
           </Link>
         </div>
       </div>
@@ -84,6 +93,7 @@ export default function ScanPayMerchant() {
           // className="hello"
           onResult={(result, error) => {
             if (!!result) {
+              console.log({ result: result.text });
               handleScanWebCam(result?.text);
             }
 
@@ -92,7 +102,7 @@ export default function ScanPayMerchant() {
             }
           }}
           scanDelay={500}
-          constraints={{ facingMode: 'user' }}
+          constraints={{ facingMode: 'environment' }}
           containerStyle={{ paddingTop: '0' }}
           videoContainerStyle={{ width: '100%', height: '100vh', paddingTop: '0' }}
           videoStyle={{
@@ -102,7 +112,10 @@ export default function ScanPayMerchant() {
           }}
         />
 
-        <span className="try-css bg-tranparent absolute inset-0 m-auto h-[200px] w-1/2 rounded-md border-2 border-white "></span>
+        <span
+          className="try-css bg-tranparent absolute inset-0 m-auto h-[200px] w-1/2 rounded-md border-2 border-white  
+        shadow-[0_4px_0px_500px_rgba(0,0,0,0.5)] "
+        ></span>
 
         {/* <span className="absolute inset-0 w-full h-full font-bold bg-black/5"></span> */}
       </div>
@@ -111,7 +124,10 @@ export default function ScanPayMerchant() {
 
       {imageUrl ? (
         <>
-          <div className="fixed bottom-7 right-7 " onClick={() => setIsOpenPopup(true)}>
+          <div
+            className="fixed bottom-7 right-7 "
+            onClick={() => popOverRef.current.open({ title: 'Share QR Code', imageUrl })}
+          >
             <Link
               // href={asPath.includes('recipient') ? '/recipient/scan-pay' : '/merchant/scan-pay'}
               href=""
@@ -121,23 +137,20 @@ export default function ScanPayMerchant() {
               <span className="text-base font-semibold text-white">Share QR</span>
             </Link>
           </div>
-          <PopupBox
-            PopupTitle="Share QR Code"
-            setIsOpenPopup={setIsOpenPopup}
-            isOpenPopup={isOpenPopup}
-            imageUrl={imageUrl}
-          >
-            <a href={imageUrl} download className="w-full">
+          <PopupBox ref={popOverRef}>
+            <>
+              <a href={imageUrl} download className="w-full">
+                <Button
+                  buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
+                  text="Save image"
+                />
+              </a>
               <Button
-                buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
-                text="Save image"
+                text="Share"
+                buttonType="secondary"
+                buttonIcon={<ShareIcon width={24} height={24} />}
               />
-            </a>
-            <Button
-              text="Share"
-              buttonType="secondary"
-              buttonIcon={<ShareIcon width={24} height={24} />}
-            />
+            </>
           </PopupBox>
 
           {/* <Drawer open={open} setOpen={setOpen} panelTitle="Share your QR Code">

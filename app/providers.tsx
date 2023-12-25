@@ -11,6 +11,8 @@ interface MyContextData {
   setCheckPinCode?: any;
   redirectTo?: any;
   setRedirectTo?: any;
+  setUserInfo?: any;
+  userInfo?: any;
 }
 
 // Create a context with an initial value

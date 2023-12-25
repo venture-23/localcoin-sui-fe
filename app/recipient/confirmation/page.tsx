@@ -1,26 +1,28 @@
 'use client';
 
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
-import Header from 'components/layout/header';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import Button from 'components/botton';
+import PopupBox from 'components/popover';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function confirmation() {
   const [openConfirmation, setopenConfirmation] = useState(false);
+  const popOverRef = useRef<any>(null);
 
   useEffect(() => {
     // setopenConfirmation(true);
   }, []);
   return (
     <>
-      <Header className="h-[120px]">
-        <div className="flex items-center">
-          <Link href="/">{'<- '}</Link>
-          <p className="flex-1  text-center text-2xl font-semibold">Confirmation Page</p>
-        </div>
-      </Header>
-      <section className="py-6">
+      <section className="">
         <div className="container mx-auto">
+          <div className="mb-6 flex items-center pt-10">
+            <Link href="/recipient">
+              <ArrowLeftIcon width={24} height={24} />
+            </Link>
+            <p className="flex-1 text-center text-2xl font-semibold">Confirmation Page</p>
+          </div>
           <div className="grid gap-4 rounded-md bg-white p-4">
             <div>
               <p className="font-bold">Store Name</p>
@@ -36,35 +38,40 @@ export default function confirmation() {
             </div>
           </div>
           <div className="mt-6">
-            <button onClick={() => setopenConfirmation(true)} className="button-primary ">
+            <button
+              onClick={() => {
+                // setOpen(false);
+                // setIsOpenPopup(true);
+                popOverRef.current.open({
+                  title: '',
+                  imageUrl: '',
+                  messageTitle: 'Payment Sucessful',
+                  message: 'Your Payment is sucessful',
+                  type: 'success'
+                });
+              }}
+              className="button-primary "
+            >
               Pay
             </button>
           </div>
+
+          <PopupBox ref={popOverRef}>
+            <a
+              onClick={() => {
+                popOverRef.current.close({});
+              }}
+              download
+              className="w-full"
+            >
+              <Button
+                // buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
+                text="Done"
+              />
+            </a>
+          </PopupBox>
         </div>
       </section>
-
-      {openConfirmation && (
-        <div>
-          <div
-            data-state="open"
-            className="pointer-events-none fixed inset-0 z-50 bg-black/20 backdrop-blur-sm"
-            // style="pointer-events: auto;"
-            data-aria-hidden="true"
-            aria-hidden="true"
-          ></div>
-
-          <div className="fixed left-[50%] top-[50%]  z-50 grid  w-[90%] w-full translate-x-[-50%] translate-y-[-50%] justify-center  justify-items-center gap-4 rounded-lg bg-white p-6 shadow-lg">
-            <CheckCircleIcon className="h-24 w-24 text-green-500" />
-            <div className="text-center">
-              <h1 className="text-2xl font-bold">Payment Sucessful</h1>
-              <p className="text-slate-500">Payment to 0z5122x7xa8sv0 was successful.</p>
-            </div>
-            <Link href="/recipient">
-              <button className="button-primary w-full">Done</button>
-            </Link>
-          </div>
-        </div>
-      )}
     </>
   );
 }
