@@ -1,5 +1,5 @@
 'use client';
-import { ArrowLeftIcon, QrCodeIcon } from '@heroicons/react/24/outline';
+import { QrCodeIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import DetailCampaign from 'components/campaigncard/detail';
 import Drawer from 'components/drawer';
@@ -69,6 +69,7 @@ const CampaignDetail = (props: any) => {
     const err: any = validation();
     setError(err);
     if (Object.keys(err).length === 0) {
+      setShowLoader(true);
       campaignServices
         .transfer_tokens_to_recipient(
           userInfo.secretKey,
@@ -84,7 +85,10 @@ const CampaignDetail = (props: any) => {
             router.push('/campaign');
           }
         })
-        .catch((e) => toast.error('Error on Token Transfer'));
+        .catch((e) => {
+          setShowLoader(false);
+          toast.error('Error on Token Transfer');
+        });
       console.log('first');
     }
   };

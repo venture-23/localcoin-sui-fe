@@ -62,7 +62,7 @@ export function useMerchant({
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const response = await campaignServices.get_merchant_associated(userInfo);
+      const response = await campaignServices.verify_merchant(userInfo);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       return response;
     },

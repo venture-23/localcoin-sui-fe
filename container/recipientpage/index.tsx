@@ -129,7 +129,7 @@ const RecipientPage = () => {
 
             <div className="fixed bottom-0 left-0 w-full">
               <DrawerQrScan
-                shareQr={false}
+                shareQr={true}
                 ref={buttonRef}
                 setScanData={setScanData}
                 panelTitle="Scan QR Code"

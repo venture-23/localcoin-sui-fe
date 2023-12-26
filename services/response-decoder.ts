@@ -18,6 +18,21 @@ const decodeContract = (value: any) => {
   return StellarSdk.StrKey.encodeContract(value);
 };
 
+const decodePublicKey = (value: any) => {
+  return StellarSdk.StrKey.encodeEd25519PublicKey(value) || '';
+};
+
+const decodeTokenBalance = (data: any) => {
+  const bigInt = require('big-integer');
+  const hiValue = bigInt(data?._attributes?.hi?._value);
+  const loValue = bigInt(data?._attributes?.lo?._value);
+
+  const combinedValue = hiValue.shiftLeft(64).or(loValue);
+  const stringValue = combinedValue.toString();
+  const decodedValue = stringValue.replace(/0{7}$/, '');
+  return decodedValue;
+};
+
 const decoderHelper = (params: string, response: ResponseType) => {
   try {
     switch (params) {
@@ -30,7 +45,13 @@ const decoderHelper = (params: string, response: ResponseType) => {
       case 'get_creator_campaigns':
         const campaignList: any = response?.returnValue?._value?.map((x: any) => {
           return x._value.map((eachInsideValue: any) => {
-            if (eachInsideValue?._attributes?.key?._value?.toString() !== 'info') {
+            console.log(
+              eachInsideValue?._attributes?.key?._value?.toString(),
+              '>>>>>>>>>>>>>>>>>>>'
+            );
+            if (eachInsideValue?._attributes?.key?._value?.toString() === 'info') {
+              return '';
+            } else if (eachInsideValue?._attributes?.key?._value?.toString() !== 'info') {
               return {
                 [eachInsideValue?._attributes?.key?._value?.toString() || '']:
                   (eachInsideValue?._attributes?.val?._value?._value &&
@@ -63,15 +84,28 @@ const decoderHelper = (params: string, response: ResponseType) => {
         });
         return flatArray || [];
       case 'get_campaign_info':
-        const allInfo = (response?.returnValue?._value || []).map(
-          (eachValue: any, index: number) => ({
-            [index === 0 ? 'no_of_recipients' : index === 1 ? 'name' : 'description']:
-              eachValue?._value?.toString()
+        const allInfo = (response?.returnValue?._value || []).map((eachValue: any) => {
+          console.log(
+            eachValue?._attributes?.key?._value?.toString(),
+            'eachValue?._attributes?.key?._value?.toString()'
+          );
+          return {
+            /* 
+              creator
+              
+              */
+            [eachValue?._attributes?.key?._value?.toString()]:
+              eachValue?._attributes?.key?._value?.toString() === 'creator'
+                ? decodePublicKey(eachValue?._attributes?.val?._value?._value?._value)
+                : eachValue?._attributes?.key?._value?.toString() === 'token_address'
+                ? decodeContract(eachValue?._attributes?.val?._value?._value)
+                : eachValue?._attributes?.val?._value?.toString()
             // [eachValue?._value?.toString()]: eachValue?._value?.toString()
             // [eachValue?._value?.toString()]: eachValue?._value?.toString()
-          })
-        );
+          };
+        });
         const singleObject = makeSingleObject(allInfo);
+        console.log({ singleObject });
         return singleObject;
 
       case 'get_token_name_address':
@@ -82,13 +116,22 @@ const decoderHelper = (params: string, response: ResponseType) => {
         return tokenData;
 
       case 'get_balance_of_batch':
-        const tokenList = (response?.returnValue?._value || []).map((x) => ({
-          name: x._attributes?.key?._value?.toString()
-        }));
-        // const res: any = (response?.returnValue?._value || []).map((entry, i) =>
-        //   this.scValToNative(entry, fields[i].type())
-        // );
-        // console.log(tokenList, res);
+        const tokenList = (response?.returnValue?._value || []).map((x) => {
+          const name = x._attributes?.key?._value?.toString();
+          const test = (x._attributes?.val?._value || []).reduce(
+            (result: any, eachVal: any) => {
+              if (eachVal._arm === 'i128') {
+                result.amount = decodeTokenBalance(eachVal?._value);
+              } else {
+                result.contractToken = decodeContract(eachVal?._value?._value);
+              }
+              return result;
+            },
+            { name }
+          );
+          return test;
+        });
+        console.log(tokenList, '1231231223121321');
         return tokenList;
 
       case 'merchant_registration':
@@ -97,7 +140,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
       case 'verify_merchant':
         toast.success('Verified Mechant from admin, Successfully');
         return response.returnValue?._value;
-      case 'get_merchants_assocoated':
+      case 'get_merchants_associated':
         const merchantAssco = (response?.returnValue?._value || []).map(
           (eachValue: any) =>
             StellarSdk.StrKey.encodeEd25519PublicKey(eachValue?._value?._value?._value) || ''
@@ -117,7 +160,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
         return response.returnValue;
     }
   } catch (error: any) {
-    toast.error('decode failed');
+    toast.error(`decode failed from ${params}`);
     throw new Error(error);
   }
 };

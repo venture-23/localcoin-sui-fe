@@ -29,7 +29,6 @@ export const campaignServices = (() => {
     contractId = campaignContractId
   }: any) => {
     try {
-      debugger
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
       const sourcePublicKey = sourceKeypair.publicKey();
       const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
@@ -46,39 +45,60 @@ export const campaignServices = (() => {
         .addOperation(contract.call(parameterType, ...((payload && payload) || [])))
         .setTimeout(30)
         .build();
-
-      transaction = await server.prepareTransaction(transaction);
-      transaction.sign(sourceKeypair);
-      const response = await server.sendTransaction(transaction);
-      const SendTxStatus = {
-        Pending: 'PENDING',
-        Duplicate: 'DUPLICATE',
-        Retry: 'TRY_AGAIN_LATER',
-        Error: 'ERROR'
-      };
-      if (response.status === SendTxStatus.Pending) {
-        while (true) {
-          try {
-            const txResponse = await server.getTransaction(response.hash);
-            if (txResponse.status === 'SUCCESS') {
-              console.log('Transaction is successful:', txResponse, parameterType);
-              // return txResponse.resultXdr.toXDR('base64');
-              return decoderHelper(parameterType, txResponse);
-            } else if (txResponse.status === 'NOT_FOUND') {
-              console.log('Transaction not found. Retrying...', parameterType);
-              await new Promise((resolve) => setTimeout(resolve, 1000));
-            } else {
-              toast.error(`failed while performing ${parameterType}`);
+      /*  server.simulateTransaction(transaction).then((sim: any) => {
+        console.log({ sim });
+        console.log('cost:', sim.cost);
+        console.log('result:', sim.result);
+        console.log('error:', sim.error);
+        console.log('latestLedger:', sim.latestLedger);
+      }); */
+      if (
+        ![
+          'create_campaign',
+          'transfer_tokens_to_recipient',
+          'recipient_to_merchant_transfer',
+          'merchant_registration',
+          'verify_merchant'
+        ].includes(parameterType)
+      ) {
+        return server.simulateTransaction(transaction).then((sim: any) => {
+          console.log({ sim });
+          return decoderHelper(parameterType, { returnValue: sim.result?.retval });
+        });
+      } else {
+        transaction = await server.prepareTransaction(transaction);
+        transaction.sign(sourceKeypair);
+        const response = await server.sendTransaction(transaction);
+        const SendTxStatus = {
+          Pending: 'PENDING',
+          Duplicate: 'DUPLICATE',
+          Retry: 'TRY_AGAIN_LATER',
+          Error: 'ERROR'
+        };
+        if (response.status === SendTxStatus.Pending) {
+          while (true) {
+            try {
+              const txResponse = await server.getTransaction(response.hash);
+              if (txResponse.status === 'SUCCESS') {
+                console.log('Transaction is successful:', txResponse, parameterType);
+                // return txResponse.resultXdr.toXDR('base64');
+                return decoderHelper(parameterType, txResponse);
+              } else if (txResponse.status === 'NOT_FOUND') {
+                console.log('Transaction not found. Retrying...', parameterType);
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+              } else {
+                toast.error(`failed while performing ${parameterType}`);
+                return null;
+              }
+            } catch (error) {
+              console.error('Error while checking transaction status:', error);
               return null;
             }
-          } catch (error) {
-            console.error('Error while checking transaction status:', error);
-            return null;
           }
         }
       }
     } catch (error: any) {
-      console.log(error, 'FRM THE ERROR');
+      console.log(error, `FRM THE ERROR from ${parameterType}`);
       // return error;
       return Promise.reject(error);
     }
@@ -107,8 +127,8 @@ export const campaignServices = (() => {
       payload: [
         StringToScVal(data.name),
         StringToScVal(data.description),
-        StringToScVal(data.participant),
-        // numberToU32(parseFloat(data.participant)),
+        // StringToScVal(data.participant),
+        numberToU32(parseFloat(data.participant)),
         accountToScVal(localCoinAddress),
         numberToI128(parseFloat(data.totalAmount)),
         accountToScVal(publicKey)
@@ -136,6 +156,7 @@ export const campaignServices = (() => {
   };
 
   const getReceipientToken = (secretKey: string, publicKey: string) => {
+    console.log({ secretKey, publicKey });
     return makeTransaction({
       parameterType: 'get_balance_of_batch',
       contractId: issuanceManagementContract,
@@ -208,14 +229,14 @@ export const campaignServices = (() => {
   const get_merchant_associated = (data: any) => {
     return makeTransaction({
       contractId: issuanceManagementContract,
-      parameterType: 'get_merchants_assocoated',
+      parameterType: 'get_merchants_associated',
       secretKey: data.secretKey,
       payload: [accountToScVal('CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL')] //token_contract_id
     });
   };
 
   const get_merchant_info = (secretKey: any, merchantAddress: string) => {
-    console.log({merchantAddress})
+    console.log({ merchantAddress });
     return makeTransaction({
       contractId: userRegistryContractId, //token_contract_id
       parameterType: 'get_merchant_info',

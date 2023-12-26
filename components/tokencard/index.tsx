@@ -1,6 +1,7 @@
 interface tokenProps {
   name: string;
   value: number;
+  amount: string;
 }
 interface CardProps {
   tokenDetails: tokenProps;
@@ -24,7 +25,10 @@ const TokenCard: React.FC<CardProps> = ({
         {/* <p className="text-base text-gray-700">{description}</p> */}
       </div>
       <div className={`flex flex-col items-center ${cardInsideClass}`}>
-        <p className="text-lg font-medium text-gray-500 "> $ {tokenDetails?.value}</p>
+        <p className="text-lg font-medium text-gray-500 ">
+          {' '}
+          $ {tokenDetails?.value || tokenDetails?.amount || ''}
+        </p>
       </div>
     </div>
   );
