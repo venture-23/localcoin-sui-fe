@@ -22,7 +22,7 @@ const decodePublicKey = (value: any) => {
   return StellarSdk.StrKey.encodeEd25519PublicKey(value) || '';
 };
 
-const decodeTokenBalance = (data: any) => {
+const decodei128 = (data: any) => {
   const bigInt = require('big-integer');
   const hiValue = bigInt(data?._attributes?.hi?._value);
   const loValue = bigInt(data?._attributes?.lo?._value);
@@ -43,69 +43,52 @@ const decoderHelper = (params: string, response: ResponseType) => {
         }));
         return allCampaignList;
       case 'get_creator_campaigns':
-        const campaignList: any = response?.returnValue?._value?.map((x: any) => {
-          return x._value.map((eachInsideValue: any) => {
-            console.log(
-              eachInsideValue?._attributes?.key?._value?.toString(),
-              '>>>>>>>>>>>>>>>>>>>'
-            );
-            if (eachInsideValue?._attributes?.key?._value?.toString() === 'info') {
-              return '';
-            } else if (eachInsideValue?._attributes?.key?._value?.toString() !== 'info') {
-              return {
-                [eachInsideValue?._attributes?.key?._value?.toString() || '']:
-                  (eachInsideValue?._attributes?.val?._value?._value &&
-                    decodeContract(eachInsideValue?._attributes?.val?._value?._value)) ||
-                  ''
-              };
-            } else {
-              return eachInsideValue?._attributes?.val?._value.map((y: any, index: number) => {
-                return {
-                  [index === 0 ? 'name' : index === 1 ? 'discription' : 'no_of_recipients']:
-                    y._value.toString()
-                };
-              });
-            }
-          });
-        });
-        const flatArray = campaignList.map((item: any) => {
-          const [campaignObj, detailsArray, tokenObj, tokenMintedObj] = item;
-          const result = {
-            id: campaignObj?.campaign,
-            campaign: campaignObj?.campaign,
-            name: detailsArray[0]?.name,
-            description: detailsArray[1]?.discription,
-            no_of_recipients: detailsArray[2]?.no_of_recipients,
-            token: tokenObj?.token,
-            token_minted: tokenMintedObj?.token_minted
-          };
+        const campaignList: any[] | undefined = response?.returnValue?._value?.map((x: any) =>
+          x._value.map((eachInsideValue: any) => {
+            const key = eachInsideValue?._attributes?.key?._value?.toString() || '';
+            const val = eachInsideValue?._attributes?.val?._value;
 
-          return result;
-        });
-        return flatArray || [];
+            if (key === 'info') {
+              return val?.map((y: any) => ({
+                [y?._attributes?.key?._value?.toString() || '']:
+                  y?._attributes?.val?._value.toString() || ''
+              }));
+            } else if (key === 'token_minted') {
+              return { [key]: decodei128(val) || '' };
+            } else {
+              return { [key]: (val?._value && decodeContract(val?._value)) || '' };
+            }
+          })
+        );
+
+        const [campaignObj, detailsArray, tokenObj, tokenMintedObj] = campaignList?.[0] || [];
+        const { campaign } = campaignObj;
+        const { description, name, no_of_recipients } = Object.assign({}, ...detailsArray);
+
+        // Create the desired output object
+        const transformedOutput = {
+          campaign,
+          description,
+          name,
+          no_of_recipients,
+          token: tokenObj?.token || '',
+          token_minted: tokenMintedObj?.token_minted || ''
+        };
+
+        // Create a new array with the transformed object
+        const output = [transformedOutput];
+        return output;
       case 'get_campaign_info':
-        const allInfo = (response?.returnValue?._value || []).map((eachValue: any) => {
-          console.log(
-            eachValue?._attributes?.key?._value?.toString(),
-            'eachValue?._attributes?.key?._value?.toString()'
-          );
-          return {
-            /* 
-              creator
-              
-              */
-            [eachValue?._attributes?.key?._value?.toString()]:
-              eachValue?._attributes?.key?._value?.toString() === 'creator'
-                ? decodePublicKey(eachValue?._attributes?.val?._value?._value?._value)
-                : eachValue?._attributes?.key?._value?.toString() === 'token_address'
-                ? decodeContract(eachValue?._attributes?.val?._value?._value)
-                : eachValue?._attributes?.val?._value?.toString()
-            // [eachValue?._value?.toString()]: eachValue?._value?.toString()
-            // [eachValue?._value?.toString()]: eachValue?._value?.toString()
-          };
-        });
+        const allInfo = (response?.returnValue?._value || []).map((eachValue: any) => ({
+          [eachValue?._attributes?.key?._value?.toString()]:
+            eachValue?._attributes?.key?._value?.toString() === 'creator'
+              ? decodePublicKey(eachValue?._attributes?.val?._value?._value?._value)
+              : eachValue?._attributes?.key?._value?.toString() === 'token_address'
+              ? decodeContract(eachValue?._attributes?.val?._value?._value)
+              : eachValue?._attributes?.val?._value?.toString()
+        }));
+
         const singleObject = makeSingleObject(allInfo);
-        console.log({ singleObject });
         return singleObject;
 
       case 'get_token_name_address':
@@ -121,7 +104,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
           const test = (x._attributes?.val?._value || []).reduce(
             (result: any, eachVal: any) => {
               if (eachVal._arm === 'i128') {
-                result.amount = decodeTokenBalance(eachVal?._value);
+                result.amount = decodei128(eachVal?._value);
               } else {
                 result.contractToken = decodeContract(eachVal?._value?._value);
               }
