@@ -127,7 +127,7 @@ const RecipientPage = () => {
               </div>
             </div>
 
-            <div className="fixed bottom-0 left-0 w-full">
+            <div className="fixed bottom-0 left-0 w-full [@media(min-width:1024px)]:left-1/2 [@media(min-width:1024px)]:max-w-[375px] [@media(min-width:1024px)]:-translate-x-1/2">
               <DrawerQrScan
                 shareQr={true}
                 ref={buttonRef}
