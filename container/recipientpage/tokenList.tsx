@@ -6,7 +6,7 @@ import TokenCard from 'components/tokencard';
 import { useRecipient } from 'hooks/useReceipient';
 
 const TokenList = () => {
-  const { isFetching, tokenList } = useRecipient({});
+  const { isFetching, tokenList } = useRecipient({ fetchAllToken: true });
   console.log({ tokenList });
   return (
     <>

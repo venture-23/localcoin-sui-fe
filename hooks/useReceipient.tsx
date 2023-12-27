@@ -4,12 +4,12 @@ import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import { useMyContext } from './useMyContext';
 
-export function useRecipient({ data = {} }: any) {
+export function useRecipient({ data = {}, fetchAllToken = false }: any) {
   const { userInfo } = useMyContext();
 
   const receipientInfo = useQuery({
-    queryKey: [`receipientInfo-token`],
-    enabled: !!userInfo.publicKey,
+    queryKey: [`receipient-token-list`],
+    enabled: !!userInfo.publicKey || fetchAllToken,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,

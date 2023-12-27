@@ -62,7 +62,7 @@ export const campaignServices = (() => {
         ].includes(parameterType)
       ) {
         return server.simulateTransaction(transaction).then((sim: any) => {
-          console.log({ sim: sim.result?.retval });
+          console.log({ sim: sim.result?.retval, parameterType });
           return decoderHelper(parameterType, { returnValue: sim.result?.retval });
         });
       } else {
