@@ -1,5 +1,4 @@
 'use client';
-import { PlusCircleIcon } from '@heroicons/react/20/solid';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import CampaignCard from 'components/campaigncard';
