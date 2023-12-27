@@ -59,9 +59,9 @@ const CampaignCard: React.FC<CardProps> = ({
             <div className="max-w-sm">
               <p className="text-base font-semibold text-text">{campaignDetails?.name}</p>
               <p className="mb-0 text-sm text-textSecondary ">{campaignDetails.description}</p>
-              {campaignDetails?.campaign && (
+              {(campaignDetails?.campaign || campaignDetails?.id) && (
                 <p className="mb-0 text-xs text-textSecondary ">
-                  {maskWalletAddress(campaignDetails?.campaign)}
+                  {maskWalletAddress(campaignDetails?.campaign || campaignDetails?.id)}
                 </p>
               )}
             </div>

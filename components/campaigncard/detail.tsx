@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import React from 'react';
+import { maskWalletAddress } from 'utils/clipper';
 
 interface tokenProps {
   id: string;
@@ -8,6 +8,9 @@ interface tokenProps {
   owner: string;
   recipient: string;
   tokentype: string;
+  token_address: string;
+  creator: string;
+  no_of_recipients: string;
 }
 
 interface CampaignDetailProps {
@@ -65,12 +68,15 @@ const DetailCampaign: React.FC<CampaignDetailProps> = ({ campaignDetails }) => {
         </div>
         <div className="rounded border p-4">
           <Tag title={'Campaign Owner'} element={campaignDetails?.owner} />
+          <p>{maskWalletAddress(campaignDetails.creator || '')}</p>
         </div>
         <div className="rounded border p-4">
           <Tag title={'Recipient Number'} element={campaignDetails?.recipient} />
+          <p>{campaignDetails.no_of_recipients || ''}</p>
         </div>
         <div className="rounded border p-4">
           <Tag title={'Token Type'} element={campaignDetails?.tokentype} />
+          <p>{maskWalletAddress(campaignDetails.token_address || '')}</p>
         </div>
       </div>
     </div>
