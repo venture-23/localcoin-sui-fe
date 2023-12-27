@@ -7,7 +7,7 @@ import { useRecipient } from 'hooks/useReceipient';
 import Image from 'next/image';
 
 const TokenList = () => {
-  const { isFetching, tokenList } = useRecipient({});
+  const { isFetching, tokenList } = useRecipient({ fetchAllToken: true });
   console.log({ tokenList });
   return (
     <>
