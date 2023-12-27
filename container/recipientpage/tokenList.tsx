@@ -1,11 +1,9 @@
 'use client';
 
-import { ArrowLeftIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 import PageHeader from 'components/pageheader';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import TokenCard from 'components/tokencard';
 import { useRecipient } from 'hooks/useReceipient';
-import Link from 'next/link';
 
 const TokenList = () => {
   const { isFetching, tokenList } = useRecipient({});

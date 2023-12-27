@@ -15,7 +15,6 @@ export function useRecipient({ data = {} }: any) {
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      console.log('manish chhetri', !!userInfo.publicKey);
       const response = await campaignServices.getReceipientToken(
         userInfo.secretKey,
         userInfo.publicKey
