@@ -1,10 +1,9 @@
 'use client';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import CampaignCard from 'components/campaigncard';
+import PageHeader from 'components/pageheader';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import { useCamapigns } from 'hooks/useCampaigns';
 import Image from 'next/image';
-import Link from 'next/link';
 import React from 'react';
 
 const CampaignList = () => {
@@ -27,17 +26,12 @@ const CampaignList = () => {
 
       <section>
         <div className="container mx-auto">
-          <Link href="/">
-            <ArrowLeftIcon width={24} height={24} />
-          </Link>
-          <div className="mb-6 flex items-center justify-between ">
-            <p className="text-heading">Ongoing Campaigns </p>
-            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
-          </div>
+          <PageHeader backLink={`/`} pageHeaderTitle={'Ongoing Campaigns'} />
+
           <div className="grid grid-cols-1 gap-3">
             {campaignList?.map((eachCampaign: any, eachid: number) => (
               <React.Fragment key={eachid + 1 + ''}>
-                <CampaignCard clippedId link="on-going-campaigns" campaignDetails={eachCampaign} />
+                <CampaignCard clippedId link="all-campaigns" campaignDetails={eachCampaign} />
               </React.Fragment>
             ))}
             {!isFetching && campaignList?.length === 0 && (
