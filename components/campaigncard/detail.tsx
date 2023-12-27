@@ -50,11 +50,6 @@ const DetailCampaign: React.FC<CampaignDetailProps> = ({ campaignDetails }) => {
             <p className="text-xl font-bold !text-white">
               {campaignDetails?.name || 'Billboard Junction'}{' '}
             </p>
-            {campaignDetails?.no_of_recipients && (
-              <p className="mt-3 break-words text-sm font-medium text-white">
-                {campaignDetails?.no_of_recipients}
-              </p>
-            )}
           </div>
         </div>
       </div>

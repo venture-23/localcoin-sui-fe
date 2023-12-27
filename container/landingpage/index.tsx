@@ -72,19 +72,19 @@ const LandingPage = () => {
           </div>
 
           <div className="flex flex-col gap-5 ">
-            <Button text="Login" link="/signup" />
+            <Button text="Sign up for account" link="/signup" />
             <Button
               text="Check for ongoing campaigns"
               buttonIcon={<QrCodeIcon className="text-color h-5 w-5" />}
               buttonType="secondary"
-              link="/on-going-campaigns"
+              link="/all-campaigns"
             />
 
-            <Button
+            {/* <Button
               text="Sign up for account"
               link="/signup"
               underline={`underline bg-transparent !text-[#212B34]  font-semibold `}
-            />
+            /> */}
           </div>
         </div>
       </section>
