@@ -143,16 +143,7 @@ const MerchantPage = () => {
                   className={`
                      `}
                 >
-                  <div className="grid gap-2">
-                    <Button
-                      text="Request for Settlement"
-                      underline={`  bg-white border border-gray-200 !text-[#212B34]  font-semibold `}
-                    />
-                    {/* <Button
-                      text="Finish Settlement"
-                      underline={`  bg-white border border-gray-200 !text-[#212B34]  font-semibold `}
-                    /> */}
-                  </div>
+                  <SettlementForm />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
@@ -170,12 +161,7 @@ const MerchantPage = () => {
           </Link>
         </div>
 
-        <Drawer
-          open={open}
-          proceedQr={() => proceedQr()}
-          setOpen={setOpen}
-          panelTitle="Share QR Code"
-        >
+        <Drawer open={open} proceedQr={setOpen} setOpen={setOpen} panelTitle="Share QR Code">
           <label className="block">
             <span className="text-color block text-sm font-medium after:ml-0.5 after:text-red-500 ">
               Invoice No
@@ -242,7 +228,6 @@ const MerchantPage = () => {
             buttonIcon={<ShareIcon width={24} height={24} />}
           />
         </PopupBox>
-        <SettlementForm />
         {/* <Popover
           PopupTitle="Share QR Code"
           setIsOpenPopup={setIsOpenPopup}
