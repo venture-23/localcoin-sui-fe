@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import { useMyContext } from './useMyContext';
 
-export function useRecipient({ data = {}, sendTokenToMer = false }: any) {
+export function useRecipient({ data = {} }: any) {
   const { userInfo } = useMyContext();
+  const [enabledSendToMerchant, setEnabledSendToMerchant] = useState(false);
 
   const receipientInfo = useQuery({
     queryKey: [`receipientInfo`],
@@ -31,19 +32,20 @@ export function useRecipient({ data = {}, sendTokenToMer = false }: any) {
 
   const sendTokenToMerchant = useQuery({
     queryKey: [`send-token-to_merchant`],
-    enabled: sendTokenToMer,
+    enabled: enabledSendToMerchant,
     // cacheTime: Infinity,
-    retry: 3,
+    retry: 0,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
       const response = await campaignServices.transfer_tokens_from_recipient_to_merchant(
         userInfo.secretKey,
         data?.amount,
-        data?.contractId || 'CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL',
+        data?.tokenAddress,
         data?.merchantAddress,
         userInfo.publicKey
       );
+      setEnabledSendToMerchant(false);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
       return response;
@@ -60,7 +62,9 @@ export function useRecipient({ data = {}, sendTokenToMer = false }: any) {
   }, [receipientInfo?.data]);
 
   return {
+    setEnabledSendToMerchant,
     tokenList: tokenList,
+    sendTokenToMerchant: sendTokenToMerchant.refetch,
     isFetching: receipientInfo.isFetching || sendTokenToMerchant.isFetching
   };
 }

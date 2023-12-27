@@ -8,7 +8,8 @@ export function useMerchant({
   merchantAddress = '',
   registerMerchant = false,
   verify_merchant = false,
-  data = {}
+  data = {},
+  tokenId = ''
 }) {
   const { userInfo } = useMyContext();
   const [fetch_merchant_info, setFetch_merchant_info] = useState(false);
@@ -20,7 +21,10 @@ export function useMerchant({
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const response_merchant_assoc = await campaignServices.get_merchant_associated(userInfo);
+      const response_merchant_assoc = await campaignServices.get_merchant_associated(
+        userInfo,
+        tokenId
+      );
       const merchantInfo = await campaignServices.get_merchant_info(
         userInfo.secretKey,
         merchantAddress

@@ -156,7 +156,6 @@ export const campaignServices = (() => {
   };
 
   const getReceipientToken = (secretKey: string, publicKey: string) => {
-    console.log({ secretKey, publicKey });
     return makeTransaction({
       parameterType: 'get_balance_of_batch',
       contractId: issuanceManagementContract,
@@ -190,6 +189,12 @@ export const campaignServices = (() => {
     need to send  token id
     const contractId = 'CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL';
     */
+    console.log({
+      amount,
+      contractId,
+      merchantAddress,
+      senderAddress
+    });
     return makeTransaction({
       parameterType: 'recipient_to_merchant_transfer',
       secretKey,
@@ -226,12 +231,14 @@ export const campaignServices = (() => {
     });
   };
 
-  const get_merchant_associated = (data: any) => {
+  const get_merchant_associated = (data: any, tokenId: string) => {
     return makeTransaction({
       contractId: issuanceManagementContract,
       parameterType: 'get_merchants_associated',
       secretKey: data.secretKey,
-      payload: [accountToScVal('CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL')] //token_contract_id
+      // tokenAddress
+      payload: [accountToScVal(tokenId)] //token_contract_id
+      // payload: [accountToScVal('CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL')] //token_contract_id
     });
   };
 

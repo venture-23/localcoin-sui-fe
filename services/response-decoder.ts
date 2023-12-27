@@ -61,22 +61,22 @@ const decoderHelper = (params: string, response: ResponseType) => {
           })
         );
 
-        const [campaignObj, detailsArray, tokenObj, tokenMintedObj] = campaignList?.[0] || [];
-        const { campaign } = campaignObj;
-        const { description, name, no_of_recipients } = Object.assign({}, ...detailsArray);
+        const transformedOutputArray: any = campaignList?.map((item) => {
+          const [campaignObj, detailsArray, tokenObj, tokenMintedObj] = item || [];
+          const { campaign } = campaignObj;
+          const { description, name, no_of_recipients } = Object.assign({}, ...detailsArray);
 
-        // Create the desired output object
-        const transformedOutput = {
-          campaign,
-          description,
-          name,
-          no_of_recipients,
-          token: tokenObj?.token || '',
-          token_minted: tokenMintedObj?.token_minted || ''
-        };
-
-        // Create a new array with the transformed object
-        const output = [transformedOutput];
+          // Create the desired output object for each item
+          return {
+            campaign,
+            description,
+            name,
+            no_of_recipients,
+            token: tokenObj?.token || '',
+            token_minted: tokenMintedObj?.token_minted || ''
+          };
+        });
+        const output = [...transformedOutputArray];
         return output;
       case 'get_campaign_info':
         const allInfo = (response?.returnValue?._value || []).map((eachValue: any) => ({
@@ -114,7 +114,6 @@ const decoderHelper = (params: string, response: ResponseType) => {
           );
           return test;
         });
-        console.log(tokenList, '1231231223121321');
         return tokenList;
 
       case 'merchant_registration':
