@@ -20,7 +20,7 @@ const CampaignList = () => {
 
   return (
     <>
-      <section>
+      <section className="relative">
         <Popover ref={popOverRef} />
         <div className="container mx-auto">
           <div className="mb-6 flex items-center justify-between pt-10 ">
@@ -60,7 +60,7 @@ const CampaignList = () => {
             )}
             {isFetching && <CampaignListSkeleton defaultData={2} />}
 
-            <div className="fixed bottom-0 left-0 w-full">
+            <div className="absolute bottom-0 left-0 w-full">
               <Button
                 link="/campaign/create"
                 text="Create a Campaign"

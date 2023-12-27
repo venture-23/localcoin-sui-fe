@@ -63,16 +63,44 @@ body{
 }
 
 
+
+
 main{
   /* padding-bottom: 73px; */
   height: 100dvh;
   overflow-y: scroll;
   /* background-color: white; */
-  
- 
+}
+
+@media screen and (min-width: 768px) {
+  main {
+    background-color: white;
+  }
 }
 section {
   /* height: 100%; */
+  }
+  
+  @media screen and (min-width: 768px) {
+    section {
+      background-color: #F7F8FA ;
+      max-width: 400px !important; /* or any other fixed width that suits your design */
+        margin: 0 auto; /* This centers the container in the viewport */
+      height: 100%;
+    }
+    .pin_lock {
+      background-color: #F7F8FA ;
+      max-width: 400px !important; /* or any other fixed width that suits your design */
+        margin: 0 auto; /* This centers the container in the viewport */
+        left: 50%;
+        transform: translateX(-50%);
+      height: 100%;
+    }
+  }
+ 
+
+  .pin_lock{
+    width: 400px !important;
   }
  
 

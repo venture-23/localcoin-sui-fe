@@ -85,7 +85,7 @@ export default function PinLockScreen(props: any) {
 
   return (
     <>
-      <div className=" fixed z-[1000] grid   h-screen  w-full  place-items-center  bg-white ">
+      <div className=" pin_lock fixed z-[1000]   grid  h-screen  w-full  place-items-center bg-white">
         <div className="container mx-auto ">
           <div className="modal-content">
             <div className="my-6 flex items-center justify-center">
