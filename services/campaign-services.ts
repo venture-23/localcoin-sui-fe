@@ -28,6 +28,7 @@ export const campaignServices = (() => {
     contractId = campaignContractId
   }: any) => {
     try {
+      debugger;
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
       const sourcePublicKey = sourceKeypair.publicKey();
       const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
@@ -58,7 +59,7 @@ export const campaignServices = (() => {
           'recipient_to_merchant_transfer',
           'merchant_registration',
           'verify_merchant',
-          'request_campaign_settelment'
+          'request_campaign_settlement'
         ].includes(parameterType)
       ) {
         return server.simulateTransaction(transaction).then((sim: any) => {
@@ -256,13 +257,19 @@ export const campaignServices = (() => {
     });
   };
 
-  const request_campaign_settelment = (secretKey: any, amount: string, tokenAddress: string) => {
+  const request_campaign_settlement = (
+    publicKey: string,
+    secretKey: any,
+    amount: any,
+    tokenAddress: string
+  ) => {
     console.log({ tokenAddress, secretKey, amount });
+    debugger;
     return makeTransaction({
       contractId: campaignContractId,
-      parameterType: 'request_campaign_settelment',
+      parameterType: 'request_campaign_settlement',
       secretKey: secretKey,
-      payload: [numberToI128(parseFloat(amount)), accountToScVal(tokenAddress)]
+      payload: [accountToScVal(publicKey), numberToI128(amount), accountToScVal(tokenAddress)]
     });
   };
 
@@ -279,6 +286,6 @@ export const campaignServices = (() => {
     verify_merchant,
     get_merchant_associated,
     get_merchant_info,
-    request_campaign_settelment
+    request_campaign_settlement
   };
 })();

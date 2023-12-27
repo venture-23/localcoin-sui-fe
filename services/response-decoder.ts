@@ -117,7 +117,9 @@ const decoderHelper = (params: string, response: ResponseType) => {
           return test;
         });
         return tokenList;
-
+      case 'request_campaign_settlement':
+        toast.success('Settled Successfully');
+        return response.returnValue?._value;
       case 'merchant_registration':
       case 'recipient_to_merchant_transfer':
         toast.success(

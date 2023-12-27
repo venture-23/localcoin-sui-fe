@@ -24,9 +24,16 @@ const MerchantPage = () => {
   const { userInfo } = useMyContext();
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({ amount: '' });
-  const { isFetching, tokenList } = useRecipient({});
-  // const { isProcessing, merchantResponse } = useMerchant();
-  // console.log({ isFetching, tokenList, isProcessing, merchantResponse });
+  const { isFetching, tokenList, fetchToken } = useRecipient({});
+  const [verifyMerchant, setVerifyMerchant] = useState(false);
+
+  const { settelmentSuccess } = useMerchant({ verify_merchant: verifyMerchant, data });
+  useEffect(() => {
+    if (settelmentSuccess) {
+      fetchToken();
+    }
+  }, [settelmentSuccess]);
+
   useEffect(() => {
     generateQrCode();
   }, [data]);
@@ -82,8 +89,6 @@ const MerchantPage = () => {
     downloadLink.download = fileName;
     downloadLink.click();
   };
-  const [verifyMerchant, setVerifyMerchant] = useState(false);
-  useMerchant({ verify_merchant: verifyMerchant, data });
   return (
     <>
       {/* <Header className="h-[120px]">
@@ -139,11 +144,8 @@ const MerchantPage = () => {
                   {isFetching && <CampaignListSkeleton defaultData={2} />}
                 </Tab.Panel>
 
-                <Tab.Panel
-                  className={`
-                     `}
-                >
-                  <SettlementForm />
+                <Tab.Panel className={` `}>
+                  <SettlementForm setActive={setActive} />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>

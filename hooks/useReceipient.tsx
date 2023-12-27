@@ -60,6 +60,7 @@ export function useRecipient({ data = {}, fetchAllToken = false }: any) {
   }, [receipientInfo?.data]);
   return {
     tokenList: tokenList,
+    fetchToken: receipientInfo.refetch,
     sendTokenToMerchant: sendTokenToMerchant.refetch,
     isFetching: receipientInfo.isFetching || sendTokenToMerchant.isFetching,
     isSendToMerchantSucc: sendTokenToMerchant.isSuccess
