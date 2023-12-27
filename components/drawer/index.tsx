@@ -1,20 +1,21 @@
-import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { Fragment } from 'react';
 
 interface DrawerProps {
   open?: any;
   setOpen?: any;
+  proceedQr?: any;
   panelTitle?: any;
   children?: any;
 }
 
-const Drawer: React.FC<DrawerProps> = ({ open, setOpen, panelTitle, children }) => {
+const Drawer: React.FC<DrawerProps> = ({ open, setOpen, proceedQr, panelTitle, children }) => {
   return (
     <>
       <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={setOpen}>
+        <Dialog as="div" className="relative z-10" onClose={proceedQr}>
           <Transition.Child
             as={Fragment}
             enter="ease-in-out duration-500"
