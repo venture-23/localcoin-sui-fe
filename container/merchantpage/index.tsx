@@ -91,7 +91,7 @@ const MerchantPage = () => {
     downloadLink.click();
   };
   const [verifyMerchant, setVerifyMerchant] = useState(false);
-  useMerchant({ verify_merchant: verifyMerchant });
+  useMerchant({ verify_merchant: verifyMerchant, data });
   return (
     <>
       {/* <Header className="h-[120px]">

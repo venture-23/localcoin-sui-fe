@@ -58,7 +58,8 @@ export const campaignServices = (() => {
           'transfer_tokens_to_recipient',
           'recipient_to_merchant_transfer',
           'merchant_registration',
-          'verify_merchant'
+          'verify_merchant',
+          'request_campaign_settelment'
         ].includes(parameterType)
       ) {
         return server.simulateTransaction(transaction).then((sim: any) => {
@@ -99,6 +100,9 @@ export const campaignServices = (() => {
       }
     } catch (error: any) {
       console.log(error, `FRM THE ERROR from ${parameterType}`);
+      toast.error(`FRM THE ERROR from ${parameterType} ${JSON.stringify(error, null, 2)} `, {
+        autoClose: false
+      });
       // return error;
       return Promise.reject(error);
     }
@@ -252,6 +256,15 @@ export const campaignServices = (() => {
     });
   };
 
+  const request_campaign_settelment = (secretKey: any, amount: number, tokenAddress: string) => {
+    return makeTransaction({
+      contractId: campaignContractId, //token_contract_id
+      parameterType: 'request_campaign_settelment',
+      secretKey: secretKey,
+      payload: [numberToI128(amount), accountToScVal(tokenAddress)]
+    });
+  };
+
   return {
     getCreatorCampaigns: getCreatorCampaigns,
     getAllCampaigns,
@@ -264,6 +277,7 @@ export const campaignServices = (() => {
     merchant_registration,
     verify_merchant,
     get_merchant_associated,
-    get_merchant_info
+    get_merchant_info,
+    request_campaign_settelment
   };
 })();

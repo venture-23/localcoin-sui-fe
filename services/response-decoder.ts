@@ -117,7 +117,12 @@ const decoderHelper = (params: string, response: ResponseType) => {
         return tokenList;
 
       case 'merchant_registration':
-        toast.success('Registered, Waiting for verified account');
+      case 'recipient_to_merchant_transfer':
+        toast.success(
+          params === 'recipient_to_merchant_transfer'
+            ? 'Send To Merchant Sucessfully'
+            : 'Registered, Waiting for verified account'
+        );
         return response.returnValue?._value;
       case 'verify_merchant':
         toast.success('Verified Mechant from admin, Successfully');

@@ -12,6 +12,7 @@ import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientToken from 'components/icons/recipient-token';
 import { useMerchant } from 'hooks/useMerchant';
 import { useRecipient } from 'hooks/useReceipient';
+import PullOnRefetch from 'hooks/useRefetchOnPull';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -34,9 +35,17 @@ const RecipientPage = () => {
       data
     }
   );
-  const { isFetching, setEnabledSendToMerchant, sendTokenToMerchant, tokenList } = useRecipient({
+  const { isFetching, sendTokenToMerchant, tokenList, isSendToMerchantSucc } = useRecipient({
     data
   });
+
+  useEffect(() => {
+    if (isSendToMerchantSucc) {
+      setOpenDrawer(false);
+      setScanData('');
+      setData({});
+    }
+  }, [isSendToMerchantSucc]);
 
   useEffect(() => {
     if (scanData) {
@@ -103,6 +112,7 @@ const RecipientPage = () => {
   console.log(isGoodToGo, !!data.amount);
   return (
     <>
+      <PullOnRefetch />
       <section className="">
         <div className="container mx-auto">
           <div className="mb-6 flex items-center justify-between pt-10 ">
