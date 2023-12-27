@@ -25,6 +25,12 @@ const TokenList = () => {
               />
             ))}
             {isFetching && <CampaignListSkeleton defaultData={2} />}
+
+            {tokenList && tokenList?.length === 0 && (
+              <>
+                <div>hello</div>
+              </>
+            )}
           </div>
         </div>
       </section>
