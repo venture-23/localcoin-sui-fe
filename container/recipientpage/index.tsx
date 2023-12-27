@@ -73,7 +73,12 @@ const RecipientPage = () => {
 
   // console.log({ merchant_info, merchant_associated, data });
   useEffect(() => {
-    if (merchant_info && Object.keys(merchant_info)?.length > 0 && merchant_associated) {
+    if (
+      data.merchantAddress &&
+      merchant_info &&
+      Object.keys(merchant_info)?.length > 0 &&
+      merchant_associated
+    ) {
       if (merchant_associated?.length) {
         if (merchant_associated.includes(data.merchantAddress)) {
           setisGoodToGo(true);

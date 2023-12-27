@@ -24,9 +24,16 @@ const MerchantPage = () => {
   const { userInfo } = useMyContext();
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({ amount: '' });
-  const { isFetching, tokenList } = useRecipient({});
-  // const { isProcessing, merchantResponse } = useMerchant();
-  // console.log({ isFetching, tokenList, isProcessing, merchantResponse });
+  const { isFetching, tokenList, fetchToken } = useRecipient({});
+  const [verifyMerchant, setVerifyMerchant] = useState(false);
+
+  const { settelmentSuccess } = useMerchant({ verify_merchant: verifyMerchant, data });
+  useEffect(() => {
+    if (settelmentSuccess) {
+      fetchToken();
+    }
+  }, [settelmentSuccess]);
+
   useEffect(() => {
     generateQrCode();
   }, [data]);
@@ -82,8 +89,6 @@ const MerchantPage = () => {
     downloadLink.download = fileName;
     downloadLink.click();
   };
-  const [verifyMerchant, setVerifyMerchant] = useState(false);
-  useMerchant({ verify_merchant: verifyMerchant, data });
   return (
     <>
       {/* <Header className="h-[120px]">
@@ -139,20 +144,8 @@ const MerchantPage = () => {
                   {isFetching && <CampaignListSkeleton defaultData={2} />}
                 </Tab.Panel>
 
-                <Tab.Panel
-                  className={`
-                     `}
-                >
-                  <div className="grid gap-2">
-                    <Button
-                      text="Request for Settlement"
-                      underline={`  bg-white border border-gray-200 !text-[#212B34]  font-semibold `}
-                    />
-                    {/* <Button
-                      text="Finish Settlement"
-                      underline={`  bg-white border border-gray-200 !text-[#212B34]  font-semibold `}
-                    /> */}
-                  </div>
+                <Tab.Panel className={` `}>
+                  <SettlementForm setActive={setActive} />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
@@ -170,12 +163,7 @@ const MerchantPage = () => {
           </Link>
         </div>
 
-        <Drawer
-          open={open}
-          proceedQr={() => proceedQr()}
-          setOpen={setOpen}
-          panelTitle="Share QR Code"
-        >
+        <Drawer open={open} proceedQr={setOpen} setOpen={setOpen} panelTitle="Share QR Code">
           <label className="block">
             <span className="text-color block text-sm font-medium after:ml-0.5 after:text-red-500 ">
               Invoice No
@@ -242,7 +230,6 @@ const MerchantPage = () => {
             buttonIcon={<ShareIcon width={24} height={24} />}
           />
         </PopupBox>
-        <SettlementForm />
         {/* <Popover
           PopupTitle="Share QR Code"
           setIsOpenPopup={setIsOpenPopup}

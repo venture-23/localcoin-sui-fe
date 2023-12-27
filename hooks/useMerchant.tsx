@@ -13,6 +13,7 @@ export function useMerchant({
 }: any) {
   const { userInfo } = useMyContext();
   const [fetch_merchant_info, setFetch_merchant_info] = useState(false);
+  const [isSettledSuccess, setisSettledSuccess] = useState(false);
   const get_merchant_info = useQuery({
     queryKey: [`get_merchant_info`],
     enabled: fetch_merchant_info,
@@ -50,17 +51,20 @@ export function useMerchant({
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
+      setisSettledSuccess(false);
       console.log({ data: data.tokenId });
-      const response = await campaignServices.request_campaign_settelment(
+      const response = await campaignServices.request_campaign_settlement(
+        userInfo.publicKey,
         userInfo.secretKey,
         parseFloat(data.amount),
         data.tokenId
       );
+      console.log({ response }, '>from the settelment');
 
       if (response?.error) throw new Error(response.error || 'Something went wrong');
-      toast.success('success settelment');
-      console.log({ response }, '>from the settelment');
-      return response;
+      // return response;
+      setisSettledSuccess(true);
+      return { success: 'Completed' };
     },
     onError: (error: any) => {
       toast.error('Error While campaign_settlement');
@@ -136,7 +140,8 @@ export function useMerchant({
     merchant_associated,
     setFetch_merchant_info,
     campaign_settlement_msg,
-    campaign_settlement: campaign_settlement.refetch
+    campaign_settlement: campaign_settlement.refetch,
+    settelmentSuccess: isSettledSuccess
   };
 }
 /* 
