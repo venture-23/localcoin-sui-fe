@@ -256,13 +256,13 @@ export const campaignServices = (() => {
     });
   };
 
-  const request_campaign_settelment = (secretKey: any, amount: number, tokenAddress: string) => {
-    console.log({ tokenAddress });
+  const request_campaign_settelment = (secretKey: any, amount: string, tokenAddress: string) => {
+    console.log({ tokenAddress, secretKey, amount });
     return makeTransaction({
-      contractId: tokenAddress, //token_contract_id
+      contractId: campaignContractId,
       parameterType: 'request_campaign_settelment',
       secretKey: secretKey,
-      payload: [numberToI128(amount), accountToScVal(localCoinAddress)]
+      payload: [numberToI128(parseFloat(amount)), accountToScVal(tokenAddress)]
     });
   };
 

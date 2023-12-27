@@ -29,7 +29,7 @@ const decodei128 = (data: any) => {
 
   const combinedValue = hiValue.shiftLeft(64).or(loValue);
   const stringValue = combinedValue.toString();
-  const decodedValue = stringValue.replace(/0{7}$/, '');
+  const decodedValue = parseFloat(stringValue) / 10000000;
   return decodedValue;
 };
 
