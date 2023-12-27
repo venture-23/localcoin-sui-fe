@@ -169,7 +169,12 @@ const MerchantPage = () => {
           </Link>
         </div>
 
-        <Drawer open={open} setOpen={setOpen} panelTitle="Share QR Code">
+        <Drawer
+          open={open}
+          proceedQr={() => proceedQr()}
+          setOpen={setOpen}
+          panelTitle="Share QR Code"
+        >
           <label className="block">
             <span className="text-color block text-sm font-medium after:ml-0.5 after:text-red-500 ">
               Token Amount
@@ -205,7 +210,6 @@ const MerchantPage = () => {
           <Button
             handleClick={() => {
               const imgBase64 = validBase64(imageUrl);
-
               shareOnMobile(
                 {
                   text: 'Scan to make payment',
