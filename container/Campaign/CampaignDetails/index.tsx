@@ -1,5 +1,5 @@
 'use client';
-import { ArrowLeftIcon, QrCodeIcon } from '@heroicons/react/24/outline';
+import { QrCodeIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import DetailCampaign from 'components/campaigncard/detail';
 import Drawer from 'components/drawer';
@@ -10,11 +10,10 @@ import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
 import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
-
 const CampaignDetail = (props: any) => {
   const { userInfo } = useMyContext();
   const router = useRouter();
@@ -22,13 +21,20 @@ const CampaignDetail = (props: any) => {
 
   const [scanData, setScanData] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [notLoggedIn, setNotLoggedIn] = useState(false);
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({
     // recipientAddress: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',
     // amount: 1
   });
+  const pathname = usePathname();
   const { isDetailsFetching, campaignInfo } = useCamapigns({ id: props.campaignId });
   console.log({ isDetailsFetching, campaignInfo });
+  useEffect(() => {
+    if (pathname.split('/')[1] === 'all-campaigns') {
+      setNotLoggedIn(true);
+    }
+  }, []);
   useEffect(() => {
     if (scanData) {
       const scanDatParse: any = JSON.parse(scanData);
@@ -39,16 +45,6 @@ const CampaignDetail = (props: any) => {
       setOpenDrawer(true);
     }
   }, [scanData]);
-
-  const campaignDetails: any = {
-    id: 1,
-    title: 'Nourish Every Soul',
-    description:
-      'Join us in our mission to provide hope and nourishment to those in need with our "Nourish Every Soul" campaign. Together, we aim to offer a warm and hearty dinner to homeless individuals for an entire month. Imagine the impact we can create by ensuring that no one goes to bed hungry, and every soul is embraced with the comfort of a wholesome meal.',
-    owner: 'Conor Mcgregor',
-    recipient: '13',
-    tokentype: 'Token 1'
-  };
 
   const buttonRef = useRef<any>(null);
 
@@ -69,6 +65,7 @@ const CampaignDetail = (props: any) => {
     const err: any = validation();
     setError(err);
     if (Object.keys(err).length === 0) {
+      setShowLoader(true);
       campaignServices
         .transfer_tokens_to_recipient(
           userInfo.secretKey,
@@ -84,8 +81,11 @@ const CampaignDetail = (props: any) => {
             router.push('/campaign');
           }
         })
-        .catch((e) => toast.error('Error on Token Transfer'));
-      console.log('first');
+        .catch((e) => {
+          setShowLoader(false);
+          toast.error('Error on Token Transfer');
+        });
+      // console.log('first');
     }
   };
 
@@ -99,7 +99,10 @@ const CampaignDetail = (props: any) => {
 
       <section>
         <div className="container mx-auto">
-          <PageHeader backLink={`/campaign`} pageHeaderTitle={'Campaign Detail'} />
+          <PageHeader
+            backLink={notLoggedIn ? '/all-campaigns' : '/campaign'}
+            pageHeaderTitle={'Campaign Detail'}
+          />
 
           {(isDetailsFetching && !campaignInfo?.name && (
             <>
@@ -109,56 +112,64 @@ const CampaignDetail = (props: any) => {
             <>
               <div className="grid grid-cols-1 gap-1">
                 <DetailCampaign campaignDetails={campaignInfo} />
-                <div
-                  className="fixed bottom-7 right-7 "
-                  onClick={() => {
-                    setScanData('');
-                    buttonRef.current.open(Drawer);
-                    // setOpenDrawer(true);
-                  }}
-                >
-                  <Link
-                    href=""
-                    className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
-                  >
-                    <QrCodeIcon className="h-6 w-6 text-white" />
-                    <span className="text-base font-semibold text-white">Scan To Pay</span>
-                  </Link>
-                </div>
+                {!notLoggedIn && (
+                  <>
+                    <div
+                      className="fixed bottom-7 right-7 "
+                      onClick={() => {
+                        setScanData('');
+                        buttonRef.current.open(Drawer);
+                        // setOpenDrawer(true);
+                      }}
+                    >
+                      <Link
+                        href=""
+                        className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
+                      >
+                        <QrCodeIcon className="h-6 w-6 text-white" />
+                        <span className="text-base font-semibold text-white">Scan To Pay</span>
+                      </Link>
+                    </div>
 
-                <DrawerQRScan ref={buttonRef} setScanData={setScanData} panelTitle="Scan QR Code" />
-
-                <Drawer open={openDrawer} setOpen={setOpenDrawer} panelTitle="Send Token">
-                  <label className="block">
-                    <InputForm
-                      type="text"
-                      data={data}
-                      error={error}
-                      maxLength={300}
-                      name="recipientAddress"
-                      handleChange={handleChange}
-                      placeholder="Recipient Address"
+                    <DrawerQRScan
+                      ref={buttonRef}
+                      setScanData={setScanData}
+                      panelTitle="Scan QR Code"
                     />
-                    <InputForm
-                      type="text"
-                      data={data}
-                      error={error}
-                      maxLength={300}
-                      name="amount"
-                      handleChange={handleChange}
-                      placeholder="Amount"
-                    />
-                  </label>
 
-                  <div
-                    className="mt-6"
-                    onClick={() => {
-                      handleSubmit();
-                    }}
-                  >
-                    <Button text="Pay Now" disabled={showLoader} showLoader={showLoader} />
-                  </div>
-                </Drawer>
+                    <Drawer open={openDrawer} setOpen={setOpenDrawer} panelTitle="Send Token">
+                      <label className="block">
+                        <InputForm
+                          type="text"
+                          data={data}
+                          error={error}
+                          maxLength={300}
+                          name="recipientAddress"
+                          handleChange={handleChange}
+                          placeholder="Recipient Address"
+                        />
+                        <InputForm
+                          type="text"
+                          data={data}
+                          error={error}
+                          maxLength={300}
+                          name="amount"
+                          handleChange={handleChange}
+                          placeholder="Amount"
+                        />
+                      </label>
+
+                      <div
+                        className="mt-6"
+                        onClick={() => {
+                          handleSubmit();
+                        }}
+                      >
+                        <Button text="Pay Now" disabled={showLoader} showLoader={showLoader} />
+                      </div>
+                    </Drawer>
+                  </>
+                )}
               </div>
             </>
           )}

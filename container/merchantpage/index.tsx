@@ -13,7 +13,7 @@ import { useRecipient } from 'hooks/useReceipient';
 import Link from 'next/link';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
-
+import { shareOnMobile } from 'react-mobile-share';
 const MerchantPage = () => {
   const [active, setActive] = useState(1);
   const [open, setOpen] = useState(false);
@@ -28,7 +28,7 @@ const MerchantPage = () => {
   // console.log({ isFetching, tokenList, isProcessing, merchantResponse });
   useEffect(() => {
     generateQrCode();
-  }, []);
+  }, [data]);
   const generateQrCode = async () => {
     try {
       const staticData = {
@@ -56,7 +56,8 @@ const MerchantPage = () => {
     if (!err.amount) {
       setOpen(false);
       // setIsOpenPopup(true);
-      popOverRef.current.open({ title: 'Share QR Code', imageUrl });
+      imageUrl && popOverRef.current.open({ title: 'Share QR Code', imageUrl });
+      setData({ amount: '' });
     } else {
       setError(err);
     }
@@ -68,8 +69,20 @@ const MerchantPage = () => {
 
     return err;
   };
+  const validBase64 = (url: string) => {
+    return 'data:image/jpeg;base64,' + url.split(',')[1];
+  };
+
+  const downloadBase64File = async (fileName: string) => {
+    const imgBase64 = imageUrl;
+    const linkSource = `${imgBase64}`;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  };
   const [verifyMerchant, setVerifyMerchant] = useState(false);
-  useMerchant({ verify_merchant: verifyMerchant });
+  useMerchant({ verify_merchant: verifyMerchant, data });
   return (
     <>
       {/* <Header className="h-[120px]">
@@ -134,10 +147,10 @@ const MerchantPage = () => {
                       text="Request for Settlement"
                       underline={`  bg-white border border-gray-200 !text-[#212B34]  font-semibold `}
                     />
-                    <Button
+                    {/* <Button
                       text="Finish Settlement"
                       underline={`  bg-white border border-gray-200 !text-[#212B34]  font-semibold `}
-                    />
+                    /> */}
                   </div>
                 </Tab.Panel>
               </Tab.Panels>
@@ -156,7 +169,12 @@ const MerchantPage = () => {
           </Link>
         </div>
 
-        <Drawer open={open} setOpen={() => proceedQr()} panelTitle="Share QR Code">
+        <Drawer
+          open={open}
+          proceedQr={() => proceedQr()}
+          setOpen={setOpen}
+          panelTitle="Share QR Code"
+        >
           <label className="block">
             <span className="text-color block text-sm font-medium after:ml-0.5 after:text-red-500 ">
               Token Amount
@@ -184,11 +202,24 @@ const MerchantPage = () => {
         <PopupBox ref={popOverRef}>
           <a href={imageUrl} download className="w-full">
             <Button
+              handleClick={() => downloadBase64File('ScanToPay')}
               buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
               text="Save image"
             />
           </a>
           <Button
+            handleClick={() => {
+              const imgBase64 = validBase64(imageUrl);
+              shareOnMobile(
+                {
+                  text: 'Scan to make payment',
+                  url: 'https://localcoin-mobileapp.vercel.app/merchant',
+                  title: 'Scan to Pay',
+                  images: [imgBase64]
+                },
+                (message) => alert(message)
+              );
+            }}
             text="Share"
             buttonType="secondary"
             buttonIcon={<ShareIcon width={24} height={24} />}

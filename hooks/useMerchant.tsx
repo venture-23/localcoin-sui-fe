@@ -8,8 +8,9 @@ export function useMerchant({
   merchantAddress = '',
   registerMerchant = false,
   verify_merchant = false,
-  data = {}
-}) {
+  data = {},
+  tokenId = ''
+}: any) {
   const { userInfo } = useMyContext();
   const [fetch_merchant_info, setFetch_merchant_info] = useState(false);
   const get_merchant_info = useQuery({
@@ -20,7 +21,10 @@ export function useMerchant({
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const response_merchant_assoc = await campaignServices.get_merchant_associated(userInfo);
+      const response_merchant_assoc = await campaignServices.get_merchant_associated(
+        userInfo,
+        tokenId
+      );
       const merchantInfo = await campaignServices.get_merchant_info(
         userInfo.secretKey,
         merchantAddress
@@ -38,11 +42,36 @@ export function useMerchant({
     }
   });
 
+  const campaign_settlement = useQuery({
+    queryKey: [`campaign_settlement`],
+    enabled: false,
+    // cacheTime: Infinity,
+    retry: 0,
+    refetchOnWindowFocus: false,
+    retryDelay: 3000,
+    queryFn: async () => {
+      console.log({ data: data.tokenId });
+      const response = await campaignServices.request_campaign_settelment(
+        userInfo.secretKey,
+        parseFloat(data.amount),
+        data.tokenId
+      );
+
+      if (response?.error) throw new Error(response.error || 'Something went wrong');
+      toast.success('success settelment');
+      console.log({ response }, '>from the settelment');
+      return response;
+    },
+    onError: (error: any) => {
+      toast.error('Error While campaign_settlement');
+    }
+  });
+
   const merchantRegistrationInfo = useQuery({
     queryKey: [`merchant-registration`],
     enabled: registerMerchant,
     // cacheTime: Infinity,
-    retry: 3,
+    retry: 0,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
@@ -62,7 +91,7 @@ export function useMerchant({
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const response = await campaignServices.get_merchant_associated(userInfo);
+      const response = await campaignServices.verify_merchant(userInfo);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       return response;
     },
@@ -72,22 +101,42 @@ export function useMerchant({
     }
   });
 
-  const { tokenList, merchant_Verify, merchant_info, merchant_associated } = useMemo(() => {
+  const {
+    tokenList,
+    merchant_Verify,
+    merchant_info,
+    merchant_associated,
+    campaign_settlement_msg
+  } = useMemo(() => {
     const tokenList = merchantRegistrationInfo.data;
     const merchant_Verify = merchant_verify.data;
     const merchant_info = get_merchant_info?.data?.merchantInfo;
     const merchant_associated = get_merchant_info?.data?.response_merchant_assoc;
-    return { tokenList, merchant_Verify, merchant_info, merchant_associated };
-  }, [merchantRegistrationInfo?.data, merchant_verify?.data, get_merchant_info?.data]);
+    const campaign_settlement_msg = campaign_settlement.data;
+    return {
+      tokenList,
+      merchant_Verify,
+      merchant_info,
+      merchant_associated,
+      campaign_settlement_msg
+    };
+  }, [
+    merchantRegistrationInfo?.data,
+    merchant_verify?.data,
+    get_merchant_info?.data,
+    campaign_settlement?.data
+  ]);
 
   return {
     isProcessing: merchantRegistrationInfo.isFetching,
     merchantResponse: tokenList,
     merchant_Verify,
     merchant_info,
-    isGettingInfo: get_merchant_info.isFetching,
+    isGettingInfo: get_merchant_info.isFetching || campaign_settlement.isFetching,
     merchant_associated,
-    setFetch_merchant_info
+    setFetch_merchant_info,
+    campaign_settlement_msg,
+    campaign_settlement: campaign_settlement.refetch
   };
 }
 /* 

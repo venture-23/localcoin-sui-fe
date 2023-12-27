@@ -1,5 +1,4 @@
 'use client';
-import { PlusCircleIcon } from '@heroicons/react/20/solid';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import CampaignCard from 'components/campaigncard';
@@ -21,7 +20,7 @@ const CampaignList = () => {
 
   return (
     <>
-      <section>
+      <section className="relative">
         <Popover ref={popOverRef} />
         <div className="container mx-auto">
           <div className="mb-6 flex items-center justify-between pt-10 ">
@@ -61,7 +60,7 @@ const CampaignList = () => {
             )}
             {isFetching && <CampaignListSkeleton defaultData={2} />}
 
-            <div className="fixed bottom-0 left-0 w-full">
+            <div className="absolute bottom-0 left-0 w-full">
               <Button
                 link="/campaign/create"
                 text="Create a Campaign"

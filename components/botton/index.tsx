@@ -28,7 +28,8 @@ const Button: React.FC<ButtonProps> = ({
   iconOrder,
   disabled = false,
   handleClick,
-  showLoader = false
+  showLoader = false,
+  
 }) => {
   return (
     <>

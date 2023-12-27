@@ -24,22 +24,27 @@ const RecipientPage = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [data, setData] = useState<any>({});
   const [error, setError] = useState({});
-  const [showLoader, setShowLoader] = useState(false);
-  const [submitForm, setSubmitForm] = useState(false);
-  const { isFetching, tokenList } = useRecipient({ data, sendTokenToMer: submitForm });
-  const [isGoodToGo, setisGoodToGo] = useState(false);
 
-  const [isSecondVisible, setIsSecondVisible] = useState(false);
+  const [isGoodToGo, setisGoodToGo] = useState(false);
 
   const { merchant_info, isGettingInfo, merchant_associated, setFetch_merchant_info } = useMerchant(
     {
-      merchantAddress: data?.merchantAddress
+      merchantAddress: data?.merchantAddress,
+      tokenId: data?.tokenAddress,
+      data
     }
   );
+  const { isFetching, sendTokenToMerchant, tokenList, isSendToMerchantSucc } = useRecipient({
+    data
+  });
 
-  const handleNextClick = () => {
-    setIsSecondVisible(true);
-  };
+  useEffect(() => {
+    if (isSendToMerchantSucc) {
+      setOpenDrawer(false);
+      setScanData('');
+      setData({});
+    }
+  }, [isSendToMerchantSucc]);
 
   useEffect(() => {
     if (scanData) {
@@ -57,14 +62,18 @@ const RecipientPage = () => {
 
   useEffect(() => {
     if (tokenList?.length) {
-      setData({ ...data, tokenName: tokenList[0]?.name });
+      console.log({ tokenList });
+      setData({
+        ...data,
+        tokenName: tokenList[0]?.name,
+        tokenAddress: tokenList[0]?.contractToken
+      });
     }
   }, [tokenList]);
 
-  console.log({ merchant_info, merchant_associated, data });
+  // console.log({ merchant_info, merchant_associated, data });
   useEffect(() => {
     if (merchant_info && Object.keys(merchant_info)?.length > 0 && merchant_associated) {
-      debugger;
       if (merchant_associated?.length) {
         if (merchant_associated.includes(data.merchantAddress)) {
           setisGoodToGo(true);
@@ -86,7 +95,8 @@ const RecipientPage = () => {
   }, [merchant_info, merchant_associated]);
 
   const handleSubmit = () => {
-    setSubmitForm(true);
+    console.log('presseed');
+    sendTokenToMerchant();
   };
   const handleChange = (e: any) => {
     const {
@@ -96,8 +106,9 @@ const RecipientPage = () => {
   };
   const handleDropdown = (value: any) => {
     console.log({ value });
-    setData({ ...data, creatorAddress: value.value || value, tokenName: value.name || value });
+    setData({ ...data, tokenAddress: value.value || value, tokenName: value.name || value });
   };
+  console.log(isGoodToGo, !!data.amount);
   return (
     <>
       <section className="">
@@ -129,7 +140,7 @@ const RecipientPage = () => {
 
             <div className="fixed bottom-0 left-0 w-full [@media(min-width:1024px)]:left-1/2 [@media(min-width:1024px)]:max-w-[375px] [@media(min-width:1024px)]:-translate-x-1/2">
               <DrawerQrScan
-                shareQr={false}
+                shareQr={true}
                 ref={buttonRef}
                 setScanData={setScanData}
                 panelTitle="Scan QR Code"
@@ -170,7 +181,7 @@ const RecipientPage = () => {
                     maxLength={300}
                     name="store_name"
                     handleChange={handleChange}
-                    placeholder="Longest name possible"
+                    placeholder="Store Name"
                     inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip`}
                   />
 
@@ -184,7 +195,7 @@ const RecipientPage = () => {
                     maxLength={300}
                     name="proprietor"
                     handleChange={handleChange}
-                    placeholder="Longest name possible"
+                    placeholder="Proprietary Name "
                     inputCSS={`pointer-events-none border-none !bg-transparent !p-0 !shadow-none truncate hover:text-clip focus-within:text-clip`}
                   />
 
@@ -235,11 +246,12 @@ const RecipientPage = () => {
               </div>
 
               <InputForm
+                inputMode={'numeric'}
                 label={'Amount'}
                 type="text"
                 data={data}
                 error={error}
-                maxLength={300}
+                maxLength={3}
                 name="amount"
                 handleChange={handleChange}
                 placeholder="Amount"
@@ -250,15 +262,13 @@ const RecipientPage = () => {
                 defaultvalue={data.tokenName || ''}
               />
             </div>
-
-            <div
-              className="mt-6"
-              onClick={() => {
-                handleSubmit();
-              }}
-            >
-              <Button text="Pay Now" disabled={showLoader} showLoader={isFetching} />
-            </div>
+            {console.log({ isFetching })}
+            <Button
+              text="Pay Now"
+              showLoader={isFetching}
+              handleClick={handleSubmit}
+              disabled={!data.amount || isFetching}
+            />
           </Drawer>
         </div>
       </section>
