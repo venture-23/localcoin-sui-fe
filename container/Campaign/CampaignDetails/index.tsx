@@ -103,7 +103,7 @@ const CampaignDetail = (props: any) => {
 
       <section>
         <div className="container mx-auto">
-          <PageHeader backLink={`/campaign`} pageHeaderTitle={'Campaign Detail'} />
+          <PageHeader backLink={`/on-going-campaigns`} pageHeaderTitle={'Campaign Detail'} />
 
           {(isDetailsFetching && !campaignInfo?.name && (
             <>

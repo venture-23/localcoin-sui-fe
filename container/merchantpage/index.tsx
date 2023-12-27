@@ -14,6 +14,7 @@ import Link from 'next/link';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { shareOnMobile } from 'react-mobile-share';
+import SettlementForm from './components/settlementForm';
 const MerchantPage = () => {
   const [active, setActive] = useState(1);
   const [open, setOpen] = useState(false);
@@ -230,6 +231,7 @@ const MerchantPage = () => {
             buttonIcon={<ShareIcon width={24} height={24} />}
           />
         </PopupBox>
+        <SettlementForm />
         {/* <Popover
           PopupTitle="Share QR Code"
           setIsOpenPopup={setIsOpenPopup}

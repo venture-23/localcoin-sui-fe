@@ -77,7 +77,7 @@ const LandingPage = () => {
               text="Check for ongoing campaigns"
               buttonIcon={<QrCodeIcon className="text-color h-5 w-5" />}
               buttonType="secondary"
-              link="/campaign"
+              link="/on-going-campaigns"
             />
 
             <Button

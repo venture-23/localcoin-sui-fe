@@ -120,7 +120,7 @@ export const campaignServices = (() => {
   const getAllCampaigns = (secretKey: string) => {
     return makeTransaction({
       secretKey,
-      parameterType: 'get_campaigns'
+      parameterType: 'get_campaigns_name'
     });
   };
 
@@ -141,7 +141,7 @@ export const campaignServices = (() => {
   };
 
   const getCampaignInfo = (
-    secretKey: string,
+    secretKey: string = 'SCKKS3FLNGIOXICRNSFVNPBUNZLUA5EMEQESQS2IGLVYYYJAHRQX2GSA', // FROM DEMO FROM HOME PAGE
     contractId: string = 'CAYB5NVCDFFO3IYCHY77LPK2KAXJ7PNHIHPWQEUIM6G372MI7YKQS2VN'
   ) => {
     return makeTransaction({
