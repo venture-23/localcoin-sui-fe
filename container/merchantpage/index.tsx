@@ -92,7 +92,7 @@ const MerchantPage = () => {
       </Header> */}
       {/* <Link href="/"><ArrowLeftIcon width={24} height={24} /></Link> */}
 
-      <section>
+      <section className="relative">
         <div className="container mx-auto">
           {/* tabs */}
 
@@ -159,7 +159,7 @@ const MerchantPage = () => {
           </div>
         </div>
 
-        <div className="fixed bottom-7 right-7 " onClick={() => setOpen(true)}>
+        <div className="fixed bottom-7 right-7 md:absolute " onClick={() => setOpen(true)}>
           <Link
             // href={asPath.includes('recipient') ? '/recipient/scan-pay' : '/merchant/scan-pay'}
             href=""

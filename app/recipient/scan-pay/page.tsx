@@ -125,7 +125,7 @@ export default function ScanPayMerchant() {
       {imageUrl ? (
         <>
           <div
-            className="fixed bottom-7 right-7 "
+            className="fixed bottom-7 right-7 md:absolute"
             onClick={() => popOverRef.current.open({ title: 'Share QR Code', imageUrl })}
           >
             <Link
