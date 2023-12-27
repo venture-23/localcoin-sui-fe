@@ -46,16 +46,20 @@ export function useMerchant({
     queryKey: [`campaign_settlement`],
     enabled: false,
     // cacheTime: Infinity,
-    retry: 1,
+    retry: 0,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
+      console.log({ data: data.tokenId });
       const response = await campaignServices.request_campaign_settelment(
         userInfo.secretKey,
-        data.amount,
-        data.tokenAddress
+        parseFloat(data.amount),
+        data.tokenId
       );
+
       if (response?.error) throw new Error(response.error || 'Something went wrong');
+      toast.success('success settelment');
+      console.log({ response }, '>from the settelment');
       return response;
     },
     onError: (error: any) => {
@@ -67,7 +71,7 @@ export function useMerchant({
     queryKey: [`merchant-registration`],
     enabled: registerMerchant,
     // cacheTime: Infinity,
-    retry: 3,
+    retry: 0,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
@@ -131,7 +135,8 @@ export function useMerchant({
     isGettingInfo: get_merchant_info.isFetching || campaign_settlement.isFetching,
     merchant_associated,
     setFetch_merchant_info,
-    campaign_settlement_msg
+    campaign_settlement_msg,
+    campaign_settlement: campaign_settlement.refetch
   };
 }
 /* 

@@ -5,7 +5,6 @@ import {
   campaignContractId,
   issuanceManagementContract,
   localCoinAddress,
-  superAdminSecret,
   userRegistryContractId
 } from 'utils/constants';
 import { decoderHelper } from './response-decoder';
@@ -100,9 +99,10 @@ export const campaignServices = (() => {
       }
     } catch (error: any) {
       console.log(error, `FRM THE ERROR from ${parameterType}`);
-      toast.error(`FRM THE ERROR from ${parameterType} ${JSON.stringify(error, null, 2)} `, {
-        autoClose: false
-      });
+      toast.error(`FRM THE ERROR from ${parameterType} `);
+      // toast.error(`FRM THE ERROR from ${parameterType} ${JSON.stringify(error, null, 2)} `, {
+      //   autoClose: false
+      // });
       // return error;
       return Promise.reject(error);
     }
@@ -257,11 +257,12 @@ export const campaignServices = (() => {
   };
 
   const request_campaign_settelment = (secretKey: any, amount: number, tokenAddress: string) => {
+    console.log({ tokenAddress });
     return makeTransaction({
-      contractId: campaignContractId, //token_contract_id
+      contractId: tokenAddress, //token_contract_id
       parameterType: 'request_campaign_settelment',
       secretKey: secretKey,
-      payload: [numberToI128(amount), accountToScVal(tokenAddress)]
+      payload: [numberToI128(amount), accountToScVal(localCoinAddress)]
     });
   };
 

@@ -8,13 +8,14 @@ export function useRecipient({ data = {} }: any) {
   const { userInfo } = useMyContext();
 
   const receipientInfo = useQuery({
-    queryKey: [`receipientInfo`],
+    queryKey: [`receipientInfo-token`],
     enabled: !!userInfo.publicKey,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
+      console.log('manish chhetri', !!userInfo.publicKey);
       const response = await campaignServices.getReceipientToken(
         userInfo.secretKey,
         userInfo.publicKey
@@ -58,7 +59,6 @@ export function useRecipient({ data = {} }: any) {
     const tokenList = receipientInfo?.data;
     return { tokenList };
   }, [receipientInfo?.data]);
-  console.log({ sendTokenToMerchant });
   return {
     tokenList: tokenList,
     sendTokenToMerchant: sendTokenToMerchant.refetch,

@@ -79,7 +79,6 @@ const CreateCampaignPage = () => {
     }
   };
   const handleDropdown = (value) => {
-    console.log({ value });
     setData({ ...data, creatorAddress: value.value, creatorName: value.name });
   };
   return (
