@@ -37,7 +37,7 @@ function DrawerQRScan(props: any, ref: any) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity md:mx-auto md:w-[400px]" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-hidden">
@@ -54,7 +54,7 @@ function DrawerQRScan(props: any, ref: any) {
                 >
                   <Dialog.Panel className="pointer-events-auto w-screen ">
                     <div
-                      className={`flex h-full w-full flex-col overflow-y-scroll rounded-t-lg bg-white ${
+                      className={`flex h-full w-full flex-col overflow-y-scroll rounded-t-lg bg-white md:mx-auto md:w-[400px] ${
                         isOpen ? '' : 'py-6'
                       } shadow-xl`}
                     >
