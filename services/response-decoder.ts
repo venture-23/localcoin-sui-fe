@@ -29,7 +29,7 @@ const decodei128 = (data: any) => {
 
   const combinedValue = hiValue.shiftLeft(64).or(loValue);
   const stringValue = combinedValue.toString();
-  const decodedValue = stringValue.replace(/0{7}$/, '');
+  const decodedValue = parseFloat(stringValue) / 10000000;
   return decodedValue;
 };
 
@@ -117,7 +117,9 @@ const decoderHelper = (params: string, response: ResponseType) => {
           return test;
         });
         return tokenList;
-
+      case 'request_campaign_settlement':
+        toast.success('Settled Successfully');
+        return response.returnValue?._value;
       case 'merchant_registration':
       case 'recipient_to_merchant_transfer':
         toast.success(

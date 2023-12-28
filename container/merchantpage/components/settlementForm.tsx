@@ -4,14 +4,21 @@ import InputForm from 'components/form/input';
 import Select from 'components/form/select';
 import { useMerchant } from 'hooks/useMerchant';
 import { useRecipient } from 'hooks/useReceipient';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const SettlementForm = () => {
+const SettlementForm = ({ setActive }: any) => {
   const [data, setData] = useState<any>({});
   const [error, setError] = useState({});
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const { isGettingInfo, campaign_settlement } = useMerchant({ data });
+  const { isGettingInfo, campaign_settlement, settelmentSuccess } = useMerchant({ data });
+  console.log({ settelmentSuccess });
+  useEffect(() => {
+    if (settelmentSuccess) {
+      setOpenDrawer(false);
+      // setActive(1);
+    }
+  }, [settelmentSuccess]);
 
   const handleChange = (e: any) => {
     const {
