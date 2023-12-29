@@ -2,8 +2,11 @@
 
 import { Tab } from '@headlessui/react';
 import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
+import BalanceCard from 'components/balancecard';
 import Button from 'components/botton';
+import BridgeBG from 'components/bridgebg';
 import Drawer from 'components/drawer';
+import LandingHeader from 'components/landingpageheader';
 import PopupBox from 'components/popover';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import TokenCard from 'components/tokencard';
@@ -15,9 +18,6 @@ import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { shareOnMobile } from 'react-mobile-share';
 import SettlementForm from './components/settlementForm';
-import LandingHeader from 'components/landingpageheader';
-import BalanceCard from 'components/balancecard';
-import BridgeBG from 'components/bridgebg';
 const MerchantPage = () => {
   const [active, setActive] = useState(1);
   const [open, setOpen] = useState(false);
@@ -127,7 +127,7 @@ const MerchantPage = () => {
                   </Tab>
                 </Tab.List>
               </div>
-              <Tab.Panels className="mt-6 h-[90vh]">
+              <Tab.Panels className="mt-6">
                 <Tab.Panel
                   className={`
                      `}
