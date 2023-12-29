@@ -10,15 +10,15 @@ interface Props {
 
 const useHandleCopy = (props?: Props) => {
   const [isCopied, setIsCopied] = React.useState<any>(false);
-  const handleCopy: any = async (promoCode: string, message = 'copied successfully') => {
-    console.log({ props, promoCode });
+  const handleCopy: any = async (content: string, message = 'copied successfully') => {
     try {
       if (!isCopied) {
-        await navigator.clipboard.writeText(promoCode);
+        await navigator.clipboard.writeText(content);
         setIsCopied(true);
         props?.showToast &&
           toast.success(message, {
-            toastId: 'success'
+            toastId: 'success',
+            autoClose: 100
           });
         const timer = setTimeout(() => setIsCopied(false), props?.setTimeOut || 3000);
         return () => clearTimeout(timer);

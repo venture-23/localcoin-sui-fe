@@ -27,7 +27,7 @@ const TokenCard: React.FC<CardProps> = ({
       <div className={`flex flex-col items-center ${cardInsideClass}`}>
         <p className="text-lg font-medium text-gray-500 ">
           {' '}
-          $ {tokenDetails?.value || tokenDetails?.amount || ''}
+          {tokenDetails?.value || tokenDetails?.amount || ''} USDC
         </p>
       </div>
     </div>

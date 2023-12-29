@@ -1,13 +1,8 @@
 'use client';
 
-import {
-  BuildingLibraryIcon,
-  ChevronDoubleDownIcon,
-  HeartIcon,
-  HomeIcon
-} from '@heroicons/react/24/outline';
+import { BuildingLibraryIcon, HeartIcon, HomeIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 const RecipientCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);

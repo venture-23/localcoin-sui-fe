@@ -28,7 +28,7 @@ const CampaignList = () => {
         <div className="container mx-auto">
           <LandingHeader pageName="Campaign Creator" />
 
-          <BalanceCard />
+          <BalanceCard  />
 
           <h3 className="mb-4 text-lg font-semibold">Your Campaigns</h3>
           {/*  <Button
