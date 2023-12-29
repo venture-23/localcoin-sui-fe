@@ -28,7 +28,7 @@ export const campaignServices = (() => {
     contractId = campaignContractId
   }: any) => {
     try {
-      debugger;
+      // debugger;
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
       const sourcePublicKey = sourceKeypair.publicKey();
       const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
@@ -264,7 +264,7 @@ export const campaignServices = (() => {
     tokenAddress: string
   ) => {
     console.log({ tokenAddress, secretKey, amount });
-    debugger;
+    // debugger;
     return makeTransaction({
       contractId: campaignContractId,
       parameterType: 'request_campaign_settlement',

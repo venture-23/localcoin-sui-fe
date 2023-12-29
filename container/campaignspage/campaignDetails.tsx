@@ -30,9 +30,8 @@ const CampaignDetail = (props: any) => {
           <div className="mb-6 ">
             <p className="text-heading">Campaign Detail </p> */}
 
-            <PageHeader backLink={`/campaign`} pageHeaderTitle={'Campaign Detail'} />
-            {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
-          </div>
+          <PageHeader backLink={`/campaign`} pageHeaderTitle={'Campaign Details'} />
+          {/* <div className="w-12 h-12 bg-gray-600 rounded-full"></div> */}
           {/* <div className="mb-6">
             <h2 className="mb-2 text-2xl font-bold">Campaign {props.campaignId}</h2>
           </div> */}
