@@ -7,7 +7,6 @@ import Drawer from 'components/drawer';
 import DrawerQrScan from 'components/drawer-qr-scan';
 import InputForm from 'components/form/input';
 import Select from 'components/form/select';
-import RecipientFunded from 'components/icons/recipient-funded';
 import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientToken from 'components/icons/recipient-token';
 import { useMerchant } from 'hooks/useMerchant';
@@ -139,7 +138,7 @@ const RecipientPage = () => {
                   link="/recipient/campaigns"
                   iconName={<RecipientOngoing />}
                 />
-                <Card title="Funded Campaigns" link="/" iconName={<RecipientFunded />} />
+                {/* <Card title="Funded Campaigns" link="/" iconName={<RecipientFunded />} /> */}
               </div>
             </div>
 

@@ -208,7 +208,7 @@ const MerchantPage = () => {
             <Button
               handleClick={() => downloadBase64File('ScanToPay')}
               buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
-              text="Save image"
+              text="Save Image"
             />
           </a>
           <Button
