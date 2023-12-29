@@ -1,5 +1,6 @@
 function maskWalletAddress(walletAddress: string) {
-  if (walletAddress.length < 16) {
+  if (!walletAddress) return '';
+  if (walletAddress?.length < 16) {
     return walletAddress;
   }
 
