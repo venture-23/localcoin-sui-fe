@@ -4,7 +4,7 @@ import React from 'react';
 const BalanceCard = () => {
   return (
     <>
-      <div className="mb-6 w-full rounded-md bg-gradient-to-br from-[#f58413] from-30% to-red-800  p-5">
+      <div className="mb-6 w-full rounded-md bg-gradient-to-r from-secondary from-10% via-sky-500 via-30% to-sky-500 to-60%  p-5">
         <div>
           <p className="m-0 text-xs text-white">Total Balance</p>
           <h2 className="m-0 my-2 text-2xl font-bold text-white">
