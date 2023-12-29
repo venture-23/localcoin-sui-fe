@@ -6,8 +6,9 @@ import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/router';
-import { ArrowLeftIcon, ChevronLeftIcon, ClipboardIcon } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon, ClipboardIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
+import BridgeBG from 'components/bridgebg';
 import { useAddToHomescreenPrompt } from 'components/test';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -15,7 +16,6 @@ import generateKeyPair from 'services/generateKeypair';
 import { maskWalletAddress } from 'utils/clipper';
 import GenerateKeyPair from './components/generate-key-pair-page';
 import MerchantInfo from './components/user-info';
-import BridgeBG from 'components/bridgebg';
 
 interface ErrorType {
   storeName?: string;
@@ -115,7 +115,7 @@ const MerchantSignup = ({ param }: any) => {
                 <div>
                   <Image src={'/generateQR.gif'} width={250} height={250} />
                 </div>
-                <p className="my-4 text-2xl ">Generating key for you</p>
+                <p className="my-4 text-2xl ">Creating your digital account</p>
               </div>
             </>
           )}
