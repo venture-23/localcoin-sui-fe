@@ -27,19 +27,20 @@ const RecipientCarousel = () => {
 
   return (
     <>
+      <h3 className="mb-4 text-lg font-semibold">Your Holdings</h3>
       <div className="carousel" ref={carouselRef} onScroll={handleScroll}>
         <div className="carousel-inner">
           {items.map((item, index) => (
             <div
               key={index}
-              className="p-5 mb-6 text-white rounded-lg carousel-item"
+              className="carousel-item mb-6 rounded-lg p-5 text-white"
               style={{
                 background: 'linear-gradient(180deg, #1384F5 0%, #4EABFE 100%)'
               }}
             >
               {item.iconUrl}
               <p className="text-lg font-semibold">{item.name}</p>
-              <div className="flex items-center justify-between w-full mt-4 ">
+              <div className="mt-4 flex w-full items-center justify-between ">
                 <p className="!m-0 font-normal">Balance</p>
                 <div className="flex items-center gap-1 ">
                   <div>

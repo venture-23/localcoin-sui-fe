@@ -15,6 +15,9 @@ import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { shareOnMobile } from 'react-mobile-share';
 import SettlementForm from './components/settlementForm';
+import LandingHeader from 'components/landingpageheader';
+import BalanceCard from 'components/balancecard';
+import BridgeBG from 'components/bridgebg';
 const MerchantPage = () => {
   const [active, setActive] = useState(1);
   const [open, setOpen] = useState(false);
@@ -101,12 +104,7 @@ const MerchantPage = () => {
         <div className="container mx-auto">
           {/* tabs */}
 
-          <div className="mb-6 flex items-center justify-between pt-10 ">
-            <p onClick={() => setVerifyMerchant(true)} className="text-heading">
-              Merchant Profile
-            </p>
-            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
-          </div>
+          <LandingHeader pageName="Merchant Profile" />
           <div className="">
             <Tab.Group>
               <div className="w-full max-w-xs">
@@ -134,6 +132,9 @@ const MerchantPage = () => {
                   className={`
                      `}
                 >
+                  <BalanceCard />
+
+                  <h3 className="mb-4 text-lg font-semibold">Your Token</h3>
                   {tokenList?.map((eachToken: any, eachInd: number) => (
                     <TokenCard
                       key={eachInd + 1 + ''}
@@ -248,6 +249,7 @@ const MerchantPage = () => {
             buttonIcon={<ShareIcon width={24} height={24} />}
           />
         </Popover> */}
+        <BridgeBG />
       </section>
     </>
   );

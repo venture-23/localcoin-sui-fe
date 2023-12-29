@@ -11,8 +11,8 @@ import { useEffect, useRef } from 'react';
 // import Header from 'components/layout/header';
 
 import Button from 'components/botton';
+import BridgeBG from 'components/bridgebg';
 import PopupBox from 'components/popover';
-import Link from 'next/link';
 
 const SignupPage = () => {
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
@@ -78,14 +78,15 @@ const SignupPage = () => {
               />
             </div>
           </div>
-          <div className="text-color absolute bottom-4 left-1/2 flex w-full -translate-x-1/2 items-baseline justify-center text-lg font-semibold">
+          {/* <div className="text-color absolute bottom-4 left-1/2 flex w-full -translate-x-1/2 items-baseline justify-center text-lg font-semibold">
             <p className="font-normal">Already have an account? </p>{' '}
             <Link href="/">
               {' '}
               <span className="ml-1">Login</span>
             </Link>
-          </div>
+          </div> */}
         </div>
+        <BridgeBG />
       </section>
     </>
   );
