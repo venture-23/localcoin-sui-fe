@@ -61,10 +61,10 @@ const SettlementForm = ({ setActive }: any) => {
           text="Request for Settlement"
           underline={`  bg-white border border-gray-200 !text-[#212B34]  font-semibold `}
         />
-        <Button
+        {/* <Button
           text="Finish Settlement"
           underline={`  bg-white border border-gray-200 !text-[#212B34]  font-semibold `}
-        />
+        /> */}
         <Drawer open={openDrawer} setOpen={setOpenDrawer} panelTitle="Share QR Code">
           <Select
             label="Select Token"

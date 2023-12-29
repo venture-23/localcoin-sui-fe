@@ -97,11 +97,11 @@ const CampaignDetail = (props: any) => {
         </div>
       </Header> */}
 
-      <section>
+      <section className="relative">
         <div className="container mx-auto">
           <PageHeader
             backLink={notLoggedIn ? '/all-campaigns' : '/campaign'}
-            pageHeaderTitle={'Campaign Detail'}
+            pageHeaderTitle={'Campaign Details'}
           />
 
           {(isDetailsFetching && !campaignInfo?.name && (
@@ -115,7 +115,7 @@ const CampaignDetail = (props: any) => {
                 {!notLoggedIn && (
                   <>
                     <div
-                      className="fixed bottom-7 right-7 "
+                      className="fixed bottom-7 right-7 md:absolute "
                       onClick={() => {
                         setScanData('');
                         buttonRef.current.open(Drawer);

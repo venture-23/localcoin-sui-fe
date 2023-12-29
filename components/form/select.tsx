@@ -6,7 +6,7 @@ const Select = ({
   optionsList = [],
   defaultvalue = '',
   handleChange,
-  label = 'Select Type',
+  label = 'Select Token Type',
   name = '',
   error = {}
 }: any) => {

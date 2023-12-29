@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
+import { shareOnMobile } from 'react-mobile-share';
 import { QrReader } from 'react-qr-reader';
 
 export default function ScanPayMerchant() {
@@ -75,6 +76,17 @@ export default function ScanPayMerchant() {
   //   });
   //   cameraRef.current.remove();
   // }
+  const validBase64 = (url: string) => {
+    return 'data:image/jpeg;base64,' + url.split(',')[1];
+  };
+  const downloadBase64File = async (fileName: string) => {
+    const imgBase64 = imageUrl;
+    const linkSource = `${imgBase64}`;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  };
 
   return (
     <>
@@ -125,7 +137,7 @@ export default function ScanPayMerchant() {
       {imageUrl ? (
         <>
           <div
-            className="fixed bottom-7 right-7 "
+            className="fixed bottom-7 right-7 md:absolute"
             onClick={() => popOverRef.current.open({ title: 'Share QR Code', imageUrl })}
           >
             <Link
@@ -141,11 +153,25 @@ export default function ScanPayMerchant() {
             <>
               <a href={imageUrl} download className="w-full">
                 <Button
+                  handleClick={() => downloadBase64File('ScanToPay')}
                   buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
-                  text="Save image"
+                  text="Save Image"
                 />
               </a>
               <Button
+                handleClick={() => {
+                  const imgBase64 = validBase64(imageUrl);
+
+                  shareOnMobile(
+                    {
+                      text: 'Scan to make payment',
+                      url: 'https://localcoin-mobileapp.vercel.app/merchant',
+                      title: 'Scan to Pay',
+                      images: [imgBase64]
+                    },
+                    (message) => alert(message)
+                  );
+                }}
                 text="Share"
                 buttonType="secondary"
                 buttonIcon={<ShareIcon width={24} height={24} />}

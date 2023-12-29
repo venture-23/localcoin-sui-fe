@@ -7,7 +7,6 @@ import Drawer from 'components/drawer';
 import DrawerQrScan from 'components/drawer-qr-scan';
 import InputForm from 'components/form/input';
 import Select from 'components/form/select';
-import RecipientFunded from 'components/icons/recipient-funded';
 import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientToken from 'components/icons/recipient-token';
 import { useMerchant } from 'hooks/useMerchant';
@@ -116,7 +115,7 @@ const RecipientPage = () => {
   console.log(isGoodToGo, !!data.amount);
   return (
     <>
-      <section className="">
+      <section className="relative">
         <div className="container mx-auto">
           <div className="mb-6 flex items-center justify-between pt-10 ">
             <p className="text-heading">Recipient Profile</p>
@@ -139,11 +138,11 @@ const RecipientPage = () => {
                   link="/recipient/campaigns"
                   iconName={<RecipientOngoing />}
                 />
-                <Card title="Funded Campaigns" link="/" iconName={<RecipientFunded />} />
+                {/* <Card title="Funded Campaigns" link="/" iconName={<RecipientFunded />} /> */}
               </div>
             </div>
 
-            <div className="fixed bottom-0 left-0 w-full [@media(min-width:1024px)]:left-1/2 [@media(min-width:1024px)]:max-w-[375px] [@media(min-width:1024px)]:-translate-x-1/2">
+            <div className="fixed bottom-0 left-0 w-full md:absolute">
               <DrawerQrScan
                 shareQr={true}
                 ref={buttonRef}
