@@ -1,7 +1,10 @@
 'use client';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { DocumentIcon, PlusIcon, UserIcon } from '@heroicons/react/24/outline';
+import BalanceCard from 'components/balancecard';
 import Button from 'components/botton';
+import BridgeBG from 'components/bridgebg';
 import CampaignCard from 'components/campaigncard';
+import LandingHeader from 'components/landingpageheader';
 import Popover from 'components/popover';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import { useCamapigns } from 'hooks/useCampaigns';
@@ -23,10 +26,11 @@ const CampaignList = () => {
       <section className="relative">
         <Popover ref={popOverRef} />
         <div className="container mx-auto">
-          <div className="mb-6 flex items-center justify-between pt-10 ">
-            <p className="text-heading">Your Campaigns </p>
-            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
-          </div>
+          <LandingHeader pageName="Campaign Creator" />
+
+          <BalanceCard />
+
+          <h3 className="mb-4 text-lg font-semibold">Your Campaigns</h3>
           {/*  <Button
             text="List Campaign"
             buttonIcon={<PlusIcon width={24} height={24} />}
@@ -70,6 +74,7 @@ const CampaignList = () => {
             </div>
           </div>
         </div>
+        <BridgeBG />
       </section>
     </>
   );

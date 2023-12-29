@@ -1,7 +1,9 @@
 'use client';
 import { ViewfinderCircleIcon } from '@heroicons/react/24/outline';
 import RecipientCarousel from 'components/RecipientCarousel';
+import BalanceCard from 'components/balancecard';
 import Button from 'components/botton';
+import BridgeBG from 'components/bridgebg';
 import Card from 'components/card';
 import Drawer from 'components/drawer';
 import DrawerQrScan from 'components/drawer-qr-scan';
@@ -9,6 +11,7 @@ import InputForm from 'components/form/input';
 import Select from 'components/form/select';
 import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientToken from 'components/icons/recipient-token';
+import LandingHeader from 'components/landingpageheader';
 import { useMerchant } from 'hooks/useMerchant';
 import { useRecipient } from 'hooks/useReceipient';
 import Image from 'next/image';
@@ -117,16 +120,8 @@ const RecipientPage = () => {
     <>
       <section className="relative">
         <div className="container mx-auto">
-          <div className="mb-6 flex items-center justify-between pt-10 ">
-            <p className="text-heading">Recipient Profile</p>
-            <Image
-              src={`/avatar.webp`}
-              width={48}
-              height={48}
-              alt="Profile Image"
-              className="!h-12 !w-12 rounded-full  object-cover"
-            />
-          </div>
+          <LandingHeader pageName="Recipient Profile" />
+          <BalanceCard />
           <RecipientCarousel />
           <div className="mb-6 ">
             <div className="grid gap-3 ">
@@ -275,6 +270,7 @@ const RecipientPage = () => {
             />
           </Drawer>
         </div>
+        <BridgeBG />
       </section>
     </>
   );

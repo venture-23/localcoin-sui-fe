@@ -15,6 +15,7 @@ import generateKeyPair from 'services/generateKeypair';
 import { maskWalletAddress } from 'utils/clipper';
 import GenerateKeyPair from './components/generate-key-pair-page';
 import MerchantInfo from './components/user-info';
+import BridgeBG from 'components/bridgebg';
 
 interface ErrorType {
   storeName?: string;
@@ -84,7 +85,7 @@ const MerchantSignup = ({ param }: any) => {
     <>
       {/* <Header className="h-[120px]"> */}
       {/* </Header> */}
-      <section className="">
+      <section className="relative">
         <div className="container mx-auto">
           <div className="mb-6 flex items-center pt-10">
             {promptable && !isInstalled ? (
@@ -173,6 +174,7 @@ const MerchantSignup = ({ param }: any) => {
             </div>
           )}
         </div>
+        <BridgeBG />
       </section>
     </>
   );

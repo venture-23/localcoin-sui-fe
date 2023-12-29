@@ -1,5 +1,5 @@
 'use client';
-import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ArchiveBoxIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -44,15 +44,17 @@ const CampaignCard: React.FC<CardProps> = ({
         {/* <p className="text-base text-gray-700">{description}</p> */}
         {/* </div> */}
         <div className="flex w-full items-center justify-between">
-          <div className="flex items-start gap-2">
-            <div>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center rounded-full bg-primary/50 p-2">
               {/* <Image
                 alt="camapaign avatar image"
                 src={'/campagin_dummy.jpg'}
                 width={40}
                 height={40}
-                className="h-12 w-12 rounded-full bg-bgGray object-cover"
+                className="object-cover w-12 h-12 rounded-full bg-bgGray"
               /> */}
+
+              <ArchiveBoxIcon width={20} height={20} color="white" />
             </div>
             <div className="max-w-sm">
               <p className="text-base font-semibold text-text">{campaignDetails?.name}</p>

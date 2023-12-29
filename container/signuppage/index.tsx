@@ -13,6 +13,7 @@ import { useEffect, useRef } from 'react';
 import Button from 'components/botton';
 import PopupBox from 'components/popover';
 import Link from 'next/link';
+import BridgeBG from 'components/bridgebg';
 
 const SignupPage = () => {
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
@@ -86,6 +87,7 @@ const SignupPage = () => {
             </Link>
           </div>
         </div>
+        <BridgeBG />
       </section>
     </>
   );
