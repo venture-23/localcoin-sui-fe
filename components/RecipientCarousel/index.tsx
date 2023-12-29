@@ -4,12 +4,12 @@ import { BuildingLibraryIcon, HeartIcon, HomeIcon } from '@heroicons/react/24/ou
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 
-const RecipientCarousel = () => {
+const RecipientCarousel = ({ balance = '' }: any) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef(null);
   const items = [
-    { name: 'HeartIcon', iconUrl: <HeartIcon width={48} height={48} /> }, // Replace with actual image paths
-    { name: ' Library', iconUrl: <BuildingLibraryIcon width={48} height={48} /> },
+    { name: 'Grocery', iconUrl: <HeartIcon width={48} height={48} /> }, // Replace with actual image paths
+    { name: 'Library', iconUrl: <BuildingLibraryIcon width={48} height={48} /> },
     { name: 'Home', iconUrl: <HomeIcon width={48} height={48} /> }
   ];
 
@@ -47,7 +47,7 @@ const RecipientCarousel = () => {
                       className="!h-5 !w-4"
                     />
                   </div>{' '}
-                  <p className="!m-0">120</p>
+                  <p className="!m-0">{balance}</p>
                 </div>
               </div>
             </div>

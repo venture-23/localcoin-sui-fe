@@ -4,7 +4,7 @@ import useHandleCopy from 'hooks/useCopyText';
 import { useMyContext } from 'hooks/useMyContext';
 import { maskWalletAddress } from 'utils/clipper';
 
-const BalanceCard = () => {
+const BalanceCard = ({ balance = '0.00' }: any) => {
   const [isCopied, handleCopy] = useHandleCopy({ showToast: true });
   const { userInfo } = useMyContext();
   return (
@@ -13,7 +13,9 @@ const BalanceCard = () => {
         <div>
           <p className="m-0 text-xs text-white">Total Balance</p>
           <h2 className="m-0 my-2 text-2xl font-bold text-white">
-            0.00 XLM <span className="text-sm font-normal text-white"> = 0.00 USDC </span>
+            {/* 0.00 XLM  */}
+            {balance} USDC
+            {/* <span className="text-sm font-normal text-white"> = {balance} USDC </span> */}
           </h2>
           <div className="m-0 flex items-center gap-1 text-xs text-white">
             <p className="m-0">{maskWalletAddress(userInfo?.publicKey)} </p>

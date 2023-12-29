@@ -14,9 +14,9 @@ import RecipientToken from 'components/icons/recipient-token';
 import LandingHeader from 'components/landingpageheader';
 import { useMerchant } from 'hooks/useMerchant';
 import { useRecipient } from 'hooks/useReceipient';
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import { totalAmount } from 'utils/helper-function';
 
 // Import Swiper React components
 
@@ -115,14 +115,14 @@ const RecipientPage = () => {
     console.log({ value });
     setData({ ...data, tokenAddress: value.value || value, tokenName: value.name || value });
   };
-  console.log(isGoodToGo, !!data.amount);
+
   return (
     <>
       <section className="relative">
         <div className="container mx-auto">
           <LandingHeader pageName="Recipient Profile" />
-          <BalanceCard />
-          <RecipientCarousel />
+          <BalanceCard balance={totalAmount(tokenList)} />
+          <RecipientCarousel balance={totalAmount(tokenList)} />
           <div className="mb-6 ">
             <div className="grid gap-3 ">
               {/* <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} /> */}

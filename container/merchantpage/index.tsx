@@ -17,6 +17,7 @@ import Link from 'next/link';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { shareOnMobile } from 'react-mobile-share';
+import { totalAmount } from 'utils/helper-function';
 import SettlementForm from './components/settlementForm';
 const MerchantPage = () => {
   const [active, setActive] = useState(1);
@@ -132,7 +133,7 @@ const MerchantPage = () => {
                   className={`
                      `}
                 >
-                  <BalanceCard />
+                  <BalanceCard balance={totalAmount(tokenList)} />
 
                   <h3 className="mb-4 text-lg font-semibold">Your Token</h3>
                   {tokenList?.map((eachToken: any, eachInd: number) => (
