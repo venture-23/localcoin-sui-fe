@@ -83,7 +83,7 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
   return (
     <>
       {/* <Header className="h-[120px]"> */}
-      <div className=" absolute top-12 z-[10] mx-auto w-[95%] ">
+      <div className=" absolute top-20 z-[10] mx-auto w-[95%] ">
         <div className="flex items-center justify-between">
           <p className="flex-1 text-center text-white">Scan QR code to pay</p>
           <div onClick={() => closeScanner()}>
