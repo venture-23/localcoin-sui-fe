@@ -12,6 +12,7 @@ import Select from 'components/form/select';
 import RecipientOngoing from 'components/icons/recipient-ongoing';
 import RecipientToken from 'components/icons/recipient-token';
 import LandingHeader from 'components/landingpageheader';
+import { useGetBalance } from 'hooks/useGetBalance';
 import { useMerchant } from 'hooks/useMerchant';
 import { useRecipient } from 'hooks/useReceipient';
 import { useEffect, useRef, useState } from 'react';
@@ -28,6 +29,7 @@ const RecipientPage = () => {
   const [error, setError] = useState({});
 
   const [isGoodToGo, setisGoodToGo] = useState(false);
+  const { userBalance } = useGetBalance();
 
   const { merchant_info, isGettingInfo, merchant_associated, setFetch_merchant_info } = useMerchant(
     {
@@ -121,7 +123,8 @@ const RecipientPage = () => {
       <section className="relative">
         <div className="container mx-auto">
           <LandingHeader pageName="Recipient Profile" />
-          <BalanceCard balance={totalAmount(tokenList)} />
+          {/* <BalanceCard balance={totalAmount(tokenList)} /> */}
+          <BalanceCard balance={userBalance} />
           <RecipientCarousel balance={totalAmount(tokenList)} />
           <div className="mb-6 ">
             <div className="grid gap-3 ">

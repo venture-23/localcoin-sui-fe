@@ -18,6 +18,7 @@ const CreateCampaignPage = () => {
   const [creatorAddressList, setCreatorAddressList] = useState([]);
 
   const { userInfo } = useMyContext();
+
   useEffect(() => {
     if (userInfo.secretKey) {
       campaignServices
@@ -31,7 +32,6 @@ const CreateCampaignPage = () => {
   }, [userInfo]);
 
   const [showLoader, setShowLoader] = useState(false);
-  const [selectedToken, setSelectedToken] = useState({});
   const [data, setData] = useState({
     name: '',
     totalAmount: '',

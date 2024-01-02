@@ -1,5 +1,5 @@
 'use client';
-import { DocumentIcon, PlusIcon, UserIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import BalanceCard from 'components/balancecard';
 import Button from 'components/botton';
 import BridgeBG from 'components/bridgebg';
@@ -8,6 +8,7 @@ import LandingHeader from 'components/landingpageheader';
 import Popover from 'components/popover';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import { useCamapigns } from 'hooks/useCampaigns';
+import { useGetBalance } from 'hooks/useGetBalance';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -18,7 +19,7 @@ const CampaignList = () => {
   const pathname = usePathname();
   const { userInfo } = useMyContext();
   const popOverRef = useRef(null);
-
+  const { userBalance } = useGetBalance();
   const { isFetching, campaignList } = useCamapigns({});
 
   return (
@@ -28,7 +29,7 @@ const CampaignList = () => {
         <div className="container mx-auto">
           <LandingHeader pageName="Campaign Creator" />
 
-          <BalanceCard  />
+          <BalanceCard balance={userBalance} />
 
           <h3 className="mb-4 text-lg font-semibold">Your Campaigns</h3>
           {/*  <Button

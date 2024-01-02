@@ -10,6 +10,7 @@ import LandingHeader from 'components/landingpageheader';
 import PopupBox from 'components/popover';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import TokenCard from 'components/tokencard';
+import { useGetBalance } from 'hooks/useGetBalance';
 import { useMerchant } from 'hooks/useMerchant';
 import { useMyContext } from 'hooks/useMyContext';
 import { useRecipient } from 'hooks/useReceipient';
@@ -17,7 +18,6 @@ import Link from 'next/link';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { shareOnMobile } from 'react-mobile-share';
-import { totalAmount } from 'utils/helper-function';
 import SettlementForm from './components/settlementForm';
 const MerchantPage = () => {
   const [active, setActive] = useState(1);
@@ -93,6 +93,8 @@ const MerchantPage = () => {
     downloadLink.download = fileName;
     downloadLink.click();
   };
+  const { userBalance } = useGetBalance();
+
   return (
     <>
       {/* <Header className="h-[120px]">
@@ -133,8 +135,8 @@ const MerchantPage = () => {
                   className={`
                      `}
                 >
-                  <BalanceCard balance={totalAmount(tokenList)} />
-
+                  {/* <BalanceCard balance={totalAmount(tokenList)} /> */}
+                  <BalanceCard balance={userBalance} />
                   <h3 className="mb-4 text-lg font-semibold">Your Token</h3>
                   {tokenList?.map((eachToken: any, eachInd: number) => (
                     <TokenCard

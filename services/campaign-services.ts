@@ -2,6 +2,7 @@
 
 import { toast } from 'react-toastify';
 import {
+  balanceContractId,
   campaignContractId,
   issuanceManagementContract,
   localCoinAddress,
@@ -273,6 +274,15 @@ export const campaignServices = (() => {
     });
   };
 
+  const get_balance = (userInfo: any) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      contractId: balanceContractId,
+      parameterType: 'balance',
+      payload: [accountToScVal(userInfo.publicKey)]
+    });
+  };
+
   return {
     getCreatorCampaigns: getCreatorCampaigns,
     getAllCampaigns,
@@ -286,6 +296,7 @@ export const campaignServices = (() => {
     verify_merchant,
     get_merchant_associated,
     get_merchant_info,
-    request_campaign_settlement
+    request_campaign_settlement,
+    get_user_balance: get_balance
   };
 })();

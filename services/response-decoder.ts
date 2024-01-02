@@ -147,6 +147,8 @@ const decoderHelper = (params: string, response: ResponseType) => {
         }
         console.log({ merchantInfo }, '111');
         return makeSingleObject(merchantInfo);
+      case 'balance':
+        return decodei128(response?.returnValue?._value) || '0.00';
       default:
         return response.returnValue;
     }
