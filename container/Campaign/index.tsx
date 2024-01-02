@@ -43,7 +43,7 @@ const CampaignList = () => {
           >
             List Campaign
           </Button> */}
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid h-[calc(60vh-64px)] grid-cols-1 gap-3 overflow-auto pb-8">
             {campaignList?.map((eachCampaign: any, eachid: number) => (
               <React.Fragment key={eachid + 1 + ''}>
                 <CampaignCard clippedId link="campaign/" campaignDetails={eachCampaign} />
@@ -65,7 +65,7 @@ const CampaignList = () => {
             )}
             {isFetching && <CampaignListSkeleton defaultData={2} />}
 
-            <div className="absolute bottom-0 left-0 w-full">
+            <div className="fixed bottom-0 left-0 w-full md:absolute">
               <Button
                 link="/campaign/create"
                 text="Create a Campaign"

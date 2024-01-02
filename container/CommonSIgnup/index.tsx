@@ -131,7 +131,7 @@ const MerchantSignup = ({ param }: any) => {
             (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
           )}
           {data.secretKey && (
-            <div className="rounded-md bg-white p-6">
+            <div className="rounded-md bg-white p-8">
               <p className="mb-4 text-lg font-bold text-text">Please securely copy this code</p>
               <div className="grid gap-3">
                 <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
