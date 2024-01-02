@@ -43,7 +43,7 @@ const CampaignList = () => {
           >
             List Campaign
           </Button> */}
-          <div className="grid h-[calc(60vh-64px)] grid-cols-1 gap-3 overflow-auto pb-8">
+          <div className="grid grid-cols-1 gap-3 pb-8">
             {campaignList?.map((eachCampaign: any, eachid: number) => (
               <React.Fragment key={eachid + 1 + ''}>
                 <CampaignCard clippedId link="campaign/" campaignDetails={eachCampaign} />
