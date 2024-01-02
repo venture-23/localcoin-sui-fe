@@ -34,7 +34,6 @@ export function useMerchant({
         toast.error('errored while multiple api hitting');
         throw new Error(merchantInfo.error || 'Something went wrong');
       }
-      console.log({ merchantInfo, response_merchant_assoc });
       return { merchantInfo, response_merchant_assoc };
     },
     onError: (error: any) => {
@@ -52,14 +51,12 @@ export function useMerchant({
     retryDelay: 3000,
     queryFn: async () => {
       setisSettledSuccess(false);
-      console.log({ data: data.tokenId });
       const response = await campaignServices.request_campaign_settlement(
         userInfo.publicKey,
         userInfo.secretKey,
         parseFloat(data.amount),
         data.tokenId
       );
-      console.log({ response }, '>from the settelment');
 
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       // return response;

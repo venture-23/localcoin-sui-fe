@@ -6,6 +6,7 @@ import {
   campaignContractId,
   issuanceManagementContract,
   localCoinAddress,
+  superAdminSecret,
   userRegistryContractId
 } from 'utils/constants';
 import { decoderHelper } from './response-decoder';
@@ -29,7 +30,6 @@ export const campaignServices = (() => {
     contractId = campaignContractId
   }: any) => {
     try {
-      // debugger;
       const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
       const sourcePublicKey = sourceKeypair.publicKey();
       const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
