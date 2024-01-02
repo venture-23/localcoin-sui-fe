@@ -123,8 +123,8 @@ const RecipientPage = () => {
       <section className="relative">
         <div className="container mx-auto">
           <LandingHeader pageName="Recipient Profile" />
-          {/* <BalanceCard balance={totalAmount(tokenList)} /> */}
-          <BalanceCard balance={userBalance} />
+          <BalanceCard balance={totalAmount(tokenList)} />
+          {/* <BalanceCard balance={userBalance} /> */}
           <RecipientCarousel balance={totalAmount(tokenList)} />
           <div className="mb-6 ">
             <div className="grid gap-3 ">

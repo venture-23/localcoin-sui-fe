@@ -17,17 +17,20 @@ const BalanceCard = ({ balance = '0.00' }: any) => {
             {balance} USDC
             {/* <span className="text-sm font-normal text-white"> = {balance} USDC </span> */}
           </h2>
-          <div className="m-0 flex items-center gap-1 text-xs text-white">
-            <p className="m-0">{maskWalletAddress(userInfo?.publicKey)} </p>
-            <p className="m-0" onClick={() => handleCopy(userInfo?.publicKey)}>
-              {' '}
-              {isCopied ? (
-                <CheckIcon className="h-3 w-3" />
-              ) : (
-                <DocumentIcon width={14} height={14} />
-              )}
-            </p>
-          </div>
+          {(userInfo?.publicKey && (
+            <div className="m-0 flex items-center gap-1 text-xs text-white">
+              <p className="m-0">{maskWalletAddress(userInfo?.publicKey)} </p>
+              <p className="m-0" onClick={() => handleCopy(userInfo?.publicKey)}>
+                {' '}
+                {isCopied ? (
+                  <CheckIcon className="h-3 w-3" />
+                ) : (
+                  <DocumentIcon width={14} height={14} />
+                )}
+              </p>
+            </div>
+          )) ||
+            null}
         </div>
       </div>
     </>

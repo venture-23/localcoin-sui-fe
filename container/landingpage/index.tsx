@@ -15,9 +15,9 @@ const LandingPage = () => {
     publicKey: 'GA443P5NB7YKQW3Q7U7NDUJLFO7HVMQH3FWK7PTR3IUMZAN5JG6UUHL5',
     secretKey: 'SCKKS3FLNGIOXICRNSFVNPBUNZLUA5EMEQESQS2IGLVYYYJAHRQX2GSA',
     userType: 'merchant',
-    proprietaryName: 'Props mer',
+    proprietaryName: 'Property Of Om',
     phoneNumber: '9860105561',
-    storeName: 'Merchant',
+    storeName: 'Om Store Name',
     location: 'pokhara'
   };
   const recInfo = {

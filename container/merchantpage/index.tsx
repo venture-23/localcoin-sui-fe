@@ -18,6 +18,7 @@ import Link from 'next/link';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { shareOnMobile } from 'react-mobile-share';
+import { totalAmount } from 'utils/helper-function';
 import SettlementForm from './components/settlementForm';
 const MerchantPage = () => {
   const [active, setActive] = useState(1);
@@ -30,8 +31,12 @@ const MerchantPage = () => {
   const [data, setData] = useState<any>({ amount: '' });
   const { isFetching, tokenList, fetchToken } = useRecipient({});
   const [verifyMerchant, setVerifyMerchant] = useState(false);
-
-  const { settelmentSuccess } = useMerchant({ verify_merchant: verifyMerchant, data });
+  const [registerMerchant, setRegisterMerchant] = useState(false);
+  const { settelmentSuccess } = useMerchant({
+    verify_merchant: verifyMerchant,
+    data,
+    registerMerchant
+  });
   useEffect(() => {
     if (settelmentSuccess) {
       fetchToken();
@@ -108,6 +113,19 @@ const MerchantPage = () => {
           {/* tabs */}
 
           <LandingHeader pageName="Merchant Profile" />
+          {/* <div className="mb-6 flex items-center justify-between pt-10 ">
+            <p onClick={() => setVerifyMerchant(true)} className="text-heading">
+              Verify Merchant Profile
+            </p>
+            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
+          </div> */}
+          {/* <div className="mb-6 flex items-center justify-between pt-10 ">
+            <p onClick={() => setRegisterMerchant(true)} className="text-heading">
+              Register Merchant Profile
+            </p>
+            <div className="h-12 w-12 rounded-full bg-gray-600"></div>
+          </div> */}
+
           <div className="">
             <Tab.Group>
               <div className="w-full max-w-xs">
@@ -135,8 +153,8 @@ const MerchantPage = () => {
                   className={`
                      `}
                 >
-                  {/* <BalanceCard balance={totalAmount(tokenList)} /> */}
-                  <BalanceCard balance={userBalance} />
+                  <BalanceCard balance={totalAmount(tokenList)} />
+                  {/* <BalanceCard balance={userBalance} /> */}
                   <h3 className="mb-4 text-lg font-semibold">Your Token</h3>
                   {tokenList?.map((eachToken: any, eachInd: number) => (
                     <TokenCard
