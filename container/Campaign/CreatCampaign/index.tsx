@@ -100,7 +100,7 @@ const CreateCampaignPage = () => {
               style={{ backgroundImage: 'url("/heading_bg.png")', backgroundSize: 'cover' }}
             >
               <h1 className=" text-2xl font-bold  !text-white">
-                <span className="font-normal ">Please provide</span> following details details to{' '}
+                <span className="font-normal ">Please provide</span> following details to{' '}
                 <span className="font-normal"> create camapaign.</span>{' '}
               </h1>
             </div>
