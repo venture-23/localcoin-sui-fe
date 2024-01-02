@@ -4,7 +4,7 @@ import Button from 'components/botton';
 const GenerateKeyPairPage = ({ handleGenerateKey }: any) => {
   return (
     <>
-      <div className="rounded-lg bg-white p-6 ">
+      <div className="rounded-lg bg-white p-10 ">
         <div className="mb-6">
           {/* <div className="flex justify-center">
             <Image src={'/generateQR.png'} width={250} height={250} alt="genetate image" />

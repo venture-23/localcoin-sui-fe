@@ -120,24 +120,22 @@ const RecipientPage = () => {
 
   return (
     <>
-      <section className="relative">
-        <div className="container mx-auto">
+      <section className="relative ">
+        <div className="container mx-auto ">
           <LandingHeader pageName="Recipient Profile" />
           <BalanceCard balance={totalAmount(tokenList)} />
           {/* <BalanceCard balance={userBalance} /> */}
           <RecipientCarousel balance={totalAmount(tokenList)} />
-          <div className="mb-6 ">
-            <div className="grid gap-3 ">
-              {/* <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} /> */}
-              <div className="grid gap-5">
-                <Card title="Your Tokens" link="/recipient/tokens" iconName={<RecipientToken />} />
-                <Card
-                  title="Ongoing Campaigns"
-                  link="/recipient/campaigns"
-                  iconName={<RecipientOngoing />}
-                />
-                {/* <Card title="Funded Campaigns" link="/" iconName={<RecipientFunded />} /> */}
-              </div>
+          <div className="mb-6 outline-dashed ">
+            {/* <TokenCard cardContainerClass=" justify-between" tokenDetails={tokenDetails} /> */}
+            <div className="grid gap-5">
+              <Card title="Your Tokens" link="/recipient/tokens" iconName={<RecipientToken />} />
+              <Card
+                title="Ongoing Campaigns"
+                link="/recipient/campaigns"
+                iconName={<RecipientOngoing />}
+              />
+              {/* <Card title="Funded Campaigns" link="/" iconName={<RecipientFunded />} /> */}
             </div>
 
             <div className="fixed bottom-0 left-0 w-full md:absolute">
