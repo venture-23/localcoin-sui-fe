@@ -5,7 +5,7 @@ import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { checkPinCorrect, encodeToken } from 'services/encrypt-decrypt-data';
+import { checkPinCorrect, getLocalStorageValue } from 'services/encrypt-decrypt-data';
 import './app.css';
 
 export default function PinLockScreen(props: any) {
@@ -37,38 +37,15 @@ export default function PinLockScreen(props: any) {
       setError('');
       const enterPin = pinData + value.toString();
       setPinData(enterPin);
-
-      if (checkPinCode) {
-        const decodedRes = checkPinCorrect(enterPin);
-        if (decodedRes) {
-          console.log({ decodedRes });
-          setUserInfo(decodedRes);
-          if (redirectTo) {
-            setRedirectTo(false);
-            router.push(`/${decodedRes.userType}`);
-          }
-          setCheckPinCode(false);
-          setshowPinScreen(false);
+      const localStoreValue = getLocalStorageValue('local-coin');
+      if (localStoreValue) {
+        if (checkPinCorrect(enterPin)) {
+          router.push('/');
         } else {
           setError('Invalid Pin');
         }
       } else {
-        try {
-          localStorage.setItem('local-coin', encodeToken({ ...userInfo }, enterPin));
-          setUserEnterPin(enterPin);
-          setUserInfo((prevValue: any) => ({ ...prevValue }));
-          if (userInfo.userType === 'merchant') {
-            setRegisterMerchant(true);
-          }
-          router.push(`/${userInfo.userType}`);
-          // setshowPinScreen(false);
-          setTimeout(() => {
-            setshowPinScreen(false);
-            clearInterval(intervalId);
-          }, 500);
-        } catch (error: any) {
-          throw new Error(error);
-        }
+        setUserInfo({ ...userInfo, enterPin });
       }
     } else if (pinData.length + 1 <= 4) {
       setError('');
@@ -99,7 +76,7 @@ export default function PinLockScreen(props: any) {
               }}
             >
               <h1 className="text-xl font-bold">
-                {!userInfo.publicKey ? 'Please Enter Your PIN' : 'Please Setup Login PIN'}
+                {userInfo.publicKey ? 'Please Enter Your PIN' : 'Setup Sign in PIN'}
               </h1>
             </div>
             <div className="mx-auto my-4 flex justify-center gap-2">

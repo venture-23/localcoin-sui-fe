@@ -17,11 +17,11 @@ export default function RootLayoutClient({ children }: React.PropsWithChildren) 
   useEffect(() => {
     const res = getLocalStorageValue('local-coin');
     if (res) {
-      setshowPinScreen(true);
-      setCheckPinCode(true);
-      setRedirectTo(true);
+      // setshowPinScreen(true);
+      // setCheckPinCode(true);
+      // setRedirectTo(true);
     } else {
-      router.push('/');
+      // router.push('/');
     }
   }, []);
 
