@@ -262,7 +262,6 @@ const RecipientPage = () => {
                 defaultvalue={data.tokenName || ''}
               />
             </div>
-            {console.log({ isFetching })}
             <Button
               text="Pay Now"
               showLoader={isFetching}
