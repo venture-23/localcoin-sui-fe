@@ -1,7 +1,8 @@
 'use client';
 import { QrCodeIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
-import GetStartedSVG from 'components/getStartedSVG';
+import { PageFooter } from 'components/pageFooter';
+import PageHeader from 'components/pageheader';
 
 import { encodeToken } from 'services/encrypt-decrypt-data';
 
@@ -37,11 +38,14 @@ const LandingPage = () => {
 
   return (
     <>
-      <section className="grid place-items-center">
+      <div className='header-container'>
+        <PageHeader />
+      </div>
+      <section className="">
         <div className="container mx-auto ">
-          <div className="flex justify-center ">
+          {/* <div className="flex justify-center ">
             <GetStartedSVG />
-          </div>
+          </div> */}
           <div className="mb-6 mt-4 text-center">
             <h2 className="text-heading mb-0 ">Get Started</h2>
             <p className="text-color text-lg opacity-[.6]">
@@ -86,6 +90,8 @@ const LandingPage = () => {
               underline={`underline bg-transparent !text-[#212B34]  font-semibold `}
             /> */}
           </div>
+
+          <PageFooter />
         </div>
       </section>
     </>

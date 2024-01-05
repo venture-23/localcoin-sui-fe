@@ -10,13 +10,20 @@ interface PageHeaderProps {
 const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) => {
   return (
     <>
-      <div className="mb-6 flex items-center gap-3 pt-10">
-        <Link href={backLink}>
-          <ChevronLeftIcon width={24} height={24} />
-        </Link>
-        <div className="">
-          <h2 className="text-2xl font-bold ">{pageHeaderTitle}</h2>
+      <div className="mb-6 flex items-center justify-between pt-10">
+        {backLink && (
+          <Link href={backLink}>
+            <ChevronLeftIcon width={24} height={24} />
+          </Link>
+        )}
+        
+        <div className='w-[46px] h-[46px] flex-end ml-[auto] rounded-[100%] bg-[#EAEBEE] cursor-pointer'>
+
         </div>
+
+        {/* <div className="">
+          <h2 className="text-2xl font-bold ">{pageHeaderTitle}</h2>
+        </div> */}
       </div>
     </>
   );

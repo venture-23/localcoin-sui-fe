@@ -100,6 +100,43 @@ section {
   }
  
 
+
+  .header-container {
+    height: 100px;
+    max-width: 400px !important;
+    margin: 0 auto;
+  }
+
+  .sticky-footer {
+    height: 48px;
+    background-color: #EAEBEE;
+    max-width: 400px !important;
+    width: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    position: fixed;
+    bottom: 18px;
+    
+  }
+
+  .req-pay-link {
+    width: max-content;
+    height: 70px;
+    background-color: #EAEBEE;
+    position: absolute;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: -28px;
+    left: 10%;
+    transform: translateX(50%);
+    cursor: pointer;
+    
+  }
  
  
 
