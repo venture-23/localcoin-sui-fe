@@ -1,5 +1,9 @@
 'use client';
-import { ArrowDownOnSquareStackIcon, ClipboardIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowDownOnSquareStackIcon,
+  ChevronLeftIcon,
+  ClipboardIcon
+} from '@heroicons/react/24/outline';
 import { useAddToHomescreenPrompt } from 'components/test';
 import { useEffect, useRef, useState } from 'react';
 // import Header from 'components/layout/header';
@@ -11,6 +15,7 @@ import PinLockScreen from 'components/pin-lock-screen';
 import GenerateKeyPairPage from 'container/CommonSIgnup/components/generate-key-pair-page';
 import useHandleCopy from 'hooks/useCopyText';
 import { useMyContext } from 'hooks/useMyContext';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { encodeToken } from 'services/encrypt-decrypt-data';
 import generateKeyPair from 'services/generateKeypair';
@@ -18,6 +23,8 @@ import { maskWalletAddress } from 'utils/clipper';
 
 const SignupPage = () => {
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
+  const { userInfo, setUserInfo, setshowPinScreen } = useMyContext();
+
   const popOverRef = useRef<any>(null);
   const router = useRouter();
 
@@ -26,8 +33,6 @@ const SignupPage = () => {
   }, [promptable]);
 
   const showPopup = () => {
-    // setOpen(false);
-    // setIsOpenPopup(true);
     popOverRef?.current?.open({
       title: '',
       messageTitle: 'Install LocalCoin',
@@ -39,7 +44,6 @@ const SignupPage = () => {
 
   const [isCopied, handleCopy] = useHandleCopy({ showToast: true });
 
-  const { userInfo, setUserInfo, setshowPinScreen } = useMyContext();
   const [showSpinner, seShowSpinner] = useState(false);
   const [data, setData] = useState<any>({
     storeName: '',
@@ -64,12 +68,24 @@ const SignupPage = () => {
   };
   return (
     <>
-      {console.log({ userInfo })}
       <section className="bg-[#F7F8FA] ">
         <div className="container mx-auto ">
+          {userInfo?.enterPin && (
+            <div className="mb-6 flex items-center pt-10">
+              <Link
+                href={'/'}
+                onClick={() => {
+                  setUserInfo({ ...userInfo, enterPin: '' });
+                }}
+              >
+                <ChevronLeftIcon width={24} height={24} />
+              </Link>
+            </div>
+          )}
           {(!userInfo?.enterPin && <PinLockScreen />) ||
             (!data.secretKey && <GenerateKeyPairPage handleGenerateKey={handleGenerateKey} />) ||
             null}
+
           {showSpinner && (
             <>
               <div className="fixed inset-0 mx-auto flex flex-col items-center justify-center bg-white">

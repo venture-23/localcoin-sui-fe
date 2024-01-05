@@ -1,13 +1,13 @@
 'use client';
-import { BackspaceIcon } from '@heroicons/react/24/outline';
+import { BackspaceIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { useMerchant } from 'hooks/useMerchant';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { checkPinCorrect, getLocalStorageValue } from 'services/encrypt-decrypt-data';
 import './app.css';
-
 export default function PinLockScreen(props: any) {
   const { children } = props;
   const {
@@ -24,6 +24,8 @@ export default function PinLockScreen(props: any) {
   const [error, setError] = useState('');
   const router = useRouter();
   const [registerMerchant, setRegisterMerchant] = useState(false);
+  const localStoreValue = getLocalStorageValue('local-coin');
+
   useMerchant({ registerMerchant, data: userInfo });
   let intervalId: any; // Variable to store the interval ID
   useEffect(() => {
@@ -37,15 +39,16 @@ export default function PinLockScreen(props: any) {
       setError('');
       const enterPin = pinData + value.toString();
       setPinData(enterPin);
-      const localStoreValue = getLocalStorageValue('local-coin');
       if (localStoreValue) {
         if (checkPinCorrect(enterPin)) {
           router.push('/');
+          // setshowPinScreen(false);
         } else {
           setError('Invalid Pin');
         }
       } else {
         setUserInfo({ ...userInfo, enterPin });
+        // setshowPinScreen(false);
       }
     } else if (pinData.length + 1 <= 4) {
       setError('');
@@ -63,6 +66,9 @@ export default function PinLockScreen(props: any) {
   return (
     <>
       <div className=" pin_lock fixed z-[1000]   grid  h-screen  w-full  place-items-center bg-white">
+        <Link href={'/'}>
+          <XCircleIcon width={24} height={24} />
+        </Link>
         <div className="container mx-auto ">
           <div className="modal-content">
             <div className="my-6 flex items-center justify-center">
@@ -76,7 +82,7 @@ export default function PinLockScreen(props: any) {
               }}
             >
               <h1 className="text-xl font-bold">
-                {userInfo.publicKey ? 'Please Enter Your PIN' : 'Setup Sign in PIN'}
+                {localStoreValue ? 'Please Enter Your PIN' : 'Setup Sign in PIN'}
               </h1>
             </div>
             <div className="mx-auto my-4 flex justify-center gap-2">

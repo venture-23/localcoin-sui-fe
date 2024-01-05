@@ -1,6 +1,5 @@
 'use client';
 
-import PinLockScreen from 'components/pin-lock-screen';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { getLocalStorageValue } from 'services/encrypt-decrypt-data';
@@ -39,8 +38,8 @@ export default function RootLayoutClient({ children }: React.PropsWithChildren) 
         checkPinCode
       }}
     >
-      {(showPinLockScreen || checkPinCode) && <PinLockScreen />}
-      {!(showPinLockScreen || checkPinCode) && children}
+      {/* {(showPinLockScreen || checkPinCode) && <PinLockScreen />} */}
+      {children}
     </MyContext.Provider>
   );
 }
