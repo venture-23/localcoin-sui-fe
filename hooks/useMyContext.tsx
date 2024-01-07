@@ -2,7 +2,7 @@
 import { MyContext } from 'app/providers';
 import { useContext } from 'react';
 
-const useMyContext = () => {
+export function useMyContext() {
   const context = useContext(MyContext);
 
   if (!context) {
@@ -10,5 +10,4 @@ const useMyContext = () => {
   }
 
   return context;
-};
-export { useMyContext };
+}

@@ -125,7 +125,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
         toast.success(
           params === 'recipient_to_merchant_transfer'
             ? 'Send To Merchant Sucessfully'
-            : 'Registered, Waiting for verified account'
+            : 'Registered, Waiting for verify account'
         );
         return response.returnValue?._value;
       case 'verify_merchant':

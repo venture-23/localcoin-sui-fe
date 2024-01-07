@@ -9,9 +9,9 @@ import { useEffect, useRef, useState } from 'react';
 // import Header from 'components/layout/header';
 import Image from 'next/image';
 
+import { setCookieData } from 'app/action';
 import Button from 'components/botton';
 import BridgeBG from 'components/bridgebg';
-import PinLockScreen from 'components/pin-lock-screen';
 import GenerateKeyPairPage from 'container/CommonSIgnup/components/generate-key-pair-page';
 import useHandleCopy from 'hooks/useCopyText';
 import { useMyContext } from 'hooks/useMyContext';
@@ -23,10 +23,14 @@ import { maskWalletAddress } from 'utils/clipper';
 
 const SignupPage = () => {
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
-  const { userInfo, setUserInfo, setshowPinScreen } = useMyContext();
+  const { userInfo, setUserInfo, setShowPinScreen } = useMyContext();
 
   const popOverRef = useRef<any>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    setShowPinScreen(true);
+  }, []);
 
   useEffect(() => {
     popOverRef && showPopup();
@@ -57,7 +61,10 @@ const SignupPage = () => {
     const resp: any = await generateKeyPair();
     console.log({ resp });
     if (resp.secretKey) {
-      localStorage.setItem('local-coin', encodeToken({ ...data, ...resp }, userInfo.enterPin));
+      const encodedData = encodeToken({ ...data, ...resp }, userInfo.enterPin);
+      await setCookieData(encodedData);
+      setUserInfo({ ...userInfo, enterPin: '' });
+      localStorage.setItem('local-coin', encodedData);
       seShowSpinner(false);
       setData({ ...data, ...resp });
     }
@@ -66,24 +73,19 @@ const SignupPage = () => {
     setUserInfo({ ...data });
     router.push('/');
   };
+
   return (
     <>
       <section className="bg-[#F7F8FA] ">
         <div className="container mx-auto ">
           {userInfo?.enterPin && (
             <div className="mb-6 flex items-center pt-10">
-              <Link
-                href={'/'}
-                onClick={() => {
-                  setUserInfo({ ...userInfo, enterPin: '' });
-                }}
-              >
+              <Link href={'/'}>
                 <ChevronLeftIcon width={24} height={24} />
               </Link>
             </div>
           )}
-          {(!userInfo?.enterPin && <PinLockScreen />) ||
-            (!data.secretKey && <GenerateKeyPairPage handleGenerateKey={handleGenerateKey} />) ||
+          {(!data.secretKey && <GenerateKeyPairPage handleGenerateKey={handleGenerateKey} />) ||
             null}
 
           {showSpinner && (

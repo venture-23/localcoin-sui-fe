@@ -27,9 +27,9 @@ const getLocalStorageValue = (name: string = 'local-coin') => {
   }
 };
 
-const checkPinCorrect = (password: string) => {
+const checkPinCorrect = (cookieValue: string, password: string) => {
   try {
-    const data = decodeToken(getLocalStorageValue(), password);
+    const data = decodeToken(cookieValue, password);
     if (data.secretKey) return true;
     return false;
   } catch (error) {

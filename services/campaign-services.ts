@@ -1,5 +1,3 @@
-'use client';
-
 import { toast } from 'react-toastify';
 import {
   balanceContractId,
@@ -25,13 +23,15 @@ export const campaignServices = (() => {
 
   const makeTransaction = async ({
     secretKey,
+    publicKey,
     parameterType,
     payload = '',
     contractId = campaignContractId
   }: any) => {
     try {
-      const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
-      const sourcePublicKey = sourceKeypair.publicKey();
+      // const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
+      // const sourcePublicKey = sourceKeypair.publicKey();
+      const sourcePublicKey = publicKey;
       const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
         allowHttp: true
       });
@@ -46,13 +46,6 @@ export const campaignServices = (() => {
         .addOperation(contract.call(parameterType, ...((payload && payload) || [])))
         .setTimeout(30)
         .build();
-      /*  server.simulateTransaction(transaction).then((sim: any) => {
-        console.log({ sim });
-        console.log('cost:', sim.cost);
-        console.log('result:', sim.result);
-        console.log('error:', sim.error);
-        console.log('latestLedger:', sim.latestLedger);
-      }); */
       if (
         ![
           'create_campaign',
@@ -69,6 +62,7 @@ export const campaignServices = (() => {
         });
       } else {
         transaction = await server.prepareTransaction(transaction);
+        const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
         transaction.sign(sourceKeypair);
         const response = await server.sendTransaction(transaction);
         const SendTxStatus = {
@@ -89,6 +83,7 @@ export const campaignServices = (() => {
                 console.log('Transaction not found. Retrying...', parameterType);
                 await new Promise((resolve) => setTimeout(resolve, 1000));
               } else {
+                console.log('error');
                 toast.error(`failed while performing ${parameterType}`);
                 return null;
               }
@@ -214,15 +209,16 @@ export const campaignServices = (() => {
   };
 
   const merchant_registration = (data: any) => {
+    console.log({ data }, 'merchant registration');
     return makeTransaction({
       contractId: userRegistryContractId,
       parameterType: 'merchant_registration',
       secretKey: data.secretKey,
       payload: [
         accountToScVal(data.publicKey),
-        StringToScVal(data.proprietaryName),
-        StringToScVal(data.phoneNumber),
-        StringToScVal(data.storeName),
+        StringToScVal(data.proprietor),
+        StringToScVal(data.phone_no),
+        StringToScVal(data.store_name),
         StringToScVal(data.location)
       ]
     });
@@ -265,7 +261,6 @@ export const campaignServices = (() => {
     tokenAddress: string
   ) => {
     console.log({ tokenAddress, secretKey, amount });
-    // debugger;
     return makeTransaction({
       contractId: campaignContractId,
       parameterType: 'request_campaign_settlement',

@@ -1,33 +1,32 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { getLocalStorageValue } from 'services/encrypt-decrypt-data';
+import React, { useState } from 'react';
 import { MyContext } from './providers';
 
 export default function RootLayoutClient({ children }: React.PropsWithChildren) {
-  const [showPinLockScreen, setshowPinScreen] = useState(false);
+  const [showPinLockScreen, setShowPinScreen] = useState(false);
   const [userEnterPin, setUserEnterPin] = useState<any>('');
   const [checkPinCode, setCheckPinCode] = useState(false);
   const [redirectTo, setRedirectTo] = useState(false);
   const [userInfo, setUserInfo] = useState<any>({});
 
   const router = useRouter();
-  useEffect(() => {
-    const res = getLocalStorageValue('local-coin');
-    if (res) {
-      // setshowPinScreen(true);
-      // setCheckPinCode(true);
-      // setRedirectTo(true);
-    } else {
-      // router.push('/');
-    }
-  }, []);
+  // useEffect(() => {
+  //   const res = getLocalStorageValue('local-coin');
+  //   if (res) {
+  //     // setShowPinScreen(true);
+  //     // setCheckPinCode(true);
+  //     // setRedirectTo(true);
+  //   } else {
+  //     // router.push('/');
+  //   }
+  // }, []);
 
   return (
     <MyContext.Provider
       value={{
-        setshowPinScreen,
+        setShowPinScreen,
         setUserEnterPin,
         setCheckPinCode,
         setRedirectTo,
@@ -38,7 +37,6 @@ export default function RootLayoutClient({ children }: React.PropsWithChildren) 
         checkPinCode
       }}
     >
-      {/* {(showPinLockScreen || checkPinCode) && <PinLockScreen />} */}
       {children}
     </MyContext.Provider>
   );

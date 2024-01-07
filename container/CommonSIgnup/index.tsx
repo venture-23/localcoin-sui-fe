@@ -31,7 +31,7 @@ const MerchantSignup = ({ param }: any) => {
 
   const [showSpinner, seShowSpinner] = useState(false);
   const [showScreen, setShowScreen] = useState(param === 'merchant' ? 0 : 1);
-  const { setshowPinScreen, userEnterPin, userInfo, setUserInfo } = useMyContext();
+  const { setShowPinScreen, userInfo, setUserInfo } = useMyContext();
   const [data, setData] = useState<any>({
     storeName: '',
     proprietaryName: '',
@@ -73,13 +73,13 @@ const MerchantSignup = ({ param }: any) => {
     if (resp.secretKey) {
       seShowSpinner(false);
       setData({ ...data, ...resp });
-      // setshowPinScreen(true);
+      // setShowPinScreen(true);
     }
   };
 
   const handleSignUp = () => {
     setUserInfo({ ...data, userType: param });
-    setshowPinScreen(true);
+    setShowPinScreen(true);
   };
   return (
     <>
