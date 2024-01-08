@@ -84,7 +84,7 @@ section {
   
   @media screen and (min-width: 768px) {
     section {
-      background-color: #F7F8FA ;
+      background-color: #FFF ;
       max-width: 400px !important; /* or any other fixed width that suits your design */
         margin: 0 auto; /* This centers the container in the viewport */
       height: 100%;
@@ -226,4 +226,30 @@ section {
 
 .dot.active {
   background-color: #717171;
+}
+
+
+.store-container-box {
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+
+.store-container-box::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-menu {
+  position: fixed;
+  max-width: 400px;
+  width: 100%;
+  top: 100%;
+  height: calc(100% -  100px);
+  background: #fff;
+  transition: 0.4s top ease-in-out;
+  z-index: 999;
+}
+
+.mobile-menu.open {
+  top: 100px;
+  transition: 0.4s top ease-in-out;
 }

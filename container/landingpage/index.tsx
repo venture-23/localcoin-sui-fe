@@ -1,8 +1,8 @@
 'use client';
-import { QrCodeIcon } from '@heroicons/react/24/outline';
-import Button from 'components/botton';
+import { Campaigns } from 'components/campaigns';
 import { PageFooter } from 'components/pageFooter';
 import PageHeader from 'components/pageheader';
+import { Stores } from 'components/stores';
 
 import { encodeToken } from 'services/encrypt-decrypt-data';
 
@@ -43,10 +43,35 @@ const LandingPage = () => {
       </div>
       <section className="">
         <div className="container mx-auto ">
+          {/* Dashboard */}
+          <div className='mb-[24px]'>
+            <h4 className='text-lg font-semibold font-[Inter] mb-[6px]'>Welcome</h4>
+            <div className='w-full flex justify-between items-center pl-[21px] pr-[16px] bg-[#EAEBEE] h-[72px]'>
+              <div>
+                <h6 className='text-xm font-normal'>LocalCoins</h6>
+                <div className='text-2xl font-semibold leading-9'>
+                  129,338
+                </div>
+              </div>
+              <div className='self-end flex items-center gap-[12px] pb-[10px]'>
+                <button className='bg-white rounded-[5px] px-[3px] py-[6px] text-xs font-normal'>Store</button>
+                <button className='bg-white rounded-[5px] px-[3px] py-[6px] text-xs font-normal'>Withdraw</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Stores */}
+          <Stores />
+
+
+          {/* Campaigns */}
+          <Campaigns />
+
+
           {/* <div className="flex justify-center ">
             <GetStartedSVG />
           </div> */}
-          <div className="mb-6 mt-4 text-center">
+          {/* <div className="mb-6 mt-4 text-center">
             <h2 className="text-heading mb-0 ">Get Started</h2>
             <p className="text-color text-lg opacity-[.6]">
               LocalCoin is just around the corner.
@@ -73,9 +98,9 @@ const LandingPage = () => {
               </span>
               below to get started .
             </p>
-          </div>
+          </div> */}
 
-          <div className="flex flex-col gap-5 ">
+          {/* <div className="flex flex-col gap-5 ">
             <Button text="Sign up for account" link="/signup" />
             <Button
               text="Check for ongoing campaigns"
@@ -84,12 +109,12 @@ const LandingPage = () => {
               link="/all-campaigns"
             />
 
-            {/* <Button
+            <Button
               text="Sign up for account"
               link="/signup"
               underline={`underline bg-transparent !text-[#212B34]  font-semibold `}
-            /> */}
-          </div>
+            />
+          </div> */}
 
           <PageFooter />
         </div>
