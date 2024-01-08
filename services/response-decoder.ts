@@ -18,59 +18,78 @@ const decodeContract = (value: any) => {
   return StellarSdk.StrKey.encodeContract(value);
 };
 
+const decodePublicKey = (value: any) => {
+  return StellarSdk.StrKey.encodeEd25519PublicKey(value) || '';
+};
+
+const decodei128 = (data: any) => {
+  const bigInt = require('big-integer');
+  const hiValue = bigInt(data?._attributes?.hi?._value);
+  const loValue = bigInt(data?._attributes?.lo?._value);
+
+  const combinedValue = hiValue.shiftLeft(64).or(loValue);
+  const stringValue = combinedValue.toString();
+  const decodedValue = parseFloat(stringValue) / 10000000;
+  return decodedValue;
+};
+
 const decoderHelper = (params: string, response: ResponseType) => {
   try {
     switch (params) {
-      case 'get_campaigns':
+      case 'get_campaigns_name':
+        console.log({ response });
         const allCampaignList = (response?.returnValue?._value || []).map((eachValue: any) => ({
-          id: decodeContract(eachValue?._value?._value),
-          campaign: decodeContract(eachValue?._value?._value)
+          name: eachValue?._attributes?.val?._value.toString(),
+          id: decodeContract(eachValue?._attributes?.key?._value?._value)
         }));
+        console.log({ allCampaignList });
         return allCampaignList;
       case 'get_creator_campaigns':
-        const campaignList: any = response?.returnValue?._value?.map((x: any) => {
-          return x._value.map((eachInsideValue: any) => {
-            if (eachInsideValue?._attributes?.key?._value?.toString() !== 'info') {
-              return {
-                [eachInsideValue?._attributes?.key?._value?.toString() || '']:
-                  (eachInsideValue?._attributes?.val?._value?._value &&
-                    decodeContract(eachInsideValue?._attributes?.val?._value?._value)) ||
-                  ''
-              };
-            } else {
-              return eachInsideValue?._attributes?.val?._value.map((y: any, index: number) => {
-                return {
-                  [index === 0 ? 'name' : index === 1 ? 'discription' : 'no_of_recipients']:
-                    y._value.toString()
-                };
-              });
-            }
-          });
-        });
-        const flatArray = campaignList.map((item: any) => {
-          const [campaignObj, detailsArray, tokenObj, tokenMintedObj] = item;
-          const result = {
-            id: campaignObj?.campaign,
-            campaign: campaignObj?.campaign,
-            name: detailsArray[0]?.name,
-            description: detailsArray[1]?.discription,
-            no_of_recipients: detailsArray[2]?.no_of_recipients,
-            token: tokenObj?.token,
-            token_minted: tokenMintedObj?.token_minted
-          };
+        const campaignList: any[] | undefined = response?.returnValue?._value?.map((x: any) =>
+          x._value.map((eachInsideValue: any) => {
+            const key = eachInsideValue?._attributes?.key?._value?.toString() || '';
+            const val = eachInsideValue?._attributes?.val?._value;
 
-          return result;
-        });
-        return flatArray || [];
-      case 'get_campaign_info':
-        const allInfo = (response?.returnValue?._value || []).map(
-          (eachValue: any, index: number) => ({
-            [index === 0 ? 'no_of_recipients' : index === 1 ? 'name' : 'description']:
-              eachValue?._value?.toString()
-            // [eachValue?._value?.toString()]: eachValue?._value?.toString()
-            // [eachValue?._value?.toString()]: eachValue?._value?.toString()
+            if (key === 'info') {
+              return val?.map((y: any) => ({
+                [y?._attributes?.key?._value?.toString() || '']:
+                  y?._attributes?.val?._value.toString() || ''
+              }));
+            } else if (key === 'token_minted') {
+              return { [key]: decodei128(val) || '' };
+            } else {
+              return { [key]: (val?._value && decodeContract(val?._value)) || '' };
+            }
           })
         );
+
+        const transformedOutputArray: any = campaignList?.map((item) => {
+          const [campaignObj, detailsArray, tokenObj, tokenMintedObj] = item || [];
+          const { campaign } = campaignObj;
+          const { description, name, no_of_recipients } = Object.assign({}, ...detailsArray);
+
+          // Create the desired output object for each item
+          return {
+            campaign,
+            description,
+            name,
+            no_of_recipients,
+            token: tokenObj?.token || '',
+            token_minted: tokenMintedObj?.token_minted || ''
+          };
+        });
+        const output = [...transformedOutputArray];
+        return output;
+      case 'get_campaign_info':
+        const allInfo = (response?.returnValue?._value || []).map((eachValue: any) => ({
+          [eachValue?._attributes?.key?._value?.toString()]:
+            eachValue?._attributes?.key?._value?.toString() === 'creator'
+              ? decodePublicKey(eachValue?._attributes?.val?._value?._value?._value)
+              : eachValue?._attributes?.key?._value?.toString() === 'token_address'
+              ? decodeContract(eachValue?._attributes?.val?._value?._value)
+              : eachValue?._attributes?.val?._value?.toString()
+        }));
+
         const singleObject = makeSingleObject(allInfo);
         return singleObject;
 
@@ -82,22 +101,37 @@ const decoderHelper = (params: string, response: ResponseType) => {
         return tokenData;
 
       case 'get_balance_of_batch':
-        const tokenList = (response?.returnValue?._value || []).map((x) => ({
-          name: x._attributes?.key?._value?.toString()
-        }));
-        // const res: any = (response?.returnValue?._value || []).map((entry, i) =>
-        //   this.scValToNative(entry, fields[i].type())
-        // );
-        // console.log(tokenList, res);
+        const tokenList = (response?.returnValue?._value || []).map((x) => {
+          const name = x._attributes?.key?._value?.toString();
+          const test = (x._attributes?.val?._value || []).reduce(
+            (result: any, eachVal: any) => {
+              if (eachVal._arm === 'i128') {
+                result.amount = decodei128(eachVal?._value);
+              } else {
+                result.contractToken = decodeContract(eachVal?._value?._value);
+              }
+              return result;
+            },
+            { name }
+          );
+          return test;
+        });
         return tokenList;
-
+      case 'request_campaign_settlement':
+        toast.success('Settled Successfully');
+        return response.returnValue?._value;
       case 'merchant_registration':
-        toast.success('Registered, Waiting for verified account');
+      case 'recipient_to_merchant_transfer':
+        toast.success(
+          params === 'recipient_to_merchant_transfer'
+            ? 'Send To Merchant Sucessfully'
+            : 'Registered, Waiting for verified account'
+        );
         return response.returnValue?._value;
       case 'verify_merchant':
         toast.success('Verified Mechant from admin, Successfully');
         return response.returnValue?._value;
-      case 'get_merchants_assocoated':
+      case 'get_merchants_associated':
         const merchantAssco = (response?.returnValue?._value || []).map(
           (eachValue: any) =>
             StellarSdk.StrKey.encodeEd25519PublicKey(eachValue?._value?._value?._value) || ''
@@ -113,11 +147,13 @@ const decoderHelper = (params: string, response: ResponseType) => {
         }
         console.log({ merchantInfo }, '111');
         return makeSingleObject(merchantInfo);
+      case 'balance':
+        return decodei128(response?.returnValue?._value) || '0.00';
       default:
         return response.returnValue;
     }
   } catch (error: any) {
-    toast.error('decode failed');
+    toast.error(`decode failed from ${params}`);
     throw new Error(error);
   }
 };

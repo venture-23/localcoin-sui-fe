@@ -4,19 +4,21 @@ import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import { useMyContext } from './useMyContext';
 
-export function useCamapigns({ id = '', getOnGoingCampaign = false }: any) {
+export function useCamapigns({ id = '', fetchAllCampaign = false }: any) {
   const { userInfo } = useMyContext();
 
   const campaignListInfo = useQuery({
     queryKey: [`campaignListInfo`],
-    enabled: !id && !!userInfo?.publicKey,
+    enabled: (!id && !!userInfo?.publicKey) || fetchAllCampaign,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const response = getOnGoingCampaign
-        ? await campaignServices.getAllCampaigns(userInfo.secretKey)
+      const response = fetchAllCampaign
+        ? await campaignServices.getAllCampaigns(
+            userInfo.secretKey || 'SCKKS3FLNGIOXICRNSFVNPBUNZLUA5EMEQESQS2IGLVYYYJAHRQX2GSA'
+          )
         : await campaignServices.getCreatorCampaigns(userInfo.secretKey, userInfo.publicKey);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });

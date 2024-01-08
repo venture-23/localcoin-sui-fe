@@ -7,9 +7,11 @@ import {
 } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import PopupBox from 'components/popover';
+import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
+import { shareOnMobile } from 'react-mobile-share';
 import { QrReader } from 'react-qr-reader';
 
 export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: any) {
@@ -19,16 +21,23 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
   const cameraRef = useRef();
   const ref = useRef(null);
   const lastResult = useRef();
+  const { userInfo } = useMyContext();
 
   const [delayScan, setDelayScan] = useState(500);
   const popOverRef = useRef<any>(null);
 
   useEffect(() => {
-    if (shareQr) generateQrCode();
+    if (shareQr) {
+      generateQrCode();
+    }
   }, [shareQr]);
   const generateQrCode = async () => {
     try {
-      const response = await QRCode.toDataURL('this is address of user');
+      const staticData = {
+        type: userInfo.userType,
+        publicKey: userInfo.publicKey
+      };
+      const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);
     } catch (error) {
       console.log(error);
@@ -59,10 +68,22 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
     });
     cameraRef?.current?.remove();
   }
+  const validBase64 = (url: string) => {
+    return 'data:image/jpeg;base64,' + url.split(',')[1];
+  };
+
+  const downloadBase64File = async (fileName: string) => {
+    const imgBase64 = imageUrl;
+    const linkSource = `${imgBase64}`;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = linkSource;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  };
   return (
     <>
       {/* <Header className="h-[120px]"> */}
-      <div className=" absolute top-12 z-[10] mx-auto w-[95%] ">
+      <div className=" absolute top-20 z-[10] mx-auto w-[95%] ">
         <div className="flex items-center justify-between">
           <p className="flex-1 text-center text-white">Scan QR code to pay</p>
           <div onClick={() => closeScanner()}>
@@ -129,7 +150,7 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
       {imageUrl ? (
         <>
           <div
-            className="fixed bottom-7 right-7 "
+            className="fixed bottom-7 right-7 md:absolute "
             onClick={() => popOverRef.current.open({ title: 'Share QR Code', imageUrl })}
           >
             <Link
@@ -137,17 +158,31 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
               className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
             >
               <QrCodeIcon className="h-6 w-6 text-white" />
-              <span className="text-base font-semibold text-white">Share QR asd</span>
+              <span className="text-base font-semibold text-white">Share QR</span>
             </Link>
           </div>
           <PopupBox ref={popOverRef}>
             <a href={imageUrl} download className="w-full">
               <Button
+                handleClick={() => downloadBase64File('ScanToPay')}
                 buttonIcon={<ArrowDownOnSquareStackIcon width={24} height={24} />}
-                text="Save image"
+                text="Save Image"
               />
             </a>
             <Button
+              handleClick={() => {
+                const imgBase64 = validBase64(imageUrl);
+
+                shareOnMobile(
+                  {
+                    text: 'Scan to make payment',
+                    url: 'https://localcoin-mobileapp.vercel.app/merchant',
+                    title: 'Scan to Pay',
+                    images: [imgBase64]
+                  },
+                  (message) => alert(message)
+                );
+              }}
               text="Share"
               buttonType="secondary"
               buttonIcon={<ShareIcon width={24} height={24} />}

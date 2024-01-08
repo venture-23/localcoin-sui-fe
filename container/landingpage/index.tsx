@@ -7,22 +7,22 @@ import { encodeToken } from 'services/encrypt-decrypt-data';
 
 const LandingPage = () => {
   const campInfo = {
-    publicKey: 'GCYVMD4FOY2B3HDZE7AYQJ5LW7OOTMGQAY5O57EDYGESM7DAKSBFB3KB',
-    secretKey: 'SBQH6RJAZCOTQ7FQQKZL5U62UZ6F3JSTGW64YV62RY6GPU344FE6MYDB',
+    publicKey: 'GC35FMQWTX7HA2UGRRHLEVT46CEKZBSDDXQXADEZGWWWOZCGCUZOOPE4',
+    secretKey: 'SBQD2MZPMRDLDIYE3SPXUD5G5X5IBPI5L7SGV476SHLVHTIJJIRJ3MVN',
     userType: 'campaign'
   };
   const merInfo = {
-    publicKey: 'GDYE7UFCWHVZSIZZC2CC2T7KXNXXGH35AI6B7HYEOSPHBB6C6PHVOM5S',
-    secretKey: 'SCXXWGY33KYLQGLAV5ACCIBES75EGN5MYQDIKBPUFH3OWGIANFCH27DA',
+    publicKey: 'GA443P5NB7YKQW3Q7U7NDUJLFO7HVMQH3FWK7PTR3IUMZAN5JG6UUHL5',
+    secretKey: 'SCKKS3FLNGIOXICRNSFVNPBUNZLUA5EMEQESQS2IGLVYYYJAHRQX2GSA',
     userType: 'merchant',
-    proprietaryName: 'Props mer',
+    proprietaryName: 'Property Of Om',
     phoneNumber: '9860105561',
-    storeName: 'Merchant',
+    storeName: 'Om Store Name',
     location: 'pokhara'
   };
   const recInfo = {
-    publicKey: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',
-    secretKey: 'SB3ROUYQSLTY5WTGQSILQ34G46IKPRW4C6ROVOHUIZCMUHOMAQHAZUIJ',
+    publicKey: 'GAJEZJRT7AG4HK5OFFW7K7SZWU4GMT2JYIKIVE23PDLMQONPOLWUAZ2Q',
+    secretKey: 'SDD7WD742RDSCUFKYI2BV77AQSU5FQ2C4ZMUMOTFKJRCPTBGTMBT7GZS',
     userType: 'recipient'
   };
   const handleClick = (name: string) => {
@@ -72,19 +72,19 @@ const LandingPage = () => {
           </div>
 
           <div className="flex flex-col gap-5 ">
-            <Button text="Login" link="/signup" />
+            <Button text="Sign up for account" link="/signup" />
             <Button
               text="Check for ongoing campaigns"
               buttonIcon={<QrCodeIcon className="text-color h-5 w-5" />}
               buttonType="secondary"
-              link="/campaign"
+              link="/all-campaigns"
             />
 
-            <Button
+            {/* <Button
               text="Sign up for account"
               link="/signup"
               underline={`underline bg-transparent !text-[#212B34]  font-semibold `}
-            />
+            /> */}
           </div>
         </div>
       </section>

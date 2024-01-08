@@ -1,20 +1,15 @@
 'use client';
 
-import {
-  BuildingLibraryIcon,
-  ChevronDoubleDownIcon,
-  HeartIcon,
-  HomeIcon
-} from '@heroicons/react/24/outline';
+import { BuildingLibraryIcon, HeartIcon, HomeIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
-const RecipientCarousel = () => {
+const RecipientCarousel = ({ balance = '' }: any) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselRef = useRef(null);
   const items = [
-    { name: 'HeartIcon', iconUrl: <HeartIcon width={48} height={48} /> }, // Replace with actual image paths
-    { name: ' Library', iconUrl: <BuildingLibraryIcon width={48} height={48} /> },
+    { name: 'Grocery', iconUrl: <HeartIcon width={48} height={48} /> }, // Replace with actual image paths
+    { name: 'Library', iconUrl: <BuildingLibraryIcon width={48} height={48} /> },
     { name: 'Home', iconUrl: <HomeIcon width={48} height={48} /> }
   ];
 
@@ -27,19 +22,20 @@ const RecipientCarousel = () => {
 
   return (
     <>
+      <h3 className="mb-4 text-lg font-semibold">Your Holdings</h3>
       <div className="carousel" ref={carouselRef} onScroll={handleScroll}>
         <div className="carousel-inner">
           {items.map((item, index) => (
             <div
               key={index}
-              className="p-5 mb-6 text-white rounded-lg carousel-item"
+              className="carousel-item mb-6 rounded-lg p-5 text-white"
               style={{
                 background: 'linear-gradient(180deg, #1384F5 0%, #4EABFE 100%)'
               }}
             >
               {item.iconUrl}
               <p className="text-lg font-semibold">{item.name}</p>
-              <div className="flex items-center justify-between w-full mt-4 ">
+              <div className="mt-4 flex w-full items-center justify-between ">
                 <p className="!m-0 font-normal">Balance</p>
                 <div className="flex items-center gap-1 ">
                   <div>
@@ -51,7 +47,7 @@ const RecipientCarousel = () => {
                       className="!h-5 !w-4"
                     />
                   </div>{' '}
-                  <p className="!m-0">120</p>
+                  <p className="!m-0">{balance}</p>
                 </div>
               </div>
             </div>

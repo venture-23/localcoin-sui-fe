@@ -54,7 +54,7 @@ export default function PinLockScreen(props: any) {
         }
       } else {
         try {
-          localStorage.setItem('local-coin', encodeToken(userInfo, enterPin));
+          localStorage.setItem('local-coin', encodeToken({ ...userInfo }, enterPin));
           setUserEnterPin(enterPin);
           setUserInfo((prevValue: any) => ({ ...prevValue }));
           if (userInfo.userType === 'merchant') {
@@ -85,7 +85,7 @@ export default function PinLockScreen(props: any) {
 
   return (
     <>
-      <div className=" fixed z-[1000] grid   h-screen  w-full  place-items-center  bg-white ">
+      <div className=" pin_lock fixed z-[1000]   grid  h-screen  w-full  place-items-center bg-white">
         <div className="container mx-auto ">
           <div className="modal-content">
             <div className="my-6 flex items-center justify-center">
@@ -98,7 +98,9 @@ export default function PinLockScreen(props: any) {
                 localStorage.removeItem('local-coin');
               }}
             >
-              <h1 className="text-xl font-bold">Please Enter Your PIN</h1>
+              <h1 className="text-xl font-bold">
+                {!userInfo.publicKey ? 'Please Enter Your PIN' : 'Please Setup Login PIN'}
+              </h1>
             </div>
             <div className="mx-auto my-4 flex justify-center gap-2">
               {/* {pinData} */}

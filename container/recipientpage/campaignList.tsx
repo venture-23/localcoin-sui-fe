@@ -1,11 +1,9 @@
 'use client';
 
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import CampaignCard from 'components/campaigncard';
 import PageHeader from 'components/pageheader';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import { useCamapigns } from 'hooks/useCampaigns';
-import Link from 'next/link';
 import React from 'react';
 
 const CampaignList = () => {
@@ -15,12 +13,12 @@ const CampaignList = () => {
     description: 'No of Recipient : 14'
   };
 
-  const { isFetching, campaignList } = useCamapigns({ getOnGoingCampaign: true });
+  const { isFetching, campaignList } = useCamapigns({ fetchAllCampaign: true });
   return (
     <>
       <section>
         <div className="container mx-auto">
-          <PageHeader backLink={`/recipient`} pageHeaderTitle={'Ongoing Campaign'} />
+          <PageHeader backLink={`/recipient`} pageHeaderTitle={'Ongoing Campaigns'} />
           <div className="grid grid-cols-1 gap-3">
             {campaignList?.map((eachCampaign: any, eachid: number) => (
               <React.Fragment key={eachid + 1 + ''}>

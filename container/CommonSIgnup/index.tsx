@@ -6,8 +6,9 @@ import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/router';
-import { ArrowLeftIcon, ChevronLeftIcon, ClipboardIcon } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon, ClipboardIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
+import BridgeBG from 'components/bridgebg';
 import { useAddToHomescreenPrompt } from 'components/test';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -84,7 +85,7 @@ const MerchantSignup = ({ param }: any) => {
     <>
       {/* <Header className="h-[120px]"> */}
       {/* </Header> */}
-      <section className="">
+      <section className="relative">
         <div className="container mx-auto">
           <div className="mb-6 flex items-center pt-10">
             {promptable && !isInstalled ? (
@@ -114,7 +115,7 @@ const MerchantSignup = ({ param }: any) => {
                 <div>
                   <Image src={'/generateQR.gif'} width={250} height={250} />
                 </div>
-                <p className="my-4 text-2xl ">Generating key for you</p>
+                <p className="my-4 text-2xl ">Creating your digital account</p>
               </div>
             </>
           )}
@@ -130,7 +131,7 @@ const MerchantSignup = ({ param }: any) => {
             (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
           )}
           {data.secretKey && (
-            <div className="rounded-md bg-white p-6">
+            <div className="rounded-md bg-white p-10">
               <p className="mb-4 text-lg font-bold text-text">Please securely copy this code</p>
               <div className="grid gap-3">
                 <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
@@ -173,6 +174,7 @@ const MerchantSignup = ({ param }: any) => {
             </div>
           )}
         </div>
+        <BridgeBG />
       </section>
     </>
   );

@@ -4,12 +4,12 @@ import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import { useMyContext } from './useMyContext';
 
-export function useRecipient({ data = {}, sendTokenToMer = false }: any) {
+export function useRecipient({ data = {}, fetchAllToken = false }: any) {
   const { userInfo } = useMyContext();
 
   const receipientInfo = useQuery({
-    queryKey: [`receipientInfo`],
-    enabled: !!userInfo.publicKey,
+    queryKey: [`receipient-token-list`],
+    enabled: !!userInfo.publicKey || fetchAllToken,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,
@@ -31,22 +31,22 @@ export function useRecipient({ data = {}, sendTokenToMer = false }: any) {
 
   const sendTokenToMerchant = useQuery({
     queryKey: [`send-token-to_merchant`],
-    enabled: sendTokenToMer,
+    enabled: false,
     // cacheTime: Infinity,
-    retry: 3,
+    retry: 0,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
       const response = await campaignServices.transfer_tokens_from_recipient_to_merchant(
         userInfo.secretKey,
         data?.amount,
-        data?.contractId || 'CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL',
+        data?.tokenAddress,
         data?.merchantAddress,
         userInfo.publicKey
       );
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
-      return response;
+      return { success: 'Completed' };
     },
     onError: (error: any) => {
       console.log('campaign status error', JSON.stringify(error, null, 2));
@@ -58,9 +58,11 @@ export function useRecipient({ data = {}, sendTokenToMer = false }: any) {
     const tokenList = receipientInfo?.data;
     return { tokenList };
   }, [receipientInfo?.data]);
-
   return {
     tokenList: tokenList,
-    isFetching: receipientInfo.isFetching || sendTokenToMerchant.isFetching
+    fetchToken: receipientInfo.refetch,
+    sendTokenToMerchant: sendTokenToMerchant.refetch,
+    isFetching: receipientInfo.isFetching || sendTokenToMerchant.isFetching,
+    isSendToMerchantSucc: sendTokenToMerchant.isSuccess
   };
 }

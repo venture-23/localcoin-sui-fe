@@ -1,14 +1,13 @@
 'use client';
 
-import { ArrowLeftIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
 import PageHeader from 'components/pageheader';
 import CampaignListSkeleton from 'components/skeleton/campaign-list';
 import TokenCard from 'components/tokencard';
 import { useRecipient } from 'hooks/useReceipient';
-import Link from 'next/link';
+import Image from 'next/image';
 
 const TokenList = () => {
-  const { isFetching, tokenList } = useRecipient({});
+  const { isFetching, tokenList } = useRecipient({ fetchAllToken: true });
   console.log({ tokenList });
   return (
     <>
@@ -25,6 +24,16 @@ const TokenList = () => {
               />
             ))}
             {isFetching && <CampaignListSkeleton defaultData={2} />}
+
+            {!isFetching && tokenList && tokenList?.length === 0 && (
+              <>
+                <div className="flex flex-col items-center gap-3 rounded-md bg-white p-4">
+                  <Image alt="empty image" src={`/empty_campaign.png`} width={80} height={80} />
+
+                  <p className="text-sm text-textSecondary">You have not received any token yet.</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
