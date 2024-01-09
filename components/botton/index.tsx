@@ -43,10 +43,10 @@ const Button: React.FC<ButtonProps> = ({
           type="button"
           className={`w-full rounded-[4px] ${
             buttonType === 'primary'
-              ? 'bg-primary font-bold text-white'
-              : ' bg-[#F7F8FA] font-semibold text-[#212B34]'
+              ? 'bg-[#000] font-bold text-white disabled:opacity-30'
+              : 'bg-[#F7F8FA] font-semibold text-[#212B34] disabled:opacity-30'
           }  flex items-center justify-center gap-4 
-          px-6 py-3.5 text-base ${underline} `}
+          px-6 py-3.5 text-base ${underline}`}
         >
           <div className={`${iconOrder}`}>{buttonIcon}</div>
           <p className={`${textOrder} m-0`}>{text}</p>

@@ -2,6 +2,7 @@ import { DummyCardBox } from "components/dummyCardBox"
 
 const campaignData = [
     {
+        id: 1,
         img: '/campaignImg.png',
         title: 'Bicycle Delivery Training',
         reward: '2500',
@@ -9,6 +10,7 @@ const campaignData = [
         date: '1/14/24'
     },
     {
+        id: 2,
         img: '/campaignImg.png',
         title: 'Bicycle Delivery Training',
         reward: '2500',
@@ -16,6 +18,7 @@ const campaignData = [
         date: '1/14/24'
     },
     {
+        id: 3,
         img: '/campaignImg.png',
         title: 'Bicycle Delivery Training',
         reward: '2500',
@@ -23,6 +26,7 @@ const campaignData = [
         date: '1/14/24'
     },
     {
+        id: 4,
         img: '/campaignImg.png',
         title: 'Bicycle Delivery Training',
         reward: '2500',
@@ -30,6 +34,7 @@ const campaignData = [
         date: '1/14/24'
     },
     {
+        id: 5,
         img: '/campaignImg.png',
         title: 'Bicycle Delivery Training',
         reward: '2500',

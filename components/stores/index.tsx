@@ -2,26 +2,31 @@ import { DummyCardBox } from "components/dummyCardBox"
 
 const storeData = [
     {
+        id: 1,
         img: '/storeImg.png',
         title: 'H & W Market',
         distance: '0.2 miles',
     },
     {
+        id: 2,
         img: '/storeImg.png',
         title: 'H & W Market',
         distance: '0.2 miles',
     },
     {
+        id: 3,
         img: '/storeImg.png',
         title: 'H & W Market',
         distance: '0.2 miles',
     },
     {
+        id: 4,
         img: '/storeImg.png',
         title: 'H & W Market',
         distance: '0.2 miles',
     },
     {
+        id: 5,
         img: '/storeImg.png',
         title: 'H & W Market',
         distance: '0.2 miles',

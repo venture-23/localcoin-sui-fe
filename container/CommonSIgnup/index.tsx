@@ -3,14 +3,12 @@
 
 import useHandleCopy from 'hooks/useCopyText';
 import { useMyContext } from 'hooks/useMyContext';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/router';
 import { ChevronLeftIcon, ClipboardIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import BridgeBG from 'components/bridgebg';
 import { useAddToHomescreenPrompt } from 'components/test';
-import Image from 'next/image';
 import { useState } from 'react';
 import generateKeyPair from 'services/generateKeypair';
 import { maskWalletAddress } from 'utils/clipper';
@@ -26,6 +24,7 @@ interface ErrorType {
 
 const MerchantSignup = ({ param }: any) => {
   const router = useRouter();
+  console.log(router)
 
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
 
@@ -36,7 +35,8 @@ const MerchantSignup = ({ param }: any) => {
     storeName: '',
     proprietaryName: '',
     phoneNumber: '',
-    location: ''
+    location: '',
+    correctInfoCheck: false,
   });
 
   const [error, setError] = useState<ErrorType>({});
@@ -46,7 +46,12 @@ const MerchantSignup = ({ param }: any) => {
       target: { name, value }
     } = e;
     delete error[name];
-    setData({ ...data, [name]: value });
+    if(name === 'correctInfoCheck') {
+      setData({ ...data, [name]: !data.correctInfoCheck });
+    } else {
+      setData({ ...data, [name]: value });
+    }
+    
   };
   const validation = () => {
     const err: any = {};
@@ -88,10 +93,15 @@ const MerchantSignup = ({ param }: any) => {
       <section className="relative">
         <div className="container mx-auto">
           <div className="mb-6 flex items-center pt-10">
-            {promptable && !isInstalled ? (
+            <div onClick={() => router.back()} className='cursor-pointer flex items-center'>
+              <ChevronLeftIcon width={16} height={16} />
+              <span className='text-[12px] font-normal'>Back</span>
+            </div>
+            {/* <PageHeader backLink={'/'} /> */}
+            {/* {promptable && !isInstalled ? (
               <buton onClick={promptToInstall}>INSTALL APP</buton>
-            ) : null}
-            {param === 'merchant' ? (
+            ) : null} */}
+            {/* {param === 'merchant' ? (
               showScreen === 0 ? (
                 <Link href={showScreen === 0 ? '/signup' : ''}>
                   <ChevronLeftIcon width={24} height={24} />
@@ -106,19 +116,19 @@ const MerchantSignup = ({ param }: any) => {
               <Link href={'/signup'}>
                 <ChevronLeftIcon width={24} height={24} />
               </Link>
-            )}
+            )} */}
             {/* <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p> */}
           </div>
-          {showSpinner && (
+          {/* {showSpinner && (
             <>
               <div className="fixed inset-0 mx-auto flex flex-col items-center justify-center bg-white">
                 <div>
-                  <Image src={'/generateQR.gif'} width={250} height={250} />
+                  <Image src={'/generateQR.gif'} width={250} height={250} alt='' />
                 </div>
                 <p className="my-4 text-2xl ">Creating your digital account</p>
               </div>
             </>
-          )}
+          )} */}
           {showScreen === 0 ? (
             <MerchantInfo
               data={data}

@@ -15,7 +15,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) =>
   const { userInfo } = useMyContext();
   return (
     <>
-      <div className="mb-6 flex items-center justify-between pt-10">
+      <div className="mb-6 flex w-full items-center justify-between pt-[10px]">
         {backLink && (
           <Link href={backLink}>
             <ChevronLeftIcon width={24} height={24} />
@@ -60,7 +60,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) =>
 
             <div className='mx-[16px] my-[10px] flex flex-col gap-[19px]'>
               <div className={['bg-[#EAEBEE] py-[10px] text-center text-lg font-semibold', !userInfo?.publicKey && 'opacity-[0.3]'].join(' ')}>
-                <Link className='w-full block' href={''}>
+                <Link className='w-full block' href={'/signup/merchant'}>
                   Apply to become a Merchant
                 </Link>
               </div>
