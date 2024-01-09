@@ -84,7 +84,7 @@ section {
   
   @media screen and (min-width: 768px) {
     section {
-      background-color: #FFF ;
+      background-color: #F9F9F9 ;
       max-width: 400px !important; /* or any other fixed width that suits your design */
         margin: 0 auto; /* This centers the container in the viewport */
       height: 100%;
@@ -109,16 +109,31 @@ section {
 
   .sticky-footer {
     height: 48px;
-    background-color: #EAEBEE;
+    background-color: #FFF;
     max-width: 400px !important;
-    width: 360px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 28px;
+    padding: 20px 28px;
     position: fixed;
     bottom: 18px;
+    margin-left: -20px;
     
+  }
+
+  .sticky-footer a {
+    color: #1384F5;
+    text-align: center;
+    font-family: Inter;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .sticky-footer a:first-of-type {
+    color: #1653AE;
   }
 
   .req-pay-link {
@@ -243,13 +258,44 @@ section {
   max-width: 400px;
   width: 100%;
   top: 100%;
-  height: calc(100% -  100px);
+  height: 100%;
   background: #fff;
   transition: 0.4s top ease-in-out;
   z-index: 999;
+  margin-left: -20px;
+  padding-bottom: 20px;
 }
 
 .mobile-menu.open {
-  top: 100px;
+  top: 0px;
   transition: 0.4s top ease-in-out;
+}
+
+
+.landing-top {
+  background: #fff;
+  border: 1px solid #E4E4E7;
+  border-radius: 0 0 24px 24px;
+  padding: 24px 16px;
+}
+
+.card-box {
+  position: relative;
+  overflow: hidden;
+  z-index: 4;
+}
+.card-box::after {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+.card-secondary-data svg {
+  width: 10px;
+  fill: #fff;
 }

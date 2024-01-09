@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Link from "next/link"
 
 
@@ -7,16 +6,32 @@ const footerLinks = [
         id: 1,
         link: '/',
         title: 'Home',
+        icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="28" viewBox="0 0 29 28" fill="none">
+                <path d="M14.5 3.5L5.16666 10.5V24.5H11V16.3333H18V24.5H23.8333V10.5L14.5 3.5Z" fill="#1653AE"/>
+            </svg>
+        )
     },
     {
         id: 2,
         link: '/',
         title: 'Request/Pay',
+        icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="28" viewBox="0 0 29 28" fill="none">
+                <path d="M4.08118 13.4188L13.2593 4.24073C13.4134 4.08659 13.6225 4 13.8404 4H23.8445C24.5767 4 24.9434 4.88532 24.4257 5.4031L16.41 13.4188C16.089 13.7398 16.089 14.2602 16.41 14.5812L24.4257 22.5969C24.9434 23.1147 24.5767 24 23.8445 24H13.8404C13.6225 24 13.4134 23.9134 13.2593 23.7593L4.08118 14.5812C3.7602 14.2602 3.76021 13.7398 4.08118 13.4188Z" fill="#1384F5"/>
+                <path d="M4.08118 13.4188L13.2593 4.24073C13.4134 4.08659 13.6225 4 13.8404 4H23.8445C24.5767 4 24.9434 4.88532 24.4257 5.4031L15.8288 14C10.8973 18.9315 13.2125 23.7125 13.5 24L4.08118 14.5812C3.7602 14.2602 3.76021 13.7398 4.08118 13.4188Z" fill="#1384F5"/>
+            </svg>
+        )
     },
     {
         id: 3,
         link: '/',
         title: 'Campaigns',
+        icon: (
+            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="28" viewBox="0 0 29 28" fill="none">
+                <path d="M21.5 12.8334V15.1667H26.1666V12.8334H21.5ZM19.1666 20.5451C20.2866 21.3734 21.745 22.4701 22.9 23.3334C23.3666 22.7151 23.8333 22.0851 24.3 21.4667C23.145 20.6034 21.6866 19.5067 20.5666 18.6667C20.1 19.2967 19.6333 19.9268 19.1666 20.5451ZM24.3 6.53341C23.8333 5.91508 23.3666 5.28508 22.9 4.66675C21.745 5.53008 20.2866 6.62675 19.1666 7.46675C19.6333 8.08508 20.1 8.71508 20.5666 9.33342C21.6866 8.49341 23.145 7.40841 24.3 6.53341ZM5.16665 10.5001C3.88331 10.5001 2.83331 11.5501 2.83331 12.8334V15.1667C2.83331 16.4501 3.88331 17.5001 5.16665 17.5001H6.33331V22.1667H8.66665V17.5001H9.83331L15.6666 21.0001V7.00008L9.83331 10.5001H5.16665ZM18.5833 14.0001C18.5833 12.4484 17.9066 11.0484 16.8333 10.0917V17.8967C17.9066 16.9517 18.5833 15.5517 18.5833 14.0001Z" fill="#1384F5"/>
+            </svg>
+        )
     },
 ]
 
@@ -24,25 +39,11 @@ export const PageFooter = () => {
     return (
         <div className="sticky-footer">
             {footerLinks.map(item => (
-                <div key={item.id} className={[item.id === 2 ? "relative w-full h-[100%]" : ""].join(" ")}>
-                    {item.id === 2 ? (
-                        <div className="req-pay-link">
-                            <Image
-                                src={'/req_pay_icon.png'}
-                                width={33}
-                                height={30}
-                                className="opacity-[100%]"
-                                alt="Req Pay icon"
-                            />
-                        <Link href={'/'}>
-                            Request/Pay
-                        </Link>
-                    </div>
-                    ) : (
-                        <Link href={item.link}>
-                            {item.title}
-                        </Link>
-                    )}
+                <div key={item.id} className="flex flex-col items-center cursor-pointer">
+                    {item.icon}
+                    <Link href={item.link}>
+                        {item.title}
+                    </Link>
                     
                 </div>
             ))}

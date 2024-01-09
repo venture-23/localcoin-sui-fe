@@ -1,4 +1,5 @@
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,19 +21,33 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) =>
             <ChevronLeftIcon width={24} height={24} />
           </Link>
         )}
-        
-        <div onClick={() => setOpenMenu(prev => !prev)} className='w-[46px] h-[46px] flex-end ml-[auto] rounded-[100%] bg-[#EAEBEE] cursor-pointer'>
 
+   
+          <div className="">
+            <h2 className="text-base font-medium">{pageHeaderTitle ? (
+              <>
+                Welcome back, <br />
+                {pageHeaderTitle}
+              </>
+            ): (
+              'Welcome'
+            )}</h2>
+          </div>
+   
+        
+        
+        <div onClick={() => setOpenMenu(prev => !prev)} className='w-[46px] h-[46px] flex-end ml-[auto] rounded-[100%] cursor-pointer'>
+          <UserCircleIcon />
         </div>
 
-        {pageHeaderTitle && (
-           <div className="">
-              <h2 className="text-2xl font-bold ">{pageHeaderTitle}</h2>
-            </div>
-        )}
+        
 
 
-        <div className={['mobile-menu', openMenu && 'open'].join(' ')}>
+        <div className={['mobile-menu pt-[10px]', openMenu && 'open'].join(' ')}>
+          <div onClick={() => setOpenMenu(false)} className='cursor-pointer flex items-center'>
+            <ChevronLeftIcon width={16} height={16} />
+            <span className='text-[12px] font-normal'>Back</span>
+          </div>
           <div className='flex flex-col h-[100%] justify-between'>
             <div className={['py-[10px] px-[16px] bg-[#EAEBEE] w-full', !userInfo?.publicKey && 'opacity-[0.3]'].join(' ')}>
               <div className='py-[4px] px-[16px] bg-[#fff] text-lg font-normal'>

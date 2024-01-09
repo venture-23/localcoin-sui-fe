@@ -38,27 +38,22 @@ const LandingPage = () => {
 
   return (
     <>
-      <div className='header-container'>
+      {/* <div className='header-container'>
         <PageHeader />
-      </div>
+      </div> */}
       <section className="">
-        <div className="container mx-auto ">
-          {/* Dashboard */}
-          <div className='mb-[24px]'>
-            <h4 className='text-lg font-semibold font-[Inter] mb-[6px]'>Welcome</h4>
-            <div className='w-full flex justify-between items-center pl-[21px] pr-[16px] bg-[#EAEBEE] h-[72px]'>
+        <div className='mb-[24px] landing-top'>
+              <PageHeader />
               <div>
-                <h6 className='text-xm font-normal'>LocalCoins</h6>
-                <div className='text-2xl font-semibold leading-9'>
-                  129,338
+                <h6 className='text-base font-bold text-[#1384F5]'>Total LocalCoins</h6>
+                <div className='text-[32px] font-semibold leading-9'>
+                  0
                 </div>
-              </div>
-              <div className='self-end flex items-center gap-[12px] pb-[10px]'>
-                <button className='bg-white rounded-[5px] px-[3px] py-[6px] text-xs font-normal'>Store</button>
-                <button className='bg-white rounded-[5px] px-[3px] py-[6px] text-xs font-normal'>Withdraw</button>
-              </div>
             </div>
           </div>
+        <div className="container mx-auto ">
+          {/* Dashboard */}
+          
 
           {/* Stores */}
           <Stores />

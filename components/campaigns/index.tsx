@@ -1,5 +1,42 @@
 import { DummyCardBox } from "components/dummyCardBox"
 
+const campaignData = [
+    {
+        img: '/campaignImg.png',
+        title: 'Bicycle Delivery Training',
+        reward: '2500',
+        participants: '12',
+        date: '1/14/24'
+    },
+    {
+        img: '/campaignImg.png',
+        title: 'Bicycle Delivery Training',
+        reward: '2500',
+        participants: '12',
+        date: '1/14/24'
+    },
+    {
+        img: '/campaignImg.png',
+        title: 'Bicycle Delivery Training',
+        reward: '2500',
+        participants: '12',
+        date: '1/14/24'
+    },
+    {
+        img: '/campaignImg.png',
+        title: 'Bicycle Delivery Training',
+        reward: '2500',
+        participants: '12',
+        date: '1/14/24'
+    },
+    {
+        img: '/campaignImg.png',
+        title: 'Bicycle Delivery Training',
+        reward: '2500',
+        participants: '12',
+        date: '1/14/24'
+    },
+]
 
 export const Campaigns = () => {
     return (
@@ -11,8 +48,8 @@ export const Campaigns = () => {
 
             <div className="flex store-container-box items-center overflow-auto gap-[20px]">
                 {
-                    Array.from({ length: 5 }, (_, index) => index).map((_,idx) => (
-                       <DummyCardBox key={idx} boxTitle="Campaigns" />
+                    campaignData.map((item,idx) => (
+                       <DummyCardBox key={idx} boxData={item} boxTitle="Campaigns" />
                     ))
                 }
             </div>
