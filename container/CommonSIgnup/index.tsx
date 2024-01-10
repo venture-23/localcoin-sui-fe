@@ -33,7 +33,7 @@ const MerchantSignup = ({ param }: any) => {
     correctInfoCheck: false,
   });
 
-  const { isProcessing } = useMerchant({ registerMerchant: merchantFlag, data })
+  const { registerMerchant, isProcessing } = useMerchant({merchantFlag, data: { ...data } });
 
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
 
@@ -41,6 +41,8 @@ const MerchantSignup = ({ param }: any) => {
   const [showScreen, setShowScreen] = useState(param === 'merchant' ? 0 : 1);
   const { setshowPinScreen, userEnterPin, userInfo, setUserInfo } = useMyContext();
   const [successScreen, setSuccessScreen] = useState(false);
+
+  console.log(isProcessing, ':process')
   
   
   
@@ -75,7 +77,10 @@ const MerchantSignup = ({ param }: any) => {
       // router.push('/generate-key-pair');
       // setShowScreen(1);
       setMerchantFlag(true);
-      setSuccessScreen(true)
+
+      registerMerchant();
+      // if (isProcessing)
+      // setSuccessScreen(true)
     }
   };
 
@@ -99,7 +104,7 @@ const MerchantSignup = ({ param }: any) => {
       {/* <Header className="h-[120px]"> */}
       {/* </Header> */}
       <section className="relative">
-        <div className="mx-auto">
+        <div className="container mx-auto">
           {/* <div className="mb-6 flex items-center pt-10"> */}
             {/* <PageHeader backLink={'/'} /> */}
             {/* {promptable && !isInstalled ? (
@@ -145,12 +150,12 @@ const MerchantSignup = ({ param }: any) => {
                 </div>
 
                 <MerchantInfo
-                data={data}
-                title={param?.charAt(0).toUpperCase() + param?.slice(1)}
-                error={error}
-                handleChange={handleChange}
-                handleSubmit={handleSubmit}
-            />
+                  data={data}
+                  title={param?.charAt(0).toUpperCase() + param?.slice(1)}
+                  error={error}
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmit}
+                />
             </>
             
           )}

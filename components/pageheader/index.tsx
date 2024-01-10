@@ -4,6 +4,7 @@ import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { maskWalletAddress } from 'utils/clipper';
 
 interface PageHeaderProps {
   pageHeaderTitle?: any;
@@ -13,6 +14,7 @@ interface PageHeaderProps {
 const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   const { userInfo } = useMyContext();
+   console.log(userInfo, ':user')
   return (
     <>
       <div className="mb-6 flex w-full items-center justify-between pt-[10px]">
@@ -51,7 +53,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) =>
           <div className='flex flex-col h-[100%] justify-between'>
             <div className={['py-[10px] px-[16px] bg-[#EAEBEE] w-full', !userInfo?.publicKey && 'opacity-[0.3]'].join(' ')}>
               <div className='py-[4px] px-[16px] bg-[#fff] text-lg font-normal'>
-                {userInfo?.publicKey ? userInfo?.publicKey : 'Wallet Address'}
+                {userInfo?.publicKey ? maskWalletAddress(userInfo?.publicKey) : 'Wallet Address'}
               </div>
               <p className='mt-[30px] font-semibold text-xs'>
                 {userInfo?.publicKey ? '2400 Local Coin Tokens': 'Earned coins today'}
@@ -60,7 +62,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) =>
 
             <div className='mx-[16px] my-[10px] flex flex-col gap-[19px]'>
               <div className={['bg-[#EAEBEE] py-[10px] text-center text-lg font-semibold', !userInfo?.publicKey && 'opacity-[0.3]'].join(' ')}>
-                <Link className='w-full block' href={'/signup/merchant'}>
+                <Link className='w-full block' href={'/merchant/register'}>
                   Apply to become a Merchant
                 </Link>
               </div>

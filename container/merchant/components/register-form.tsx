@@ -24,7 +24,7 @@ const MerchantRegisterInfo = ({
           maxLength={300}
           data={data}
           handleChange={handleChange}
-          className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white p-4  text-base placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+          className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white p-4  text-base placeholder-[#A3A3A3] placeholder-extrabold shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
           placeholder="Enter Store Name"
         />
         <InputForm
@@ -34,7 +34,7 @@ const MerchantRegisterInfo = ({
           name="proprietor"
           maxLength={300}
           data={data}
-          className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+          className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-[#A3A3A3] placeholder-extrabold shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
           placeholder="Enter Store Owner Name"
           label="Store Owner Name"
         />
@@ -47,23 +47,36 @@ const MerchantRegisterInfo = ({
           maxLength={15}
           data={data}
           handleChange={handleChange}
-          className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+          className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-[#A3A3A3] placeholder-extrabold shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
           placeholder="Enter Phone Number"
         />
         <TextArea
           label="Store Address"
           type="text"
-          rows={2}
+          rows={4}
           error={error}
           name="location"
           maxLength={225}
           data={data}
           handleChange={handleChange}
-          className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-slate-400 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+          className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-[#A3A3A3] placeholder-extrabold shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
           placeholder="Enter Store Address"
         />
+
+        <label className='block flex items-center'>
+          <input 
+            type='checkbox'
+            name='correctInfoCheck'
+            onChange={handleChange}
+            // checked={data.correctInfoCheck}
+            className='rounded-md border border-gray-300 bg-white p-2'
+          />
+
+          <span className='ml-[6px] text-base font-medium text-[#171717]'>My merchant information is correct.</span>
+        </label>
+
         <div onClick={handleSubmit}>
-          <Button text="Continue" />
+          <Button disabled={!data.correctInfoCheck} text="Continue" />
         </div>
       </div>
     </div>

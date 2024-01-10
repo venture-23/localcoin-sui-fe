@@ -24,7 +24,7 @@ export const ConfirmationScreen = ({ text }: IConfirmationScreenProps) => {
                     alt="z"
                 />
             </div>
-            <div className="container h-[100%] mx-auto">
+            <div className="h-[100%] mx-auto">
                 <div className="h-[100%] flex flex-col justify-between">
                     <div className="flex flex-col mt-[100px] gap-[12px] items-center">
                         <div>

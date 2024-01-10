@@ -1,6 +1,7 @@
 'use client';
 
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { ConfirmationScreen } from 'components/confirmationScreen';
 import { useMerchant } from 'hooks/useMerchant';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -14,13 +15,18 @@ const MerchantRegisterPage = () => {
     location: '',
     store_name: '',
     phone_no: '',
-    proprietor: ''
+    proprietor: '',
+    correctInfoCheck: false,
   });
   const { registerMerchant, isProcessing } = useMerchant({ data: { ...data } });
 
   const handleChange = (e: any) => {
     delete error[e.target.name];
-    setData({ ...data, [e.target.name]: e.target.value });
+    if(e.target.name === 'correctInfoCheck') {
+      setData({ ...data, [e.target.name]: !data.correctInfoCheck });
+    } else {
+      setData({ ...data, [e.target.name]: e.target.value });
+    }
   };
 
   const validation = () => {
@@ -42,6 +48,8 @@ const MerchantRegisterPage = () => {
         console.log('manish');
         
         registerMerchant();
+
+        setShowFormNo(3)
       }
     }
   };
@@ -56,7 +64,7 @@ const MerchantRegisterPage = () => {
             <ChevronLeftIcon width={24} height={24} />
           </Link>
         </div>
-        {showFormNo === 1 ? (
+        {showFormNo === 1 && (
           <MerchantInfo
             data={data}
             title="Apply to become a merchant"
@@ -64,8 +72,16 @@ const MerchantRegisterPage = () => {
             handleChange={handleChange}
             handleSubmit={handleSubmit}
           />
-        ) : (
+        // ) : (
+        //   <RegisterOverView data={data} loader={isProcessing} handleSubmit={handleSubmit} />
+        )}
+        {showFormNo ===  2 && (
           <RegisterOverView data={data} loader={isProcessing} handleSubmit={handleSubmit} />
+        )}
+
+
+        {showFormNo === 3 && (
+          <ConfirmationScreen text='Thank you for applying! The Local Coin team will review your application and get back to you within 1 week. If you have any questions, please email admin@localcoin.us' />
         )}
       </div>
       {/* <BridgeBG /> */}
