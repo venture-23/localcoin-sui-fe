@@ -9,6 +9,7 @@ interface ButtonProps {
   link?: string;
   query?: any;
   buttonType?: any;
+  buttonBg?: any;
   underline?: any;
   textOrder?: any;
   iconOrder?: any;
@@ -23,6 +24,7 @@ const Button: React.FC<ButtonProps> = ({
   link,
   query,
   buttonType = 'primary',
+  buttonBg = '#fff',
   underline,
   textOrder,
   iconOrder,
@@ -44,7 +46,9 @@ const Button: React.FC<ButtonProps> = ({
           className={`w-full rounded-[4px] ${
             buttonType === 'primary'
               ? 'bg-[#000] font-bold text-white disabled:opacity-30'
-              : 'bg-[#F7F8FA] font-semibold text-[#212B34] disabled:opacity-30'
+              : buttonType === 'secondary'
+              ? 'bg-[#FAD146] font-bold text-[#000] disabled:opacity-30'
+              : `bg-[${buttonBg}] font-semibold text-[#212B34] disabled:opacity-30`
           }  flex items-center justify-center gap-4 
           px-6 py-3.5 text-base ${underline}`}
         >
