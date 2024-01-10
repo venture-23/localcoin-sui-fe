@@ -70,7 +70,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) =>
                 </Link>
               </div>
               <div className={['bg-[#EAEBEE] py-[10px] text-center text-lg font-semibold'].join(' ')}>
-                <Link className='w-full block' href={''}>
+                <Link className='w-full block' href={'/signup'}>
                   {userInfo?.publicKey ? (
                     <div className='flex items-center justify-center gap-[6px]'>
                     <Image 

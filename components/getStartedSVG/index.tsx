@@ -1,5 +1,3 @@
-import React from 'react';
-
 const GetStartedSVG = () => {
   return (
     <div>
@@ -10,22 +8,22 @@ const GetStartedSVG = () => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g id="GetStartedImage" clip-path="url(#clip0_181_261)">
+        <g id="GetStartedImage" clipPath="url(#clip0_181_261)">
           <g id="shadows">
-            <g id="shadow-bg" clip-path="url(#clip1_181_261)">
+            <g id="shadow-bg" clipPath="url(#clip1_181_261)">
               <path
                 id="Vector"
                 opacity="0.25"
                 d="M94.18 336.41C135.148 336.41 168.36 334.404 168.36 331.93C168.36 329.456 135.148 327.45 94.18 327.45C53.2115 327.45 20 329.456 20 331.93C20 334.404 53.2115 336.41 94.18 336.41Z"
                 fill="#212B34"
-                fill-opacity="0.14"
+                fillOpacity="0.14"
               />
               <path
                 id="Vector_2"
                 opacity="0.25"
                 d="M240.13 354.46C311.01 354.46 368.47 350.99 368.47 346.71C368.47 342.43 311.01 338.96 240.13 338.96C169.25 338.96 111.79 342.43 111.79 346.71C111.79 350.99 169.25 354.46 240.13 354.46Z"
                 fill="#212B34"
-                fill-opacity="0.28"
+                fillOpacity="0.28"
               />
               <g id="Group">
                 <g id="Group_2">
@@ -212,7 +210,7 @@ const GetStartedSVG = () => {
             </g>
           </g>
           <g id="mobile">
-            <g id="wholeMobile" clip-path="url(#clip2_181_261)">
+            <g id="wholeMobile" clipPath="url(#clip2_181_261)">
               <path
                 id="Vector_29"
                 d="M235.93 0H151.39C138.472 0 128 10.4721 128 23.39V222.75C128 235.668 138.472 246.14 151.39 246.14H235.93C248.848 246.14 259.32 235.668 259.32 222.75V23.39C259.32 10.4721 248.848 0 235.93 0Z"
@@ -245,7 +243,7 @@ const GetStartedSVG = () => {
             </g>
           </g>
           <g id="card">
-            <g id="wholeCard" clip-path="url(#clip3_181_261)">
+            <g id="wholeCard" clipPath="url(#clip3_181_261)">
               <path
                 id="Vector_34"
                 d="M141.55 184H12.3C5.5069 184 0 189.507 0 196.3V269.01C0 275.803 5.5069 281.31 12.3 281.31H141.55C148.343 281.31 153.85 275.803 153.85 269.01V196.3C153.85 189.507 148.343 184 141.55 184Z"
@@ -377,7 +375,7 @@ const GetStartedSVG = () => {
             </g>
           </g>
           <g id="coin">
-            <g id="wholeCoin" clip-path="url(#clip4_181_261)">
+            <g id="wholeCoin" clipPath="url(#clip4_181_261)">
               <path
                 id="Vector_60"
                 d="M222.464 405.548L229.162 409.194C234.975 412.357 241.873 413.693 249.274 412.652C270.068 409.728 286.958 389.156 287 366.701C287.027 352.238 280.057 340.523 269.536 334.797L262.838 331.152L222.464 405.548Z"
@@ -459,8 +457,8 @@ const GetStartedSVG = () => {
             y2="390.848"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0.73" stop-color="#E8A12E" />
-            <stop offset="1" stop-color="#D4852A" />
+            <stop offset="0.73" stopColor="#E8A12E" />
+            <stop offset="1" stopColor="#D4852A" />
           </linearGradient>
           <linearGradient
             id="paint1_linear_181_261"
@@ -470,8 +468,8 @@ const GetStartedSVG = () => {
             y2="386.164"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#E8A12E" />
-            <stop offset="1" stop-color="#F7CE2A" />
+            <stop stopColor="#E8A12E" />
+            <stop offset="1" stopColor="#F7CE2A" />
           </linearGradient>
           <linearGradient
             id="paint2_linear_181_261"
@@ -481,8 +479,8 @@ const GetStartedSVG = () => {
             y2="383.962"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#F7CE2A" />
-            <stop offset="1" stop-color="#E8A12E" />
+            <stop stopColor="#F7CE2A" />
+            <stop offset="1" stopColor="#E8A12E" />
           </linearGradient>
           <linearGradient
             id="paint3_linear_181_261"
@@ -492,8 +490,8 @@ const GetStartedSVG = () => {
             y2="376.396"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0.73" stop-color="#E8A12E" />
-            <stop offset="1" stop-color="#D4852A" />
+            <stop offset="0.73" stopColor="#E8A12E" />
+            <stop offset="1" stopColor="#D4852A" />
           </linearGradient>
           <linearGradient
             id="paint4_linear_181_261"
@@ -503,8 +501,8 @@ const GetStartedSVG = () => {
             y2="375.089"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#FFE757" />
-            <stop offset="1" stop-color="#F5C845" />
+            <stop stopColor="#FFE757" />
+            <stop offset="1" stopColor="#F5C845" />
           </linearGradient>
           <clipPath id="clip0_181_261">
             <rect width="368.46" height="413" fill="white" />

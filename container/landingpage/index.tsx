@@ -7,6 +7,8 @@ import { Stores } from 'components/stores';
 import { encodeToken } from 'services/encrypt-decrypt-data';
 
 const LandingPage = () => {
+  // const router = useRouter();
+
   const campInfo = {
     publicKey: 'GC35FMQWTX7HA2UGRRHLEVT46CEKZBSDDXQXADEZGWWWOZCGCUZOOPE4',
     secretKey: 'SBQD2MZPMRDLDIYE3SPXUD5G5X5IBPI5L7SGV476SHLVHTIJJIRJ3MVN',

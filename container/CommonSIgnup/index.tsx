@@ -86,13 +86,13 @@ const MerchantSignup = ({ param }: any) => {
     if (resp.secretKey) {
       seShowSpinner(false);
       setData({ ...data, ...resp });
-      // setshowPinScreen(true);
+      // setShowPinScreen(true);
     }
   };
 
   const handleSignUp = () => {
     setUserInfo({ ...data, userType: param });
-    setshowPinScreen(true);
+    setShowPinScreen(true);
   };
   return (
     <>
