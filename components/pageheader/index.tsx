@@ -67,7 +67,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) =>
                 </Link>
               </div>
               <div className={['bg-[#EAEBEE] py-[10px] text-center text-lg font-semibold', !userInfo?.publicKey && 'opacity-[0.3]'].join(' ')}>
-                <Link className='w-full block' href={''}>
+                <Link className='w-full block' href={'/campaign/create'}>
                   Start a campaign
                 </Link>
               </div>
