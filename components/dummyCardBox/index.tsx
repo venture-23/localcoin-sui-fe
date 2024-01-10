@@ -1,6 +1,9 @@
-import { CalendarIcon, CurrencyDollarIcon, UserCircleIcon } from "@heroicons/react/16/solid"
+'use client';
+import { CalendarIcon, CurrencyDollarIcon, UserCircleIcon } from "@heroicons/react/16/solid";
+import { useRouter } from "next/navigation";
 
-interface IBoxDataProps {
+export interface IBoxDataProps {
+    id?: Number
     img?: string
     title?: string
     distance?: string,
@@ -8,12 +11,13 @@ interface IBoxDataProps {
     participants?: string,
     date?: string,
 }
-interface IDummyCardBoxProps {
+export interface IDummyCardBoxProps {
     boxTitle: string
     boxData: IBoxDataProps,
 }
 
 export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
+    const router = useRouter()
     return (
         <div style={{
                 background: `url(${boxData?.img})`,
@@ -21,7 +25,8 @@ export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover'
             }} 
-            className="h-[124px] card-box p-[10px] flex-none rounded-[12px] w-[290px] flex items-end"
+            className="h-[124px] card-box p-[10px] flex-none rounded-[12px] cursor-pointer w-[290px] flex items-end"
+            onClick={() => router.push(`/all-stores/${boxData.id}`)}
         >
             <div className="w-full flex flex-col gap-[7px]">
                 <div className="flex items-center w-full justify-between">
