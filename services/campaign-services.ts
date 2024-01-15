@@ -332,14 +332,13 @@ export const campaignServices = (() => {
     });
   };
 
-  const verify_recipients = (secretKey: string, contractId: string) => {
-    const testss = new StellarSdk.List(['om']).toScVal();
-    console.log(StringToScVal('om'), 'sdafsdfasdfasf');
+  const verify_recipients = (secretKey: string, contractId: string, participantNameList: any) => {
     return makeTransaction({
       secretKey: 'SB7BMAZEPUABMZ6ESC5FXNTGAUBEYZHMRUJH423B2U5IUHICQIZL42XY',
       contractId: contractId,
       parameterType: 'verify_recipients',
-      payload: [testss]
+      // payload: [StringToScVal(['om'])]
+      payload: [StringToScVal(participantNameList.join(','))]
     });
   };
 

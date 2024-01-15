@@ -166,7 +166,7 @@ const CampaignDetail = (props: any) => {
   };
 
   const handleVerify = async () => {
-    await campaignServices.verify_recipients('', props.campaignId);
+    await campaignServices.verify_recipients('', props.campaignId, ['om', 'test']);
   };
 
   return (
