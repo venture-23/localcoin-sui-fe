@@ -83,6 +83,17 @@ const CampaignDetail = (props: any) => {
       // console.log('first');
     }
   };
+  // const joinCampaign = async () => {
+  //   try {
+  //     setShowLoader(true)
+  //     const joinRes = await campaignServices.join_campaign()
+
+  //     setShowLoader(false)
+  //   } catch (error) {
+  //     console.log(error)
+  //     setShowLoader(false)
+  //   }
+  // }
 
   return (
     <>
@@ -218,7 +229,7 @@ const CampaignDetail = (props: any) => {
                 
                 </div>
                 <div>
-                    <Button text="Join Campaign" />
+                    <Button  text="Join Campaign" />
                 </div>
              </div>
 

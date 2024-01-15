@@ -37,7 +37,7 @@ const storeData = [
 
 
 export const Stores = () => {
-    const { merchantList } = useCamapigns({});
+    const { merchantList } = useCamapigns({ fetchAllCampaign: true});
     console.log(merchantList, ':mer1')
     return (
         <div className="mt-[20px]">

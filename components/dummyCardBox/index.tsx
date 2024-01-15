@@ -36,7 +36,7 @@ export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
                 backgroundSize: 'cover'
             }} 
             className="h-[124px] card-box p-[10px] flex-none rounded-[12px] cursor-pointer w-[290px] flex items-end"
-            onClick={() => router.push(`/${boxTitle === 'Campaigns' ? `all-campaigns/${boxData?.campaign}` : `all-stores/${boxData?.merchantAddress}`}`)}
+            onClick={() => router.push(`/${boxTitle === 'Campaigns' ? `all-campaigns/${boxData?.id}` : `all-stores/${boxData?.merchantAddress}`}`)}
         >
             <div className="w-full flex flex-col gap-[7px]">
                 <div className="flex items-center w-full justify-between">

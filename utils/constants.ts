@@ -6,14 +6,14 @@ const localCoinAddress = 'CCKZTQ2TUDTR2EJJRY3BTPGV6R23UMNSTC6DYKBRBTAJUBC3UCR2BL
 const userRegistryContractId = 'CDT2BLUT7NCVMVZE26FIKAKMNSWQ6SUZTRB5JHA4CW2JKPS37IUDIRAT';
 const superAdminSecret = 'SB46364SGIGPEQOLRXL6RTVDP4X2HBIMSNPIG246GAQC7VHHGHBOEV4M';
 const balanceContractId = 'CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA';
+const staticPubKey = 'GDLRSCX7JV635QA5D6XMM7MRZFGDF42WMRE62F3LFZWJZKU3M2L3VN5U'; // for read only methods
 
 export {
   balanceContractId,
   campaignContractId,
   issuanceManagementContract,
   localCoinAddress,
-  serverUrl,
-  superAdminSecret,
+  serverUrl, staticPubKey, superAdminSecret,
   userRegistryContractId
 };
 

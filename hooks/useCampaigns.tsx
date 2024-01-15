@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
+import { staticPubKey } from 'utils/constants';
 import { useMyContext } from './useMyContext';
 
 export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }: any) {
@@ -17,7 +18,7 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
     queryFn: async () => {
       const response = fetchAllCampaign
         ? await campaignServices.getAllCampaigns(
-            userInfo.secretKey || 'SCKKS3FLNGIOXICRNSFVNPBUNZLUA5EMEQESQS2IGLVYYYJAHRQX2GSA'
+          staticPubKey
           )
         : await campaignServices.getCreatorCampaigns(userInfo.secretKey, userInfo.publicKey);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
@@ -32,21 +33,21 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
   
   const merchantListInfo = useQuery({
     queryKey: [`merchantListInfo`],
-    enabled: (!id && !!userInfo?.publicKey),
+    enabled: (!id && !!userInfo?.publicKey) || fetchAllCampaign,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
       const merResponse = await campaignServices.get_verified_merchants(
-            userInfo.secretKey || 'SCKKS3FLNGIOXICRNSFVNPBUNZLUA5EMEQESQS2IGLVYYYJAHRQX2GSA'
+            staticPubKey
           )
       
       const response = [];    
 
       for(const merchantAddr of merResponse)  {
 
-        const infoRes = await campaignServices.get_merchant_info(userInfo.secretKey, merchantAddr)
+        const infoRes = await campaignServices.get_merchant_info(staticPubKey, merchantAddr)
         infoRes.merchantAddress = merchantAddr;
         response.push(infoRes)
 
@@ -66,14 +67,14 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
 
   const storeDetailInfo = useQuery({
     queryKey: [`storeDetailsInfo-${id}`],
-    enabled: !!storeId,
+    enabled: (!!storeId) || fetchAllCampaign,
     // cacheTime: Infinity,
     retry: 3,
     retryDelay: 3000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
       console.log(storeId,'storeId')
-      const response = await campaignServices.get_merchant_info(userInfo.secretKey, storeId);
+      const response = await campaignServices.get_merchant_info(staticPubKey, storeId);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
       return response;
@@ -92,7 +93,7 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
     retryDelay: 3000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      const response = await campaignServices.getCampaignInfo(userInfo.secretKey, id);
+      const response = await campaignServices.getCampaignInfo(staticPubKey, id);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
       return response;

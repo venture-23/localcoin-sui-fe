@@ -45,7 +45,8 @@ const campaignData = [
 ]
 
 export const Campaigns = () => {
-    const { isFetching, campaignList } = useCamapigns({});
+    const { isFetching, campaignList } = useCamapigns({ fetchAllCampaign: true });
+    console.log(campaignList, ";cList")
     return (
         <div className="mt-[20px]">
             <div className="flex items-center">
