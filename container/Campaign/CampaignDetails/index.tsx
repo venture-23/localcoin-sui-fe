@@ -55,7 +55,7 @@ const CampaignDetail = (props: any) => {
           }
         }
       })
-      .catch((err) => console.log({ err }, 'formt he gatecampaignOwner'));
+      .catch((err) => console.log({ err }, 'from the gatecampaignOwner'));
   };
 
   console.log({ isCampaignAdmin });
@@ -165,8 +165,9 @@ const CampaignDetail = (props: any) => {
     // console.log(res, ':rec')
   };
 
+
   const handleVerify = async () => {
-    await campaignServices.verify_recipients('', props.campaignId, ['om', 'test']);
+    await campaignServices.verify_recipients('', props.campaignId, ['OMM', 'sudeep']);
   };
 
   return (

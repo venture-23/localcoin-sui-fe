@@ -337,8 +337,9 @@ export const campaignServices = (() => {
       secretKey: 'SB7BMAZEPUABMZ6ESC5FXNTGAUBEYZHMRUJH423B2U5IUHICQIZL42XY',
       contractId: contractId,
       parameterType: 'verify_recipients',
-      // payload: [StringToScVal(['om'])]
-      payload: [StringToScVal(participantNameList.join(','))]
+      // payload: [StringToScVal(['jack'])]
+      // payload: [StringToScVal(['jack', 'bob'])]
+      payload: [StringToScVal(participantNameList)]
     });
   };
 
