@@ -142,7 +142,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
           (eachValue: any) =>
             StellarSdk.StrKey.encodeEd25519PublicKey(eachValue?._value?._value?._value) || ''
         );
-        console.log(verifiedMerchants, ':verfied')
+        console.log(verifiedMerchants, ':verfied');
         return verifiedMerchants;
       case 'get_merchant_info':
         const merchantInfo = (response?.returnValue?._value || []).map((eachValue: any) => ({
@@ -156,6 +156,16 @@ const decoderHelper = (params: string, response: ResponseType) => {
         return makeSingleObject(merchantInfo);
       case 'balance':
         return decodei128(response?.returnValue?._value) || '0.00';
+      case 'get_recipients_status':
+        const receipientList = (response?.returnValue?._value || []).map((eachValue: any) => ({
+          name: eachValue?._attributes?.key?._value?.toString(),
+          value: eachValue?._attributes?.val?._value[0]?._value,
+          address: decodePublicKey(eachValue?._attributes?.val?._value[1]?._value?._value?._value)
+        }));
+        return receipientList;
+      case 'get_owner':
+        const owner_address: any = decodePublicKey(response?.returnValue?._value?._value?._value);
+        return owner_address;
       default:
         return response.returnValue;
     }

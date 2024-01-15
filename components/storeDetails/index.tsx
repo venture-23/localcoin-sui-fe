@@ -11,7 +11,7 @@ const StoreDetails = () => {
     const router = useRouter()
     const params = useParams()
     console.log(params, ':para')
-    const { storeInfo  } = useCamapigns({ storeId: params?.storeId });
+    const { storeInfo  } = useCamapigns({ storeId: params?.storeId, fetchAllCampaigns: false });
     console.log(storeInfo, ':store')
     
   return (

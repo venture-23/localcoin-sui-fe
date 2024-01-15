@@ -28,6 +28,7 @@ export const campaignServices = (() => {
     contractId = campaignContractId
   }: any) => {
     try {
+      debugger;
       let sourcePublicKey: string = '';
       let sourceKeypair: any = '';
       if (secretKey) {
@@ -57,7 +58,9 @@ export const campaignServices = (() => {
           'recipient_to_merchant_transfer',
           'merchant_registration',
           'verify_merchant',
-          'request_campaign_settlement'
+          'request_campaign_settlement',
+          'join_campaign',
+          'verify_recipients'
         ].includes(parameterType)
       ) {
         return server.simulateTransaction(transaction).then((sim: any) => {
@@ -298,12 +301,45 @@ export const campaignServices = (() => {
     });
   };
 
-  const join_campaign = (username: string, address: string, userInfo: any) => {
+  const join_campaign = (
+    username: string,
+    address: string,
+    userInfo: any,
+    campaignAddress: string
+  ) => {
     return makeTransaction({
       secretKey: userInfo.secretKey,
-      contractId: campaignContractId,
+      publicKey: userInfo.publicKey,
+      contractId: campaignAddress,
       parameterType: 'join_campaign',
-      payload: [accountToScVal(address), StringToScVal(username)]
+      payload: [StringToScVal(username), accountToScVal(userInfo.publicKey)]
+    });
+  };
+
+  const get_recipients_status = (userInfo: any) => {
+    return makeTransaction({
+      publicKey: userInfo.publicKey,
+      contractId: userInfo.campaignAddress,
+      parameterType: 'get_recipients_status'
+    });
+  };
+
+  const get_owner = (publicKey: string, contractId: string) => {
+    return makeTransaction({
+      publicKey: publicKey,
+      contractId: contractId,
+      parameterType: 'get_owner'
+    });
+  };
+
+  const verify_recipients = (secretKey: string, contractId: string) => {
+    const testss = new StellarSdk.List(['om']).toScVal();
+    console.log(StringToScVal('om'), 'sdafsdfasdfasf');
+    return makeTransaction({
+      secretKey: 'SB7BMAZEPUABMZ6ESC5FXNTGAUBEYZHMRUJH423B2U5IUHICQIZL42XY',
+      contractId: contractId,
+      parameterType: 'verify_recipients',
+      payload: [testss]
     });
   };
 
@@ -323,6 +359,26 @@ export const campaignServices = (() => {
     request_campaign_settlement,
     get_user_balance: get_balance,
     get_verified_merchants,
-    join_campaign
+    join_campaign,
+    get_recipients_status,
+    get_owner,
+    verify_recipients
   };
 })();
+
+/* 
+{
+    "username": "manish",
+    "address": "GAVBJZNE4NKI7NMZAGD7RA5SIHBSZDSGUDCV2UDQHGUHGN4UIWAJUHPZ",
+    "userInfo": {
+        "storeName": "",
+        "proprietaryName": "",
+        "phoneNumber": "",
+        "location": "",
+        "secretKey": "SBWPALRGE724TRTJTCH353EWC67ASGY3PV47SHCHM4632Y7PVV3SWSEO",
+        "publicKey": "GAVBJZNE4NKI7NMZAGD7RA5SIHBSZDSGUDCV2UDQHGUHGN4UIWAJUHPZ"
+    },
+    "campaignAddress": "CALTR26TIUXUGMEKYTIUSPRZ7LW3BMV2MF7J7SJB7K7ZQ6OGI2ZA5ZTQ"
+}
+
+*/

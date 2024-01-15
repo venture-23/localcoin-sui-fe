@@ -2,6 +2,7 @@
 import { CurrencyDollarIcon, MapIcon, UserCircleIcon } from '@heroicons/react/16/solid';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
+import InputForm from 'components/form/input';
 import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
@@ -13,33 +14,81 @@ const CampaignDetail = (props: any) => {
   const { userInfo } = useMyContext();
   const router = useRouter();
   const [showLoader, setShowLoader] = useState(false);
+  const [showUsernameBox, setShowUsernameBox] = useState(false);
 
   const [scanData, setScanData] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
   const [notLoggedIn, setNotLoggedIn] = useState(false);
+  // const [data, setData] = useState({
+  //   username: ''
+  // })
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({
-    // recipientAddress: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',
-    // amount: 1
+    username: '',
+    recipientAddress: userInfo?.publicKey
   });
   const pathname = usePathname();
-  const { isDetailsFetching, campaignInfo } = useCamapigns({ id: props.campaignId, fetchAllCampaign: true });
+  const { isDetailsFetching, campaignInfo } = useCamapigns({
+    id: props.campaignId,
+    fetchAllCampaign: true
+  });
   console.log({ isDetailsFetching, campaignInfo });
+
+  const [participantList, setParticipantList] = useState<any>([]);
+  const [isCampaignAdmin, setisCampaignAdmin] = useState(false);
+
+  useEffect(() => {
+    if (userInfo.publicKey) {
+      console.log({ userInfo });
+      getCampaginOwner();
+      fetchCampaignParticipate();
+    }
+  }, [userInfo]);
+
+  const getCampaginOwner = async () => {
+    await campaignServices
+      .get_owner(userInfo.publicKey, props.campaignId)
+      .then((ownerAdd) => {
+        if (ownerAdd) {
+          if (userInfo.publicKey === ownerAdd) {
+            setisCampaignAdmin(true);
+          }
+        }
+      })
+      .catch((err) => console.log({ err }, 'formt he gatecampaignOwner'));
+  };
+
+  console.log({ isCampaignAdmin });
+
+  const fetchCampaignParticipate = async () => {
+    await campaignServices
+      .get_recipients_status({
+        ...userInfo,
+        campaignAddress: props.campaignId
+      })
+      .then((res: any) => {
+        if (res.length) {
+          setParticipantList(res);
+        }
+      })
+      .catch((e) => console.log(e, 'from the pariticipant list'));
+  };
+
   useEffect(() => {
     if (pathname.split('/')[1] === 'all-campaigns') {
       setNotLoggedIn(true);
     }
   }, []);
-  useEffect(() => {
-    if (scanData) {
-      const scanDatParse: any = JSON.parse(scanData);
-      if (scanDatParse.publicKey) {
-        setData({ ...data, recipientAddress: scanDatParse.publicKey });
-      }
-      buttonRef.current.close();
-      setOpenDrawer(true);
-    }
-  }, [scanData]);
+  // useEffect(() => {
+  //   if (scanData) {
+  //     const scanDatParse: any = JSON.parse(scanData);
+  //     if (scanDatParse.publicKey) {
+  //       setData({ ...data, recipientAddress: scanDatParse.publicKey });
+  //     }
+  //     buttonRef.current.close();
+  //     setOpenDrawer(true);
+  //   }
+  // }, [scanData]);
 
   const buttonRef = useRef<any>(null);
 
@@ -83,17 +132,42 @@ const CampaignDetail = (props: any) => {
       // console.log('first');
     }
   };
-  // const joinCampaign = async () => {
-  //   try {
-  //     setShowLoader(true)
-  //     const joinRes = await campaignServices.join_campaign()
+  const joinCampaign = async () => {
+    try {
+      setShowLoader(true);
+      const joinRes = await campaignServices.join_campaign(
+        data.username,
+        data.recipientAddress,
+        userInfo,
+        props.campaignId
+      );
 
-  //     setShowLoader(false)
-  //   } catch (error) {
-  //     console.log(error)
-  //     setShowLoader(false)
-  //   }
-  // }
+      console.log(joinRes, ':res');
+
+      toast.success('Campaign Joined');
+      setShowUsernameBox(false);
+      fetchCampaignParticipate();
+      setShowLoader(false);
+    } catch (error) {
+      console.log(error);
+      setShowLoader(false);
+    }
+  };
+
+  const handleJoin = async () => {
+    if (!userInfo?.publicKey) {
+      toast.error('Please login first');
+      return;
+    }
+    setShowUsernameBox(true);
+
+    // const res = await campaignServices.get_recipients_status(userInfo)
+    // console.log(res, ':rec')
+  };
+
+  const handleVerify = async () => {
+    await campaignServices.verify_recipients('', props.campaignId);
+  };
 
   return (
     <>
@@ -180,59 +254,97 @@ const CampaignDetail = (props: any) => {
             </>
           )} */}
 
-<div onClick={() => router.back()} className='cursor-pointer py-[18px] flex items-center'>
-                  <ChevronLeftIcon width={16} height={16} />
-                  <span className='text-[12px] font-normal'>Back</span>
-             </div>
-             <div className="flex flex-col justify-between h-[90vh]">
-                <div>
-                <h3 className="text-base font-semibold">{campaignInfo?.name}</h3>
-                <div className="w-full my-[16px] rounded-[12px] border-[3px] border-solid overflow-hidden border-[#D7D7D7]">
-                    <Image 
-                        src={'/storeImg.png'}
-                        alt="Store"
-                        height={420}
-                        width={400}
-                        className="w-full"
-                    />
-                </div>
-                {/* <h2 className="text-2xl font-medium mb-[16px]">H & W Market</h2> */}
-                <p className='text-base font-medium'>
-                  {campaignInfo?.description}
-                </p>
+          <div onClick={() => router.back()} className="flex cursor-pointer items-center py-[18px]">
+            <ChevronLeftIcon width={16} height={16} />
+            <span className="text-[12px] font-normal">Back</span>
+          </div>
+          <div className="flex h-[90vh] flex-col justify-between">
+            <div>
+              <h3 className="text-base font-semibold">{campaignInfo?.name}</h3>
+              <div className="my-[16px] w-full overflow-hidden rounded-[12px] border-[3px] border-solid border-[#D7D7D7]">
+                <Image
+                  src={'/storeImg.png'}
+                  alt="Store"
+                  height={420}
+                  width={400}
+                  className="w-full"
+                />
+              </div>
+              {/* <h2 className="text-2xl font-medium mb-[16px]">H & W Market</h2> */}
+              <p className="text-base font-medium">{campaignInfo?.description}</p>
 
-                <div className='mt-[16px] flex flex-col gap-[17px]'>
-                    <div className="flex items-center gap-[6px]">
-                      <UserCircleIcon width={20} height={20} />
-                      <div className='flex items-center gap-[4px]'>
-                        <p className="text-[#000] font-medium text-base">{campaignInfo?.no_of_recipients}/100</p>
-                        <span className='text-[12px] self-end font-normal italic text-[#A3A3A3]'>participants</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-[6px]">
-                      <CurrencyDollarIcon  width={20} height={20} />
-                      <div className='flex items-cente gap-[4px]'>
-                        <p className="text-[#000] font-medium text-base">2500</p>
-                        <span className='text-[12px] self-end  font-normal italic text-[#A3A3A3]'>localcoin</span>
-                      </div>
-                    </div>
-                    <div className="flex gap-[6px]">
-                      <MapIcon  width={20} height={20} />
-                      <div className='flex items-center'>
-                        <p className="text-[#000] self-bottom font-medium text-base">
-                          {campaignInfo?.location}
-                        </p>
-                        {/* <span className='text-[12px] font-normal italic text-[#A3A3A3]'>localcoin</span> */}
-                      </div>
-                    </div>
+              <div className="mt-[16px] flex flex-col gap-[17px]">
+                <div className="flex items-center gap-[6px]">
+                  <UserCircleIcon width={20} height={20} />
+                  <div className="flex items-center gap-[4px]">
+                    <p className="text-base font-medium text-[#000]">
+                      {campaignInfo?.no_of_recipients}/100
+                    </p>
+                    <span className="self-end text-[12px] font-normal italic text-[#A3A3A3]">
+                      participants
+                    </span>
+                  </div>
                 </div>
-                
+                <div className="flex items-center gap-[6px]">
+                  <CurrencyDollarIcon width={20} height={20} />
+                  <div className="items-cente flex gap-[4px]">
+                    <p className="text-base font-medium text-[#000]">2500</p>
+                    <span className="self-end text-[12px]  font-normal italic text-[#A3A3A3]">
+                      localcoin
+                    </span>
+                  </div>
                 </div>
-                <div>
-                    <Button  text="Join Campaign" />
+                <div className="flex gap-[6px]">
+                  <MapIcon width={20} height={20} />
+                  <div className="flex items-center">
+                    <p className="self-bottom text-base font-medium text-[#000]">
+                      {campaignInfo?.location}
+                    </p>
+                    {/* <span className='text-[12px] font-normal italic text-[#A3A3A3]'>localcoin</span> */}
+                  </div>
                 </div>
-             </div>
+                <div>Participants</div>
+                {participantList.map((eachParticipant: any, eachIndex: number) => (
+                  <div key={eachIndex + 1 + ''}>
+                    {eachParticipant.name}{' '}
+                    <small>{eachParticipant.value ? 'Accepted' : 'UnVerified'}</small>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <Button handleClick={handleJoin} text="Join Campaign" />
+            </div>
+          </div>
 
+          <button type="button" onClick={() => handleVerify()}>
+            Check for Verify
+          </button>
+
+          {showUsernameBox && (
+            <div className="username-modal flex items-center justify-between">
+              <div className="relative mx-auto flex h-[200px] w-[80%] items-center justify-center overflow-hidden rounded-[16px] bg-[#fff] p-[16px]">
+                <span
+                  onClick={() => setShowUsernameBox(false)}
+                  className="absolute right-[4px] top-[4px] flex h-[20px] w-[20px] cursor-pointer items-center justify-center rounded-[100%] border border-[#000]"
+                >
+                  X
+                </span>
+                <div className="flex flex-col gap-[20px] pl-[20px]">
+                  <InputForm
+                    name="username"
+                    // label={'Title'}
+                    // labelClass={'!mb-[2px]'}
+                    handleChange={handleChange}
+                    placeholder={'Enter Username'}
+                    maxLength={300}
+                    data={data}
+                  />
+                  <Button showLoader={showLoader} handleClick={joinCampaign} text="Join" />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </>

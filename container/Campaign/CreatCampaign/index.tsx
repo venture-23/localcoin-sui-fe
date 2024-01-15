@@ -263,19 +263,3 @@ export default CreateCampaignPage;
 
 
 
-/* 
-
-
-{
-    "name": "Campaign Title OM",
-    "totalAmount": "1",
-    "participant": "1",
-    "description": "campaign description by OM",
-    "tokenAddress": "CD7TYEZ6HDR7AK3FERMOGGYANBBC4CYFMEDGNSWQOFEPAKLSHUO56WTK",
-    "tokenName": "TST1",
-    "endingDate": "2024-01-15T15:21:52.082Z",
-    "endingDateStr": "",
-    "correctInfoCheck": true,
-    "location": "kathmandu"
-}
-*/
