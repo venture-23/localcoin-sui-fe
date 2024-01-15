@@ -1,11 +1,13 @@
-import StoreDetails from "components/storeDetails"
+import StoreDetails from "components/storeDetails";
 
-const StorePage = () => {
+
+export default function storeDetails() {
     return (
-        <>
-            <StoreDetails  />
-        </>
-    )
-}
-
-export default StorePage
+      <>
+        {/* <h1>Fetch Details of the campaign {params.campaignid}</h1> */}
+    
+            <StoreDetails />
+      </>
+    );
+  }
+  

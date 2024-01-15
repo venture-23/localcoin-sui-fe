@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import { useMyContext } from './useMyContext';
 
-export function useCamapigns({ id = '', fetchAllCampaign = false }: any) {
+export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }: any) {
   const { userInfo } = useMyContext();
 
   const campaignListInfo = useQuery({
@@ -64,24 +64,25 @@ export function useCamapigns({ id = '', fetchAllCampaign = false }: any) {
     }
   });
 
-  // const storeDetailInfo = useQuery({
-  //   queryKey: [`storeDetailsInfo-${id}`],
-  //   enabled: !!id,
-  //   // cacheTime: Infinity,
-  //   retry: 3,
-  //   retryDelay: 3000,
-  //   refetchOnWindowFocus: false,
-  //   queryFn: async () => {
-  //     const response = await campaignServices.get_merchant_info(userInfo.secretKey, id);
-  //     if (response?.error) throw new Error(response.error || 'Something went wrong');
-  //     console.log({ response });
-  //     return response;
-  //   },
-  //   onError: (error: any) => {
-  //     console.log('merchant status error', JSON.stringify(error, null, 2));
-  //     toast.error('Error While getting details info');
-  //   }
-  // });
+  const storeDetailInfo = useQuery({
+    queryKey: [`storeDetailsInfo-${id}`],
+    enabled: !!storeId,
+    // cacheTime: Infinity,
+    retry: 3,
+    retryDelay: 3000,
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      console.log(storeId,'storeId')
+      const response = await campaignServices.get_merchant_info(userInfo.secretKey, storeId);
+      if (response?.error) throw new Error(response.error || 'Something went wrong');
+      console.log({ response });
+      return response;
+    },
+    onError: (error: any) => {
+      console.log('merchant status error', JSON.stringify(error, null, 2));
+      toast.error('Error While getting details info');
+    }
+  });
 
   const campaignDetailsInfo = useQuery({
     queryKey: [`campaignDetailsInfo-${id}`],
@@ -107,11 +108,11 @@ export function useCamapigns({ id = '', fetchAllCampaign = false }: any) {
     return { campaignList, campaignInfo };
   }, [campaignListInfo.data, campaignDetailsInfo.data]);
 
-  const { merchantList } = useMemo(() => {
+  const { merchantList, storeInfo } = useMemo(() => {
     const merchantList = merchantListInfo.data;
-    // const storeInfo =  storeDetailInfo.data
-    return { merchantList }
-  }, [merchantListInfo.data])
+    const storeInfo =  storeDetailInfo.data
+    return { merchantList, storeInfo }
+  }, [merchantListInfo.data, storeDetailInfo.data])
 
   return {
     campaignList,
@@ -119,6 +120,6 @@ export function useCamapigns({ id = '', fetchAllCampaign = false }: any) {
     isFetching: campaignListInfo.isFetching,
     isDetailsFetching: campaignDetailsInfo.isFetching,
     merchantList,
-    // storeInfo,
+    storeInfo,
   };
 }
