@@ -3,11 +3,22 @@ import { Campaigns } from 'components/campaigns';
 import { PageFooter } from 'components/pageFooter';
 import PageHeader from 'components/pageheader';
 import { Stores } from 'components/stores';
+import { useGetBalance } from 'hooks';
+import { useMyContext } from 'hooks/useMyContext';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { encodeToken } from 'services/encrypt-decrypt-data';
 
 const LandingPage = () => {
-  // const router = useRouter();
+  const router = useRouter();
+
+  const { userBalance } = useGetBalance()
+
+
+  console.log(userBalance, ':userBal')
+
+  const { userInfo } = useMyContext();
 
   const campInfo = {
     publicKey: 'GC35FMQWTX7HA2UGRRHLEVT46CEKZBSDDXQXADEZGWWWOZCGCUZOOPE4',
@@ -37,6 +48,7 @@ const LandingPage = () => {
     localStorage.setItem('local-coin', encodeToken(mapValue[name], '1111'));
     window.location.reload();
   };
+  
 
   return (
     <>
@@ -46,12 +58,25 @@ const LandingPage = () => {
       <section className="">
         <div className='mb-[24px] landing-top'>
               <PageHeader />
-              <div>
-                <h6 className='text-base font-bold text-[#1384F5]'>Total LocalCoins</h6>
-                <div className='text-[32px] font-semibold leading-9'>
-                  0
+              <div className='flex justify-between'>
+                <div>
+                  <h6 className='text-base font-bold text-[#1384F5]'>Total LocalCoins</h6>
+                  <div className='text-[32px] font-semibold leading-9'>
+                    {userBalance ? Number(userBalance).toFixed(0).toString() : 0}
+                  </div>
                 </div>
-            </div>
+                {userInfo?.publicKey && (
+                  <div className='self-end'>
+                    <Link href={'/withdraw'}>
+                    <button className='text-[12px] font-medium text-[#FFf] py-[5px] px-[18px] bg-[#1653AE] rounded-[6px] cursor-pointer'>Withdraw</button>
+                    </Link>
+                    
+                  </div>
+
+                )}
+                
+              </div>
+              
           </div>
         <div className="container mx-auto ">
           {/* Dashboard */}

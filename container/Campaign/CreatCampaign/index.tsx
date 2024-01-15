@@ -13,6 +13,8 @@ import DatePicker from 'react-datepicker';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 
+import { ConfirmationScreen } from 'components/confirmationScreen';
+import Select from 'components/form/select';
 import "react-datepicker/dist/react-datepicker.css";
 
 
@@ -35,15 +37,18 @@ const CreateCampaignPage = () => {
   }, [userInfo]);
 
   const [showLoader, setShowLoader] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [data, setData] = useState({
     name: '',
     totalAmount: '',
     participant: '',
     description: '',
-    creatorAddress: '',
-    creatorName: '',
+    tokenAddress: '',
+    tokenName: '',
     endingDate: new Date(),
+    endingDateStr: '',
     correctInfoCheck: false,
+    location: '',
   });
   const [error, setError] = useState<any>({});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +83,8 @@ const CreateCampaignPage = () => {
             setShowLoader(false);
             console.log(x);
             toast.success('Created a Campaign');
-            router.push('/campaign');
+            // router.push('/campaign');
+            setShowSuccess(true);
           }
         })
         .catch((x) => {
@@ -88,7 +94,8 @@ const CreateCampaignPage = () => {
     }
   };
   const handleDropdown = (value) => {
-    setData({ ...data, creatorAddress: value.value, creatorName: value.name });
+    console.log(value, ':val')
+    setData({ ...data, tokenAddress: value.value, tokenName: value.name });
   };
 
 const CustomInput = forwardRef(({ value, onClick }: any, ref) => {
@@ -110,7 +117,10 @@ const CustomInput = forwardRef(({ value, onClick }: any, ref) => {
 
   return (
     <section>
-      <div className="container mx-auto">
+      {showSuccess ? (
+        <ConfirmationScreen text='Your campaign is now live. Participants can now join your campaign to earn rewards. If you have any questions, please email admin@localcoin.us' />
+      ): (
+        <div className="container mx-auto">
         {/* <PageHeader backLink={`/campaign`} /> */}
           <div onClick={() => router.back()} className='my-[18px] cursor-pointer flex items-center'>
             <ChevronLeftIcon width={16} height={16} />
@@ -162,14 +172,14 @@ const CustomInput = forwardRef(({ value, onClick }: any, ref) => {
             error={error}
             data={data}
           />
-          {/* <Select
-            defaultvalue={data.creatorName || ''}
+          <Select
+            defaultvalue={data.tokenName || ''}
             optionsList={creatorAddressList}
             handleChange={handleDropdown}
-          /> */}
+          />
           <DatePicker
             selected={new Date(data.endingDate)} 
-            onChange={(date) => setData({ ...data, endingDate: date as Date})}
+            onChange={(date) => setData({ ...data, endingDate: date as Date, endingDateStr: date?.toDateString() as string})}
             customInput={<CustomInput />}
           />
           <InputForm
@@ -177,7 +187,7 @@ const CustomInput = forwardRef(({ value, onClick }: any, ref) => {
             // label={'No of Recipients'}
             // labelClass={'!mb-[2px]'}
             handleChange={handleChange}
-            placeholder={'# of Tokens Funding'}
+            placeholder={'Number of Recipients'}
             maxLength={3}
             error={error}
             inputMode="numeric"
@@ -188,11 +198,22 @@ const CustomInput = forwardRef(({ value, onClick }: any, ref) => {
             handleChange={handleChange}
             // label={'Total Amount'}
             // labelClass={'!mb-[2px]'}
-            placeholder={'# of Recipients'}
+            placeholder={'Total funding amount'}
             maxLength={5}
             error={error}
             inputMode="numeric"
             data={data}
+          />
+          <TextArea
+            type="text"
+            rows={3}
+            error={error}
+            name="location"
+            maxLength={225}
+            data={data}
+            handleChange={handleChange}
+            className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-[#A3A3A3] placeholder-extrabold shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+            placeholder="Enter Campaign Location"
           />
           <div className={`flex items-center justify-between px-[12px] w-full h-[48px] rounded-[6px] border border-[#E4E4E7] bg-[#F9F9F9) text-base font-semibold ${!data.correctInfoCheck && 'opacity-40'}`}>
             <span>Total:</span>
@@ -214,6 +235,8 @@ const CustomInput = forwardRef(({ value, onClick }: any, ref) => {
           </div>
         </div>
       </div>
+      )}
+      
     </section>
   );
 };

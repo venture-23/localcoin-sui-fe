@@ -75,13 +75,12 @@ export function useMerchant({
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const test = async () => {
+      // const test = async () => {
+        console.log(data, ':data')
         const response = await campaignServices.merchant_registration({ ...data, ...userInfo });
+        console.log(response, 'Merhcant')
         if (response?.error) throw new Error(response.error || 'Something went wrong');
         return response;
-      };
-      requiredAuthentication(test);
-      console.log('printed');
     },
     onError: (error: any) => {
       toast.error('Error While merchant-registration');

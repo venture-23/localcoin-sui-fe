@@ -3,7 +3,7 @@ import StoreDetails from "components/storeDetails"
 const StorePage = () => {
     return (
         <>
-            <StoreDetails />
+            <StoreDetails  />
         </>
     )
 }

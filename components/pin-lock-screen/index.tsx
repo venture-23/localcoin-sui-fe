@@ -5,7 +5,7 @@ import CustomToaster from 'components/toaster';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { checkPinCorrect } from 'services/encrypt-decrypt-data';
+import { checkPinCorrect, decodeToken } from 'services/encrypt-decrypt-data';
 import './app.css';
 
 export default function PinLockScreen(props: any) {
@@ -18,6 +18,7 @@ export default function PinLockScreen(props: any) {
   const [redirectTo, setRedirectTo] = useState(false);
   const [userInfo, setUserInfo] = useState<any>({});
 
+
   const [userEnterPinData, setUserEnterPinData] = useState<any>('');
   const [error, setError] = useState('');
 
@@ -28,6 +29,8 @@ export default function PinLockScreen(props: any) {
       setUserEnterPinData(enterPin);
       if (isInCookies) {
         if (checkPinCorrect(cookieValue, enterPin)) {
+          const userD = decodeToken(cookieValue, enterPin)
+          setUserInfo({ ...userD, enterPin });
           setUserEnterPinData('');
           setShowPinScreen(false);
           setCheckPinCode(false);

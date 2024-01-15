@@ -8,7 +8,8 @@ const MerchantRegisterInfo = ({
   handleChange,
   handleSubmit,
   error = {},
-  data = {}
+  data = {},
+  loader
 }: any) => {
   return (
     <div className="bg-white">
@@ -76,7 +77,7 @@ const MerchantRegisterInfo = ({
         </label>
 
         <div onClick={handleSubmit}>
-          <Button disabled={!data.correctInfoCheck} text="Continue" />
+          <Button showLoader={loader} disabled={!data.correctInfoCheck || loader} text="Continue" />
         </div>
       </div>
     </div>

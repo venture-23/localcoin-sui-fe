@@ -3,7 +3,6 @@ import {
   balanceContractId,
   campaignContractId,
   issuanceManagementContract,
-  localCoinAddress,
   superAdminSecret,
   userRegistryContractId
 } from 'utils/constants';
@@ -29,9 +28,10 @@ export const campaignServices = (() => {
     contractId = campaignContractId
   }: any) => {
     try {
-      // const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
-      // const sourcePublicKey = sourceKeypair.publicKey();
-      const sourcePublicKey = publicKey;
+      const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
+      const sourcePublicKey = sourceKeypair.publicKey();
+      debugger
+      // const sourcePublicKey = publicKey;
       const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
         allowHttp: true
       });
@@ -60,7 +60,10 @@ export const campaignServices = (() => {
           console.log({ sim: sim.result?.retval, parameterType });
           return decoderHelper(parameterType, { returnValue: sim.result?.retval });
         });
-      } else {
+      } 
+      else
+      {
+        debugger
         transaction = await server.prepareTransaction(transaction);
         const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
         transaction.sign(sourceKeypair);
@@ -130,9 +133,10 @@ export const campaignServices = (() => {
         StringToScVal(data.description),
         // StringToScVal(data.participant),
         numberToU32(parseFloat(data.participant)),
-        accountToScVal(localCoinAddress),
+        accountToScVal(data.tokenAddress),
         numberToI128(parseFloat(data.totalAmount)),
-        accountToScVal(publicKey)
+        accountToScVal(publicKey),
+        StringToScVal(data.location),
       ]
     });
   };
@@ -209,7 +213,8 @@ export const campaignServices = (() => {
   };
 
   const merchant_registration = (data: any) => {
-    console.log({ data }, 'merchant registration');
+    try {
+      console.log({ data }, 'merchant registration');
     return makeTransaction({
       contractId: userRegistryContractId,
       parameterType: 'merchant_registration',
@@ -219,9 +224,13 @@ export const campaignServices = (() => {
         StringToScVal(data.proprietor),
         StringToScVal(data.phone_no),
         StringToScVal(data.store_name),
-        StringToScVal(data.location)
+        StringToScVal(data.location || 'pokhara')
       ]
     });
+    } catch (error) {
+      console.log(error, ':from 231')
+    }
+    
   };
 
   const verify_merchant = (data: any) => {
@@ -243,6 +252,15 @@ export const campaignServices = (() => {
       // payload: [accountToScVal('CB5VITTFVAVRIWZDJ2BITGU3NHE5UEEQWIJ6DJFGNPITHRZVY7EOVIOL')] //token_contract_id
     });
   };
+
+  const get_verified_merchants = (secretKey: any) => {
+    console.log(secretKey, ':secret')
+    return makeTransaction({
+      contractId: userRegistryContractId,
+      parameterType: 'get_verified_merchants',
+      secretKey: secretKey,
+    })
+  }
 
   const get_merchant_info = (secretKey: any, merchantAddress: string) => {
     console.log({ merchantAddress });
@@ -292,6 +310,7 @@ export const campaignServices = (() => {
     get_merchant_associated,
     get_merchant_info,
     request_campaign_settlement,
-    get_user_balance: get_balance
+    get_user_balance: get_balance,
+    get_verified_merchants,
   };
 })();

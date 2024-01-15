@@ -29,6 +29,8 @@ const MerchantRegisterPage = () => {
     }
   };
 
+  console.log(data, ':data')
+
   const validation = () => {
     const err: any = {};
     if (!data.store_name) err.store_name = 'Enter Store Name';
@@ -39,19 +41,25 @@ const MerchantRegisterPage = () => {
   };
 
   const handleSubmit = () => {
-    const errorChecked = validation();
-    setError(errorChecked);
-    if (Object.keys(errorChecked).length === 0) {
-      if (showFormNo === 1) {
-        setShowFormNo(2);
-      } else {
-        console.log('manish');
-        
-        registerMerchant();
+    try {
+      const errorChecked = validation();
+      setError(errorChecked);
+      if (Object.keys(errorChecked).length === 0) {
+        // if (showFormNo === 1) {
+        //   setShowFormNo(2);
+        // } else {
+          console.log('manish');
 
-        setShowFormNo(3)
+          registerMerchant();
+
+          // setShowFormNo(3)
+        // }
       }
+    } catch (error) {
+      console.log(error)
+      setShowFormNo(1);
     }
+    
   };
   return (
     <section className="relative">
@@ -59,7 +67,7 @@ const MerchantRegisterPage = () => {
         <div className="mb-6 flex items-center pt-10">
           <Link
             href={showFormNo === 1 ? '/' : '#'}
-            onClick={() => (showFormNo === 2 && setShowFormNo(1)) || false}
+            onClick={() => ((showFormNo === 2 || showFormNo === 3) && setShowFormNo(1)) || false}
           >
             <ChevronLeftIcon width={24} height={24} />
           </Link>
@@ -71,6 +79,7 @@ const MerchantRegisterPage = () => {
             error={error}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
+            loader={isProcessing}
           />
         // ) : (
         //   <RegisterOverView data={data} loader={isProcessing} handleSubmit={handleSubmit} />

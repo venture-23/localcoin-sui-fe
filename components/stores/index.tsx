@@ -1,4 +1,5 @@
-import { DummyCardBox } from "components/dummyCardBox"
+import { DummyCardBox } from "components/dummyCardBox";
+import { useCamapigns } from "hooks";
 
 const storeData = [
     {
@@ -36,6 +37,8 @@ const storeData = [
 
 
 export const Stores = () => {
+    const { merchantList } = useCamapigns({});
+    console.log(merchantList, ':mer1')
     return (
         <div className="mt-[20px]">
             <div className="flex items-center">
@@ -45,7 +48,7 @@ export const Stores = () => {
 
             <div className="flex store-container-box items-center overflow-auto gap-[20px]">
                 {
-                    storeData.map((item,idx) => (
+                    merchantList?.map((item,idx) => (
                        <DummyCardBox key={idx} boxData={item} boxTitle="Store" />
                     ))
                 }

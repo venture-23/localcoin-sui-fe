@@ -1,4 +1,5 @@
-import { DummyCardBox } from "components/dummyCardBox"
+import { DummyCardBox } from "components/dummyCardBox";
+import { useCamapigns } from "hooks";
 
 const campaignData = [
     {
@@ -44,6 +45,7 @@ const campaignData = [
 ]
 
 export const Campaigns = () => {
+    const { isFetching, campaignList } = useCamapigns({});
     return (
         <div className="mt-[20px]">
             <div className="flex items-center">
@@ -53,7 +55,7 @@ export const Campaigns = () => {
 
             <div className="flex store-container-box items-center overflow-auto gap-[20px]">
                 {
-                    campaignData.map((item,idx) => (
+                    campaignList?.map((item: any ,idx: any) => (
                        <DummyCardBox key={idx} boxData={item} boxTitle="Campaigns" />
                     ))
                 }

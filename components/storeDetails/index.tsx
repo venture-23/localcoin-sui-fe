@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 
 
 const StoreDetails = () => {
+    // const { isDetailsFetching, storeInfo  } = useCamapigns({ id: props.merchantId });
+    // console.log(storeInfo, ':store')
     const router = useRouter()
   return (
     <section>
