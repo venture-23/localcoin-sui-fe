@@ -2,6 +2,7 @@
 import { CurrencyDollarIcon, MapIcon, UserCircleIcon } from '@heroicons/react/16/solid';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
+import InputForm from 'components/form/input';
 import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
@@ -13,14 +14,18 @@ const CampaignDetail = (props: any) => {
   const { userInfo } = useMyContext();
   const router = useRouter();
   const [showLoader, setShowLoader] = useState(false);
+  const [showUsernameBox, setShowUsernameBox] = useState(false)
 
   const [scanData, setScanData] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
   const [notLoggedIn, setNotLoggedIn] = useState(false);
+  // const [data, setData] = useState({
+  //   username: ''
+  // })
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({
-    // recipientAddress: 'GAFD2TMWS75B5VHQTUQ3E534UEHNLRIHH64VYO4EAMYNEIDXJ765JI34',
-    // amount: 1
+    username: '',
+    recipientAddress: userInfo?.publicKey,
   });
   const pathname = usePathname();
   const { isDetailsFetching, campaignInfo } = useCamapigns({ id: props.campaignId, fetchAllCampaign: true });
@@ -30,16 +35,16 @@ const CampaignDetail = (props: any) => {
       setNotLoggedIn(true);
     }
   }, []);
-  useEffect(() => {
-    if (scanData) {
-      const scanDatParse: any = JSON.parse(scanData);
-      if (scanDatParse.publicKey) {
-        setData({ ...data, recipientAddress: scanDatParse.publicKey });
-      }
-      buttonRef.current.close();
-      setOpenDrawer(true);
-    }
-  }, [scanData]);
+  // useEffect(() => {
+  //   if (scanData) {
+  //     const scanDatParse: any = JSON.parse(scanData);
+  //     if (scanDatParse.publicKey) {
+  //       setData({ ...data, recipientAddress: scanDatParse.publicKey });
+  //     }
+  //     buttonRef.current.close();
+  //     setOpenDrawer(true);
+  //   }
+  // }, [scanData]);
 
   const buttonRef = useRef<any>(null);
 
@@ -83,17 +88,35 @@ const CampaignDetail = (props: any) => {
       // console.log('first');
     }
   };
-  // const joinCampaign = async () => {
-  //   try {
-  //     setShowLoader(true)
-  //     const joinRes = await campaignServices.join_campaign()
+  const joinCampaign = async () => {
+    try {
+      setShowLoader(true)
+      const joinRes = await campaignServices.join_campaign(data.username, data.recipientAddress, userInfo, props.campaignId )
 
-  //     setShowLoader(false)
-  //   } catch (error) {
-  //     console.log(error)
-  //     setShowLoader(false)
-  //   }
-  // }
+      console.log(joinRes, ':res')
+
+      toast.success('Campaign Joined')
+      setShowUsernameBox(false);
+      
+
+      setShowLoader(false)
+    } catch (error) {
+      console.log(error)
+      setShowLoader(false)
+    }
+  }
+
+  const handleJoin = async () => {
+    if(!userInfo?.publicKey) {
+      toast.error('Please login first')
+      return;
+    }
+    setShowUsernameBox(true);
+
+    // const res = await campaignServices.get_recipients_status(userInfo)
+    // console.log(res, ':rec')
+  }
+  
 
   return (
     <>
@@ -229,9 +252,30 @@ const CampaignDetail = (props: any) => {
                 
                 </div>
                 <div>
-                    <Button  text="Join Campaign" />
+                    <Button handleClick={handleJoin}  text="Join Campaign" />
                 </div>
              </div>
+
+             {showUsernameBox && (
+              <div className='username-modal flex items-center justify-between'>
+                
+                <div className='w-[80%] relative flex items-center justify-center p-[16px] overflow-hidden mx-auto bg-[#fff] h-[200px] rounded-[16px]'>
+                  <span onClick={() => setShowUsernameBox(false)} className='absolute cursor-pointer top-[4px] right-[4px] border border-[#000] h-[20px] w-[20px] flex items-center justify-center rounded-[100%]'>X</span>
+                  <div className='pl-[20px] flex flex-col gap-[20px]'>
+                    <InputForm
+                      name="username"
+                      // label={'Title'}
+                      // labelClass={'!mb-[2px]'}
+                      handleChange={handleChange}
+                      placeholder={'Enter Username'}
+                      maxLength={300}
+                      data={data}
+                    />
+                    <Button showLoader={showLoader}  handleClick={joinCampaign} text='Join' />
+                  </div>
+                </div>
+              </div>
+             )}
 
         </div>
       </section>

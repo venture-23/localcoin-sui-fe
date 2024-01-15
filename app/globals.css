@@ -314,3 +314,14 @@ section {
   right: 0;
   bottom: 40px
 }
+
+.username-modal {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000044;
+  max-width: 400px;
+  backdrop-filter: blur(2px);
+  z-index: 333;
+}

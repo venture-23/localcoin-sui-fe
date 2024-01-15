@@ -53,7 +53,8 @@ export const campaignServices = (() => {
           'recipient_to_merchant_transfer',
           'merchant_registration',
           'verify_merchant',
-          'request_campaign_settlement'
+          'request_campaign_settlement',
+          'join_campaign'
         ].includes(parameterType)
       ) {
         return server.simulateTransaction(transaction).then((sim: any) => {
@@ -63,6 +64,7 @@ export const campaignServices = (() => {
       } 
       else
       {
+        debugger
         transaction = await server.prepareTransaction(transaction);
         const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
         transaction.sign(sourceKeypair);
@@ -296,12 +298,29 @@ export const campaignServices = (() => {
     });
   };
 
-  const join_campaign = (username: string, address: string, userInfo: any) => {
+  const join_campaign = (username: string, address: string, userInfo: any, campaignAddress: string) => {
+    console.log({
+      username,
+      address,
+      userInfo,
+      campaignAddress
+    })
     return makeTransaction({
       secretKey: userInfo.secretKey,
-      contractId: campaignContractId,
+      publicKey: userInfo.publicKey,
+      contractId: campaignAddress,
       parameterType: 'join_campaign',
-      payload: [accountToScVal(address), StringToScVal(username)]
+      payload: [accountToScVal(userInfo.publicKey), StringToScVal(username)]
+    })
+  }
+
+  const get_recipients_status = (userInfo: any) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      publicKey: userInfo.publicKey,
+      contractId: campaignContractId,
+      parameterType: 'get_recipients_status',
+      payload: []
     })
   }
 
@@ -322,5 +341,6 @@ export const campaignServices = (() => {
     get_user_balance: get_balance,
     get_verified_merchants,
     join_campaign,
+    get_recipients_status
   };
 })();
