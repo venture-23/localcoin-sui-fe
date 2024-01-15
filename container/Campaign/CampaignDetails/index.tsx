@@ -23,7 +23,7 @@ const CampaignDetail = (props: any) => {
     // amount: 1
   });
   const pathname = usePathname();
-  const { isDetailsFetching, campaignInfo } = useCamapigns({ id: props.campaignId });
+  const { isDetailsFetching, campaignInfo } = useCamapigns({ id: props.campaignId, fetchAllCampaign: true });
   console.log({ isDetailsFetching, campaignInfo });
   useEffect(() => {
     if (pathname.split('/')[1] === 'all-campaigns') {

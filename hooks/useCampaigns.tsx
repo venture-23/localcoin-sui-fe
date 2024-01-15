@@ -67,7 +67,7 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
 
   const storeDetailInfo = useQuery({
     queryKey: [`storeDetailsInfo-${id}`],
-    enabled: (!!storeId) || fetchAllCampaign,
+    enabled: !!storeId,
     // cacheTime: Infinity,
     retry: 3,
     retryDelay: 3000,

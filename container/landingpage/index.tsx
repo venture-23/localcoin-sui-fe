@@ -13,12 +13,14 @@ import { encodeToken } from 'services/encrypt-decrypt-data';
 const LandingPage = () => {
   const router = useRouter();
 
-  const { userBalance } = useGetBalance()
+ 
 
 
-  console.log(userBalance, ':userBal')
+ 
 
   const { userInfo } = useMyContext();
+
+  const { userBalance } = useGetBalance()
 
   const campInfo = {
     publicKey: 'GC35FMQWTX7HA2UGRRHLEVT46CEKZBSDDXQXADEZGWWWOZCGCUZOOPE4',

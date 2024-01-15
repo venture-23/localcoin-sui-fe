@@ -286,11 +286,13 @@ export const campaignServices = (() => {
   };
 
   const get_balance = (userInfo: any) => {
+    console.log(userInfo, ':fromBalance')
     return makeTransaction({
-      secretKey: userInfo.secretKey,
+      secretKey: userInfo?.secretKey,
       contractId: balanceContractId,
+      publicKey: userInfo?.publicKey,
       parameterType: 'balance',
-      payload: [accountToScVal(userInfo.publicKey)]
+      payload: [accountToScVal(userInfo?.publicKey)]
     });
   };
 

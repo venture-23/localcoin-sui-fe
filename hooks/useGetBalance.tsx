@@ -15,6 +15,7 @@ export function useGetBalance() {
     retryDelay: 3000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
+      console.log(userInfo, ':info')
       const response = await campaignServices.get_user_balance(userInfo);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
