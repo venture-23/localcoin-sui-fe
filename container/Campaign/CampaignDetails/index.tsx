@@ -214,6 +214,9 @@ const CampaignDetail = (props: any) => {
       if(acceptedNames.length === 0) {
         throw new Error ('Please select participants to verify')
       }
+      if(isCampaignEnded) {
+        throw new Error ('Campaign has ended')
+      }
       await campaignServices.verify_recipients(userInfo.secretKey, props.campaignId, acceptedNames);
       toast.success('Successfully verified participants')
       await fetchCampaignParticipate()
@@ -378,7 +381,7 @@ const CampaignDetail = (props: any) => {
                   <UserCircleIcon width={20} height={20} />
                   <div className="flex items-center gap-[4px]">
                     <p className="text-base font-medium text-[#000]">
-                      {getVerifiedParticipants() || 0}/{participantList?.length || 0}
+                      {getVerifiedParticipants() || 0}/{campaignInfo?.no_of_recipients}
                     </p>
                     <span className="self-end text-[12px] font-normal italic text-[#A3A3A3]">
                       verified participants/total participants

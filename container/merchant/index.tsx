@@ -13,7 +13,7 @@ import RegisterOverView from './components/register-overview';
 
 const MerchantRegisterPage = () => {
   const [error, setError] = useState<any>({});
-  const [showFormNo, setShowFormNo] = useState(3);
+  const [showFormNo, setShowFormNo] = useState(1);
   const { userInfo } = useMyContext();
   const [data, setData] = useState<any>({
     location: '',
