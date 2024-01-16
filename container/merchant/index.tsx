@@ -61,7 +61,7 @@ const MerchantRegisterPage = () => {
           await campaignServices.merchant_registration(userInfo, data)
           setShowLoader(false);
           toast.success('Registered merchant successfully')
-          setShowFormNo(2);
+          setShowFormNo(3);
       }
       setShowLoader(false);
     } catch (error: any) {
