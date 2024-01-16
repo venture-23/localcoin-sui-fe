@@ -1,6 +1,4 @@
 'use client';
-import { QrCodeIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 

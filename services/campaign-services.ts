@@ -1,11 +1,8 @@
-'use client';
-
 import { toast } from 'react-toastify';
 import {
   balanceContractId,
   campaignContractId,
   issuanceManagementContract,
-  localCoinAddress,
   superAdminSecret,
   userRegistryContractId
 } from 'utils/constants';
@@ -25,17 +22,20 @@ export const campaignServices = (() => {
 
   const makeTransaction = async ({
     secretKey,
+    publicKey,
     parameterType,
     payload = '',
     contractId = campaignContractId
   }: any) => {
     try {
-      const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
-      const sourcePublicKey = sourceKeypair.publicKey();
+      debugger
+      // const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
+      // const sourcePublicKey = sourceKeypair.publicKey();
+      // const sourcePublicKey = publicKey;
       const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
         allowHttp: true
       });
-      const account = await server.getAccount(sourcePublicKey);
+      const account = await server.getAccount(publicKey);
 
       const contract = new StellarSdk.Contract(contractId);
       const fee = 1000000;
@@ -46,13 +46,6 @@ export const campaignServices = (() => {
         .addOperation(contract.call(parameterType, ...((payload && payload) || [])))
         .setTimeout(30)
         .build();
-      /*  server.simulateTransaction(transaction).then((sim: any) => {
-        console.log({ sim });
-        console.log('cost:', sim.cost);
-        console.log('result:', sim.result);
-        console.log('error:', sim.error);
-        console.log('latestLedger:', sim.latestLedger);
-      }); */
       if (
         ![
           'create_campaign',
@@ -67,8 +60,11 @@ export const campaignServices = (() => {
           console.log({ sim: sim.result?.retval, parameterType });
           return decoderHelper(parameterType, { returnValue: sim.result?.retval });
         });
-      } else {
+      } 
+      else
+      {
         transaction = await server.prepareTransaction(transaction);
+        const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
         transaction.sign(sourceKeypair);
         const response = await server.sendTransaction(transaction);
         const SendTxStatus = {
@@ -89,6 +85,7 @@ export const campaignServices = (() => {
                 console.log('Transaction not found. Retrying...', parameterType);
                 await new Promise((resolve) => setTimeout(resolve, 1000));
               } else {
+                console.log('error');
                 toast.error(`failed while performing ${parameterType}`);
                 return null;
               }
@@ -119,10 +116,10 @@ export const campaignServices = (() => {
     });
   };
 
-  const getAllCampaigns = (secretKey: string) => {
+  const getAllCampaigns = (publicKey: string) => {
     return makeTransaction({
-      secretKey,
-      parameterType: 'get_campaigns_name'
+      parameterType: 'get_campaigns_name',
+      publicKey
     });
   };
 
@@ -135,21 +132,22 @@ export const campaignServices = (() => {
         StringToScVal(data.description),
         // StringToScVal(data.participant),
         numberToU32(parseFloat(data.participant)),
-        accountToScVal(localCoinAddress),
+        accountToScVal(data.tokenAddress),
         numberToI128(parseFloat(data.totalAmount)),
-        accountToScVal(publicKey)
+        accountToScVal(publicKey),
+        StringToScVal(data.location),
       ]
     });
   };
 
   const getCampaignInfo = (
-    secretKey: string = 'SCKKS3FLNGIOXICRNSFVNPBUNZLUA5EMEQESQS2IGLVYYYJAHRQX2GSA', // FROM DEMO FROM HOME PAGE
+    publicKey: string,
     contractId: string = 'CAYB5NVCDFFO3IYCHY77LPK2KAXJ7PNHIHPWQEUIM6G372MI7YKQS2VN'
   ) => {
     return makeTransaction({
       parameterType: 'get_campaign_info',
       contractId,
-      secretKey
+      publicKey
     });
   };
 
@@ -214,18 +212,24 @@ export const campaignServices = (() => {
   };
 
   const merchant_registration = (data: any) => {
+    try {
+      console.log({ data }, 'merchant registration');
     return makeTransaction({
       contractId: userRegistryContractId,
       parameterType: 'merchant_registration',
       secretKey: data.secretKey,
       payload: [
         accountToScVal(data.publicKey),
-        StringToScVal(data.proprietaryName),
-        StringToScVal(data.phoneNumber),
-        StringToScVal(data.storeName),
-        StringToScVal(data.location)
+        StringToScVal(data.proprietor),
+        StringToScVal(data.phone_no),
+        StringToScVal(data.store_name),
+        StringToScVal(data.location || 'pokhara')
       ]
     });
+    } catch (error) {
+      console.log(error, ':from 231')
+    }
+    
   };
 
   const verify_merchant = (data: any) => {
@@ -248,12 +252,20 @@ export const campaignServices = (() => {
     });
   };
 
-  const get_merchant_info = (secretKey: any, merchantAddress: string) => {
+  const get_verified_merchants = (publicKey: any) => {
+    return makeTransaction({
+      contractId: userRegistryContractId,
+      parameterType: 'get_verified_merchants',
+      publicKey
+    })
+  }
+
+  const get_merchant_info = (publicKey: any, merchantAddress: string) => {
     console.log({ merchantAddress });
     return makeTransaction({
       contractId: userRegistryContractId, //token_contract_id
       parameterType: 'get_merchant_info',
-      secretKey: secretKey,
+      publicKey,
       payload: [accountToScVal(merchantAddress)]
     });
   };
@@ -265,7 +277,6 @@ export const campaignServices = (() => {
     tokenAddress: string
   ) => {
     console.log({ tokenAddress, secretKey, amount });
-    // debugger;
     return makeTransaction({
       contractId: campaignContractId,
       parameterType: 'request_campaign_settlement',
@@ -283,6 +294,15 @@ export const campaignServices = (() => {
     });
   };
 
+  const join_campaign = (username: string, address: string, userInfo: any) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      contractId: campaignContractId,
+      parameterType: 'join_campaign',
+      payload: [accountToScVal(address), StringToScVal(username)]
+    })
+  }
+
   return {
     getCreatorCampaigns: getCreatorCampaigns,
     getAllCampaigns,
@@ -297,6 +317,8 @@ export const campaignServices = (() => {
     get_merchant_associated,
     get_merchant_info,
     request_campaign_settlement,
-    get_user_balance: get_balance
+    get_user_balance: get_balance,
+    get_verified_merchants,
+    join_campaign,
   };
 })();

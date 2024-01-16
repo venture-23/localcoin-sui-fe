@@ -125,7 +125,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
         toast.success(
           params === 'recipient_to_merchant_transfer'
             ? 'Send To Merchant Sucessfully'
-            : 'Registered, Waiting for verified account'
+            : 'Registered, Waiting for verify account'
         );
         return response.returnValue?._value;
       case 'verify_merchant':
@@ -137,6 +137,13 @@ const decoderHelper = (params: string, response: ResponseType) => {
             StellarSdk.StrKey.encodeEd25519PublicKey(eachValue?._value?._value?._value) || ''
         );
         return merchantAssco;
+      case 'get_verified_merchants':
+        const verifiedMerchants = (response?.returnValue?._value || []).map(
+          (eachValue: any) =>
+            StellarSdk.StrKey.encodeEd25519PublicKey(eachValue?._value?._value?._value) || ''
+        );
+        console.log(verifiedMerchants, ':verfied')
+        return verifiedMerchants;
       case 'get_merchant_info':
         const merchantInfo = (response?.returnValue?._value || []).map((eachValue: any) => ({
           [eachValue?._attributes?.key?._value?.toString()]:

@@ -3,18 +3,15 @@
 
 import useHandleCopy from 'hooks/useCopyText';
 import { useMyContext } from 'hooks/useMyContext';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/router';
-import { ChevronLeftIcon, ClipboardIcon } from '@heroicons/react/24/outline';
-import Button from 'components/botton';
+import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import BridgeBG from 'components/bridgebg';
+import { ConfirmationScreen } from 'components/confirmationScreen';
 import { useAddToHomescreenPrompt } from 'components/test';
-import Image from 'next/image';
+import { useMerchant } from 'hooks/useMerchant';
 import { useState } from 'react';
 import generateKeyPair from 'services/generateKeypair';
-import { maskWalletAddress } from 'utils/clipper';
-import GenerateKeyPair from './components/generate-key-pair-page';
 import MerchantInfo from './components/user-info';
 
 interface ErrorType {
@@ -26,18 +23,29 @@ interface ErrorType {
 
 const MerchantSignup = ({ param }: any) => {
   const router = useRouter();
+  console.log(router)
+  const [merchantFlag, setMerchantFlag] = useState(false);
+  const [data, setData] = useState<any>({
+    storeName: '',
+    proprietaryName: '',
+    phoneNumber: '',
+    location: '',
+    correctInfoCheck: false,
+  });
+
+  const { registerMerchant, isProcessing } = useMerchant({merchantFlag, data: { ...data } });
 
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
 
   const [showSpinner, seShowSpinner] = useState(false);
   const [showScreen, setShowScreen] = useState(param === 'merchant' ? 0 : 1);
   const { setshowPinScreen, userEnterPin, userInfo, setUserInfo } = useMyContext();
-  const [data, setData] = useState<any>({
-    storeName: '',
-    proprietaryName: '',
-    phoneNumber: '',
-    location: ''
-  });
+  const [successScreen, setSuccessScreen] = useState(false);
+
+  console.log(isProcessing, ':process')
+  
+  
+  
 
   const [error, setError] = useState<ErrorType>({});
   const [isCopied, handleCopy] = useHandleCopy({ showToast: true });
@@ -46,7 +54,12 @@ const MerchantSignup = ({ param }: any) => {
       target: { name, value }
     } = e;
     delete error[name];
-    setData({ ...data, [name]: value });
+    if(name === 'correctInfoCheck') {
+      setData({ ...data, [name]: !data.correctInfoCheck });
+    } else {
+      setData({ ...data, [name]: value });
+    }
+    
   };
   const validation = () => {
     const err: any = {};
@@ -62,7 +75,12 @@ const MerchantSignup = ({ param }: any) => {
     if (Object.keys(errorChecked).length === 0) {
       console.log('good to go', data);
       // router.push('/generate-key-pair');
-      setShowScreen(1);
+      // setShowScreen(1);
+      setMerchantFlag(true);
+
+      registerMerchant();
+      // if (isProcessing)
+      // setSuccessScreen(true)
     }
   };
 
@@ -73,13 +91,13 @@ const MerchantSignup = ({ param }: any) => {
     if (resp.secretKey) {
       seShowSpinner(false);
       setData({ ...data, ...resp });
-      // setshowPinScreen(true);
+      // setShowPinScreen(true);
     }
   };
 
   const handleSignUp = () => {
     setUserInfo({ ...data, userType: param });
-    setshowPinScreen(true);
+    setShowPinScreen(true);
   };
   return (
     <>
@@ -87,11 +105,12 @@ const MerchantSignup = ({ param }: any) => {
       {/* </Header> */}
       <section className="relative">
         <div className="container mx-auto">
-          <div className="mb-6 flex items-center pt-10">
-            {promptable && !isInstalled ? (
+          {/* <div className="mb-6 flex items-center pt-10"> */}
+            {/* <PageHeader backLink={'/'} /> */}
+            {/* {promptable && !isInstalled ? (
               <buton onClick={promptToInstall}>INSTALL APP</buton>
-            ) : null}
-            {param === 'merchant' ? (
+            ) : null} */}
+            {/* {param === 'merchant' ? (
               showScreen === 0 ? (
                 <Link href={showScreen === 0 ? '/signup' : ''}>
                   <ChevronLeftIcon width={24} height={24} />
@@ -106,20 +125,42 @@ const MerchantSignup = ({ param }: any) => {
               <Link href={'/signup'}>
                 <ChevronLeftIcon width={24} height={24} />
               </Link>
-            )}
+            )} */}
             {/* <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p> */}
-          </div>
-          {showSpinner && (
+          {/* </div> */}
+          {/* {showSpinner && (
             <>
               <div className="fixed inset-0 mx-auto flex flex-col items-center justify-center bg-white">
                 <div>
-                  <Image src={'/generateQR.gif'} width={250} height={250} />
+                  <Image src={'/generateQR.gif'} width={250} height={250} alt='' />
                 </div>
                 <p className="my-4 text-2xl ">Creating your digital account</p>
               </div>
             </>
+          )} */}
+          {successScreen ? (
+            <ConfirmationScreen 
+              text={'Thank you for applying! The Local Coin team will review your application and get back to you within 1 week. If you have any questions, please email admin@localcoin.us'} 
+            />
+          ): (
+            <>
+                <div onClick={() => router.back()} className='cursor-pointer flex items-center'>
+                  <ChevronLeftIcon width={16} height={16} />
+                  <span className='text-[12px] font-normal'>Back</span>
+                </div>
+
+                <MerchantInfo
+                  data={data}
+                  title={param?.charAt(0).toUpperCase() + param?.slice(1)}
+                  error={error}
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmit}
+                />
+            </>
+            
           )}
-          {showScreen === 0 ? (
+          
+          {/* {showScreen === 0 ? (
             <MerchantInfo
               data={data}
               title={param?.charAt(0).toUpperCase() + param?.slice(1)}
@@ -129,8 +170,8 @@ const MerchantSignup = ({ param }: any) => {
             />
           ) : (
             (!data.secretKey && <GenerateKeyPair handleGenerateKey={handleGenerateKey} />) || null
-          )}
-          {data.secretKey && (
+          )} */}
+          {/* {data.secretKey && (
             <div className="rounded-md bg-white p-10">
               <p className="mb-4 text-lg font-bold text-text">Please securely copy this code</p>
               <div className="grid gap-3">
@@ -172,7 +213,7 @@ const MerchantSignup = ({ param }: any) => {
                 )}
               </div>
             </div>
-          )}
+          )} */}
         </div>
         <BridgeBG />
       </section>

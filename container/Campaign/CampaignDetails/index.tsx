@@ -1,15 +1,10 @@
 'use client';
-import { QrCodeIcon } from '@heroicons/react/24/outline';
+import { CurrencyDollarIcon, MapIcon, UserCircleIcon } from '@heroicons/react/16/solid';
+import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
-import DetailCampaign from 'components/campaigncard/detail';
-import Drawer from 'components/drawer';
-import DrawerQRScan from 'components/drawer-qr-scan';
-import InputForm from 'components/form/input';
-import PageHeader from 'components/pageheader';
-import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
 import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
-import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -88,6 +83,17 @@ const CampaignDetail = (props: any) => {
       // console.log('first');
     }
   };
+  // const joinCampaign = async () => {
+  //   try {
+  //     setShowLoader(true)
+  //     const joinRes = await campaignServices.join_campaign()
+
+  //     setShowLoader(false)
+  //   } catch (error) {
+  //     console.log(error)
+  //     setShowLoader(false)
+  //   }
+  // }
 
   return (
     <>
@@ -99,12 +105,12 @@ const CampaignDetail = (props: any) => {
 
       <section className="relative">
         <div className="container mx-auto">
-          <PageHeader
+          {/* <PageHeader
             backLink={notLoggedIn ? '/all-campaigns' : '/campaign'}
             pageHeaderTitle={'Campaign Details'}
-          />
+          /> */}
 
-          {(isDetailsFetching && !campaignInfo?.name && (
+          {/* {(isDetailsFetching && !campaignInfo?.name && (
             <>
               <CampaignDetailSkeleton />
             </>
@@ -172,7 +178,61 @@ const CampaignDetail = (props: any) => {
                 )}
               </div>
             </>
-          )}
+          )} */}
+
+<div onClick={() => router.back()} className='cursor-pointer py-[18px] flex items-center'>
+                  <ChevronLeftIcon width={16} height={16} />
+                  <span className='text-[12px] font-normal'>Back</span>
+             </div>
+             <div className="flex flex-col justify-between h-[90vh]">
+                <div>
+                <h3 className="text-base font-semibold">{campaignInfo?.name}</h3>
+                <div className="w-full my-[16px] rounded-[12px] border-[3px] border-solid overflow-hidden border-[#D7D7D7]">
+                    <Image 
+                        src={'/storeImg.png'}
+                        alt="Store"
+                        height={420}
+                        width={400}
+                        className="w-full"
+                    />
+                </div>
+                {/* <h2 className="text-2xl font-medium mb-[16px]">H & W Market</h2> */}
+                <p className='text-base font-medium'>
+                  {campaignInfo?.description}
+                </p>
+
+                <div className='mt-[16px] flex flex-col gap-[17px]'>
+                    <div className="flex items-center gap-[6px]">
+                      <UserCircleIcon width={20} height={20} />
+                      <div className='flex items-center gap-[4px]'>
+                        <p className="text-[#000] font-medium text-base">{campaignInfo?.no_of_recipients}/100</p>
+                        <span className='text-[12px] self-end font-normal italic text-[#A3A3A3]'>participants</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-[6px]">
+                      <CurrencyDollarIcon  width={20} height={20} />
+                      <div className='flex items-cente gap-[4px]'>
+                        <p className="text-[#000] font-medium text-base">2500</p>
+                        <span className='text-[12px] self-end  font-normal italic text-[#A3A3A3]'>localcoin</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-[6px]">
+                      <MapIcon  width={20} height={20} />
+                      <div className='flex items-center'>
+                        <p className="text-[#000] self-bottom font-medium text-base">
+                          {campaignInfo?.location}
+                        </p>
+                        {/* <span className='text-[12px] font-normal italic text-[#A3A3A3]'>localcoin</span> */}
+                      </div>
+                    </div>
+                </div>
+                
+                </div>
+                <div>
+                    <Button  text="Join Campaign" />
+                </div>
+             </div>
+
         </div>
       </section>
     </>

@@ -4,7 +4,7 @@ import { createContext } from 'react';
 interface MyContextData {
   value?: string;
   showPinLockScreen?: boolean;
-  setshowPinScreen?: any;
+  setShowPinScreen?: any;
   setUserEnterPin?: any;
   userEnterPin?: string;
   checkPinCode?: boolean;
@@ -13,6 +13,7 @@ interface MyContextData {
   setRedirectTo?: any;
   setUserInfo?: any;
   userInfo?: any;
+  requiredAuthentication?: any;
 }
 
 // Create a context with an initial value

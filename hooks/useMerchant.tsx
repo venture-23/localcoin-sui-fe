@@ -6,12 +6,11 @@ import { useMyContext } from './useMyContext';
 
 export function useMerchant({
   merchantAddress = '',
-  registerMerchant = false,
   verify_merchant = false,
   data = {},
   tokenId = ''
 }: any) {
-  const { userInfo } = useMyContext();
+  const { userInfo, setShowPinScreen, requiredAuthentication } = useMyContext();
   const [fetch_merchant_info, setFetch_merchant_info] = useState(false);
   const [isSettledSuccess, setisSettledSuccess] = useState(false);
   const get_merchant_info = useQuery({
@@ -70,20 +69,24 @@ export function useMerchant({
 
   const merchantRegistrationInfo = useQuery({
     queryKey: [`merchant-registration`],
-    enabled: registerMerchant,
+    enabled: false,
     // cacheTime: Infinity,
     retry: 0,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const response = await campaignServices.merchant_registration(data);
-      if (response?.error) throw new Error(response.error || 'Something went wrong');
-      return response;
+      // const test = async () => {
+        console.log(data, ':data')
+        const response = await campaignServices.merchant_registration({ ...data, ...userInfo });
+        console.log(response, 'Merhcant')
+        if (response?.error) throw new Error(response.error || 'Something went wrong');
+        return response;
     },
     onError: (error: any) => {
       toast.error('Error While merchant-registration');
     }
   });
+
   const merchant_verify = useQuery({
     queryKey: [`merchant-verify`],
     enabled: verify_merchant,
@@ -129,7 +132,7 @@ export function useMerchant({
   ]);
 
   return {
-    isProcessing: merchantRegistrationInfo.isFetching,
+    isProcessing: merchantRegistrationInfo.isFetching || merchantRegistrationInfo.isRefetching,
     merchantResponse: tokenList,
     merchant_Verify,
     merchant_info,
@@ -138,13 +141,7 @@ export function useMerchant({
     setFetch_merchant_info,
     campaign_settlement_msg,
     campaign_settlement: campaign_settlement.refetch,
-    settelmentSuccess: isSettledSuccess
+    settelmentSuccess: isSettledSuccess,
+    registerMerchant: merchantRegistrationInfo.refetch
   };
 }
-/* 
---merchant_addr GCO5YWMWGT4KCJXWZ3S7ABSO6XXMWZ3OW3VBSR3CXZGIGFQPHAJ5MPG2 \
---proprietor "Carol" \
---phone_no "+977-9851000000" \
---store_name "Carol Super Mart" \
---location "Chhauni,vKathmandu"
-*/

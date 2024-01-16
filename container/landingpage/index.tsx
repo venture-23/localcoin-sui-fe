@@ -1,11 +1,25 @@
 'use client';
-import { QrCodeIcon } from '@heroicons/react/24/outline';
-import Button from 'components/botton';
-import GetStartedSVG from 'components/getStartedSVG';
+import { Campaigns } from 'components/campaigns';
+import { PageFooter } from 'components/pageFooter';
+import PageHeader from 'components/pageheader';
+import { Stores } from 'components/stores';
+import { useGetBalance } from 'hooks';
+import { useMyContext } from 'hooks/useMyContext';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { encodeToken } from 'services/encrypt-decrypt-data';
 
 const LandingPage = () => {
+  const router = useRouter();
+
+  const { userBalance } = useGetBalance()
+
+
+  console.log(userBalance, ':userBal')
+
+  const { userInfo } = useMyContext();
+
   const campInfo = {
     publicKey: 'GC35FMQWTX7HA2UGRRHLEVT46CEKZBSDDXQXADEZGWWWOZCGCUZOOPE4',
     secretKey: 'SBQD2MZPMRDLDIYE3SPXUD5G5X5IBPI5L7SGV476SHLVHTIJJIRJ3MVN',
@@ -34,15 +48,52 @@ const LandingPage = () => {
     localStorage.setItem('local-coin', encodeToken(mapValue[name], '1111'));
     window.location.reload();
   };
+  
 
   return (
     <>
-      <section className="grid place-items-center">
-        <div className="container mx-auto ">
-          <div className="flex justify-center ">
-            <GetStartedSVG />
+      {/* <div className='header-container'>
+        <PageHeader />
+      </div> */}
+      <section className="">
+        <div className='mb-[24px] landing-top'>
+              <PageHeader />
+              <div className='flex justify-between'>
+                <div>
+                  <h6 className='text-base font-bold text-[#1384F5]'>Total LocalCoins</h6>
+                  <div className='text-[32px] font-semibold leading-9'>
+                    {userBalance ? Number(userBalance).toFixed(0).toString() : 0}
+                  </div>
+                </div>
+                {userInfo?.publicKey && (
+                  <div className='self-end'>
+                    <Link href={'/withdraw'}>
+                    <button className='text-[12px] font-medium text-[#FFf] py-[5px] px-[18px] bg-[#1653AE] rounded-[6px] cursor-pointer'>Withdraw</button>
+                    </Link>
+                    
+                  </div>
+
+                )}
+                
+              </div>
+              
           </div>
-          <div className="mb-6 mt-4 text-center">
+        <div className="container mx-auto ">
+          {/* Dashboard */}
+          
+
+          {/* Stores */}
+          <Stores />
+
+
+          {/* Campaigns */}
+          <Campaigns />
+
+
+          {/* <div className="flex justify-center ">
+            <GetStartedSVG />
+          </div> */}
+          {/* <div className="mb-6 mt-4 text-center">
             <h2 className="text-heading mb-0 ">Get Started</h2>
             <p className="text-color text-lg opacity-[.6]">
               LocalCoin is just around the corner.
@@ -69,9 +120,9 @@ const LandingPage = () => {
               </span>
               below to get started .
             </p>
-          </div>
+          </div> */}
 
-          <div className="flex flex-col gap-5 ">
+          {/* <div className="flex flex-col gap-5 ">
             <Button text="Sign up for account" link="/signup" />
             <Button
               text="Check for ongoing campaigns"
@@ -80,12 +131,14 @@ const LandingPage = () => {
               link="/all-campaigns"
             />
 
-            {/* <Button
+            <Button
               text="Sign up for account"
               link="/signup"
               underline={`underline bg-transparent !text-[#212B34]  font-semibold `}
-            /> */}
-          </div>
+            />
+          </div> */}
+
+          <PageFooter />
         </div>
       </section>
     </>

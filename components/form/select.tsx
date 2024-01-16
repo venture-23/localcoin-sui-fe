@@ -13,10 +13,10 @@ const Select = ({
   return (
     <>
       <Menu as="div" className="relative inline-block w-full text-left">
-        <label className="!mb-[2px]">{label}</label>
+        {/* <label className="!mb-[2px]">{label}</label> */}
         <div>
-          <Menu.Button className="inline-flex w-full justify-start justify-between gap-x-1.5 rounded-md bg-white px-6 py-4 text-base font-medium text-textSecondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            {defaultvalue || 'Select One'}
+          <Menu.Button className="inline-flex w-full justify-start justify-between gap-x-1.5 placeholder-[#A3A3A3] placeholder-extrabold text-base font-semibold rounded-md bg-white px-6 py-4 text-base font-medium text-textSecondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            {defaultvalue || label}
             <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
           </Menu.Button>
           <p className={`mt-2 text-xs text-pink-600 `}>{error[name] || ''}</p>

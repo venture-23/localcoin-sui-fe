@@ -1,19 +1,19 @@
 const serverUrl = 'https://soroban-testnet.stellar.org';
 
-const issuanceManagementContract = 'CBCTFGTI4UZIVWZSTWYT2GRU2XMBW6BDTZS6EWAUZDQ3UDRNT4242SFM';
-const campaignContractId = 'CDZUQM552MGSEH3CFKEEIRJL7KBJR4ZBDC44VKYAHQPW3HT6NHL2F6RL';
+const issuanceManagementContract = 'CDHD4V7KCWPCEJBDJFLZFICYVO26WDAUAX2UOEDQYV6H7ANGC72GQWMV';
+const campaignContractId = 'CCEUWFV3B2XEJ5AHXAWTTSNRNPDZCWOMTUYOQ7HLZVYAKZCQNAV3PRK7';
 const localCoinAddress = 'CCKZTQ2TUDTR2EJJRY3BTPGV6R23UMNSTC6DYKBRBTAJUBC3UCR2BL5U';
-const userRegistryContractId = 'CAGXS4NKPKP4HWZWO2TCIOIZ6423PVV4PHCS3VW63PNBAVCGZSBCSITY';
+const userRegistryContractId = 'CDT2BLUT7NCVMVZE26FIKAKMNSWQ6SUZTRB5JHA4CW2JKPS37IUDIRAT';
 const superAdminSecret = 'SB46364SGIGPEQOLRXL6RTVDP4X2HBIMSNPIG246GAQC7VHHGHBOEV4M';
 const balanceContractId = 'CBIELTK6YBZJU5UP2WWQEUCYKLPU6AUNZ2BQ4WWFEIE3USCIHMXQDAMA';
+const staticPubKey = 'GDLRSCX7JV635QA5D6XMM7MRZFGDF42WMRE62F3LFZWJZKU3M2L3VN5U'; // for read only methods
 
 export {
   balanceContractId,
   campaignContractId,
   issuanceManagementContract,
   localCoinAddress,
-  serverUrl,
-  superAdminSecret,
+  serverUrl, staticPubKey, superAdminSecret,
   userRegistryContractId
 };
 
