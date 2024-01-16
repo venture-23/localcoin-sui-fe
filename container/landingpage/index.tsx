@@ -5,7 +5,6 @@ import PageHeader from 'components/pageheader';
 import { Stores } from 'components/stores';
 import { useGetBalance } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { encodeToken } from 'services/encrypt-decrypt-data';
@@ -67,7 +66,7 @@ const LandingPage = () => {
                     {userBalance ? Number(userBalance).toFixed(0).toString() : 0}
                   </div>
                 </div>
-                {userInfo?.publicKey && (
+                {/* {userInfo?.publicKey && (
                   <div className='self-end'>
                     <Link href={'/withdraw'}>
                     <button className='text-[12px] font-medium text-[#FFf] py-[5px] px-[18px] bg-[#1653AE] rounded-[6px] cursor-pointer'>Withdraw</button>
@@ -75,7 +74,7 @@ const LandingPage = () => {
                     
                   </div>
 
-                )}
+                )} */}
                 
               </div>
               

@@ -16,7 +16,7 @@ export function useGetBalance() {
     refetchOnWindowFocus: false,
     queryFn: async () => {
       console.log(userInfo, ':info')
-      const response = await campaignServices.get_user_balance(userInfo);
+      const response = await campaignServices.getReceipientToken(userInfo.secretKey, userInfo.publicKey);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
       return response;
