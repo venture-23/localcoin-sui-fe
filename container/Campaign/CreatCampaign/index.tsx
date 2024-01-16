@@ -14,29 +14,11 @@ import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 
 import { ConfirmationScreen } from 'components/confirmationScreen';
-import Select from 'components/form/select';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const CreateCampaignPage = () => {
   const router = useRouter();
   const [creatorAddressList, setCreatorAddressList] = useState([]);
-
-  const { userInfo } = useMyContext();
-
-  useEffect(() => {
-    if (userInfo.secretKey) {
-      campaignServices
-        .getTokenNameAddress(userInfo.publicKey)
-        .then((x) => {
-          console.log({ x });
-          setCreatorAddressList(x);
-        })
-        .catch(() => toast.error('Error from get_address_name'));
-    }
-  }, [userInfo]);
-
-  const [showLoader, setShowLoader] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
   const [data, setData] = useState({
     name: '',
     totalAmount: '',
@@ -49,6 +31,27 @@ const CreateCampaignPage = () => {
     correctInfoCheck: false,
     location: ''
   });
+
+  const { userInfo } = useMyContext();
+
+  useEffect(() => {
+    if (userInfo.secretKey) {
+      campaignServices
+        .getTokenNameAddress(userInfo.publicKey)
+        .then((x) => {
+          console.log({ x });
+          setCreatorAddressList(x);
+          setData({ ...data, tokenAddress: creatorAddressList[0]?.value})
+        })
+        .catch(() => toast.error('Error from get_address_name'));
+    }
+  }, [userInfo]);
+
+  console.log(creatorAddressList, ':cre')
+
+  const [showLoader, setShowLoader] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  
   const [error, setError] = useState<any>({});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -170,11 +173,11 @@ const CreateCampaignPage = () => {
               error={error}
               data={data}
             />
-            <Select
+            {/* <Select
               defaultvalue={data.tokenName || ''}
               optionsList={creatorAddressList}
               handleChange={handleDropdown}
-            />
+            /> */}
             <DatePicker
               selected={new Date(data.endingDate)}
               onChange={(date) =>

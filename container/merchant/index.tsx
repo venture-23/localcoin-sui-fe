@@ -3,14 +3,18 @@
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import { ConfirmationScreen } from 'components/confirmationScreen';
 import { useMerchant } from 'hooks/useMerchant';
+import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { campaignServices } from 'services/campaign-services';
 import MerchantInfo from './components/register-form';
 import RegisterOverView from './components/register-overview';
 
 const MerchantRegisterPage = () => {
   const [error, setError] = useState<any>({});
   const [showFormNo, setShowFormNo] = useState(1);
+  const { userInfo } = useMyContext();
   const [data, setData] = useState<any>({
     location: '',
     store_name: '',
@@ -18,7 +22,9 @@ const MerchantRegisterPage = () => {
     proprietor: '',
     correctInfoCheck: false,
   });
-  const { registerMerchant, isProcessing } = useMerchant({ data: { ...data } });
+  const { registerMerchant, isProcessing, isMerchantError } = useMerchant({ data: { ...data } });
+
+  const [showLoader, setShowLoader] = useState(false);
 
   const handleChange = (e: any) => {
     delete error[e.target.name];
@@ -29,6 +35,7 @@ const MerchantRegisterPage = () => {
     }
   };
 
+  console.log(isMerchantError, ':error')
   console.log(data, ':data')
 
   const validation = () => {
@@ -40,8 +47,9 @@ const MerchantRegisterPage = () => {
     return err;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
+      setShowLoader(true)
       const errorChecked = validation();
       setError(errorChecked);
       if (Object.keys(errorChecked).length === 0) {
@@ -50,14 +58,17 @@ const MerchantRegisterPage = () => {
         // } else {
           console.log('manish');
 
-          registerMerchant();
-
-          // setShowFormNo(3)
-        // }
+          await campaignServices.merchant_registration(userInfo, data)
+          setShowLoader(false);
+          toast.success('Registered merchant successfully')
+          setShowFormNo(2);
       }
-    } catch (error) {
+      setShowLoader(false);
+    } catch (error: any) {
       console.log(error)
+      toast.error('Failed while applying for merchant')
       setShowFormNo(1);
+      setShowLoader(false);
     }
     
   };
@@ -79,13 +90,13 @@ const MerchantRegisterPage = () => {
             error={error}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
-            loader={isProcessing}
+            loader={showLoader}
           />
         // ) : (
         //   <RegisterOverView data={data} loader={isProcessing} handleSubmit={handleSubmit} />
         )}
         {showFormNo ===  2 && (
-          <RegisterOverView data={data} loader={isProcessing} handleSubmit={handleSubmit} />
+          <RegisterOverView data={data} loader={showLoader} handleSubmit={handleSubmit} />
         )}
 
 

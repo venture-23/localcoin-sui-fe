@@ -97,7 +97,8 @@ const CampaignDetail = (props: any) => {
       })
       .then((res: any) => {
         if (res.length) {
-          setParticipantList(res);
+          const sortedParticipant = res.sort((a: any, b: any) => (b?.value === true) - (a?.value === true))
+          setParticipantList(sortedParticipant);
           
           setCurrentParticipant(res?.find((part: any) => part.address === userInfo.publicKey))
         }
@@ -383,7 +384,7 @@ const CampaignDetail = (props: any) => {
                   <div className="flex items-center gap-[6px]">
                     <CurrencyDollarIcon width={20} height={20} />
                     <div className="items-cente flex gap-[4px]">
-                      <p className="text-base font-medium text-[#000]">2500</p>
+                      <p className="text-base font-medium text-[#000]">{campaignInfo?.amount || 0}</p>
                       <span className="self-end text-[12px]  font-normal italic text-[#A3A3A3]">
                         localcoin
                       </span>

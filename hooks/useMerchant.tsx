@@ -77,7 +77,7 @@ export function useMerchant({
     queryFn: async () => {
       // const test = async () => {
         console.log(data, ':data')
-        const response = await campaignServices.merchant_registration({ ...data, ...userInfo });
+        const response = await campaignServices.merchant_registration(userInfo, data);
         console.log(response, 'Merhcant')
         if (response?.error) throw new Error(response.error || 'Something went wrong');
         return response;
@@ -133,6 +133,7 @@ export function useMerchant({
 
   return {
     isProcessing: merchantRegistrationInfo.isFetching || merchantRegistrationInfo.isRefetching,
+    isMerchantError: merchantRegistrationInfo.isError,
     merchantResponse: tokenList,
     merchant_Verify,
     merchant_info,

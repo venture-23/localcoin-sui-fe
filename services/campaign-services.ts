@@ -218,19 +218,19 @@ export const campaignServices = (() => {
     });
   };
 
-  const merchant_registration = (data: any) => {
+  const merchant_registration = (userInfo: any, data: any) => {
     try {
       console.log({ data }, 'merchant registration');
       return makeTransaction({
         contractId: userRegistryContractId,
         parameterType: 'merchant_registration',
-        secretKey: data.secretKey,
+        secretKey: userInfo.secretKey,
         payload: [
-          accountToScVal(data.publicKey),
+          accountToScVal(userInfo.publicKey),
           StringToScVal(data.proprietor),
           StringToScVal(data.phone_no),
           StringToScVal(data.store_name),
-          StringToScVal(data.location || 'pokhara')
+          StringToScVal(data.location)
         ]
       });
     } catch (error) {
