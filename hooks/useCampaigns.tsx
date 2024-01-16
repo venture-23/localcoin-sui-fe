@@ -10,16 +10,14 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
 
   const campaignListInfo = useQuery({
     queryKey: [`campaignListInfo`],
-    enabled: (!id && !!userInfo?.publicKey) || fetchAllCampaign,
+    enabled: fetchAllCampaign,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
       const response = fetchAllCampaign
-        ? await campaignServices.getAllCampaigns(
-          staticPubKey
-          )
+        ? await campaignServices.getAllCampaigns(staticPubKey)
         : await campaignServices.getCreatorCampaigns(userInfo.secretKey, userInfo.publicKey);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
@@ -30,7 +28,7 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
       toast.error('Error While getting campaign list');
     }
   });
-  
+
   const merchantListInfo = useQuery({
     queryKey: [`merchantListInfo`],
     enabled: (!id && !!userInfo?.publicKey) || fetchAllCampaign,
@@ -39,22 +37,18 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const merResponse = await campaignServices.get_verified_merchants(
-            staticPubKey
-          )
-      
-      const response = [];    
+      const merResponse = await campaignServices.get_verified_merchants(staticPubKey);
 
-      for(const merchantAddr of merResponse)  {
+      const response = [];
 
-        const infoRes = await campaignServices.get_merchant_info(staticPubKey, merchantAddr)
+      for (const merchantAddr of merResponse) {
+        const infoRes = await campaignServices.get_merchant_info(staticPubKey, merchantAddr);
         infoRes.merchantAddress = merchantAddr;
-        response.push(infoRes)
-
-      }  
+        response.push(infoRes);
+      }
       // const response = await campaignServices.get_merchant_info(userInfo.secretKey, merResponse[0])
-         
-      console.log(response, ':stores')  
+
+      console.log(response, ':stores');
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
       return response;
@@ -67,13 +61,13 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
 
   const storeDetailInfo = useQuery({
     queryKey: [`storeDetailsInfo-${id}`],
-    enabled: (!!storeId) || fetchAllCampaign,
+    enabled: !!storeId,
     // cacheTime: Infinity,
     retry: 3,
     retryDelay: 3000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      console.log(storeId,'storeId')
+      console.log(storeId, 'storeId');
       const response = await campaignServices.get_merchant_info(staticPubKey, storeId);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
@@ -111,9 +105,9 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
 
   const { merchantList, storeInfo } = useMemo(() => {
     const merchantList = merchantListInfo.data;
-    const storeInfo =  storeDetailInfo.data
-    return { merchantList, storeInfo }
-  }, [merchantListInfo.data, storeDetailInfo.data])
+    const storeInfo = storeDetailInfo.data;
+    return { merchantList, storeInfo };
+  }, [merchantListInfo.data, storeDetailInfo.data]);
 
   return {
     campaignList,
@@ -121,6 +115,6 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
     isFetching: campaignListInfo.isFetching,
     isDetailsFetching: campaignDetailsInfo.isFetching,
     merchantList,
-    storeInfo,
+    storeInfo
   };
 }

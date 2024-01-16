@@ -5,7 +5,6 @@ import PageHeader from 'components/pageheader';
 import { Stores } from 'components/stores';
 import { useGetBalance } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { encodeToken } from 'services/encrypt-decrypt-data';
@@ -13,12 +12,9 @@ import { encodeToken } from 'services/encrypt-decrypt-data';
 const LandingPage = () => {
   const router = useRouter();
 
-  const { userBalance } = useGetBalance()
-
-
-  console.log(userBalance, ':userBal')
-
   const { userInfo } = useMyContext();
+
+  const { userBalance, userUsdcBalance } = useGetBalance()
 
   const campInfo = {
     publicKey: 'GC35FMQWTX7HA2UGRRHLEVT46CEKZBSDDXQXADEZGWWWOZCGCUZOOPE4',
@@ -58,6 +54,12 @@ const LandingPage = () => {
       <section className="">
         <div className='mb-[24px] landing-top'>
               <PageHeader />
+              <div className='mb-[4px]'>
+                  <h6 className='text-sm font-semibold text-[#1384F5]'>USDC Coins</h6>
+                  <div className='text-[16px] font-semibold'>
+                    {userUsdcBalance ? Number(userUsdcBalance).toFixed(0).toString() : 0}
+                  </div>
+              </div>
               <div className='flex justify-between'>
                 <div>
                   <h6 className='text-base font-bold text-[#1384F5]'>Total LocalCoins</h6>
@@ -65,7 +67,7 @@ const LandingPage = () => {
                     {userBalance ? Number(userBalance).toFixed(0).toString() : 0}
                   </div>
                 </div>
-                {userInfo?.publicKey && (
+                {/* {userInfo?.publicKey && (
                   <div className='self-end'>
                     <Link href={'/withdraw'}>
                     <button className='text-[12px] font-medium text-[#FFf] py-[5px] px-[18px] bg-[#1653AE] rounded-[6px] cursor-pointer'>Withdraw</button>
@@ -73,7 +75,7 @@ const LandingPage = () => {
                     
                   </div>
 
-                )}
+                )} */}
                 
               </div>
               

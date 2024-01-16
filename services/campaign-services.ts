@@ -28,14 +28,19 @@ export const campaignServices = (() => {
     contractId = campaignContractId
   }: any) => {
     try {
-      debugger
-      // const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
-      // const sourcePublicKey = sourceKeypair.publicKey();
-      // const sourcePublicKey = publicKey;
+      debugger;
+      let sourcePublicKey: string = '';
+      let sourceKeypair: any = '';
+      if (secretKey) {
+        sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
+        sourcePublicKey = sourceKeypair.publicKey();
+      } else {
+        sourcePublicKey = publicKey;
+      }
       const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
         allowHttp: true
       });
-      const account = await server.getAccount(publicKey);
+      const account = await server.getAccount(sourcePublicKey);
 
       const contract = new StellarSdk.Contract(contractId);
       const fee = 1000000;
@@ -53,18 +58,18 @@ export const campaignServices = (() => {
           'recipient_to_merchant_transfer',
           'merchant_registration',
           'verify_merchant',
-          'request_campaign_settlement'
+          'request_campaign_settlement',
+          'join_campaign',
+          'verify_recipients',
+          'end_campaign'
         ].includes(parameterType)
       ) {
         return server.simulateTransaction(transaction).then((sim: any) => {
           console.log({ sim: sim.result?.retval, parameterType });
           return decoderHelper(parameterType, { returnValue: sim.result?.retval });
         });
-      } 
-      else
-      {
+      } else {
         transaction = await server.prepareTransaction(transaction);
-        const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
         transaction.sign(sourceKeypair);
         const response = await server.sendTransaction(transaction);
         const SendTxStatus = {
@@ -124,8 +129,10 @@ export const campaignServices = (() => {
   };
 
   const createCampaigs = (data: any, secretKey: string, publicKey: string) => {
+    console.log({ data, secretKey, publicKey });
     return makeTransaction({
       secretKey,
+      publicKey,
       parameterType: 'create_campaign',
       payload: [
         StringToScVal(data.name),
@@ -135,7 +142,7 @@ export const campaignServices = (() => {
         accountToScVal(data.tokenAddress),
         numberToI128(parseFloat(data.totalAmount)),
         accountToScVal(publicKey),
-        StringToScVal(data.location),
+        StringToScVal(data.location)
       ]
     });
   };
@@ -151,11 +158,11 @@ export const campaignServices = (() => {
     });
   };
 
-  const getTokenNameAddress = (secretKey: string) => {
+  const getTokenNameAddress = (publicKey: string) => {
     return makeTransaction({
       parameterType: 'get_token_name_address',
       contractId: issuanceManagementContract,
-      secretKey
+      publicKey
     });
   };
 
@@ -211,25 +218,24 @@ export const campaignServices = (() => {
     });
   };
 
-  const merchant_registration = (data: any) => {
+  const merchant_registration = (userInfo: any, data: any) => {
     try {
       console.log({ data }, 'merchant registration');
-    return makeTransaction({
-      contractId: userRegistryContractId,
-      parameterType: 'merchant_registration',
-      secretKey: data.secretKey,
-      payload: [
-        accountToScVal(data.publicKey),
-        StringToScVal(data.proprietor),
-        StringToScVal(data.phone_no),
-        StringToScVal(data.store_name),
-        StringToScVal(data.location || 'pokhara')
-      ]
-    });
+      return makeTransaction({
+        contractId: userRegistryContractId,
+        parameterType: 'merchant_registration',
+        secretKey: userInfo.secretKey,
+        payload: [
+          accountToScVal(userInfo.publicKey),
+          StringToScVal(data.proprietor),
+          StringToScVal(data.phone_no),
+          StringToScVal(data.store_name),
+          StringToScVal(data.location)
+        ]
+      });
     } catch (error) {
-      console.log(error, ':from 231')
+      console.log(error, ':from 231');
     }
-    
   };
 
   const verify_merchant = (data: any) => {
@@ -257,8 +263,8 @@ export const campaignServices = (() => {
       contractId: userRegistryContractId,
       parameterType: 'get_verified_merchants',
       publicKey
-    })
-  }
+    });
+  };
 
   const get_merchant_info = (publicKey: any, merchantAddress: string) => {
     console.log({ merchantAddress });
@@ -287,20 +293,72 @@ export const campaignServices = (() => {
 
   const get_balance = (userInfo: any) => {
     return makeTransaction({
-      secretKey: userInfo.secretKey,
+      secretKey: userInfo?.secretKey,
       contractId: balanceContractId,
+      publicKey: userInfo?.publicKey,
       parameterType: 'balance',
-      payload: [accountToScVal(userInfo.publicKey)]
+      payload: [accountToScVal(userInfo?.publicKey)]
     });
   };
 
-  const join_campaign = (username: string, address: string, userInfo: any) => {
+  const join_campaign = (
+    username: string,
+    address: string,
+    userInfo: any,
+    campaignAddress: string
+  ) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      publicKey: userInfo.publicKey,
+      contractId: campaignAddress,
+      parameterType: 'join_campaign',
+      payload: [StringToScVal(username), accountToScVal(userInfo.publicKey)]
+    });
+  };
+
+  const get_recipients_status = (userInfo: any) => {
+    return makeTransaction({
+      publicKey: userInfo.publicKey,
+      contractId: userInfo.campaignAddress,
+      parameterType: 'get_recipients_status'
+    });
+  };
+
+  const get_owner = (publicKey: string, contractId: string) => {
+    return makeTransaction({
+      publicKey: publicKey,
+      contractId: contractId,
+      parameterType: 'get_owner'
+    });
+  };
+
+  const verify_recipients = (secretKey: string, contractId: string, participantNameList: any) => {
+    console.log({participantNameList})
+    return makeTransaction({
+      secretKey: secretKey,
+      contractId: contractId,
+      parameterType: 'verify_recipients',
+      // payload: [StringToScVal(['jack'])]
+      // payload: [StringToScVal(['jack', 'bob'])]
+      payload: [StringToScVal(participantNameList)]
+    });
+  };
+
+  const end_campaign = (userInfo: any, contractId: string) => {
     return makeTransaction({
       secretKey: userInfo.secretKey,
       contractId: campaignContractId,
-      parameterType: 'join_campaign',
-      payload: [accountToScVal(address), StringToScVal(username)]
-    })
+      parameterType: 'end_campaign',
+      payload: [accountToScVal(contractId), accountToScVal(userInfo.publicKey)]
+    });
+  };
+
+  const is_ended = (userInfo: any, contractId: string) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      contractId: contractId,
+      parameterType: 'is_ended',
+    });
   }
 
   return {
@@ -320,5 +378,27 @@ export const campaignServices = (() => {
     get_user_balance: get_balance,
     get_verified_merchants,
     join_campaign,
+    get_recipients_status,
+    get_owner,
+    verify_recipients,
+    end_campaign,
+    is_ended
   };
 })();
+
+/* 
+{
+    "username": "manish",
+    "address": "GAVBJZNE4NKI7NMZAGD7RA5SIHBSZDSGUDCV2UDQHGUHGN4UIWAJUHPZ",
+    "userInfo": {
+        "storeName": "",
+        "proprietaryName": "",
+        "phoneNumber": "",
+        "location": "",
+        "secretKey": "SBWPALRGE724TRTJTCH353EWC67ASGY3PV47SHCHM4632Y7PVV3SWSEO",
+        "publicKey": "GAVBJZNE4NKI7NMZAGD7RA5SIHBSZDSGUDCV2UDQHGUHGN4UIWAJUHPZ"
+    },
+    "campaignAddress": "CALTR26TIUXUGMEKYTIUSPRZ7LW3BMV2MF7J7SJB7K7ZQ6OGI2ZA5ZTQ"
+}
+
+*/
