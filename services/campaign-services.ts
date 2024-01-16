@@ -60,7 +60,8 @@ export const campaignServices = (() => {
           'verify_merchant',
           'request_campaign_settlement',
           'join_campaign',
-          'verify_recipients'
+          'verify_recipients',
+          'end_campaign'
         ].includes(parameterType)
       ) {
         return server.simulateTransaction(transaction).then((sim: any) => {
@@ -291,7 +292,6 @@ export const campaignServices = (() => {
   };
 
   const get_balance = (userInfo: any) => {
-    console.log(userInfo, ':fromBalance');
     return makeTransaction({
       secretKey: userInfo?.secretKey,
       contractId: balanceContractId,
@@ -344,6 +344,23 @@ export const campaignServices = (() => {
     });
   };
 
+  const end_campaign = (userInfo: any, contractId: string) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      contractId: campaignContractId,
+      parameterType: 'end_campaign',
+      payload: [accountToScVal(contractId), accountToScVal(userInfo.publicKey)]
+    });
+  };
+
+  const is_ended = (userInfo: any, contractId: string) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      contractId: contractId,
+      parameterType: 'is_ended',
+    });
+  }
+
   return {
     getCreatorCampaigns: getCreatorCampaigns,
     getAllCampaigns,
@@ -363,7 +380,9 @@ export const campaignServices = (() => {
     join_campaign,
     get_recipients_status,
     get_owner,
-    verify_recipients
+    verify_recipients,
+    end_campaign,
+    is_ended
   };
 })();
 

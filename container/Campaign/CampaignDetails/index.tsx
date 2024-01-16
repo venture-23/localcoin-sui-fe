@@ -48,6 +48,9 @@ const CampaignDetail = (props: any) => {
   const [verifyLoader, setVerifyLoader] = useState(false);
   const [currentParticipant, setCurrentParticipant] = useState<IPaticipant>({});
   const [verifyConfirm, setVerifyConfirm] = useState(false);
+  const [endCampaignConfirm, setEndCampaignConfirm] = useState(false);
+
+  const [isCampaignEnded, setIsCampaignEnded] = useState(false);
   console.log(currentParticipant, ':cuurPart')
 
   useEffect(() => {
@@ -55,8 +58,21 @@ const CampaignDetail = (props: any) => {
       console.log({ userInfo });
       getCampaginOwner();
       fetchCampaignParticipate();
+      getCampaignStatus()
+    }
+
+    return () => {
+      setCurrentParticipant({})
+      setIsCampaignEnded(false);
+      setisCampaignAdmin(false);
+      
     }
   }, [userInfo]);
+
+  const getCampaignStatus = async() => {
+    const isEnded = await campaignServices.is_ended(userInfo, props.campaignId)
+    setIsCampaignEnded(isEnded?._value)
+  }
 
   const getCampaginOwner = async () => {
     await campaignServices
@@ -82,6 +98,7 @@ const CampaignDetail = (props: any) => {
       .then((res: any) => {
         if (res.length) {
           setParticipantList(res);
+          
           setCurrentParticipant(res?.find((part: any) => part.address === userInfo.publicKey))
         }
       })
@@ -193,19 +210,45 @@ const CampaignDetail = (props: any) => {
 
     try {
       setVerifyLoader(true)
+      if(acceptedNames.length === 0) {
+        throw new Error ('Please select participants to verify')
+      }
       await campaignServices.verify_recipients(userInfo.secretKey, props.campaignId, acceptedNames);
       toast.success('Successfully verified participants')
       await fetchCampaignParticipate()
       setVerifyLoader(false)
       setVerifyConfirm(false)
-    } catch (error) {
+      setAcceptedNames([])
+      setData({
+        username: '',
+        recipientAddress: userInfo?.publicKey
+      })
+    } catch (error: any) {
       console.log(error)
+      toast.error(error.toString())
       setVerifyLoader(false)
+      setVerifyConfirm(false)
     }
     
   };
 
-  console.log(participantList, ':participant')
+  const endCampaign = async () => {
+    try {
+      setShowLoader(true);
+      await campaignServices.end_campaign(userInfo, props.campaignId)
+
+      toast.success('Campaign Ended Successfully')
+      await getCampaignStatus();
+
+      setShowLoader(false);
+      setEndCampaignConfirm(false);
+    } catch (error: any) {
+      toast.error(error.toString())
+      console.log(error);
+      setEndCampaignConfirm(false);
+      setShowLoader(false);
+    }
+  }
 
   return (
     <>
@@ -309,8 +352,8 @@ const CampaignDetail = (props: any) => {
                 />
                 {currentParticipant && Object.keys(currentParticipant).length > 0 && (
                   currentParticipant?.value ? (
-                    <div className='absolute'>
-                      Verified
+                    <div className='absolute flex items-center bottom-[10px] right-[10px]  border border-[#fff] rounded-[6px] p-[2px] text-[#fff] text-xs font-normal'>
+                      <span className='w-[10px] block h-[10px] rounded-[100%] bg-[#6ED365] mr-[2px]'></span> Verified
                     </div>
                   ) : (
                     <div className='absolute flex items-center bottom-[10px] right-[10px]  border border-[#fff] rounded-[6px] p-[2px] text-[#fff] text-xs font-normal'>
@@ -324,7 +367,7 @@ const CampaignDetail = (props: any) => {
               {/* <h2 className="text-2xl font-medium mb-[16px]">H & W Market</h2> */}
               <p className="text-base font-medium">{campaignInfo?.description}</p>
 
-              <div className="mt-[16px] flex flex-col gap-[17px]">
+              <div className="my-[16px] flex flex-col gap-[17px]">
                 <div className="flex items-center gap-[6px]">
                   <UserCircleIcon width={20} height={20} />
                   <div className="flex items-center gap-[4px]">
@@ -336,7 +379,7 @@ const CampaignDetail = (props: any) => {
                     </span>
                   </div>
                 </div>
-                {currentParticipant?.value || isCampaignAdmin && (
+                {(currentParticipant?.value || isCampaignAdmin) && (
                   <div className="flex items-center gap-[6px]">
                     <CurrencyDollarIcon width={20} height={20} />
                     <div className="items-cente flex gap-[4px]">
@@ -348,7 +391,7 @@ const CampaignDetail = (props: any) => {
                 </div>
 
                 )}
-                {currentParticipant?.value || isCampaignAdmin && (
+                {(currentParticipant?.value || isCampaignAdmin) && (
                   <div className="flex gap-[6px]">
                     <MapIcon width={20} height={20} />
                     <div className="flex items-center">
@@ -411,26 +454,7 @@ const CampaignDetail = (props: any) => {
                 <div className='flex items-center justify-center'>
                   <button disabled={verifyLoader} className='border border-[#171717] rounded-[6px] text-base font-normal px-[12px] py-[4px] cursor-pointer' onClick={() => setVerifyConfirm(true)}>
                     {verifyLoader ? (
-                      <svg
-                        className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                    </svg>
+                      'Verifying'
                     ) : (
                       'Verify Participants'
                     )}
@@ -444,12 +468,16 @@ const CampaignDetail = (props: any) => {
             
             <div>
               {isCampaignAdmin ? (
-                <Button buttonType={'outlined'} text='End Campaign' />
-              ): (
+                <Button handleClick={() => {if(!isCampaignEnded) setEndCampaignConfirm(true)}} buttonType={'outlined'} text={isCampaignEnded ? 'Campaign Ended' : 'End Campaign'}/>
+              ) 
+              : isCampaignEnded ? (
+                <Button buttonType={'outlined'} text={'Campaign Ended'}/>
+              )
+              : (
                 currentParticipant?.value ? (
-                  <Button  text='Request incentives'/>
+                  <Button buttonType={'secondary'}  text='Request incentives'/>
                 ) : (
-                  <Button disabled={Boolean(currentParticipant)} handleClick={handleJoin} text="Join Campaign" />
+                  <Button disabled={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0} handleClick={handleJoin} text={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0 ? 'Requested to join' : 'Join Campaign'} />
                 )
                 
               )}
@@ -494,6 +522,23 @@ const CampaignDetail = (props: any) => {
                 <div className="flex flex-col gap-[20px] pl-[20px]">
                   <h3 className='text-lg font-extrabold text-center'>Are you sure you want to verify selected participants?</h3>
                   <Button disabled={verifyLoader} showLoader={verifyLoader} handleClick={handleVerify} text="Yes, Verify" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {endCampaignConfirm && (
+            <div className="username-modal flex items-center justify-between">
+              <div className="relative mx-auto flex h-[200px] w-[80%] items-center justify-center overflow-hidden rounded-[16px] bg-[#fff] p-[16px]">
+                <span
+                  onClick={() => setEndCampaignConfirm(false)}
+                  className="absolute right-[4px] top-[4px] flex h-[20px] w-[20px] cursor-pointer items-center justify-center rounded-[100%] border border-[#000]"
+                >
+                  X
+                </span>
+                <div className="flex flex-col gap-[20px] pl-[20px]">
+                  <h3 className='text-lg font-extrabold text-center'>Are you sure you want to end the campaign?</h3>
+                  <Button disabled={showLoader} showLoader={showLoader} handleClick={endCampaign} text="Yes, End campaign" />
                 </div>
               </div>
             </div>
