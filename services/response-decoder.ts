@@ -88,7 +88,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
               : eachValue?._attributes?.key?._value?.toString() === 'token_address'
               ? decodeContract(eachValue?._attributes?.val?._value?._value)
               : eachValue?._attributes?.key?._value?.toString() === 'amount'
-              ? decodei128(eachValue?._attributes?.val?._value?._attributes?._value)
+              ? decodei128(eachValue?._attributes?.val?._value)
               : eachValue?._attributes?.val?._value?.toString()
         }));
 

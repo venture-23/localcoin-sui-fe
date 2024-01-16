@@ -481,7 +481,7 @@ const CampaignDetail = (props: any) => {
               )
               : (
                 currentParticipant?.value ? (
-                  <Button buttonType={'secondary'}  text='Request incentives'/>
+                  <Button buttonType={'secondary'}  text='Request Incentives'/>
                 ) : (
                   <Button disabled={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0} handleClick={handleJoin} text={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0 ? 'Requested to join' : 'Join Campaign'} />
                 )
