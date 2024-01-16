@@ -26,12 +26,41 @@ export function useGetBalance() {
       toast.error('Error While getting details info');
     }
   });
+
+
+  const userUsdcBalanceResponse = useQuery({
+    queryKey: [`user-usdc-balance-${userInfo?.publicKey}`],
+    enabled: !!userInfo?.publicKey,
+    // cacheTime: Infinity,
+    retry: 3,
+    retryDelay: 3000,
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      console.log(userInfo, ':info')
+      const response = await campaignServices.get_user_balance(userInfo);
+      if (response?.error) throw new Error(response.error || 'Something went wrong');
+      console.log({ response });
+      return response;
+    },
+    onError: (error: any) => {
+      console.log('campaign status error', JSON.stringify(error, null, 2));
+      toast.error('Error While getting details info');
+    }
+  });
+
+
   const { userBalance } = useMemo(() => {
     const userBalance = userBalanceResponse.data;
     return { userBalance };
   }, [userBalanceResponse.data]);
 
+  const { userUsdcBalance } = useMemo(() => {
+    const userUsdcBalance = userUsdcBalanceResponse.data;
+    return { userUsdcBalance };
+  }, [userUsdcBalanceResponse.data]);
+
   return {
-    userBalance
+    userBalance,
+    userUsdcBalance
   };
 }

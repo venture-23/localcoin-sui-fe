@@ -4,8 +4,9 @@ import { useGetBalance } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { campaignServices } from 'services/campaign-services';
 import { maskWalletAddress } from 'utils/clipper';
 
 interface PageHeaderProps {
@@ -17,7 +18,21 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) =>
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   const { userInfo } = useMyContext();
   const { userBalance } = useGetBalance()
-   console.log(userInfo, ':user')
+
+  const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
+
+  useEffect(() => {
+    if(userInfo?.publicKey) {
+      campaignServices.get_verified_merchants(userInfo?.publicKey).then(response => {
+
+        if(response.length > 0 ) {
+          console.log(response.includes(userInfo?.publicKey), ':veri')
+          setIsVerifiedMerchant(response.includes(userInfo?.publicKey))
+        }
+      })
+    }
+
+  }, [userInfo])
 
    const handleCopy = () => {
     if(userInfo?.publicKey) {
@@ -27,7 +42,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) =>
    }
   return (
     <>
-      <div className="mb-6 flex w-full items-center justify-between pt-[10px]">
+      <div className="mb-[10px] flex w-full items-center justify-between pt-[10px]">
         {backLink && (
           <Link href={backLink}>
             <ChevronLeftIcon width={24} height={24} />
@@ -71,11 +86,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) =>
             </div>
 
             <div className='mx-[16px] my-[10px] flex flex-col gap-[19px]'>
-              <div className={['bg-[#EAEBEE] py-[10px] text-center text-lg font-semibold', !userInfo?.publicKey && 'opacity-[0.3]'].join(' ')}>
-                <Link className={`w-full block ${!userInfo?.publicKey && 'cursor-not-allowed'}`} href={userInfo?.publicKey ? '/merchant/register' : '/'}>
-                  Apply to become a Merchant
-                </Link>
-              </div>
+              {userInfo.publicKey && isVerifiedMerchant ? '' : (
+                <div className={['bg-[#EAEBEE] py-[10px] text-center text-lg font-semibold', !userInfo?.publicKey && 'opacity-[0.3]'].join(' ')}>
+                  <Link className={`w-full block ${!userInfo?.publicKey && 'cursor-not-allowed'}`} href={userInfo?.publicKey ? '/merchant/register' : '/'}>
+                    Apply to become a Merchant
+                  </Link>
+                </div>
+              )}
+              
               <div className={['bg-[#EAEBEE] py-[10px] text-center text-lg font-semibold', !userInfo?.publicKey && 'opacity-[0.3]'].join(' ')}>
                 <Link className={`w-full block ${!userInfo?.publicKey && 'cursor-not-allowed'}`} href={userInfo?.publicKey ? '/campaign/create' : ''}>
                   Start a campaign

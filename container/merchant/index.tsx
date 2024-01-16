@@ -75,23 +75,34 @@ const MerchantRegisterPage = () => {
   return (
     <section className="relative">
       <div className="container mx-auto">
-        <div className="mb-6 flex items-center pt-10">
+        {/* <div className="mb-6 flex items-center pt-10">
           <Link
             href={showFormNo === 1 ? '/' : '#'}
             onClick={() => ((showFormNo === 2 || showFormNo === 3) && setShowFormNo(1)) || false}
           >
             <ChevronLeftIcon width={24} height={24} />
           </Link>
-        </div>
+        </div> */}
         {showFormNo === 1 && (
-          <MerchantInfo
-            data={data}
-            title="Apply to become a merchant"
-            error={error}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            loader={showLoader}
-          />
+          <>
+            <div className="mb-6 flex items-center pt-10">
+              <Link
+                href={showFormNo === 1 ? '/' : '#'}
+                className='flex items-center'
+              >
+                <ChevronLeftIcon width={16} height={16} />
+                Back
+              </Link>
+            </div>
+            <MerchantInfo
+              data={data}
+              title="Apply to become a merchant"
+              error={error}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+              loader={showLoader}
+            />
+            </>
         // ) : (
         //   <RegisterOverView data={data} loader={isProcessing} handleSubmit={handleSubmit} />
         )}

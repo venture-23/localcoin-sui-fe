@@ -384,7 +384,7 @@ const CampaignDetail = (props: any) => {
                       {getVerifiedParticipants() || 0}/{campaignInfo?.no_of_recipients}
                     </p>
                     <span className="self-end text-[12px] font-normal italic text-[#A3A3A3]">
-                      verified participants/total participants
+                      Verified participants/Number of participants
                     </span>
                   </div>
                 </div>
@@ -394,7 +394,7 @@ const CampaignDetail = (props: any) => {
                     <div className="items-cente flex gap-[4px]">
                       <p className="text-base font-medium text-[#000]">{campaignInfo?.amount || 0}</p>
                       <span className="self-end text-[12px]  font-normal italic text-[#A3A3A3]">
-                        localcoin
+                        LocalCoin
                       </span>
                     </div>
                 </div>
@@ -438,9 +438,9 @@ const CampaignDetail = (props: any) => {
                               <label className='verification-checkbox-label' htmlFor={`deny-${eachIndex + 1}`}></label>
                           </div> */}
                           {eachParticipant.value ? (
-                            <div  className='text-xs font-normal'>verified</div>
+                            <div  className='text-xs font-normal'>Verified</div>
                           ) : (
-                            <div  className='text-xs font-normal'>unverified</div>
+                            <div  className='text-xs font-normal'>Unverified</div>
                           )}
                           <div className='w-[25px]'>
                               <input 
