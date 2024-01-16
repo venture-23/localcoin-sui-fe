@@ -10,6 +10,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
+
+
+interface IPaticipant {
+  address?: string,
+  name?: string,
+  value?: boolean
+}
+
 const CampaignDetail = (props: any) => {
   const { userInfo } = useMyContext();
   const router = useRouter();
@@ -36,6 +44,11 @@ const CampaignDetail = (props: any) => {
 
   const [participantList, setParticipantList] = useState<any>([]);
   const [isCampaignAdmin, setisCampaignAdmin] = useState(false);
+  const [acceptedNames, setAcceptedNames] = useState<string[]>([]);
+  const [verifyLoader, setVerifyLoader] = useState(false);
+  const [currentParticipant, setCurrentParticipant] = useState<IPaticipant>({});
+  const [verifyConfirm, setVerifyConfirm] = useState(false);
+  console.log(currentParticipant, ':cuurPart')
 
   useEffect(() => {
     if (userInfo.publicKey) {
@@ -69,6 +82,7 @@ const CampaignDetail = (props: any) => {
       .then((res: any) => {
         if (res.length) {
           setParticipantList(res);
+          setCurrentParticipant(res?.find((part: any) => part.address === userInfo.publicKey))
         }
       })
       .catch((e) => console.log(e, 'from the pariticipant list'));
@@ -165,10 +179,33 @@ const CampaignDetail = (props: any) => {
     // console.log(res, ':rec')
   };
 
+  const handleCheckboxChange = (name: string, accepted: boolean) => {
+    if(accepted) {
+      setAcceptedNames(prevNames => [...prevNames, name])
+    } else {
+      setAcceptedNames(prevNames => prevNames.filter(n => n!== name))
+    }
+  }
+
+
 
   const handleVerify = async () => {
-    await campaignServices.verify_recipients('', props.campaignId, ['OMM', 'sudeep']);
+
+    try {
+      setVerifyLoader(true)
+      await campaignServices.verify_recipients(userInfo.secretKey, props.campaignId, acceptedNames);
+      toast.success('Successfully verified participants')
+      await fetchCampaignParticipate()
+      setVerifyLoader(false)
+      setVerifyConfirm(false)
+    } catch (error) {
+      console.log(error)
+      setVerifyLoader(false)
+    }
+    
   };
+
+  console.log(participantList, ':participant')
 
   return (
     <>
@@ -262,7 +299,7 @@ const CampaignDetail = (props: any) => {
           <div className="flex h-[90vh] flex-col justify-between">
             <div>
               <h3 className="text-base font-semibold">{campaignInfo?.name}</h3>
-              <div className="my-[16px] w-full overflow-hidden rounded-[12px] border-[3px] border-solid border-[#D7D7D7]">
+              <div className="my-[16px] relative w-full overflow-hidden rounded-[12px] border-[3px] border-solid border-[#D7D7D7]">
                 <Image
                   src={'/storeImg.png'}
                   alt="Store"
@@ -270,6 +307,19 @@ const CampaignDetail = (props: any) => {
                   width={400}
                   className="w-full"
                 />
+                {currentParticipant && Object.keys(currentParticipant).length > 0 && (
+                  currentParticipant?.value ? (
+                    <div className='absolute'>
+                      Verified
+                    </div>
+                  ) : (
+                    <div className='absolute flex items-center bottom-[10px] right-[10px]  border border-[#fff] rounded-[6px] p-[2px] text-[#fff] text-xs font-normal'>
+                      <span className='w-[10px] block h-[10px] rounded-[100%] bg-[#F24141] mr-[2px]'></span> Unverified
+                    </div>
+                  ) 
+
+                )}
+                
               </div>
               {/* <h2 className="text-2xl font-medium mb-[16px]">H & W Market</h2> */}
               <p className="text-base font-medium">{campaignInfo?.description}</p>
@@ -286,41 +336,121 @@ const CampaignDetail = (props: any) => {
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-[6px]">
-                  <CurrencyDollarIcon width={20} height={20} />
-                  <div className="items-cente flex gap-[4px]">
-                    <p className="text-base font-medium text-[#000]">2500</p>
-                    <span className="self-end text-[12px]  font-normal italic text-[#A3A3A3]">
-                      localcoin
-                    </span>
-                  </div>
+                {currentParticipant?.value || isCampaignAdmin && (
+                  <div className="flex items-center gap-[6px]">
+                    <CurrencyDollarIcon width={20} height={20} />
+                    <div className="items-cente flex gap-[4px]">
+                      <p className="text-base font-medium text-[#000]">2500</p>
+                      <span className="self-end text-[12px]  font-normal italic text-[#A3A3A3]">
+                        localcoin
+                      </span>
+                    </div>
                 </div>
-                <div className="flex gap-[6px]">
-                  <MapIcon width={20} height={20} />
-                  <div className="flex items-center">
-                    <p className="self-bottom text-base font-medium text-[#000]">
-                      {campaignInfo?.location}
-                    </p>
-                    {/* <span className='text-[12px] font-normal italic text-[#A3A3A3]'>localcoin</span> */}
+
+                )}
+                {currentParticipant?.value || isCampaignAdmin && (
+                  <div className="flex gap-[6px]">
+                    <MapIcon width={20} height={20} />
+                    <div className="flex items-center">
+                      <p className="self-bottom text-base font-medium text-[#000]">
+                        {campaignInfo?.location}
+                      </p>
+                      {/* <span className='text-[12px] font-normal italic text-[#A3A3A3]'>localcoin</span> */}
+                    </div>
                   </div>
+                )}
+                
+                
+                {participantList?.length > 0 && isCampaignAdmin && (
+                  <div className='w-[100%] mb-[20px]'>
+                    <div className='flex justify-between w-[100%]'>
+                      <div className='text-lg font-semibold'>Participants</div>
+                      <div className='self-end flex items-center gap-[18px]'>
+                        <div className='text-[10px] font-normal'>Status</div>
+                        <div className='text-[10px] font-normal'>Accept</div>
+                      </div>
+                    </div>                      
+                    {participantList.map((eachParticipant: any, eachIndex: number) => (
+                      <div className='flex items-center justify-between' key={eachIndex + 1 + ''}>
+                        <div className='flex items-center gap-[3px] text-base font-normal text-[#171717]'>
+                          <span>{eachParticipant.name}{' '}</span>
+                          {/* {eachParticipant.value ? (
+                            <div title='Verified' className='verified-user'></div>
+                          ) : (
+                            <div title='Unverified' className='unverified-user'></div>
+                          )} */}
+                        </div>
+                        <div className='flex items-center gap-[18px]'>
+                          {/* <div className='w-[30px]'>
+                              <input type="checkbox" id={`deny-${eachIndex + 1}`} className='verification-checkbox crossed-checkbox' />
+                              <label className='verification-checkbox-label' htmlFor={`deny-${eachIndex + 1}`}></label>
+                          </div> */}
+                          {eachParticipant.value ? (
+                            <div  className='text-xs font-normal'>verified</div>
+                          ) : (
+                            <div  className='text-xs font-normal'>unverified</div>
+                          )}
+                          <div className='w-[25px]'>
+                              <input 
+                                checked={acceptedNames.includes(eachParticipant.name) || eachParticipant?.value} 
+                                type="checkbox" id={`accept-${eachIndex + 1}`} 
+                                className='verification-checkbox ticked-checkbox'
+                                onChange={(e) => handleCheckboxChange(eachParticipant.name, e.target.checked)} 
+                                disabled={eachParticipant?.value}
+                              />
+                              <label className='verification-checkbox-label' htmlFor={`accept-${eachIndex + 1}`}></label>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                  </div>
+                )}
+
+              {participantList.length > 0 && isCampaignAdmin && (
+                <div className='flex items-center justify-center'>
+                  <button disabled={verifyLoader} className='border border-[#171717] rounded-[6px] text-base font-normal px-[12px] py-[4px] cursor-pointer' onClick={() => setVerifyConfirm(true)}>
+                    {verifyLoader ? (
+                      <svg
+                        className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
+                    ) : (
+                      'Verify Participants'
+                    )}
+                    
+                  </button>
                 </div>
-                <div>Participants</div>
-                {participantList.map((eachParticipant: any, eachIndex: number) => (
-                  <div key={eachIndex + 1 + ''}>
-                    {eachParticipant.name}{' '}
-                    <small>{eachParticipant.value ? 'Accepted' : 'UnVerified'}</small>
-                  </div>
-                ))}
+              )}
+                
               </div>
             </div>
+            
             <div>
-              <Button handleClick={handleJoin} text="Join Campaign" />
+              {isCampaignAdmin ? (
+                <Button buttonType={'outlined'} text='End Campaign' />
+              ): (
+                <Button disabled={Boolean(currentParticipant)} handleClick={handleJoin} text="Join Campaign" />
+              )}
+              
             </div>
           </div>
-
-          <button type="button" onClick={() => handleVerify()}>
-            Check for Verify
-          </button>
 
           {showUsernameBox && (
             <div className="username-modal flex items-center justify-between">
@@ -341,7 +471,24 @@ const CampaignDetail = (props: any) => {
                     maxLength={300}
                     data={data}
                   />
-                  <Button showLoader={showLoader} handleClick={joinCampaign} text="Join" />
+                  <Button disabled={showLoader} showLoader={showLoader} handleClick={joinCampaign} text="Join" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {verifyConfirm && (
+            <div className="username-modal flex items-center justify-between">
+              <div className="relative mx-auto flex h-[200px] w-[80%] items-center justify-center overflow-hidden rounded-[16px] bg-[#fff] p-[16px]">
+                <span
+                  onClick={() => setVerifyConfirm(false)}
+                  className="absolute right-[4px] top-[4px] flex h-[20px] w-[20px] cursor-pointer items-center justify-center rounded-[100%] border border-[#000]"
+                >
+                  X
+                </span>
+                <div className="flex flex-col gap-[20px] pl-[20px]">
+                  <h3 className='text-lg font-extrabold text-center'>Are you sure you want to verify selected participants?</h3>
+                  <Button disabled={verifyLoader} showLoader={verifyLoader} handleClick={handleVerify} text="Yes, Verify" />
                 </div>
               </div>
             </div>

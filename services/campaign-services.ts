@@ -333,8 +333,9 @@ export const campaignServices = (() => {
   };
 
   const verify_recipients = (secretKey: string, contractId: string, participantNameList: any) => {
+    console.log({participantNameList})
     return makeTransaction({
-      secretKey: 'SB7BMAZEPUABMZ6ESC5FXNTGAUBEYZHMRUJH423B2U5IUHICQIZL42XY',
+      secretKey: secretKey,
       contractId: contractId,
       parameterType: 'verify_recipients',
       // payload: [StringToScVal(['jack'])]
