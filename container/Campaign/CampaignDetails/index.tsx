@@ -446,7 +446,12 @@ const CampaignDetail = (props: any) => {
               {isCampaignAdmin ? (
                 <Button buttonType={'outlined'} text='End Campaign' />
               ): (
-                <Button disabled={Boolean(currentParticipant)} handleClick={handleJoin} text="Join Campaign" />
+                currentParticipant?.value ? (
+                  <Button  text='Request incentives'/>
+                ) : (
+                  <Button disabled={Boolean(currentParticipant)} handleClick={handleJoin} text="Join Campaign" />
+                )
+                
               )}
               
             </div>
