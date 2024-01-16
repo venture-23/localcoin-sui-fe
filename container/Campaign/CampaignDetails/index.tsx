@@ -251,6 +251,11 @@ const CampaignDetail = (props: any) => {
     }
   }
 
+  const getVerifiedParticipants = () => {
+    const verified = participantList.filter((item: any) => item.value)
+    return verified.length
+  }
+
   return (
     <>
       {/* <Header className="h-[120px]">
@@ -373,10 +378,10 @@ const CampaignDetail = (props: any) => {
                   <UserCircleIcon width={20} height={20} />
                   <div className="flex items-center gap-[4px]">
                     <p className="text-base font-medium text-[#000]">
-                      {campaignInfo?.no_of_recipients}/100
+                      {getVerifiedParticipants() || 0}/{participantList?.length || 0}
                     </p>
                     <span className="self-end text-[12px] font-normal italic text-[#A3A3A3]">
-                      participants
+                      verified participants/total participants
                     </span>
                   </div>
                 </div>
@@ -436,7 +441,7 @@ const CampaignDetail = (props: any) => {
                           )}
                           <div className='w-[25px]'>
                               <input 
-                                checked={acceptedNames.includes(eachParticipant.name) || eachParticipant?.value} 
+                                checked={acceptedNames.includes(eachParticipant.name)} 
                                 type="checkbox" id={`accept-${eachIndex + 1}`} 
                                 className='verification-checkbox ticked-checkbox'
                                 onChange={(e) => handleCheckboxChange(eachParticipant.name, e.target.checked)} 

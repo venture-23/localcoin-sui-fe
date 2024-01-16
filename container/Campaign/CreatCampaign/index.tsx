@@ -41,13 +41,13 @@ const CreateCampaignPage = () => {
         .then((x) => {
           console.log({ x });
           setCreatorAddressList(x);
-          setData({ ...data, tokenAddress: creatorAddressList[0]?.value})
+          setData({ ...data, tokenAddress: x[0]?.value})
         })
         .catch(() => toast.error('Error from get_address_name'));
     }
   }, [userInfo]);
 
-  console.log(creatorAddressList, ':cre')
+  console.log(creatorAddressList, ':creator')
 
   const [showLoader, setShowLoader] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
