@@ -112,7 +112,7 @@ const MerchantRegisterPage = () => {
 
 
         {showFormNo === 3 && (
-          <ConfirmationScreen text='Thank you for applying! The Local Coin team will review your application and get back to you within 1 week. If you have any questions, please email admin@localcoin.us' />
+          <ConfirmationScreen type='merchant' />
         )}
       </div>
       {/* <BridgeBG /> */}

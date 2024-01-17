@@ -5,16 +5,19 @@ import PageHeader from 'components/pageheader';
 import { Stores } from 'components/stores';
 import { useGetBalance } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { campaignServices } from 'services/campaign-services';
+// import { useMyContext } from 'hooks/useMyContext';
+// import { useRouter } from 'next/navigation';
 
 import { encodeToken } from 'services/encrypt-decrypt-data';
 
 const LandingPage = () => {
-  const router = useRouter();
 
-  const { userInfo } = useMyContext();
-
+  const { userInfo } = useMyContext()
   const { userBalance, userUsdcBalance } = useGetBalance()
+  const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
 
   const campInfo = {
     publicKey: 'GC35FMQWTX7HA2UGRRHLEVT46CEKZBSDDXQXADEZGWWWOZCGCUZOOPE4',
@@ -44,6 +47,20 @@ const LandingPage = () => {
     localStorage.setItem('local-coin', encodeToken(mapValue[name], '1111'));
     window.location.reload();
   };
+
+
+  useEffect(() => {
+    if(userInfo?.publicKey) {
+      campaignServices.get_verified_merchants(userInfo?.publicKey).then(response => {
+
+        if(response.length > 0 ) {
+          console.log(response.includes(userInfo?.publicKey), ':veri')
+          setIsVerifiedMerchant(response.includes(userInfo?.publicKey))
+        }
+      })
+    }
+
+  }, [userInfo])
   
 
   return (
@@ -53,7 +70,7 @@ const LandingPage = () => {
       </div> */}
       <section className="">
         <div className='mb-[24px] landing-top'>
-              <PageHeader />
+              <PageHeader isVerifiedMerchant={isVerifiedMerchant} />
               <div className='mb-[4px]'>
                   <h6 className='text-sm font-semibold text-[#1384F5]'>USDC Coins</h6>
                   <div className='text-[16px] font-semibold'>
@@ -67,7 +84,7 @@ const LandingPage = () => {
                     {userBalance ? Number(userBalance).toFixed(0).toString() : 0}
                   </div>
                 </div>
-                {/* {userInfo?.publicKey && (
+                {isVerifiedMerchant && (
                   <div className='self-end'>
                     <Link href={'/withdraw'}>
                     <button className='text-[12px] font-medium text-[#FFf] py-[5px] px-[18px] bg-[#1653AE] rounded-[6px] cursor-pointer'>Withdraw</button>
@@ -75,7 +92,7 @@ const LandingPage = () => {
                     
                   </div>
 
-                )} */}
+                )}
                 
               </div>
               

@@ -1,11 +1,15 @@
 import Button from "components/botton"
 import Image from "next/image"
+import { StatusType, successStatusText } from "utils/constants"
 
 interface IConfirmationScreenProps {
-    text: string
+    text?: string
+    type?: StatusType
 }
 
-export const ConfirmationScreen = ({ text }: IConfirmationScreenProps) => {
+
+
+export const ConfirmationScreen = ({ text, type }: IConfirmationScreenProps) => {
     return (
         <section className="w-full realtive bg-[#1653AE] h-[100vh]">
             <div className="success-vector-1">
@@ -35,9 +39,9 @@ export const ConfirmationScreen = ({ text }: IConfirmationScreenProps) => {
                                 alt="Local Coin"
                             />
                         </div>
-                        <h3 className="text-2xl font-semibold text-[#fff]">Congratulations!</h3>
+                        <h3 className="text-2xl font-semibold text-[#fff]">{successStatusText[type as StatusType]?.title}</h3>
                         <div className="text-base font-medium text-[#fff] text-center">
-                            {text}
+                            {text ? text : successStatusText[type as StatusType]?.text}
                         </div>
                     </div>
                     <div className="mb-[10px]">
