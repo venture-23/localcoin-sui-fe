@@ -278,7 +278,9 @@ const CampaignDetail = (props: any) => {
         proprietaryName: userInfo.proprietaryName,
         phoneNumber: userInfo.phoneNumber,
         storeName: userInfo.storeName,
-        location: userInfo.location
+        location: userInfo.location,
+        campaignAddress: props.campaignId,
+        campaignName: campaignInfo?.name,
       };
       const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);

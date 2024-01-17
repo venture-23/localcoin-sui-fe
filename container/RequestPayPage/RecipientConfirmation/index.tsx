@@ -5,9 +5,11 @@ interface IRecipientConfirmProps {
     amount: number | string
     storeName: string
     handleClick:() => void
+    type?: string
+    campaignName?: string
 }
 
-const RecipientConfirmation = ({ amount, storeName, handleClick }: IRecipientConfirmProps) => {
+const RecipientConfirmation = ({ amount, storeName, handleClick, type, campaignName }: IRecipientConfirmProps) => {
   return (
     <section className="w-full realtive bg-[#1653AE] h-[100vh]">
             <div className="success-vector-1">
@@ -40,9 +42,14 @@ const RecipientConfirmation = ({ amount, storeName, handleClick }: IRecipientCon
                         <h3 className="text-2xl font-semibold text-[#fff]">
                             {amount || 0} LocalCoin
                         </h3>
-                        <p className='italic my-[12px] text-white text-base font-normal'>{storeName}</p>
-                        <div className="text-base font-medium text-[#fff] text-center">
-                            You are about to pay <br /> {amount || 0} LocalCoin to &apos;{storeName}&apos;
+                        <p className='italic my-[12px] text-white text-base font-normal'>{type === 'campaign' ? campaignName : storeName}</p>
+                        <div className="text-base container mx-auto font-medium text-[#fff] text-center">
+                            {type === 'campaign' ? (
+                                `You are about to pay ${amount} of LocalCoin for completing the campaign`
+                            ): (
+                                `You are about to pay  ${amount || 0} LocalCoin to "${storeName}"`
+                            )}
+                            
                         </div>
                     </div>
                     <div className="container mx-auto mb-[10px]">

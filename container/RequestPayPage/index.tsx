@@ -12,6 +12,7 @@ import Link from "next/link";
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { campaignServices } from "services/campaign-services";
 import RecipientConfirmation from "./RecipientConfirmation";
 
 
@@ -27,7 +28,6 @@ const RequestPay = () => {
     const [paymentSuccess, setPaymentSuccess] = useState(false)
     const [data, setData] = useState<any>({})
     const [openConfirmation, setOpenConfirmation] = useState(false);
-
     const { merchant_info, isGettingInfo, merchant_associated, setFetch_merchant_info } = useMerchant(
         {
           merchantAddress: data?.merchantAddress,
@@ -137,8 +137,20 @@ const RequestPay = () => {
       };
 
       const handleSendToken = async () => {
-        sendTokenToMerchant()
-        setPaymentSuccess(true)
+        try {
+            setPaymentSuccess(false)
+            if(scanData?.type === 'campaign creator') {
+                await campaignServices.transfer_tokens_to_recipient(userInfo?.secretKey, userInfo?.publicKey, data?.amount, scanData?.campaignAddress);
+            } else {
+                sendTokenToMerchant()
+            }
+            
+            setPaymentSuccess(false)
+        } catch (error: any) {
+            console.log(error)
+            toast.error(error.toString())
+            setPaymentSuccess(false)
+        }
       }
   return (
     <section>
@@ -162,7 +174,7 @@ const RequestPay = () => {
                             setSelected(2)
                             buttonRef.current.open()
                         }} 
-                        className={`flex-1 cursor-pointer py-[8px] ${selected === 2 && 'bg-[#EAEBEE]'} flex items-center justify-center  rounded-[26px] text-center text-lg font-semibold`}>pay</div>
+                        className={`flex-1 cursor-pointer py-[8px] ${selected === 2 && 'bg-[#EAEBEE]'} flex items-center justify-center  rounded-[26px] text-center text-lg font-semibold`}>Pay</div>
                 </div>
                 </div>
             </div>
@@ -263,11 +275,15 @@ const RequestPay = () => {
         )}
 
         {openConfirmation && !isSendToMerchantSucc && (
-            <RecipientConfirmation handleClick={handleSendToken} amount={"30"} storeName={"My Kitty Cat"}  />
+            <RecipientConfirmation campaignName={scanData?.campaignName} type={scanData?.type === 'campaign creator' ? 'campaign' : 'merchant'} handleClick={handleSendToken} amount={"30"} storeName={"My Kitty Cat"}  />
         )}
 
         {isSendToMerchantSucc && (
             <ConfirmationScreen type="receipent_transfer_success" />
+        )}
+
+        {paymentSuccess && (
+            <ConfirmationScreen type="creator_transfer_success" />
         )}
 
         

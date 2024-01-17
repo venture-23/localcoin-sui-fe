@@ -91,7 +91,7 @@ const CreateCampaignPage = () => {
         })
         .catch((x) => {
           setShowLoader(false);
-          toast.error('Error while creating');
+          // toast.error('Error while creating');
         });
     }
   };

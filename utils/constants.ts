@@ -17,7 +17,7 @@ export {
   userRegistryContractId
 };
 
-export type StatusType = 'withdraw' | 'merchant' | 'campaign' | 'recipient_transfer' | 'receipent_transfer_success';
+export type StatusType = 'withdraw' | 'merchant' | 'campaign' | 'recipient_transfer' | 'receipent_transfer_success' | 'creator_transfer_success';
 
 export const successStatusText = {
   'withdraw' : {
@@ -35,6 +35,10 @@ export const successStatusText = {
   'receipent_transfer_success' : {
     title: 'Payment Sent',
     text: 'Your payment has successfully been sent to the merchant.'
+  },
+  'creator_transfer_success' : {
+    title: 'Payment Sent',
+    text: 'Your payment has successfully been sent to the participant.'
   }
 }
 

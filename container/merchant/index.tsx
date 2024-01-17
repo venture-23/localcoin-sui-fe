@@ -66,7 +66,7 @@ const MerchantRegisterPage = () => {
       setShowLoader(false);
     } catch (error: any) {
       console.log(error)
-      toast.error('Failed while applying for merchant')
+      // toast.error('Failed while applying for merchant')
       setShowFormNo(1);
       setShowLoader(false);
     }
