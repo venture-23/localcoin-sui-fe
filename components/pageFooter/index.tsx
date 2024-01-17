@@ -14,7 +14,7 @@ const footerLinks = [
     },
     {
         id: 2,
-        link: '/',
+        link: '/request-pay',
         title: 'Request/Pay',
         icon: (
             <svg xmlns="http://www.w3.org/2000/svg" width="29" height="28" viewBox="0 0 29 28" fill="none">

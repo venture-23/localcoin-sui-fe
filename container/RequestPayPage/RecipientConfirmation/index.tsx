@@ -1,17 +1,17 @@
-import Button from "components/botton"
-import Image from "next/image"
-import { StatusType, successStatusText } from "utils/constants"
+import Button from 'components/botton'
+import Image from 'next/image'
 
-interface IConfirmationScreenProps {
-    text?: string
-    type?: StatusType
+interface IRecipientConfirmProps {
+    amount: number | string
+    storeName: string
+    handleClick:() => void
+    type?: string
+    campaignName?: string
 }
 
-
-
-export const ConfirmationScreen = ({ text, type }: IConfirmationScreenProps) => {
-    return (
-        <section className="w-full realtive bg-[#1653AE] h-[100vh]">
+const RecipientConfirmation = ({ amount, storeName, handleClick, type, campaignName }: IRecipientConfirmProps) => {
+  return (
+    <section className="w-full realtive bg-[#1653AE] h-[100vh]">
             <div className="success-vector-1">
                 <Image 
                     src={'/successScreenVector1.png'}
@@ -40,17 +40,25 @@ export const ConfirmationScreen = ({ text, type }: IConfirmationScreenProps) => 
                             />
                         </div>
                         <h3 className="text-2xl font-semibold text-[#fff]">
-                            {successStatusText[type as StatusType]?.title}
+                            {amount || 0} LocalCoin
                         </h3>
-                        <div className="text-base font-medium text-[#fff] text-center">
-                            {successStatusText[type as StatusType]?.text}
+                        <p className='italic my-[12px] text-white text-base font-normal'>{type === 'campaign' ? campaignName : storeName}</p>
+                        <div className="text-base container mx-auto font-medium text-[#fff] text-center">
+                            {type === 'campaign' ? (
+                                `You are about to pay ${amount} of LocalCoin for completing the campaign`
+                            ): (
+                                `You are about to pay  ${amount || 0} LocalCoin to "${storeName}"`
+                            )}
+                            
                         </div>
                     </div>
                     <div className="container mx-auto mb-[10px]">
-                        <Button link="/" buttonType={'secondary'} text="Go Home" />
+                        <Button handleClick={handleClick} buttonType={'secondary'} text="Send Payment" />
                     </div>
                 </div>
             </div>
         </section>
-    )
+  )
 }
+
+export default RecipientConfirmation

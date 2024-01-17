@@ -17,6 +17,31 @@ export {
   userRegistryContractId
 };
 
+export type StatusType = 'withdraw' | 'merchant' | 'campaign' | 'recipient_transfer' | 'receipent_transfer_success' | 'creator_transfer_success';
+
+export const successStatusText = {
+  'withdraw' : {
+    title: 'Withdraw requested.',
+    text: 'Your LocalCoin will be credited into USD for you once our administration gets to this transaction. This can take up to 2 business days.'
+  },
+  'merchant': {
+    title: 'Congratulations!',
+    text: 'Thank you for applying! The Local Coin team will review your application and get back to you within 1 week. If you have any questions, please email admin@localcoin.us'
+  },
+  'campaign' : {
+    title: 'Congratulations!',
+    text: 'Your campaign is now live. Participants can now join your campaign to earn rewards. If you have any questions, please email admin@localcoin.us'
+  },
+  'receipent_transfer_success' : {
+    title: 'Payment Sent',
+    text: 'Your payment has successfully been sent to the merchant.'
+  },
+  'creator_transfer_success' : {
+    title: 'Payment Sent',
+    text: 'Your payment has successfully been sent to the participant.'
+  }
+}
+
 /* 
 
  'create_campaign',

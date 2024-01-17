@@ -6,10 +6,13 @@ import InputForm from 'components/form/input';
 import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
+import { maskWalletAddress } from 'utils/clipper';
 
 
 interface IPaticipant {
@@ -27,6 +30,7 @@ const CampaignDetail = (props: any) => {
   const [scanData, setScanData] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
   const [notLoggedIn, setNotLoggedIn] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
   // const [data, setData] = useState({
   //   username: ''
   // })
@@ -49,6 +53,7 @@ const CampaignDetail = (props: any) => {
   const [currentParticipant, setCurrentParticipant] = useState<IPaticipant>({});
   const [verifyConfirm, setVerifyConfirm] = useState(false);
   const [endCampaignConfirm, setEndCampaignConfirm] = useState(false);
+  const [requestedIncentive, setRequestedIncentive] = useState(false);
 
   const [isCampaignEnded, setIsCampaignEnded] = useState(false);
   console.log(currentParticipant, ':cuurPart')
@@ -259,16 +264,38 @@ const CampaignDetail = (props: any) => {
     return verified.length
   }
 
+  const handleIncentive = async () => {
+    await generateQrCode();
+    setRequestedIncentive(true);
+  }
+
+  const generateQrCode = async () => {
+    try {
+      const staticData = {
+        type: 'campaign creator',
+        publicKey: userInfo.publicKey,
+        amount: 0,
+        proprietaryName: userInfo.proprietaryName,
+        phoneNumber: userInfo.phoneNumber,
+        storeName: userInfo.storeName,
+        location: userInfo.location,
+        campaignAddress: props.campaignId,
+        campaignName: campaignInfo?.name,
+      };
+      const response = await QRCode.toDataURL(JSON.stringify(staticData));
+      setImageUrl(response);
+    } catch (error) {
+      // debugger;
+      console.log(error);
+    }
+  };
+
   return (
     <>
-      {/* <Header className="h-[120px]">
-        <div className="flex items-center">
-          <p className="flex-1 text-2xl font-semibold text-center">Campaign Details</p>
-        </div>
-      </Header> */}
 
       <section className="relative">
-        <div className="container mx-auto">
+        {!requestedIncentive && (
+          <div className="container mx-auto">
           {/* <PageHeader
             backLink={notLoggedIn ? '/all-campaigns' : '/campaign'}
             pageHeaderTitle={'Campaign Details'}
@@ -353,7 +380,7 @@ const CampaignDetail = (props: any) => {
               <h3 className="text-base font-semibold">{campaignInfo?.name}</h3>
               <div className="my-[16px] relative w-full overflow-hidden rounded-[12px] border-[3px] border-solid border-[#D7D7D7]">
                 <Image
-                  src={'/storeImg.png'}
+                  src={'/campaignImg.png'}
                   alt="Store"
                   height={420}
                   width={400}
@@ -484,7 +511,7 @@ const CampaignDetail = (props: any) => {
               )
               : (
                 currentParticipant?.value ? (
-                  <Button buttonType={'secondary'}  text='Request Incentives'/>
+                  <Button handleClick={handleIncentive} buttonType={'secondary'}  text='Request Incentives'/>
                 ) : (
                   <Button disabled={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0} handleClick={handleJoin} text={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0 ? 'Requested to join' : 'Join Campaign'} />
                 )
@@ -552,7 +579,46 @@ const CampaignDetail = (props: any) => {
               </div>
             </div>
           )}
-        </div>
+          </div>
+        )}
+
+        {requestedIncentive && imageUrl && (
+          <div className="container mx-auto">
+            <div>
+              <Link href={'#'}>
+                  <div onClick={() => setRequestedIncentive(false)} className='cursor-pointer py-[18px] flex items-center'>
+                      <ChevronLeftIcon width={16} height={16} />
+                      <span className='text-[12px] font-normal'>Back</span>
+                  </div>
+              </Link>
+            </div>
+            <h3 className="text-base font-semibold text-[#000]">Request Incentives</h3>
+
+            <div className="flex flex-col mt-[18px] items-center jusitfy-center gap-[12px]">
+              <div className="w-[80px] h-[80px] rounded-[100%] bg-[#EAEBEE]"></div>
+              <div className="text-[24px] font-normal text-[#000]">
+                  Profile Name
+              </div>
+              <div className="text-base font-[400] italic">
+                  {maskWalletAddress(userInfo?.publicKey)}
+              </div>
+            </div>
+            {/* QR SCANNER PART */}
+            {imageUrl && (
+              <>
+                  <div className="w-full flex items-center justify-center">
+                  <Image src={imageUrl} alt="img" width={240} height={240} />
+                  </div>
+
+                  <p className="text-base font-normal text-center mt-[12px]">Campaign creator will need to scan your QR code to send you the payment</p>
+              </>
+
+            )}
+          
+           
+          </div>
+        )}
+        
       </section>
     </>
   );

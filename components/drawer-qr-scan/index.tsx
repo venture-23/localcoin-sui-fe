@@ -18,6 +18,10 @@ function DrawerQRScan(props: any, ref: any) {
 
   function closeModal() {
     setIsOpen(false);
+    if(props.closePayMode) {
+      props.closePayMode();
+    }
+    
   }
 
   function openModal() {
