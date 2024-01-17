@@ -18,7 +18,7 @@ export function useGetBalance() {
       console.log(userInfo, ':info')
       const response = await campaignServices.getReceipientToken(userInfo.secretKey, userInfo.publicKey);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
-      console.log({ response });
+      onsole.log({ response,  }, ':token');
       return response;
     },
     onError: (error: any) => {
@@ -39,7 +39,7 @@ export function useGetBalance() {
       console.log(userInfo, ':info')
       const response = await campaignServices.get_user_balance(userInfo);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
-      console.log({ response });
+      console.log({ response,  });
       return response;
     },
     onError: (error: any) => {
