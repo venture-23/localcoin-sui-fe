@@ -237,8 +237,8 @@ const RequestPay = () => {
                 </div>
                 <h3 className="text-base font-semibold text-[#000]">Payment Request</h3>
 
-                <div className="flex flex-col items-center jusitfy-center gap-[12px]">
-                    <div className="w[80px] h-[80px] rounded-[100%] bg-[#EAEBEE]"></div>
+                <div className="flex flex-col mt-[18px] items-center jusitfy-center gap-[12px]">
+                    <div className="w-[80px] h-[80px] rounded-[100%] bg-[#EAEBEE]"></div>
                     <div className="text-[24px] font-normal text-[#000]">
                         {amount || 0 } LocalCoin
                     </div>
