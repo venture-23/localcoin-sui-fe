@@ -9,7 +9,7 @@ const GenerateKeyPairPage = ({ handleGenerateKey }: any) => {
           {/* <div className="flex justify-center">
             <Image src={'/generateQR.png'} width={250} height={250} alt="genetate image" />
           </div> */}
-          <h1 className="mb-2 text-2xl font-bold">Create Digital Account</h1>
+          <h1 className="mb-2 text-2xl font-bold">Generate Keypair</h1>
           <p className="max-w-sm font-medium text-textSecondary">
             Clicking the button below will Generates a keypair associated with the stellar
             blockchain.

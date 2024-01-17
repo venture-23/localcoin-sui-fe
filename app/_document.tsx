@@ -6,7 +6,7 @@ interface DocumentMetaTagsProps {
 
 export const DocumentMetaTags = ({ twitterId, image, language }: DocumentMetaTagsProps) => (
   <>
-    <link rel="manifest" href="/manifest.json" />
+    {/* <link rel="manifest" href="/manifest.json" /> */}
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     {twitterId && <meta name="twitter:site" content={twitterId} />}

@@ -1,11 +1,8 @@
-'use client';
-
 import { toast } from 'react-toastify';
 import {
   balanceContractId,
   campaignContractId,
   issuanceManagementContract,
-  localCoinAddress,
   superAdminSecret,
   userRegistryContractId
 } from 'utils/constants';
@@ -25,13 +22,20 @@ export const campaignServices = (() => {
 
   const makeTransaction = async ({
     secretKey,
+    publicKey,
     parameterType,
     payload = '',
     contractId = campaignContractId
   }: any) => {
     try {
-      const sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
-      const sourcePublicKey = sourceKeypair.publicKey();
+      let sourcePublicKey: string = '';
+      let sourceKeypair: any = '';
+      if (secretKey) {
+        sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
+        sourcePublicKey = sourceKeypair.publicKey();
+      } else {
+        sourcePublicKey = publicKey;
+      }
       const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
         allowHttp: true
       });
@@ -46,13 +50,6 @@ export const campaignServices = (() => {
         .addOperation(contract.call(parameterType, ...((payload && payload) || [])))
         .setTimeout(30)
         .build();
-      /*  server.simulateTransaction(transaction).then((sim: any) => {
-        console.log({ sim });
-        console.log('cost:', sim.cost);
-        console.log('result:', sim.result);
-        console.log('error:', sim.error);
-        console.log('latestLedger:', sim.latestLedger);
-      }); */
       if (
         ![
           'create_campaign',
@@ -60,7 +57,10 @@ export const campaignServices = (() => {
           'recipient_to_merchant_transfer',
           'merchant_registration',
           'verify_merchant',
-          'request_campaign_settlement'
+          'request_campaign_settlement',
+          'join_campaign',
+          'verify_recipients',
+          'end_campaign'
         ].includes(parameterType)
       ) {
         return server.simulateTransaction(transaction).then((sim: any) => {
@@ -89,6 +89,7 @@ export const campaignServices = (() => {
                 console.log('Transaction not found. Retrying...', parameterType);
                 await new Promise((resolve) => setTimeout(resolve, 1000));
               } else {
+                console.log('error');
                 toast.error(`failed while performing ${parameterType}`);
                 return null;
               }
@@ -119,45 +120,48 @@ export const campaignServices = (() => {
     });
   };
 
-  const getAllCampaigns = (secretKey: string) => {
+  const getAllCampaigns = (publicKey: string) => {
     return makeTransaction({
-      secretKey,
-      parameterType: 'get_campaigns_name'
+      parameterType: 'get_campaigns_name',
+      publicKey
     });
   };
 
   const createCampaigs = (data: any, secretKey: string, publicKey: string) => {
+    console.log({ data, secretKey, publicKey });
     return makeTransaction({
       secretKey,
+      publicKey,
       parameterType: 'create_campaign',
       payload: [
         StringToScVal(data.name),
         StringToScVal(data.description),
         // StringToScVal(data.participant),
         numberToU32(parseFloat(data.participant)),
-        accountToScVal(localCoinAddress),
+        accountToScVal(data.tokenAddress),
         numberToI128(parseFloat(data.totalAmount)),
-        accountToScVal(publicKey)
+        accountToScVal(publicKey),
+        StringToScVal(data.location)
       ]
     });
   };
 
   const getCampaignInfo = (
-    secretKey: string = 'SCKKS3FLNGIOXICRNSFVNPBUNZLUA5EMEQESQS2IGLVYYYJAHRQX2GSA', // FROM DEMO FROM HOME PAGE
+    publicKey: string,
     contractId: string = 'CAYB5NVCDFFO3IYCHY77LPK2KAXJ7PNHIHPWQEUIM6G372MI7YKQS2VN'
   ) => {
     return makeTransaction({
       parameterType: 'get_campaign_info',
       contractId,
-      secretKey
+      publicKey
     });
   };
 
-  const getTokenNameAddress = (secretKey: string) => {
+  const getTokenNameAddress = (publicKey: string) => {
     return makeTransaction({
       parameterType: 'get_token_name_address',
       contractId: issuanceManagementContract,
-      secretKey
+      publicKey
     });
   };
 
@@ -213,19 +217,24 @@ export const campaignServices = (() => {
     });
   };
 
-  const merchant_registration = (data: any) => {
-    return makeTransaction({
-      contractId: userRegistryContractId,
-      parameterType: 'merchant_registration',
-      secretKey: data.secretKey,
-      payload: [
-        accountToScVal(data.publicKey),
-        StringToScVal(data.proprietaryName),
-        StringToScVal(data.phoneNumber),
-        StringToScVal(data.storeName),
-        StringToScVal(data.location)
-      ]
-    });
+  const merchant_registration = (userInfo: any, data: any) => {
+    try {
+      console.log({ data }, 'merchant registration');
+      return makeTransaction({
+        contractId: userRegistryContractId,
+        parameterType: 'merchant_registration',
+        secretKey: userInfo.secretKey,
+        payload: [
+          accountToScVal(userInfo.publicKey),
+          StringToScVal(data.proprietor),
+          StringToScVal(data.phone_no),
+          StringToScVal(data.store_name),
+          StringToScVal(data.location)
+        ]
+      });
+    } catch (error) {
+      console.log(error, ':from 231');
+    }
   };
 
   const verify_merchant = (data: any) => {
@@ -248,12 +257,20 @@ export const campaignServices = (() => {
     });
   };
 
-  const get_merchant_info = (secretKey: any, merchantAddress: string) => {
+  const get_verified_merchants = (publicKey: any) => {
+    return makeTransaction({
+      contractId: userRegistryContractId,
+      parameterType: 'get_verified_merchants',
+      publicKey
+    });
+  };
+
+  const get_merchant_info = (publicKey: any, merchantAddress: string) => {
     console.log({ merchantAddress });
     return makeTransaction({
       contractId: userRegistryContractId, //token_contract_id
       parameterType: 'get_merchant_info',
-      secretKey: secretKey,
+      publicKey,
       payload: [accountToScVal(merchantAddress)]
     });
   };
@@ -265,7 +282,6 @@ export const campaignServices = (() => {
     tokenAddress: string
   ) => {
     console.log({ tokenAddress, secretKey, amount });
-    // debugger;
     return makeTransaction({
       contractId: campaignContractId,
       parameterType: 'request_campaign_settlement',
@@ -276,12 +292,73 @@ export const campaignServices = (() => {
 
   const get_balance = (userInfo: any) => {
     return makeTransaction({
-      secretKey: userInfo.secretKey,
+      secretKey: userInfo?.secretKey,
       contractId: balanceContractId,
+      publicKey: userInfo?.publicKey,
       parameterType: 'balance',
-      payload: [accountToScVal(userInfo.publicKey)]
+      payload: [accountToScVal(userInfo?.publicKey)]
     });
   };
+
+  const join_campaign = (
+    username: string,
+    address: string,
+    userInfo: any,
+    campaignAddress: string
+  ) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      publicKey: userInfo.publicKey,
+      contractId: campaignAddress,
+      parameterType: 'join_campaign',
+      payload: [StringToScVal(username), accountToScVal(userInfo.publicKey)]
+    });
+  };
+
+  const get_recipients_status = (userInfo: any) => {
+    return makeTransaction({
+      publicKey: userInfo.publicKey,
+      contractId: userInfo.campaignAddress,
+      parameterType: 'get_recipients_status'
+    });
+  };
+
+  const get_owner = (publicKey: string, contractId: string) => {
+    return makeTransaction({
+      publicKey: publicKey,
+      contractId: contractId,
+      parameterType: 'get_owner'
+    });
+  };
+
+  const verify_recipients = (secretKey: string, contractId: string, participantNameList: any) => {
+    console.log({participantNameList})
+    return makeTransaction({
+      secretKey: secretKey,
+      contractId: contractId,
+      parameterType: 'verify_recipients',
+      // payload: [StringToScVal(['jack'])]
+      // payload: [StringToScVal(['jack', 'bob'])]
+      payload: [StringToScVal(participantNameList)]
+    });
+  };
+
+  const end_campaign = (userInfo: any, contractId: string) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      contractId: campaignContractId,
+      parameterType: 'end_campaign',
+      payload: [accountToScVal(contractId), accountToScVal(userInfo.publicKey)]
+    });
+  };
+
+  const is_ended = (userInfo: any, contractId: string) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      contractId: contractId,
+      parameterType: 'is_ended',
+    });
+  }
 
   return {
     getCreatorCampaigns: getCreatorCampaigns,
@@ -297,6 +374,30 @@ export const campaignServices = (() => {
     get_merchant_associated,
     get_merchant_info,
     request_campaign_settlement,
-    get_user_balance: get_balance
+    get_user_balance: get_balance,
+    get_verified_merchants,
+    join_campaign,
+    get_recipients_status,
+    get_owner,
+    verify_recipients,
+    end_campaign,
+    is_ended
   };
 })();
+
+/* 
+{
+    "username": "manish",
+    "address": "GAVBJZNE4NKI7NMZAGD7RA5SIHBSZDSGUDCV2UDQHGUHGN4UIWAJUHPZ",
+    "userInfo": {
+        "storeName": "",
+        "proprietaryName": "",
+        "phoneNumber": "",
+        "location": "",
+        "secretKey": "SBWPALRGE724TRTJTCH353EWC67ASGY3PV47SHCHM4632Y7PVV3SWSEO",
+        "publicKey": "GAVBJZNE4NKI7NMZAGD7RA5SIHBSZDSGUDCV2UDQHGUHGN4UIWAJUHPZ"
+    },
+    "campaignAddress": "CALTR26TIUXUGMEKYTIUSPRZ7LW3BMV2MF7J7SJB7K7ZQ6OGI2ZA5ZTQ"
+}
+
+*/
