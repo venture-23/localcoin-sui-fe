@@ -12,13 +12,13 @@ const MerchantRegisterInfo = ({
   loader
 }: any) => {
   return (
-    <div className="bg-white">
-      <div className="relative p-6">
+    <div className="">
+      <div className="relative ">
         <h3 className="mb-2 text-2xl font-bold">{title || 'Apply to become a merchant'}</h3>
       </div>
-      <div className="mt-1 grid gap-5 px-6 pb-6">
+      <div className="mt-1 grid gap-5 pb-6">
         <InputForm
-          label="Store Name"
+          // label="Store Name"
           type="text"
           error={error}
           name="store_name"
@@ -37,13 +37,13 @@ const MerchantRegisterInfo = ({
           data={data}
           className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-[#A3A3A3] placeholder-extrabold shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
           placeholder="Enter Store Owner Name"
-          label="Store Owner Name"
+          // label="Store Owner Name"
         />
         <InputForm
           inputMode="numeric"
           type="number"
           error={error}
-          label="Phone Number"
+          // label="Phone Number"
           name="phone_no"
           maxLength={15}
           data={data}
@@ -52,7 +52,7 @@ const MerchantRegisterInfo = ({
           placeholder="Enter Phone Number"
         />
         <TextArea
-          label="Store Address"
+          // label="Store Address"
           type="text"
           rows={4}
           error={error}

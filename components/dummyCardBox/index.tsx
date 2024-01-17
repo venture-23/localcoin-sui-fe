@@ -30,7 +30,7 @@ export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
     const router = useRouter()
     return (
         <div style={{
-                background: `url('/campaignImg.png')`,
+                background: `url(${boxTitle === 'Campaigns' ? '/campaignImg.png' : 'storeImg.png'})`,
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: 'cover'
