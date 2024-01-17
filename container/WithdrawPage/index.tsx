@@ -2,30 +2,46 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import Button from "components/botton";
 import { ConfirmationScreen } from "components/confirmationScreen";
-import { useGetBalance } from "hooks";
+import { useGetBalance, useRecipient } from "hooks";
+import { useMyContext } from "hooks/useMyContext";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import { campaignServices } from "services/campaign-services";
 
 const Withdraw = () => {
     const { userBalance } = useGetBalance()
     const [confirmWithdraw, setConfirmWithdraw] = useState(false)
     const [showLoader, setShowLoader] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
+    const { userInfo } = useMyContext();
+    const { tokenList } = useRecipient({});
+    console.log(tokenList, ':token')
 
-    const withdrawFunds = () => {
+
+    const withdrawFunds = async () => {
       try {
+        if(!userBalance || !tokenList) {
+          throw new Error('No funds to withdraw');
+        }
         setShowLoader(true)
-        
-
+        const response = await campaignServices.request_campaign_settlement(
+          userInfo.publicKey,
+          userInfo.secretKey,
+          parseFloat(userBalance),
+          tokenList[0].contractToken
+        );
+        console.log(response)
 
         setShowLoader(false)
         setConfirmWithdraw(false)
         setShowSuccess(true);
         
-      } catch (error) {
+      } catch (error:any) {
         console.log(error)
         setShowLoader(false)
         setConfirmWithdraw(false)
+        toast.error(error.toString())
       }
     }
      
