@@ -17,7 +17,7 @@ export {
   userRegistryContractId
 };
 
-export type StatusType = 'withdraw' | 'merchant' | 'campaign';
+export type StatusType = 'withdraw' | 'merchant' | 'campaign' | 'recipient_transfer' | 'receipent_transfer_success';
 
 export const successStatusText = {
   'withdraw' : {
@@ -31,6 +31,10 @@ export const successStatusText = {
   'campaign' : {
     title: 'Congratulations!',
     text: 'Your campaign is now live. Participants can now join your campaign to earn rewards. If you have any questions, please email admin@localcoin.us'
+  },
+  'receipent_transfer_success' : {
+    title: 'Payment Sent',
+    text: 'Your payment has successfully been sent to the merchant.'
   }
 }
 

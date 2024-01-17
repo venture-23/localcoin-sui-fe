@@ -1,17 +1,15 @@
-import Button from "components/botton"
-import Image from "next/image"
-import { StatusType, successStatusText } from "utils/constants"
+import Button from 'components/botton'
+import Image from 'next/image'
 
-interface IConfirmationScreenProps {
-    text?: string
-    type?: StatusType
+interface IRecipientConfirmProps {
+    amount: number | string
+    storeName: string
+    handleClick:() => void
 }
 
-
-
-export const ConfirmationScreen = ({ text, type }: IConfirmationScreenProps) => {
-    return (
-        <section className="w-full realtive bg-[#1653AE] h-[100vh]">
+const RecipientConfirmation = ({ amount, storeName, handleClick }: IRecipientConfirmProps) => {
+  return (
+    <section className="w-full realtive bg-[#1653AE] h-[100vh]">
             <div className="success-vector-1">
                 <Image 
                     src={'/successScreenVector1.png'}
@@ -40,17 +38,20 @@ export const ConfirmationScreen = ({ text, type }: IConfirmationScreenProps) => 
                             />
                         </div>
                         <h3 className="text-2xl font-semibold text-[#fff]">
-                            {successStatusText[type as StatusType]?.title}
+                            {amount || 0} LocalCoin
                         </h3>
+                        <p className='italic my-[12px] text-white text-base font-normal'>{storeName}</p>
                         <div className="text-base font-medium text-[#fff] text-center">
-                            {successStatusText[type as StatusType]?.text}
+                            You are about to pay <br /> {amount || 0} LocalCoin to &apos;{storeName}&apos;
                         </div>
                     </div>
                     <div className="container mx-auto mb-[10px]">
-                        <Button link="/" buttonType={'secondary'} text="Go Home" />
+                        <Button handleClick={handleClick} buttonType={'secondary'} text="Send Payment" />
                     </div>
                 </div>
             </div>
         </section>
-    )
+  )
 }
+
+export default RecipientConfirmation
