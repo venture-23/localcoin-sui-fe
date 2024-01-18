@@ -8,7 +8,13 @@ import PageHeader from 'components/pageheader';
 import PopupBox from 'components/popover';
 import { Stores } from 'components/stores';
 import { useGetBalance } from 'hooks';
-import { useEffect, useRef } from 'react';
+import { useMyContext } from 'hooks/useMyContext';
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import { campaignServices } from 'services/campaign-services';
+// import { useMyContext } from 'hooks/useMyContext';
+// import { useRouter } from 'next/navigation';
+
 import { encodeToken } from 'services/encrypt-decrypt-data';
 const LandingPage = () => {
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
@@ -28,8 +34,9 @@ const LandingPage = () => {
       downloadIcon: <ArrowDownOnSquareStackIcon width={48} height={48} />
     });
   };
-
+  const { userInfo } = useMyContext();
   const { userBalance, userUsdcBalance } = useGetBalance();
+  const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
 
   const campInfo = {
     publicKey: 'GC35FMQWTX7HA2UGRRHLEVT46CEKZBSDDXQXADEZGWWWOZCGCUZOOPE4',
@@ -60,20 +67,34 @@ const LandingPage = () => {
     window.location.reload();
   };
 
+  useEffect(() => {
+    if (userInfo?.publicKey) {
+      campaignServices.get_verified_merchants(userInfo?.publicKey).then((response) => {
+        if (response.length > 0) {
+          console.log(response.includes(userInfo?.publicKey), ':veri');
+          setIsVerifiedMerchant(response.includes(userInfo?.publicKey));
+        }
+      });
+    }
+  }, [userInfo]);
+
   return (
     <>
       {/* <div className='header-container'>
-        <PageHeader />
-      </div> */}
+      <PageHeader />
+    </div> */}
       <section className="">
         <div className="landing-top mb-[24px]">
-          <PageHeader />
-          <div className="mb-[4px]">
-            <h6 className="text-sm font-semibold text-[#1384F5]">USDC Coins</h6>
-            <div className="text-[16px] font-semibold">
-              {userUsdcBalance ? Number(userUsdcBalance).toFixed(0).toString() : 0}
+          <PageHeader isVerifiedMerchant={isVerifiedMerchant} />
+          {Number(userUsdcBalance) !== 0 && (
+            <div className="mb-[4px]">
+              <h6 className="text-sm font-semibold text-[#1384F5]">USDC Coins</h6>
+              <div className="text-[16px] font-semibold">
+                {userUsdcBalance ? Number(userUsdcBalance).toFixed(0).toString() : 0}
+              </div>
             </div>
-          </div>
+          )}
+
           <div className="flex justify-between">
             <div>
               <h6 className="text-base font-bold text-[#1384F5]">Total LocalCoins</h6>
@@ -81,15 +102,15 @@ const LandingPage = () => {
                 {userBalance ? Number(userBalance).toFixed(0).toString() : 0}
               </div>
             </div>
-            {/* {userInfo?.publicKey && (
-                  <div className='self-end'>
-                    <Link href={'/withdraw'}>
-                    <button className='text-[12px] font-medium text-[#FFf] py-[5px] px-[18px] bg-[#1653AE] rounded-[6px] cursor-pointer'>Withdraw</button>
-                    </Link>
-                    
-                  </div>
-
-                )} */}
+            {isVerifiedMerchant && (
+              <div className="self-end">
+                <Link href={'/withdraw'}>
+                  <button className="cursor-pointer rounded-[6px] bg-[#1653AE] px-[18px] py-[5px] text-[12px] font-medium text-[#FFf]">
+                    Withdraw
+                  </button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
         <div className="container mx-auto ">
@@ -102,52 +123,52 @@ const LandingPage = () => {
           <Campaigns />
 
           {/* <div className="flex justify-center ">
-            <GetStartedSVG />
-          </div> */}
+          <GetStartedSVG />
+        </div> */}
           {/* <div className="mb-6 mt-4 text-center">
-            <h2 className="text-heading mb-0 ">Get Started</h2>
-            <p className="text-color text-lg opacity-[.6]">
-              LocalCoin is just around the corner.
-              <span
-                onClick={() => {
-                  handleClick('c');
-                }}
-              >
-                Choose
-              </span>{' '}
-              <span
-                onClick={() => {
-                  handleClick('m');
-                }}
-              >
-                an&nbsp;
-              </span>
-              <span
-                onClick={() => {
-                  handleClick('r');
-                }}
-              >
-                option&nbsp;
-              </span>
-              below to get started .
-            </p>
-          </div> */}
+          <h2 className="text-heading mb-0 ">Get Started</h2>
+          <p className="text-color text-lg opacity-[.6]">
+            LocalCoin is just around the corner.
+            <span
+              onClick={() => {
+                handleClick('c');
+              }}
+            >
+              Choose
+            </span>{' '}
+            <span
+              onClick={() => {
+                handleClick('m');
+              }}
+            >
+              an&nbsp;
+            </span>
+            <span
+              onClick={() => {
+                handleClick('r');
+              }}
+            >
+              option&nbsp;
+            </span>
+            below to get started .
+          </p>
+        </div> */}
 
           {/* <div className="flex flex-col gap-5 ">
-            <Button text="Sign up for account" link="/signup" />
-            <Button
-              text="Check for ongoing campaigns"
-              buttonIcon={<QrCodeIcon className="text-color h-5 w-5" />}
-              buttonType="secondary"
-              link="/all-campaigns"
-            />
+          <Button text="Sign up for account" link="/signup" />
+          <Button
+            text="Check for ongoing campaigns"
+            buttonIcon={<QrCodeIcon className="text-color h-5 w-5" />}
+            buttonType="secondary"
+            link="/all-campaigns"
+          />
 
-            <Button
-              text="Sign up for account"
-              link="/signup"
-              underline={`underline bg-transparent !text-[#212B34]  font-semibold `}
-            />
-          </div> */}
+          <Button
+            text="Sign up for account"
+            link="/signup"
+            underline={`underline bg-transparent !text-[#212B34]  font-semibold `}
+          />
+        </div> */}
           {promptable && !isInstalled ? (
             <>
               <PopupBox ref={popOverRef}>

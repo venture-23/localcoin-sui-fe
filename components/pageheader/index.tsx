@@ -4,35 +4,22 @@ import { useGetBalance } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { campaignServices } from 'services/campaign-services';
 import { maskWalletAddress } from 'utils/clipper';
 
 interface PageHeaderProps {
   pageHeaderTitle?: any;
   backLink?: any;
+  isVerifiedMerchant?: boolean
 }
 
-const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink }) => {
+const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink, isVerifiedMerchant }) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   const { userInfo } = useMyContext();
   const { userBalance } = useGetBalance()
 
-  const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
-
-  useEffect(() => {
-    if(userInfo?.publicKey) {
-      campaignServices.get_verified_merchants(userInfo?.publicKey).then(response => {
-
-        if(response.length > 0 ) {
-          console.log(response.includes(userInfo?.publicKey), ':veri')
-          setIsVerifiedMerchant(response.includes(userInfo?.publicKey))
-        }
-      })
-    }
-
-  }, [userInfo])
+  // const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
 
    const handleCopy = () => {
     if(userInfo?.publicKey) {

@@ -91,7 +91,7 @@ const CreateCampaignPage = () => {
         })
         .catch((x) => {
           setShowLoader(false);
-          toast.error('Error while creating');
+          // toast.error('Error while creating');
         });
     }
   };
@@ -119,7 +119,7 @@ const CreateCampaignPage = () => {
   return (
     <section>
       {showSuccess ? (
-        <ConfirmationScreen text="Your campaign is now live. Participants can now join your campaign to earn rewards. If you have any questions, please email admin@localcoin.us" />
+        <ConfirmationScreen type='campaign' />
       ) : (
         <div className="container mx-auto">
           {/* <PageHeader backLink={`/campaign`} /> */}

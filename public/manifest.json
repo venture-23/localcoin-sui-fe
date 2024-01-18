@@ -4,7 +4,7 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "name": "localcoin",
+  "name": "LocalCoin",
   "short_name": "LocalCoin",
   "description": "A social charity app",
   "icons": [
