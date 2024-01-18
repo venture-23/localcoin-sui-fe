@@ -57,7 +57,12 @@ export const Campaigns = () => {
             <div className="flex store-container-box items-center overflow-auto gap-[20px]">
                 {
                     campaignList?.map((item: any ,idx: any) => (
-                       <DummyCardBox key={idx} boxData={item} boxTitle="Campaigns" />
+                        isFetching ? (
+                            <div className="h-[124px] min-w-[260px] bg-gray-300 animate-pulse rounded-[12px]" key={idx}></div>
+                        ) : (
+                            <DummyCardBox key={idx} boxData={item} boxTitle="Campaigns" />
+                        )
+                       
                     ))
                 }
             </div>

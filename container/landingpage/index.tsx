@@ -62,6 +62,8 @@ const LandingPage = () => {
 
   }, [userInfo])
 
+  console.log(userUsdcBalance, 'usdc')
+
   
 
   return (
@@ -72,7 +74,7 @@ const LandingPage = () => {
       <section className="">
         <div className='mb-[24px] landing-top'>
               <PageHeader isVerifiedMerchant={isVerifiedMerchant} />
-              {Number(userUsdcBalance) !== 0 && (
+              {(Number(userUsdcBalance) !== 0 && userUsdcBalance !== undefined) && (
                 <div className='mb-[4px]'>
                   <h6 className='text-sm font-semibold text-[#1384F5]'>USDC Coins</h6>
                   <div className='text-[16px] font-semibold'>

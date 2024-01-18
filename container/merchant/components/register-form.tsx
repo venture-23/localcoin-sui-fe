@@ -11,6 +11,11 @@ const MerchantRegisterInfo = ({
   data = {},
   loader
 }: any) => {
+
+  const isDataNotFilled = () => {
+    const isNotFilled = data.proprietor === '' || data.phone_no === '' || data.location === '' || data.store_name === ''
+    return isNotFilled
+  }
   return (
     <div className="">
       <div className="relative ">
@@ -71,6 +76,7 @@ const MerchantRegisterInfo = ({
             onChange={handleChange}
             // checked={data.correctInfoCheck}
             className='rounded-md border border-gray-300 bg-white p-2'
+            disabled={isDataNotFilled()}
           />
 
           <span className='ml-[6px] text-base font-medium text-[#171717]'>My merchant information is correct.</span>

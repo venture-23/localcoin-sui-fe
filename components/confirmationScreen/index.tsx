@@ -11,7 +11,7 @@ interface IConfirmationScreenProps {
 
 export const ConfirmationScreen = ({ text, type }: IConfirmationScreenProps) => {
     return (
-        <section className="w-full realtive bg-[#1653AE] h-[100vh]">
+        <section className="w-full relative bg-[#1653AE] h-[100vh]">
             <div className="success-vector-1">
                 <Image 
                     src={'/successScreenVector1.png'}

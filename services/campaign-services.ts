@@ -180,6 +180,12 @@ export const campaignServices = (() => {
     amount: number,
     contractId: string
   ) => {
+    console.log({
+      secretKey,
+      address,
+      amount,
+      contractId 
+    })
     return makeTransaction({
       parameterType: 'transfer_tokens_to_recipient',
       secretKey,

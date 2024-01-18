@@ -6,7 +6,6 @@ import { useMerchant } from 'hooks/useMerchant';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import MerchantInfo from './components/register-form';
 import RegisterOverView from './components/register-overview';
@@ -60,7 +59,6 @@ const MerchantRegisterPage = () => {
 
           await campaignServices.merchant_registration(userInfo, data)
           setShowLoader(false);
-          toast.success('Registered merchant successfully')
           setShowFormNo(3);
       }
       setShowLoader(false);
@@ -72,6 +70,7 @@ const MerchantRegisterPage = () => {
     }
     
   };
+
   return (
     <section className="relative">
       <div className="container mx-auto">
