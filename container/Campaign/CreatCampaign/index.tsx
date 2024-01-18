@@ -114,7 +114,11 @@ const CreateCampaignPage = () => {
 
   CustomInput.displayName = 'CustomInput';
 
-  console.log(data, ':data');
+
+  const isDataNotFilled = () => {
+    const isNotFilled = data.name === '' || data.description === '' || data.location === '' || data.participant === '' || data.totalAmount === ''
+    return isNotFilled
+  }
 
   return (
     <section>
@@ -178,17 +182,20 @@ const CreateCampaignPage = () => {
               optionsList={creatorAddressList}
               handleChange={handleDropdown}
             /> */}
-            <DatePicker
-              selected={new Date(data.endingDate)}
-              onChange={(date) =>
-                setData({
-                  ...data,
-                  endingDate: date as Date,
-                  endingDateStr: date?.toDateString() as string
-                })
-              }
-              customInput={<CustomInput />}
-            />
+            <div className='flex flex-col gap-[2px]'>
+              <label className='text-base font-semibold text-[#171717]'>Ending date</label>
+              <DatePicker
+                selected={new Date(data.endingDate)}
+                onChange={(date) =>
+                  setData({
+                    ...data,
+                    endingDate: date as Date,
+                    endingDateStr: date?.toDateString() as string
+                  })
+                }
+                customInput={<CustomInput />}
+              />
+            </div>
             <InputForm
               name="participant"
               // label={'No of Recipients'}
@@ -239,6 +246,7 @@ const CreateCampaignPage = () => {
                 onChange={handleChange}
                 // checked={data.correctInfoCheck}
                 className="rounded-md border border-gray-300 bg-white p-2"
+                disabled={isDataNotFilled()}
               />
 
               <span className="ml-[6px] text-base font-medium text-[#171717]">

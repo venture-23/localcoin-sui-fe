@@ -115,6 +115,7 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
     isFetching: campaignListInfo.isFetching,
     isDetailsFetching: campaignDetailsInfo.isFetching,
     merchantList,
-    storeInfo
+    storeInfo,
+    isStoreFetching: merchantListInfo.isFetching
   };
 }

@@ -1,6 +1,6 @@
 'use client';
 import { CurrencyDollarIcon, MapIcon, UserCircleIcon } from '@heroicons/react/16/solid';
-import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import InputForm from 'components/form/input';
 import { useCamapigns } from 'hooks/useCampaigns';
@@ -179,7 +179,20 @@ const CampaignDetail = (props: any) => {
         props.campaignId
       );
 
-      console.log(joinRes, ':res');
+      const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo') || '';
+      const joinedInfo = []
+      if(prevJoinedCamp) {
+        for(const prev of JSON.parse(prevJoinedCamp)) {
+          joinedInfo.push(prev);
+        }
+      } else {
+        joinedInfo.push({ campaignAddress: props.campaignId, username: data.username })
+      }
+
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('joinedCampaignInfo', JSON.stringify(joinedInfo));
+      }
+      
 
       toast.success('Campaign Joined');
       setShowUsernameBox(false);
@@ -190,6 +203,9 @@ const CampaignDetail = (props: any) => {
       setShowLoader(false);
     }
   };
+
+  const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo');
+  console.log(prevJoinedCamp, ':preg')
 
   const handleJoin = async () => {
     if (!userInfo?.publicKey) {
@@ -269,18 +285,28 @@ const CampaignDetail = (props: any) => {
     setRequestedIncentive(true);
   }
 
+  const getUsername = () => {
+    const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
+    if(allJoinedCampaignInfo === '') return '';
+    const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
+    return currentCampaignInfo?.username
+  }
+
   const generateQrCode = async () => {
     try {
+      const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
+      const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
       const staticData = {
         type: 'campaign creator',
         publicKey: userInfo.publicKey,
-        amount: 0,
+        amount: Number(campaignInfo?.amount)/Number(participantList.length),
         proprietaryName: userInfo.proprietaryName,
         phoneNumber: userInfo.phoneNumber,
         storeName: userInfo.storeName,
         location: userInfo.location,
-        campaignAddress: props.campaignId,
+        campaignAddress: currentCampaignInfo?.campaignAddress ||  props.campaignId,
         campaignName: campaignInfo?.name,
+        username: currentCampaignInfo?.username
       };
       const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);
@@ -528,7 +554,7 @@ const CampaignDetail = (props: any) => {
                   onClick={() => setShowUsernameBox(false)}
                   className="absolute right-[4px] top-[4px] flex h-[20px] w-[20px] cursor-pointer items-center justify-center rounded-[100%] border border-[#000]"
                 >
-                  X
+                  <XMarkIcon width={20} height={20} />
                 </span>
                 <div className="flex flex-col gap-[20px] pl-[20px]">
                   <InputForm
@@ -553,7 +579,7 @@ const CampaignDetail = (props: any) => {
                   onClick={() => setVerifyConfirm(false)}
                   className="absolute right-[4px] top-[4px] flex h-[20px] w-[20px] cursor-pointer items-center justify-center rounded-[100%] border border-[#000]"
                 >
-                  X
+                  <XMarkIcon width={20} height={20} />
                 </span>
                 <div className="flex flex-col gap-[20px] pl-[20px]">
                   <h3 className='text-lg font-extrabold text-center'>Are you sure you want to verify selected participants?</h3>
@@ -570,7 +596,7 @@ const CampaignDetail = (props: any) => {
                   onClick={() => setEndCampaignConfirm(false)}
                   className="absolute right-[4px] top-[4px] flex h-[20px] w-[20px] cursor-pointer items-center justify-center rounded-[100%] border border-[#000]"
                 >
-                  X
+                  <XMarkIcon width={20} height={20} />
                 </span>
                 <div className="flex flex-col gap-[20px] pl-[20px]">
                   <h3 className='text-lg font-extrabold text-center'>Are you sure you want to end the campaign?</h3>
@@ -597,7 +623,7 @@ const CampaignDetail = (props: any) => {
             <div className="flex flex-col mt-[18px] items-center jusitfy-center gap-[12px]">
               <div className="w-[80px] h-[80px] rounded-[100%] bg-[#EAEBEE]"></div>
               <div className="text-[24px] font-normal text-[#000]">
-                  Profile Name
+                  {getUsername()}
               </div>
               <div className="text-base font-[400] italic">
                   {maskWalletAddress(userInfo?.publicKey)}

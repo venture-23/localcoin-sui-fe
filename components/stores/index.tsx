@@ -37,7 +37,7 @@ const storeData = [
 
 
 export const Stores = () => {
-    const { merchantList } = useCamapigns({ fetchAllCampaign: true});
+    const { merchantList, isStoreFetching } = useCamapigns({ fetchAllCampaign: true});
     console.log(merchantList, ':mer1')
     return (
         <div className="mt-[20px]">
@@ -49,7 +49,12 @@ export const Stores = () => {
             <div className="flex store-container-box items-center overflow-auto gap-[20px]">
                 {
                     merchantList?.map((item,idx) => (
-                       <DummyCardBox key={idx} boxData={item} boxTitle="Store" />
+                        isStoreFetching ? (
+                            <div key={idx} className="h-[124px] min-w-[260px] bg-gray-300 animate-pulse rounded-[12px]"></div>
+                        ): (
+                            <DummyCardBox key={idx}  boxData={item} boxTitle="Store" />
+                        )
+                       
                     ))
                 }
             </div>
