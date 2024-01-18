@@ -1,15 +1,15 @@
 // import Navbar from 'components/layout/navbar';
 import { GeistSans } from 'geist/font';
+import { cookies } from 'next/headers';
 import { ReactNode, Suspense } from 'react';
 import Providers from 'utils/provider';
+
 const { SITE_NAME } = process.env;
-const baseUrl = 'http://localhost:3000';
 // const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
 // const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
 import { AppleSplashScreen } from 'components/layout/splash-screen';
 import PinLockScreen from 'components/pin-lock-screen';
 import '../styles/index.scss';
-import { getCookiedata } from './action';
 import './globals.css';
 
 export const metadata = {
@@ -39,7 +39,12 @@ export const metadata = {
 // };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const res = await getCookiedata();
+  let res = '';
+  const cookieStore = cookies();
+  const data: any = cookieStore.get('local-coin');
+  if (data?.value) {
+    res = data.value;
+  }
   return (
     <html lang="en" className={GeistSans.variable}>
       <link rel="apple-touch-icon" href="/apple_touch.png" type="image/png" sizes="180*180" />
@@ -51,9 +56,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Suspense>
           <Providers>
             <main className="">
-              <PinLockScreen isInCached={!!res} cookieValue={res || ''}>
-                {children}
-              </PinLockScreen>
+              <Suspense>
+                <PinLockScreen isInCached={!!res} cookieValue={res || null}>
+                  {children}
+                </PinLockScreen>
+              </Suspense>
             </main>
           </Providers>
         </Suspense>

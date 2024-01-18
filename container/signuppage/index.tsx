@@ -4,7 +4,7 @@ import {
   ChevronLeftIcon,
   ClipboardIcon
 } from '@heroicons/react/24/outline';
-import { useAddToHomescreenPrompt } from 'components/test';
+import { useAddToHomescreenPrompt } from 'components/addToHomeScreen';
 import { useEffect, useRef, useState } from 'react';
 // import Header from 'components/layout/header';
 import Image from 'next/image';

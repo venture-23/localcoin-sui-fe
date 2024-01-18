@@ -1,10 +1,10 @@
 {
-  "theme_color": "#4EABFE",
-  "background_color": "#ffff",
+  "theme_color": "#ffffff",
+  "background_color": "#1653AE",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "name": "LOCAL COIN",
+  "name": "localcoin",
   "short_name": "LocalCoin",
   "description": "A social charity app",
   "icons": [

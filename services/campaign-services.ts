@@ -28,7 +28,6 @@ export const campaignServices = (() => {
     contractId = campaignContractId
   }: any) => {
     try {
-      debugger;
       let sourcePublicKey: string = '';
       let sourceKeypair: any = '';
       if (secretKey) {
