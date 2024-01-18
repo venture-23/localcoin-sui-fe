@@ -1,5 +1,5 @@
 "use client"
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import Button from "components/botton";
 import { ConfirmationScreen } from "components/confirmationScreen";
 import { useGetBalance, useRecipient } from "hooks";
@@ -88,7 +88,7 @@ const Withdraw = () => {
                   onClick={() => setConfirmWithdraw(false)}
                   className="absolute right-[4px] top-[4px] flex h-[20px] w-[20px] cursor-pointer items-center justify-center rounded-[100%] border border-[#000]"
                 >
-                  X
+                  <XMarkIcon width={20} height={20} />
                 </span>
                 <div className="flex flex-col gap-[20px] pl-[20px]">
                   <h3 className='text-lg font-extrabold text-center'>Are you sure you want to withdraw your funds?</h3>

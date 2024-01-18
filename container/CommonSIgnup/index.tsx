@@ -6,9 +6,9 @@ import { useMyContext } from 'hooks/useMyContext';
 import { useRouter } from 'next/navigation';
 // import { useRouter } from 'next/router';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { useAddToHomescreenPrompt } from 'components/addToHomeScreen';
 import BridgeBG from 'components/bridgebg';
 import { ConfirmationScreen } from 'components/confirmationScreen';
-import { useAddToHomescreenPrompt } from 'components/test';
 import { useMerchant } from 'hooks/useMerchant';
 import { useState } from 'react';
 import generateKeyPair from 'services/generateKeypair';
@@ -23,17 +23,17 @@ interface ErrorType {
 
 const MerchantSignup = ({ param }: any) => {
   const router = useRouter();
-  console.log(router)
+  console.log(router);
   const [merchantFlag, setMerchantFlag] = useState(false);
   const [data, setData] = useState<any>({
     storeName: '',
     proprietaryName: '',
     phoneNumber: '',
     location: '',
-    correctInfoCheck: false,
+    correctInfoCheck: false
   });
 
-  const { registerMerchant, isProcessing } = useMerchant({merchantFlag, data: { ...data } });
+  const { registerMerchant, isProcessing } = useMerchant({ merchantFlag, data: { ...data } });
 
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
 
@@ -42,10 +42,7 @@ const MerchantSignup = ({ param }: any) => {
   const { setshowPinScreen, userEnterPin, userInfo, setUserInfo } = useMyContext();
   const [successScreen, setSuccessScreen] = useState(false);
 
-  console.log(isProcessing, ':process')
-  
-  
-  
+  console.log(isProcessing, ':process');
 
   const [error, setError] = useState<ErrorType>({});
   const [isCopied, handleCopy] = useHandleCopy({ showToast: true });
@@ -54,12 +51,11 @@ const MerchantSignup = ({ param }: any) => {
       target: { name, value }
     } = e;
     delete error[name];
-    if(name === 'correctInfoCheck') {
+    if (name === 'correctInfoCheck') {
       setData({ ...data, [name]: !data.correctInfoCheck });
     } else {
       setData({ ...data, [name]: value });
     }
-    
   };
   const validation = () => {
     const err: any = {};
@@ -106,11 +102,11 @@ const MerchantSignup = ({ param }: any) => {
       <section className="relative">
         <div className="container mx-auto">
           {/* <div className="mb-6 flex items-center pt-10"> */}
-            {/* <PageHeader backLink={'/'} /> */}
-            {/* {promptable && !isInstalled ? (
+          {/* <PageHeader backLink={'/'} /> */}
+          {/* {promptable && !isInstalled ? (
               <buton onClick={promptToInstall}>INSTALL APP</buton>
             ) : null} */}
-            {/* {param === 'merchant' ? (
+          {/* {param === 'merchant' ? (
               showScreen === 0 ? (
                 <Link href={showScreen === 0 ? '/signup' : ''}>
                   <ChevronLeftIcon width={24} height={24} />
@@ -126,7 +122,7 @@ const MerchantSignup = ({ param }: any) => {
                 <ChevronLeftIcon width={24} height={24} />
               </Link>
             )} */}
-            {/* <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p> */}
+          {/* <p className="flex-1 text-2xl font-semibold text-center">LocalCoin</p> */}
           {/* </div> */}
           {/* {showSpinner && (
             <>
@@ -139,27 +135,24 @@ const MerchantSignup = ({ param }: any) => {
             </>
           )} */}
           {successScreen ? (
-            <ConfirmationScreen 
-              type='merchant'
-            />
-          ): (
+            <ConfirmationScreen type="merchant" />
+          ) : (
             <>
-                <div onClick={() => router.back()} className='cursor-pointer flex items-center'>
-                  <ChevronLeftIcon width={16} height={16} />
-                  <span className='text-[12px] font-normal'>Back</span>
-                </div>
+              <div onClick={() => router.back()} className="flex cursor-pointer items-center">
+                <ChevronLeftIcon width={16} height={16} />
+                <span className="text-[12px] font-normal">Back</span>
+              </div>
 
-                <MerchantInfo
-                  data={data}
-                  title={param?.charAt(0).toUpperCase() + param?.slice(1)}
-                  error={error}
-                  handleChange={handleChange}
-                  handleSubmit={handleSubmit}
-                />
+              <MerchantInfo
+                data={data}
+                title={param?.charAt(0).toUpperCase() + param?.slice(1)}
+                error={error}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+              />
             </>
-            
           )}
-          
+
           {/* {showScreen === 0 ? (
             <MerchantInfo
               data={data}

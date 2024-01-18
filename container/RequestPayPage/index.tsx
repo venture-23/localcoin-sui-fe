@@ -5,7 +5,7 @@ import { BackspaceIcon } from "@heroicons/react/24/outline";
 import Button from "components/botton";
 import { ConfirmationScreen } from "components/confirmationScreen";
 import DrawerQrScan from "components/drawer-qr-scan";
-import { useMerchant, useRecipient } from "hooks";
+import { useCamapigns, useMerchant, useRecipient } from "hooks";
 import { useMyContext } from "hooks/useMyContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,19 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { campaignServices } from "services/campaign-services";
 import RecipientConfirmation from "./RecipientConfirmation";
+
+interface IScannedDataProps {
+    type?: string
+    publicKey?: string
+    amount?: string | number
+    proprietaryName?: string
+    phoneNumber?: string
+    storeName?: string
+    location?: string
+    campaignAddress?: string
+    campaignName?: string
+    username?: string
+}
 
 
 const RequestPay = () => {
@@ -24,10 +37,27 @@ const RequestPay = () => {
     const [imageUrl, setImageUrl] = useState('');
     const { userInfo } = useMyContext()
     const buttonRef = useRef<any>(null);
-    const [scanData, setScanData] = useState('');
-    const [paymentSuccess, setPaymentSuccess] = useState(false)
+    // const [scanData, setScanData] = useState(JSON.stringify(
+    //   {
+    //     type:"campaign creator",
+    //     publicKey:"GBM5WSMHTRCXMFDLHWO2KV2SJV25PBECZIDT33FDNOWZVBC4JAJVZFH4",
+    //     amount:1,
+    //     proprietaryName:"",
+    //     phoneNumber:"",
+    //     storeName:"",
+    //     location:"",
+    //     campaignAddress:"CAMZRDZ4IKJTRTZ7WV35F2JEJO7NVROC2LBIGUNPXKM6A4HW3NGTOSAP",
+    //     campaignName:"Blood Doantion"
+    //   }
+    // ));
+    const [scanData, setScanData] = useState('')
+    const [formattedScannedData, setFormattedScannedData] = useState<IScannedDataProps>({})
+    const [paymentSuccessLoader, setPaymentSuccessLoader] = useState(false)
     const [data, setData] = useState<any>({})
     const [openConfirmation, setOpenConfirmation] = useState(false);
+    const [transferConfirmation, setTransferConfirmation] = useState(false);
+    const [creatorPaymentSuccess, setCreatorPaymentSuccess] = useState(false);
+
     const { merchant_info, isGettingInfo, merchant_associated, setFetch_merchant_info } = useMerchant(
         {
           merchantAddress: data?.merchantAddress,
@@ -35,9 +65,12 @@ const RequestPay = () => {
           data
         }
       );
+    console.log(merchant_info, ':info')
     const { isFetching, sendTokenToMerchant, tokenList, isSendToMerchantSucc } = useRecipient({
       data
     });
+
+    const { merchantList } = useCamapigns({ fetchAllCampaign: true});
 
     useEffect(() => {
         if (isSendToMerchantSucc) {
@@ -51,6 +84,7 @@ const RequestPay = () => {
     useEffect(() => {
         if (scanData) {
           const scannedData = JSON.parse(scanData);
+          setFormattedScannedData(scannedData);
           if (scannedData?.publicKey) {
             console.log({ publicKey: scannedData?.publicKey });
             setFetch_merchant_info(true);
@@ -112,20 +146,25 @@ const RequestPay = () => {
     }
 
     const handlePaymentRequest = async () => {
-       
-        await generateQrCode()
+        const merchant = merchantList?.find(item => item.merchantAddress === userInfo?.publicKey)
+        if(!merchant || Object.keys(merchant).length === 0) {
+          toast.error('You are not a verified mechant.')
+          return;
+        }
+        await generateQrCode(merchant)
         setPaymentRequested(true);
     }
 
-    const generateQrCode = async () => {
+    const generateQrCode = async (merchant: any) => {
         try {
+          
           const staticData = {
             type: 'merchant',
             publicKey: userInfo.publicKey,
             amount: amount || 0,
             proprietaryName: userInfo.proprietaryName,
             phoneNumber: userInfo.phoneNumber,
-            storeName: userInfo.storeName,
+            storeName: merchant?.storeName,
             location: userInfo.location
           };
           const response = await QRCode.toDataURL(JSON.stringify(staticData));
@@ -138,20 +177,31 @@ const RequestPay = () => {
 
       const handleSendToken = async () => {
         try {
-            setPaymentSuccess(false)
-            if(scanData?.type === 'campaign creator') {
-                await campaignServices.transfer_tokens_to_recipient(userInfo?.secretKey, userInfo?.publicKey, data?.amount, scanData?.campaignAddress);
+          setPaymentSuccessLoader(true)
+            if(formattedScannedData?.type === 'campaign creator') {
+                await campaignServices.transfer_tokens_to_recipient(
+                  userInfo?.secretKey, 
+                  formattedScannedData?.publicKey as string, 
+                  formattedScannedData?.amount as number, 
+                  formattedScannedData?.campaignAddress as string
+                );
+                setPaymentSuccessLoader(false)
+                setCreatorPaymentSuccess(true)
             } else {
                 sendTokenToMerchant()
+                if(isSendToMerchantSucc) setPaymentSuccessLoader(false)
             }
             
-            setPaymentSuccess(false)
+            setTransferConfirmation(false);
+            setOpenConfirmation(false);
         } catch (error: any) {
             console.log(error)
-            toast.error(error.toString())
-            setPaymentSuccess(false)
+            // toast.error('Error: Failed transferring the funds')
+            setPaymentSuccessLoader(false)
         }
       }
+
+      console.log(formattedScannedData, ':data')
   return (
     <section>
         {!paymentRequested && !openConfirmation &&(
@@ -187,7 +237,7 @@ const RequestPay = () => {
                         <div className="flex text-base font-semibold text-[#000] items-center px-[16px] w-full h-[54px] border border-[#E2E2E2] rounded-[4px]">
                             {amount || 0} LocalCoins
                         </div>
-                        <Button handleClick={handlePaymentRequest} buttonType={'tertiary'} text="Request" />
+                        <Button disabled={amount === '' || amount === '0'} handleClick={handlePaymentRequest} buttonType={'tertiary'} text="Request" />
                     </div>
                     </div>
                     <div className="p-[6px]">
@@ -275,16 +325,27 @@ const RequestPay = () => {
         )}
 
         {openConfirmation && !isSendToMerchantSucc && (
-            <RecipientConfirmation campaignName={scanData?.campaignName} type={scanData?.type === 'campaign creator' ? 'campaign' : 'merchant'} handleClick={handleSendToken} amount={"30"} storeName={"My Kitty Cat"}  />
+            <RecipientConfirmation 
+              campaignName={formattedScannedData?.campaignName} 
+              type={formattedScannedData?.type === 'campaign creator' ? 'campaign' : 'merchant'} 
+              handleClick={handleSendToken} 
+              amount={formattedScannedData?.amount as number} 
+              storeName={"My Kitty Cat"}  
+              setTransferConfirmation={setTransferConfirmation}
+              transferConfirmation={transferConfirmation}
+              showLoader={paymentSuccessLoader}
+              participantName={formattedScannedData?.username}
+            />
         )}
 
         {isSendToMerchantSucc && (
             <ConfirmationScreen type="receipent_transfer_success" />
         )}
 
-        {paymentSuccess && (
+        {creatorPaymentSuccess && (
             <ConfirmationScreen type="creator_transfer_success" />
         )}
+        
 
         
     </section>
