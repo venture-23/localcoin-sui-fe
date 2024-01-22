@@ -41,7 +41,6 @@ export const successStatusText = {
     text: 'Your payment has successfully been sent to the participant.'
   }
 }
-
 /* 
 
  'create_campaign',

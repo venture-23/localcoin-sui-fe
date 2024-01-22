@@ -57,6 +57,7 @@ const RequestPay = () => {
     const [openConfirmation, setOpenConfirmation] = useState(false);
     const [transferConfirmation, setTransferConfirmation] = useState(false);
     const [creatorPaymentSuccess, setCreatorPaymentSuccess] = useState(false);
+    const [storeName, setStoreName] = useState('')
 
     const { merchant_info, isGettingInfo, merchant_associated, setFetch_merchant_info } = useMerchant(
         {
@@ -71,6 +72,8 @@ const RequestPay = () => {
     });
 
     const { merchantList } = useCamapigns({ fetchAllCampaign: true});
+
+    console.log(isSendToMerchantSucc, ':isSend')
 
     useEffect(() => {
         if (isSendToMerchantSucc) {
@@ -157,6 +160,8 @@ const RequestPay = () => {
 
     const generateQrCode = async (merchant: any) => {
         try {
+          console.log(merchant, ':merchant')
+          setStoreName(merchant?.store_name)
           
           const staticData = {
             type: 'merchant',
@@ -164,7 +169,7 @@ const RequestPay = () => {
             amount: amount || 0,
             proprietaryName: userInfo.proprietaryName,
             phoneNumber: userInfo.phoneNumber,
-            storeName: merchant?.storeName,
+            storeName: merchant?.store_name,
             location: userInfo.location
           };
           const response = await QRCode.toDataURL(JSON.stringify(staticData));
@@ -185,6 +190,7 @@ const RequestPay = () => {
                   formattedScannedData?.amount as number, 
                   formattedScannedData?.campaignAddress as string
                 );
+                toast.success('Amount transferred to campaign creator')
                 setPaymentSuccessLoader(false)
                 setCreatorPaymentSuccess(true)
             } else {
@@ -204,7 +210,7 @@ const RequestPay = () => {
       console.log(formattedScannedData, ':data')
   return (
     <section>
-        {!paymentRequested && !openConfirmation &&(
+        {!paymentRequested && !openConfirmation && (!creatorPaymentSuccess || !isSendToMerchantSucc) &&(
             <div className="flex flex-col min-h-[100vh] justify-between">
             <div className="container mx-auto">
                 <div>
@@ -305,7 +311,7 @@ const RequestPay = () => {
                         {amount || 0 } LocalCoin
                     </div>
                     <div className="text-base font-[400] italic">
-                        My Kitty Cat Store
+                        {storeName}
                     </div>
                 </div>
                 {/* QR SCANNER PART */}
@@ -330,7 +336,7 @@ const RequestPay = () => {
               type={formattedScannedData?.type === 'campaign creator' ? 'campaign' : 'merchant'} 
               handleClick={handleSendToken} 
               amount={formattedScannedData?.amount as number} 
-              storeName={"My Kitty Cat"}  
+              storeName={formattedScannedData?.storeName as string}  
               setTransferConfirmation={setTransferConfirmation}
               transferConfirmation={transferConfirmation}
               showLoader={paymentSuccessLoader}

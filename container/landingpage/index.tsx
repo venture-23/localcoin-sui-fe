@@ -38,6 +38,8 @@ const LandingPage = () => {
   const { userBalance, userUsdcBalance } = useGetBalance();
   const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
 
+  console.log(userBalance, ':lcoal')
+
   const campInfo = {
     publicKey: 'GC35FMQWTX7HA2UGRRHLEVT46CEKZBSDDXQXADEZGWWWOZCGCUZOOPE4',
     secretKey: 'SBQD2MZPMRDLDIYE3SPXUD5G5X5IBPI5L7SGV476SHLVHTIJJIRJ3MVN',
@@ -101,7 +103,7 @@ const LandingPage = () => {
             <div>
               <h6 className="text-base font-bold text-[#1384F5]">Total LocalCoins</h6>
               <div className="text-[32px] font-semibold leading-9">
-                {userBalance ? Number(userBalance).toFixed(0).toString() : 0}
+                {userBalance?.length > 0 ? Number(userBalance[0].amount).toString() : 0}
               </div>
             </div>
             {isVerifiedMerchant && (
