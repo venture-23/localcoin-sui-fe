@@ -18,7 +18,7 @@ export function useGetBalance() {
       console.log(userInfo, ':info')
       const response = await campaignServices.getReceipientToken(userInfo.secretKey, userInfo.publicKey);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
-      onsole.log({ response,  }, ':token');
+      console.log({ response,  }, ':token');
       return response;
     },
     onError: (error: any) => {

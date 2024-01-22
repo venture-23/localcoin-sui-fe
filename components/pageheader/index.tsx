@@ -68,7 +68,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ pageHeaderTitle, backLink, isVe
                   {userInfo?.publicKey ? maskWalletAddress(userInfo?.publicKey) : 'Wallet Address'}
                 </div>
                 <p className='mt-[16px] font-semibold pb-[18px] text-base'>
-                  {userInfo?.publicKey ? `${userBalance ? Number(userBalance).toFixed(0).toString() : 0} Local Coin Tokens`: 'Earned coins today'}
+                  {userInfo?.publicKey ? `${userBalance?.length > 0 ? Number(userBalance[0].amount).toString() : 0} Local Coin Tokens`: 'Earned coins today'}
                 </p>
               </div>
             </div>

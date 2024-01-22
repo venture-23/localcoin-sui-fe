@@ -180,16 +180,19 @@ const CampaignDetail = (props: any) => {
       );
 
       const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo') || '';
+      console.log(prevJoinedCamp)
       const joinedInfo = []
-      if(prevJoinedCamp) {
+      if(prevJoinedCamp !== '') {
         for(const prev of JSON.parse(prevJoinedCamp)) {
+          console.log(prev, ':prev')
           joinedInfo.push(prev);
         }
-      } else {
-        joinedInfo.push({ campaignAddress: props.campaignId, username: data.username })
-      }
+      } 
+      joinedInfo.push({ campaignAddress: props.campaignId, username: data.username })
+   
 
       if (typeof window !== 'undefined') {
+        console.log(joinedInfo, ':Joined')
         localStorage.setItem('joinedCampaignInfo', JSON.stringify(joinedInfo));
       }
       
@@ -204,8 +207,8 @@ const CampaignDetail = (props: any) => {
     }
   };
 
-  const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo');
-  console.log(prevJoinedCamp, ':preg')
+  // const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo');
+  // console.log(prevJoinedCamp, ':preg')
 
   const handleJoin = async () => {
     if (!userInfo?.publicKey) {
@@ -299,7 +302,7 @@ const CampaignDetail = (props: any) => {
       const staticData = {
         type: 'campaign creator',
         publicKey: userInfo.publicKey,
-        amount: Number(campaignInfo?.amount)/Number(participantList.length),
+        amount: Number(campaignInfo?.amount)/Number(campaignInfo?.no_of_recipients),
         proprietaryName: userInfo.proprietaryName,
         phoneNumber: userInfo.phoneNumber,
         storeName: userInfo.storeName,

@@ -28,7 +28,7 @@ const Withdraw = () => {
         const response = await campaignServices.request_campaign_settlement(
           userInfo.publicKey,
           userInfo.secretKey,
-          parseFloat(userBalance),
+          parseFloat(userBalance[0].amount),
           tokenList[0].contractToken
         );
         console.log(response)
@@ -46,7 +46,7 @@ const Withdraw = () => {
     }
      
   return (
-    <section>
+    <section className="relative">
         <div className='container mx-auto'>
           {showSuccess ? (
             <ConfirmationScreen type="withdraw" />
@@ -66,7 +66,7 @@ const Withdraw = () => {
 
                        <div className="bg-[#fff] border p-[16px] mt-[16px] border-[#E4E4E7] rounded-[12px]">
                            <p className="text-base font-medium text-[#1384F5]">Total LocalCoin Available</p>
-                           <h2 className="text-[32px] font-">{userBalance ? Number(userBalance).toFixed(0).toString() : 0}</h2>
+                           <h2 className="text-[32px] font-">{userBalance?.length > 0 ? Number(userBalance[0].amount).toString() : 0}</h2>
                        </div>
                     </div>
 
