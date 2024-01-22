@@ -71,6 +71,8 @@ const RequestPay = () => {
       data
     });
 
+    
+
     const { merchantList } = useCamapigns({ fetchAllCampaign: true});
 
     console.log(isSendToMerchantSucc, ':isSend')
@@ -137,6 +139,15 @@ const RequestPay = () => {
         }
       }, [merchant_info, merchant_associated]);
 
+      useEffect(() => {
+        setCreatorPaymentSuccess(false)
+  
+        return () => {
+          setCreatorPaymentSuccess(false);
+        }
+  
+      }, [])
+
     const handleRemove = () => {
         if (amount) {
             setAmount((prevAmt: string) => prevAmt.slice(0, -1));
@@ -190,7 +201,7 @@ const RequestPay = () => {
                   formattedScannedData?.amount as number, 
                   formattedScannedData?.campaignAddress as string
                 );
-                toast.success('Amount transferred to campaign creator')
+                toast.success('Amount transferred to participant')
                 setPaymentSuccessLoader(false)
                 setCreatorPaymentSuccess(true)
             } else {
@@ -210,7 +221,7 @@ const RequestPay = () => {
       console.log(formattedScannedData, ':data')
   return (
     <section>
-        {!paymentRequested && !openConfirmation && (!creatorPaymentSuccess || !isSendToMerchantSucc) &&(
+        {!paymentRequested && !openConfirmation && !creatorPaymentSuccess && !isSendToMerchantSucc &&(
             <div className="flex flex-col min-h-[100vh] justify-between">
             <div className="container mx-auto">
                 <div>
