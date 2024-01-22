@@ -57,6 +57,7 @@ const RequestPay = () => {
     const [openConfirmation, setOpenConfirmation] = useState(false);
     const [transferConfirmation, setTransferConfirmation] = useState(false);
     const [creatorPaymentSuccess, setCreatorPaymentSuccess] = useState(false);
+    const [merchantPaymentSuccess, setMerchantPaymentSuccess] = useState(false);
     const [storeName, setStoreName] = useState('')
 
     const { merchant_info, isGettingInfo, merchant_associated, setFetch_merchant_info } = useMerchant(
@@ -195,8 +196,17 @@ const RequestPay = () => {
                 setPaymentSuccessLoader(false)
                 setCreatorPaymentSuccess(true)
             } else {
-                sendTokenToMerchant()
-                if(isSendToMerchantSucc) setPaymentSuccessLoader(false)
+                // sendTokenToMerchant()
+                await campaignServices.transfer_tokens_from_recipient_to_merchant(
+                  userInfo.secretKey,
+                  formattedScannedData?.amount as number,
+                  data?.tokenAddress,
+                  data?.merchantAddress,
+                  userInfo.publicKey
+                );
+                toast.success('Amount transferred to merchant')
+                setPaymentSuccessLoader(false)
+                setMerchantPaymentSuccess(true)
             }
             
             setTransferConfirmation(false);
@@ -211,7 +221,7 @@ const RequestPay = () => {
       console.log(formattedScannedData, ':data')
   return (
     <section>
-        {!paymentRequested && !openConfirmation && !creatorPaymentSuccess && !isSendToMerchantSucc &&(
+        {!paymentRequested && !openConfirmation && !creatorPaymentSuccess && !merchantPaymentSuccess &&(
             <div className="flex flex-col min-h-[100vh] justify-between">
             <div className="container mx-auto">
                 <div>
@@ -331,7 +341,7 @@ const RequestPay = () => {
             </div>
         )}
 
-        {openConfirmation && !isSendToMerchantSucc && (
+        {openConfirmation && !merchantPaymentSuccess && (
             <RecipientConfirmation 
               campaignName={formattedScannedData?.campaignName} 
               type={formattedScannedData?.type === 'campaign creator' ? 'campaign' : 'merchant'} 
@@ -345,7 +355,7 @@ const RequestPay = () => {
             />
         )}
 
-        {isSendToMerchantSucc && (
+        {merchantPaymentSuccess && (
             <ConfirmationScreen type="receipent_transfer_success" />
         )}
 
