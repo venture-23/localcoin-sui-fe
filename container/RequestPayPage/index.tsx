@@ -71,7 +71,6 @@ const RequestPay = () => {
       data
     });
 
-    
 
     const { merchantList } = useCamapigns({ fetchAllCampaign: true});
 
@@ -93,7 +92,7 @@ const RequestPay = () => {
           if (scannedData?.publicKey) {
             console.log({ publicKey: scannedData?.publicKey });
             setFetch_merchant_info(true);
-            setData({ ...data, merchantAddress: scannedData?.publicKey });
+            setData({ ...data, merchantAddress: scannedData?.publicKey, amount: scannedData?.amount });
             setOpenConfirmation(true);
           } else {
             toast.error('Invalid QR');
@@ -138,15 +137,6 @@ const RequestPay = () => {
           setData({ ...data, ...merchant_info, merchant_associated });
         }
       }, [merchant_info, merchant_associated]);
-
-      useEffect(() => {
-        setCreatorPaymentSuccess(false)
-  
-        return () => {
-          setCreatorPaymentSuccess(false);
-        }
-  
-      }, [])
 
     const handleRemove = () => {
         if (amount) {
