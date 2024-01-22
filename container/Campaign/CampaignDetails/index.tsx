@@ -302,7 +302,7 @@ const CampaignDetail = (props: any) => {
       const staticData = {
         type: 'campaign creator',
         publicKey: userInfo.publicKey,
-        amount: Number(campaignInfo?.amount)/Number(campaignInfo?.no_of_recipients),
+        amount: (Number(campaignInfo?.amount)/Number(campaignInfo?.no_of_recipients)).toFixed(2),
         proprietaryName: userInfo.proprietaryName,
         phoneNumber: userInfo.phoneNumber,
         storeName: userInfo.storeName,
