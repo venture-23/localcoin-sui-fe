@@ -18,7 +18,7 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
     queryFn: async () => {
       const response = fetchAllCampaign
         ? await campaignServices.getAllCampaigns(staticPubKey)
-        : await campaignServices.getCreatorCampaigns(userInfo.secretKey, userInfo.publicKey);
+        : await campaignServices.getCreatorCampaigns(userInfo?.secretKey, userInfo?.publicKey);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
       return response;

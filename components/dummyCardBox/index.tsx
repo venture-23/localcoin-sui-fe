@@ -1,5 +1,4 @@
 'use client';
-import { CalendarIcon, CurrencyDollarIcon, UserCircleIcon } from "@heroicons/react/16/solid";
 import { useRouter } from "next/navigation";
 
 export interface IBoxDataProps {
@@ -53,25 +52,25 @@ export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
                 {boxTitle === 'Campaigns' && (
                     <div className="flex items-center card-secondary-data gap-[12px]">
                   
-                        <div className="flex items-center gap-[3px]">
+                        {/* <div className="flex items-center gap-[3px]">
                             <CurrencyDollarIcon />
                             <span className="text-[#fff] font-normal text-[10px]">{boxData?.token_minted}</span>
-                        </div>
+                        </div> */}
                  
 
 
                  
-                        <div className="flex items-center gap-[3px]">
+                        {/* <div className="flex items-center gap-[3px]">
                             <UserCircleIcon />
                             <span className="text-[#fff] font-normal text-[10px]">{boxData?.no_of_recipients}/100</span>
-                        </div>
+                        </div> */}
               
 
                  
-                        <div className="flex items-center gap-[3px]">
+                        {/* <div className="flex items-center gap-[3px]">
                             <CalendarIcon />
                             <span className="text-[#fff] font-normal text-[10px]">{'1/14/24'}</span>
-                        </div>
+                        </div> */}
               
                     
 
