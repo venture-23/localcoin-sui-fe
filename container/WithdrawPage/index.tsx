@@ -25,12 +25,19 @@ const Withdraw = () => {
           throw new Error('No funds to withdraw');
         }
         setShowLoader(true)
+        console.log({
+          publicKey: userInfo.publicKey,
+          secretKey: userInfo.secretKey,
+          amount: parseFloat(userBalance[0].amount),
+          con: tokenList[0].contractToken
+        })
         const response = await campaignServices.request_campaign_settlement(
           userInfo.publicKey,
           userInfo.secretKey,
           parseFloat(userBalance[0].amount),
           tokenList[0].contractToken
         );
+        if(!response) throw new Error('Failed while withdrawing')
         console.log(response)
 
         setShowLoader(false)

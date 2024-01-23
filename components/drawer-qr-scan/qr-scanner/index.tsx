@@ -96,7 +96,17 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
         <QrReader
           scanDelay={delayScan}
           constraints={{
-            facingMode: 'environment'
+            facingMode: 'environment',
+            width : {
+              min : 640,
+              ideal : 720,
+              max : 1920
+            },
+            height : {
+              min : 640,
+              ideal : 720,
+              max : 1920
+            }
           }}
           onResult={(result, error) => {
             if (!result) return;

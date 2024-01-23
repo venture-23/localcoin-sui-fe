@@ -57,7 +57,9 @@ const MerchantRegisterPage = () => {
         // } else {
           console.log('manish');
 
-          await campaignServices.merchant_registration(userInfo, data)
+          const response = await campaignServices.merchant_registration(userInfo, data)
+          console.log(response)
+          if(!response) throw new Error('Error while registering store')
           setShowLoader(false);
           setShowFormNo(3);
       }

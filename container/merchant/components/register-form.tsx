@@ -45,8 +45,8 @@ const MerchantRegisterInfo = ({
           // label="Store Owner Name"
         />
         <InputForm
-          inputMode="numeric"
-          type="number"
+          // inputMode="numeric"
+          type="text"
           error={error}
           // label="Phone Number"
           name="phone_no"
@@ -54,7 +54,7 @@ const MerchantRegisterInfo = ({
           data={data}
           handleChange={handleChange}
           className="mt-1 block w-full rounded-[4px] border border-slate-300 bg-white  p-4 placeholder-[#A3A3A3] placeholder-extrabold shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
-          placeholder="Enter Phone Number"
+          placeholder="Enter Phone Number (Eg: +977985465215785)"
         />
         <TextArea
           // label="Store Address"
