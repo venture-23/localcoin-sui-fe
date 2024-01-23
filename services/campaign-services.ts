@@ -89,7 +89,7 @@ export const campaignServices = (() => {
                 console.log('Transaction not found. Retrying...', parameterType);
                 await new Promise((resolve) => setTimeout(resolve, 1000));
               } else {
-                console.log('error');
+                console.log(txResponse,'error');
                 toast.error(`failed while performing ${parameterType}`);
                 return null;
               }
