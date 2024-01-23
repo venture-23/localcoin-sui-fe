@@ -7,6 +7,7 @@ interface ResponseType {
   returnValue?: {
     _value?: any[];
   };
+  status?: string
 }
 
 const makeSingleObject = (data: any) => {
@@ -121,7 +122,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
         return tokenList;
       case 'request_campaign_settlement':
         toast.success('Settled Successfully');
-        return response.returnValue?._value;
+        return response.returnValue?._value || response?.status;
       case 'merchant_registration':
       case 'recipient_to_merchant_transfer':
         toast.success(
@@ -129,7 +130,7 @@ const decoderHelper = (params: string, response: ResponseType) => {
             ? 'Send To Merchant Sucessfully'
             : 'Registered, Waiting for verify account'
         );
-        return response.returnValue?._value;
+        return response.returnValue?._value || response?.status;
       case 'verify_merchant':
         toast.success('Verified Mechant from admin, Successfully');
         return response.returnValue?._value;

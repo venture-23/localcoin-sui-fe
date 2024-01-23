@@ -6,7 +6,6 @@ import { useGetBalance, useRecipient } from "hooks";
 import { useMyContext } from "hooks/useMyContext";
 import Link from "next/link";
 import { useState } from "react";
-import { toast } from "react-toastify";
 import { campaignServices } from "services/campaign-services";
 
 const Withdraw = () => {
@@ -37,7 +36,7 @@ const Withdraw = () => {
           parseFloat(userBalance[0].amount),
           tokenList[0].contractToken
         );
-        if(!response) throw new Error('Failed while withdrawing')
+        if(response != 'SUCCESS') throw new Error('Failed while withdrawing')
         console.log(response)
 
         setShowLoader(false)
@@ -48,7 +47,6 @@ const Withdraw = () => {
         console.log(error)
         setShowLoader(false)
         setConfirmWithdraw(false)
-        toast.error(error.toString())
       }
     }
      

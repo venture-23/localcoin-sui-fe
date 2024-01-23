@@ -59,7 +59,7 @@ const MerchantRegisterPage = () => {
 
           const response = await campaignServices.merchant_registration(userInfo, data)
           console.log(response)
-          if(!response) throw new Error('Error while registering store')
+          if(response != 'SUCCESS') throw new Error('Error while registering store')
           setShowLoader(false);
           setShowFormNo(3);
       }
