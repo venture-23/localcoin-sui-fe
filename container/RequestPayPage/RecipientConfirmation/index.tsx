@@ -11,11 +11,12 @@ interface IRecipientConfirmProps {
     campaignName?: string
     showLoader?: boolean
     transferConfirmation?: boolean
-    setTransferConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
+    setTransferConfirmation: React.Dispatch<React.SetStateAction<boolean>>
+    cancelPayment:() => void
     participantName?: string
 }
 
-const RecipientConfirmation = ({ amount, participantName = 'ABC', storeName, handleClick, type, campaignName, showLoader, transferConfirmation, setTransferConfirmation }: IRecipientConfirmProps) => {
+const RecipientConfirmation = ({ amount, participantName = 'ABC', storeName, handleClick, type, campaignName, showLoader, transferConfirmation, setTransferConfirmation, cancelPayment }: IRecipientConfirmProps) => {
     
   return (
     <section className="w-full relative bg-[#1653AE] h-[100vh]">
@@ -37,6 +38,9 @@ const RecipientConfirmation = ({ amount, participantName = 'ABC', storeName, han
             </div>
             <div className="h-[100%] mx-auto">
                 <div className="h-[100%] flex flex-col justify-between">
+                    <div onClick={() => cancelPayment()} className='h-[24px] w-[24px] cursor-pointer absolute left-[10px] top-[10px]'>
+                        <XMarkIcon color='#fff' width={24} height={24} />
+                    </div>
                     <div className="flex flex-col mt-[100px] gap-[12px] items-center">
                         <div>
                             <Image 

@@ -60,15 +60,15 @@ const RequestPay = () => {
     const [merchantPaymentSuccess, setMerchantPaymentSuccess] = useState(false);
     const [storeName, setStoreName] = useState('')
 
-    const { merchant_info, isGettingInfo, merchant_associated, setFetch_merchant_info } = useMerchant(
+    const {  merchant_associated } = useMerchant(
         {
-          merchantAddress: data?.merchantAddress,
-          tokenId: data?.tokenAddress,
+          merchantAddress: data?.merchantAddress || '',
+          tokenId: data?.tokenAddress || '',
           data
         }
       );
-    console.log(merchant_info, ':info')
-    const { isFetching, sendTokenToMerchant, tokenList, isSendToMerchantSucc } = useRecipient({
+  
+    const { tokenList, isSendToMerchantSucc } = useRecipient({
       data
     });
 
@@ -86,13 +86,23 @@ const RequestPay = () => {
       }, [isSendToMerchantSucc]);
 
 
+      const handleCancelPayment = () => {
+        setOpenConfirmation(false)
+        setScanData('')
+        setData({})
+        setFormattedScannedData({})
+        setSelected(1);
+
+      }
+
+
     useEffect(() => {
         if (scanData) {
           const scannedData = JSON.parse(scanData);
           setFormattedScannedData(scannedData);
           if (scannedData?.publicKey) {
             console.log({ publicKey: scannedData?.publicKey });
-            setFetch_merchant_info(true);
+            // setFetch_merchant_info(true);
             setData({ ...data, merchantAddress: scannedData?.publicKey, amount: scannedData?.amount });
             setOpenConfirmation(true);
           } else {
@@ -115,8 +125,6 @@ const RequestPay = () => {
       useEffect(() => {
         if (
           data.merchantAddress &&
-          merchant_info &&
-          Object.keys(merchant_info)?.length > 0 &&
           merchant_associated
         ) {
           if (merchant_associated?.length) {
@@ -135,9 +143,9 @@ const RequestPay = () => {
           } else {
             toast.error(`You can't transfer to the scan Merchant`);
           }
-          setData({ ...data, ...merchant_info, merchant_associated });
+          setData({ ...data, merchant_associated });
         }
-      }, [merchant_info, merchant_associated]);
+      }, [merchant_associated]);
 
     const handleRemove = () => {
         if (amount) {
@@ -204,13 +212,14 @@ const RequestPay = () => {
                   data?.merchantAddress,
                   userInfo.publicKey
                 );
-                toast.success('Amount transferred to merchant')
+                // toast.success('Amount transferred to merchant')
                 setPaymentSuccessLoader(false)
                 setMerchantPaymentSuccess(true)
             }
             
             setTransferConfirmation(false);
             setOpenConfirmation(false);
+            setData({});
         } catch (error: any) {
             console.log(error)
             // toast.error('Error: Failed transferring the funds')
@@ -218,7 +227,8 @@ const RequestPay = () => {
         }
       }
 
-      console.log(formattedScannedData, ':data')
+      console.log(formattedScannedData, ':formatdata')
+      console.log(data, ':data')
   return (
     <section>
         {!paymentRequested && !openConfirmation && !creatorPaymentSuccess && !merchantPaymentSuccess &&(
@@ -352,6 +362,7 @@ const RequestPay = () => {
               transferConfirmation={transferConfirmation}
               showLoader={paymentSuccessLoader}
               participantName={formattedScannedData?.username}
+              cancelPayment={handleCancelPayment}
             />
         )}
 
