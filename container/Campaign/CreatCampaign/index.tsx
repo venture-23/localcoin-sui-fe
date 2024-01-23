@@ -9,7 +9,6 @@ import TextArea from 'components/form/text-area';
 import { useMyContext } from 'hooks/useMyContext';
 import { useRouter } from 'next/navigation';
 import { forwardRef, useEffect, useState } from 'react';
-import DatePicker from 'react-datepicker';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 
@@ -182,7 +181,7 @@ const CreateCampaignPage = () => {
               optionsList={creatorAddressList}
               handleChange={handleDropdown}
             /> */}
-            <div className='flex flex-col gap-[2px]'>
+            {/* <div className='flex flex-col gap-[2px]'>
               <label className='text-base font-semibold text-[#171717]'>Ending date</label>
               <DatePicker
                 selected={new Date(data.endingDate)}
@@ -195,7 +194,7 @@ const CreateCampaignPage = () => {
                 }
                 customInput={<CustomInput />}
               />
-            </div>
+            </div> */}
             <InputForm
               name="participant"
               // label={'No of Recipients'}
