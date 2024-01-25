@@ -131,6 +131,21 @@ const decoderHelper = (params: string, response: ResponseType) => {
             : 'Registered, Waiting for verify account'
         );
         return response.returnValue?._value || response?.status;
+      case 'end_campaign':
+        toast.success(
+          'Campaign Ended Successfully'
+        );
+        return response?.status;
+      case 'join_campaign':
+        toast.success(
+          'Campaign Joined Successfully'
+        );
+        return response?.status;
+      case 'verify_recipients':
+        toast.success(
+          'Verified Participants Successfully'
+        );
+        return response?.status;
       case 'verify_merchant':
         toast.success('Verified Mechant from admin, Successfully');
         return response.returnValue?._value;
@@ -158,6 +173,8 @@ const decoderHelper = (params: string, response: ResponseType) => {
         console.log({ merchantInfo }, '111');
         return makeSingleObject(merchantInfo);
       case 'balance':
+        return decodei128(response?.returnValue?._value) || '0.00';
+      case 'get_amount_received':
         return decodei128(response?.returnValue?._value) || '0.00';
       case 'get_recipients_status':
         const receipientList = (response?.returnValue?._value || []).map((eachValue: any) => ({

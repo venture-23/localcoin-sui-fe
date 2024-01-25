@@ -54,6 +54,7 @@ const CampaignDetail = (props: any) => {
   const [verifyConfirm, setVerifyConfirm] = useState(false);
   const [endCampaignConfirm, setEndCampaignConfirm] = useState(false);
   const [requestedIncentive, setRequestedIncentive] = useState(false);
+  const [participantPaymentReceived, setParticipantPaymentReceived] = useState(false);
 
   const [isCampaignEnded, setIsCampaignEnded] = useState(false);
   console.log(currentParticipant, ':cuurPart')
@@ -179,6 +180,8 @@ const CampaignDetail = (props: any) => {
         props.campaignId
       );
 
+      if(joinRes === 'FAILED') throw error;
+
       const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo') || '';
       console.log(prevJoinedCamp)
       const joinedInfo = []
@@ -197,7 +200,7 @@ const CampaignDetail = (props: any) => {
       }
       
 
-      toast.success('Campaign Joined');
+      // toast.success('Campaign Joined');
       setShowUsernameBox(false);
       fetchCampaignParticipate();
       setShowLoader(false);
@@ -241,8 +244,9 @@ const CampaignDetail = (props: any) => {
       if(isCampaignEnded) {
         throw new Error ('Campaign has ended')
       }
-      await campaignServices.verify_recipients(userInfo.secretKey, props.campaignId, acceptedNames);
-      toast.success('Successfully verified participants')
+      const respose =  await campaignServices.verify_recipients(userInfo.secretKey, props.campaignId, acceptedNames);
+      if(respose === 'FAILED') throw error;
+      // toast.success('Successfully verified participants')
       await fetchCampaignParticipate()
       setVerifyLoader(false)
       setVerifyConfirm(false)
@@ -253,7 +257,7 @@ const CampaignDetail = (props: any) => {
       })
     } catch (error: any) {
       console.log(error)
-      toast.error(error.toString())
+      // toast.error(error.toString())
       setVerifyLoader(false)
       setVerifyConfirm(false)
     }
@@ -263,15 +267,14 @@ const CampaignDetail = (props: any) => {
   const endCampaign = async () => {
     try {
       setShowLoader(true);
-      await campaignServices.end_campaign(userInfo, props.campaignId)
-
-      toast.success('Campaign Ended Successfully')
+      const response = await campaignServices.end_campaign(userInfo, props.campaignId)
+      if(response !== 'SUCCESS') throw error
+      // toast.success('Campaign Ended Successfully')
       await getCampaignStatus();
 
       setShowLoader(false);
       setEndCampaignConfirm(false);
     } catch (error: any) {
-      toast.error(error.toString())
       console.log(error);
       setEndCampaignConfirm(false);
       setShowLoader(false);
@@ -318,6 +321,27 @@ const CampaignDetail = (props: any) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    console.log(userInfo, ':user')
+    if(userInfo?.publicKey) {
+      if(participantList?.length > 0) {
+        const verified = participantList.filter((item: any) => item.value)
+        console.log(verified, ':all verified')
+        const isCurrentUserVerified = verified.find((item: any) => item.address === userInfo.publicKey)
+        console.log(isCurrentUserVerified, ':isVerified')
+
+        if(Boolean(isCurrentUserVerified)){
+          console.log('checking amount')
+          campaignServices.get_amount_received(userInfo, props.campaignId).then((response: any) => {
+            console.log(response, ':esponse')
+            setParticipantPaymentReceived(Number(response) > 0)
+          })
+        }
+      }
+    }
+
+  }, [userInfo, participantList])
 
   return (
     <>
@@ -540,7 +564,7 @@ const CampaignDetail = (props: any) => {
               )
               : (
                 currentParticipant?.value ? (
-                  <Button handleClick={handleIncentive} buttonType={'secondary'}  text='Request Incentives'/>
+                  <Button disabled={participantPaymentReceived} handleClick={handleIncentive} buttonType={'secondary'}  text={participantPaymentReceived ? 'Payment Received' :'Request Incentives'}/>
                 ) : (
                   <Button disabled={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0} handleClick={handleJoin} text={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0 ? 'Requested to join' : 'Join Campaign'} />
                 )
