@@ -90,7 +90,8 @@ export const campaignServices = (() => {
                 await new Promise((resolve) => setTimeout(resolve, 1000));
               } else {
                 console.log(txResponse,'error');
-                toast.error(`failed while performing ${parameterType}`);
+                // toast.error(`failed while performing ${parameterType}`);
+                toast.error(`Something went wrong. Please reach out to admin`);
                 return null;
               }
             } catch (error) {
@@ -363,6 +364,16 @@ export const campaignServices = (() => {
       secretKey: userInfo.secretKey,
       contractId: contractId,
       parameterType: 'is_ended',
+      
+    });
+  }
+
+  const  get_amount_received = (userInfo: any, contractId: string) => {
+    return makeTransaction({
+      secretKey: userInfo.secretKey,
+      contractId: contractId,
+      parameterType: 'get_amount_received',
+      payload: [accountToScVal(userInfo.publicKey)]
     });
   }
 
@@ -387,7 +398,8 @@ export const campaignServices = (() => {
     get_owner,
     verify_recipients,
     end_campaign,
-    is_ended
+    is_ended,
+    get_amount_received
   };
 })();
 
