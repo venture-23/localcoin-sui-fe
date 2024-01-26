@@ -91,7 +91,7 @@ export const campaignServices = (() => {
               } else {
                 console.log(txResponse,'error');
                 // toast.error(`failed while performing ${parameterType}`);
-                toast.error(`Something went wrong. Please reach out to admin`);
+                toast.error(`Something went wrong. Please try again`);
                 return null;
               }
             } catch (error) {

@@ -10,9 +10,8 @@ import { useParams, useRouter } from "next/navigation";
 const StoreDetails = () => {
     const router = useRouter()
     const params = useParams()
-    console.log(params, ':para')
     const { storeInfo  } = useCamapigns({ storeId: params?.storeId, fetchAllCampaigns: false });
-    console.log(storeInfo, ':store')
+  
     
   return (
     <section>
@@ -52,7 +51,9 @@ const StoreDetails = () => {
                 </div>
                 </div>
                 <div>
+                    <a href={`tel: ${storeInfo?.phone_no}`}>
                     <Button text="Contact" />
+                    </a>
                 </div>
              </div>
              

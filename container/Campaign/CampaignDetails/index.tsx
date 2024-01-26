@@ -34,9 +34,10 @@ const CampaignDetail = (props: any) => {
   // const [data, setData] = useState({
   //   username: ''
   // })
+  const joinedInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '{}')
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({
-    username: '',
+    username: joinedInfo[0].username || '',
     recipientAddress: userInfo?.publicKey
   });
   const pathname = usePathname();
@@ -55,6 +56,7 @@ const CampaignDetail = (props: any) => {
   const [endCampaignConfirm, setEndCampaignConfirm] = useState(false);
   const [requestedIncentive, setRequestedIncentive] = useState(false);
   const [participantPaymentReceived, setParticipantPaymentReceived] = useState(false);
+  
 
   const [isCampaignEnded, setIsCampaignEnded] = useState(false);
   console.log(currentParticipant, ':cuurPart')
@@ -592,6 +594,7 @@ const CampaignDetail = (props: any) => {
                     placeholder={'Enter Username'}
                     maxLength={300}
                     data={data}
+                    disabled={data.username !== ""}
                   />
                   <Button disabled={showLoader} showLoader={showLoader} handleClick={joinCampaign} text="Join" />
                 </div>
