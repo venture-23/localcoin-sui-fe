@@ -11,8 +11,7 @@ const GenerateKeyPairPage = ({ handleGenerateKey }: any) => {
           </div> */}
           <h1 className="mb-2 text-2xl font-bold">Generate Keypair</h1>
           <p className="max-w-sm font-medium text-textSecondary">
-            Clicking the button below will Generates a keypair associated with the stellar
-            blockchain.
+            Clicking the button below will Generates a keypair associated for signing transaction.
           </p>
         </div>
 
