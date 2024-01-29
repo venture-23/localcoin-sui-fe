@@ -38,7 +38,7 @@ const CampaignDetail = (props: any) => {
   const joinedInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '{}')
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({
-    username: joinedInfo[0].username || '',
+    username: joinedInfo[0]?.username || '',
     recipientAddress: userInfo?.publicKey
   });
   const pathname = usePathname();
