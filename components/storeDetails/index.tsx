@@ -2,6 +2,7 @@
 import { MapPinIcon, PhoneIcon, UserCircleIcon } from "@heroicons/react/16/solid";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import Button from "components/botton";
+import CampaignDetailSkeleton from "components/skeleton/campagin-details";
 import { useCamapigns } from "hooks";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -10,7 +11,15 @@ import { useParams, useRouter } from "next/navigation";
 const StoreDetails = () => {
     const router = useRouter()
     const params = useParams()
-    const { storeInfo  } = useCamapigns({ storeId: params?.storeId, fetchAllCampaigns: false });
+    const { storeInfo, isStoreFetching  } = useCamapigns({ storeId: params?.storeId, fetchAllCampaigns: false });
+
+    if(isStoreFetching) {
+        return (
+            <section>
+                <CampaignDetailSkeleton />
+            </section>
+        )
+    }
   
     
   return (

@@ -11,6 +11,7 @@ import { useGetBalance } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import { ThreeDots } from 'react-loader-spinner';
 import { campaignServices } from 'services/campaign-services';
 // import { useMyContext } from 'hooks/useMyContext';
 // import { useRouter } from 'next/navigation';
@@ -35,7 +36,7 @@ const LandingPage = () => {
     });
   };
   const { userInfo } = useMyContext();
-  const { userBalance, userUsdcBalance } = useGetBalance();
+  const { userBalance, userUsdcBalance, isFetchingUsdcBalance, isFetchingUserBalance } = useGetBalance();
   const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
 
   console.log(userBalance, ':lcoal')
@@ -94,7 +95,19 @@ const LandingPage = () => {
             <div className="mb-[4px]">
               <h6 className="text-sm font-semibold text-[#1384F5]">USDC Coins</h6>
               <div className="text-[16px] font-semibold">
-                {userUsdcBalance ? Number(userUsdcBalance).toFixed(0).toString() : 0}
+                {isFetchingUsdcBalance ? (
+                  <ThreeDots 
+                    visible={true}
+                    height="20"
+                    width="20"
+                    color="#000"
+                    radius="15"
+                    ariaLabel="three-dots-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                  />
+                ) : (userUsdcBalance ? Number(userUsdcBalance).toFixed(0).toString() : 0)}
+                
               </div>
             </div>
           )}
@@ -103,7 +116,19 @@ const LandingPage = () => {
             <div>
               <h6 className="text-base font-bold text-[#1384F5]">Total LocalCoins</h6>
               <div className="text-[32px] font-semibold leading-9">
-                {userBalance?.length > 0 ? Number(userBalance[0].amount).toString() : 0}
+              {isFetchingUsdcBalance ? (
+                  <ThreeDots 
+                    visible={true}
+                    height="30"
+                    width="30"
+                    color="#000"
+                    radius="25"
+                    ariaLabel="three-dots-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                  />
+                ) : (userBalance?.length > 0 ? Number(userBalance[0].amount).toString() : 0)}
+                
               </div>
             </div>
             {isVerifiedMerchant && (

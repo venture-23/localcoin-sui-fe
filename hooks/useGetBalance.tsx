@@ -61,6 +61,8 @@ export function useGetBalance() {
 
   return {
     userBalance,
-    userUsdcBalance
+    userUsdcBalance,
+    isFetchingUserBalance: userBalanceResponse.isFetching,
+    isFetchingUsdcBalance: userUsdcBalanceResponse.isFetching,
   };
 }
