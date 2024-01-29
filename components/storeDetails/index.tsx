@@ -60,7 +60,7 @@ const StoreDetails = () => {
                 </div>
                 </div>
                 <div>
-                    <a href={`tel: ${storeInfo?.phone_no}`}>
+                    <a href={`tel:${storeInfo?.phone_no}`}>
                     <Button text="Contact" />
                     </a>
                 </div>
