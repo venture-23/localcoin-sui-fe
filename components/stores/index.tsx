@@ -39,6 +39,8 @@ const storeData = [
 export const Stores = () => {
     const { merchantList, isStoreFetching } = useCamapigns({ fetchAllCampaign: true});
     console.log(merchantList, ':mer1')
+
+    
     return (
         <div className="mt-[20px]">
             <div className="flex items-center">
@@ -50,7 +52,9 @@ export const Stores = () => {
                 {
                     merchantList?.map((item,idx) => (
                         isStoreFetching ? (
-                            <div key={idx} className="h-[124px] min-w-[260px] bg-gray-300 animate-pulse rounded-[12px]"></div>
+                            <div key={idx} className="h-[124px] min-w-[260px] bg-gray-300 animate-pulse rounded-[12px]">
+                                
+                            </div>
                         ): (
                             <DummyCardBox key={idx}  boxData={item} boxTitle="Store" />
                         )
@@ -60,13 +64,7 @@ export const Stores = () => {
             </div>
             {!isStoreFetching && merchantList?.length === 0 && (
                 <div className="flex store-container-box items-center">
-                <div 
-                    style={{
-                        background: `url(/storeImg.png)`,
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundSize: 'cover'
-                    }} 
+                <div  
                     className="h-[124px] overflow-hidden min-w-[260px] relative before:content-[''] before:absolute before:h-full before:w-full before:left-0 before:top-0 before:bg-[#000000a6] rounded-[12px] flex jusitfy-center items-center"
                 >
                     <h4 className="text-center relative z-[2] w-full text-[#fff] font-extrabold text-lg">No store created yet</h4>

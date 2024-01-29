@@ -3,6 +3,7 @@ import { CurrencyDollarIcon, MapIcon, UserCircleIcon } from '@heroicons/react/16
 import { ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import InputForm from 'components/form/input';
+import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
 import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
@@ -56,6 +57,7 @@ const CampaignDetail = (props: any) => {
   const [endCampaignConfirm, setEndCampaignConfirm] = useState(false);
   const [requestedIncentive, setRequestedIncentive] = useState(false);
   const [participantPaymentReceived, setParticipantPaymentReceived] = useState(false);
+  const [loader, setLoader] = useState(false);
   
 
   const [isCampaignEnded, setIsCampaignEnded] = useState(false);
@@ -78,11 +80,20 @@ const CampaignDetail = (props: any) => {
   }, [userInfo]);
 
   const getCampaignStatus = async() => {
-    const isEnded = await campaignServices.is_ended(userInfo, props.campaignId)
-    setIsCampaignEnded(isEnded?._value)
+    try {
+      setLoader(true);
+      const isEnded = await campaignServices.is_ended(userInfo, props.campaignId)
+      setIsCampaignEnded(isEnded?._value)
+      setLoader(false)
+    } catch (error) {
+      console.log(error)
+      setLoader(false)
+    }
+    
   }
 
   const getCampaginOwner = async () => {
+    setLoader(true);
     await campaignServices
       .get_owner(userInfo.publicKey, props.campaignId)
       .then((ownerAdd) => {
@@ -91,13 +102,18 @@ const CampaignDetail = (props: any) => {
             setisCampaignAdmin(true);
           }
         }
+        setLoader(false);
       })
-      .catch((err) => console.log({ err }, 'from the gatecampaignOwner'));
+      .catch((err) => {
+        console.log({ err }, 'from the gatecampaignOwner')
+        setLoader(false)
+      });
   };
 
   console.log({ isCampaignAdmin });
 
   const fetchCampaignParticipate = async () => {
+    setLoader(true)
     await campaignServices
       .get_recipients_status({
         ...userInfo,
@@ -110,8 +126,12 @@ const CampaignDetail = (props: any) => {
           
           setCurrentParticipant(res?.find((part: any) => part.address === userInfo.publicKey))
         }
+        setLoader(false)
       })
-      .catch((e) => console.log(e, 'from the pariticipant list'));
+      .catch((e) => {
+        console.log(e, 'from the pariticipant list')
+        setLoader(false)
+      });
   };
 
   useEffect(() => {
@@ -241,10 +261,16 @@ const CampaignDetail = (props: any) => {
     try {
       setVerifyLoader(true)
       if(acceptedNames.length === 0) {
+        toast.error('Please select participants to verify')
         throw new Error ('Please select participants to verify')
       }
       if(isCampaignEnded) {
+        toast.error('Campaign has ended')
         throw new Error ('Campaign has ended')
+      }
+      if(isParticipantFull()) {
+        toast.error('Cannot verify. Participant limit has reached')
+        throw new Error ('Cannot verify. Participant limit has reached')
       }
       const respose =  await campaignServices.verify_recipients(userInfo.secretKey, props.campaignId, acceptedNames);
       if(respose === 'FAILED') throw error;
@@ -300,6 +326,12 @@ const CampaignDetail = (props: any) => {
     return currentCampaignInfo?.username
   }
 
+  const isParticipantFull = () => {
+    const isFull = getVerifiedParticipants() >= Number(campaignInfo?.no_of_recipients) 
+    console.log(isFull, ':isFull')
+    return isFull
+  }
+
   const generateQrCode = async () => {
     try {
       const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
@@ -344,6 +376,14 @@ const CampaignDetail = (props: any) => {
     }
 
   }, [userInfo, participantList])
+
+  if(isDetailsFetching || loader) {
+    return (
+      <section>
+        <CampaignDetailSkeleton />
+      </section>
+    )
+  }
 
   return (
     <>
@@ -568,7 +608,12 @@ const CampaignDetail = (props: any) => {
                 currentParticipant?.value ? (
                   <Button disabled={participantPaymentReceived} handleClick={handleIncentive} buttonType={'secondary'}  text={participantPaymentReceived ? 'Payment Received' :'Request Incentives'}/>
                 ) : (
-                  <Button disabled={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0} handleClick={handleJoin} text={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0 ? 'Requested to join' : 'Join Campaign'} />
+                  isParticipantFull() ? (
+                    <Button disabled={true} text='Paticipant limit reached' />
+                  ) : (
+                    <Button disabled={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0} handleClick={handleJoin} text={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0 ? 'Requested to join' : 'Join Campaign'} />
+                  )
+                  
                 )
                 
               )}

@@ -8,7 +8,7 @@ import TextArea from 'components/form/text-area';
 
 import { useMyContext } from 'hooks/useMyContext';
 import { useRouter } from 'next/navigation';
-import { forwardRef, useEffect, useState } from 'react';
+import { KeyboardEvent, forwardRef, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 
@@ -69,6 +69,7 @@ const CreateCampaignPage = () => {
     if (!data.totalAmount) err.totalAmount = 'Enter No of Token';
     if (!data.participant) err.participant = 'Enter Recipients';
     if (!data.description) err.description = 'Enter Description';
+    if(Number(data.totalAmount) < 100) err.totalAmount = 'Min. funding amount should be 100'
     return err;
   };
   const handleSubmit = async () => {
@@ -205,6 +206,11 @@ const CreateCampaignPage = () => {
               error={error}
               inputMode="numeric"
               data={data}
+              handleKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+                if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) {
+                  e.preventDefault();
+                }
+              }}
             />
             <InputForm
               name="totalAmount"
@@ -216,6 +222,11 @@ const CreateCampaignPage = () => {
               error={error}
               inputMode="numeric"
               data={data}
+              handleKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+                if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) {
+                  e.preventDefault();
+                }
+              }}
             />
             <TextArea
               type="text"

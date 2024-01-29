@@ -70,12 +70,6 @@ export const Campaigns = () => {
             {!isFetching && campaignList?.length === 0 && (
                 <div className="flex store-container-box items-center">
                     <div 
-                        style={{
-                            background: `url(/campaignImg.png)`,
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundSize: 'cover'
-                        }} 
                         className="h-[124px] overflow-hidden min-w-[260px] relative before:content-[''] before:absolute before:h-full before:w-full before:left-0 before:top-0 before:bg-[#000000a6] rounded-[12px] flex jusitfy-center items-center"
                     >
                         <h4 className="text-center relative z-[2] w-full text-[#fff] font-extrabold text-lg">No campaigns created yet</h4>
