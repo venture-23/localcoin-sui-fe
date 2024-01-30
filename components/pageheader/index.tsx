@@ -93,7 +93,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
               ) : (
                 <div
                   className={[
-                    'border border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
+                    'border rounded-[6px] border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
                     !userInfo?.publicKey && 'opacity-[0.3]'
                   ].join(' ')}
                 >
@@ -108,7 +108,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
               <div
                 className={[
-                  'border border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
+                  'border rounded-[6px] border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
                   !userInfo?.publicKey && 'opacity-[0.3]'
                 ].join(' ')}
               >
@@ -121,7 +121,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
               </div>
               <div
                 className={[
-                  'border border-[#171717] bg-[#171717] py-[10px] text-center text-lg font-semibold text-white'
+                  'border rounded-[6px] border-[#171717] bg-[#171717] py-[10px] text-center text-lg font-semibold text-white'
                 ].join(' ')}
               >
                 {!userInfo?.publicKey && (

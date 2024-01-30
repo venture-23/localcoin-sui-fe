@@ -40,13 +40,11 @@ export const PageFooter = () => {
         <div className="sticky-footer">
             {footerLinks.map(item => (
                 <Link key={item.id} href={item.link}>
-                <div  className="flex flex-col items-center cursor-pointer">
-                    {item.icon}
-                    {/* <Link href={item.link}> */}
-                        {item.title}
-                    {/* </Link> */}
-                    
-                </div>
+                    <div  className="flex flex-col items-center cursor-pointer">
+                        {item.icon}
+                            {item.title}
+                        
+                    </div>
                 </Link>
             ))}
         </div>

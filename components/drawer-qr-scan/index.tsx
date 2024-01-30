@@ -1,7 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 import ScanToPay from 'components/drawer-qr-scan/qr-scanner';
-import Link from 'next/link';
 import { Fragment, forwardRef, useImperativeHandle, useState } from 'react';
 
 function DrawerQRScan(props: any, ref: any) {
@@ -32,7 +30,7 @@ function DrawerQRScan(props: any, ref: any) {
     <>
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
+          {/* <Transition.Child
             as={Fragment}
             enter="ease-in-out duration-500"
             enterFrom="opacity-0"
@@ -42,7 +40,7 @@ function DrawerQRScan(props: any, ref: any) {
             leaveTo="opacity-0"
           >
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity md:mx-auto md:w-[400px]" />
-          </Transition.Child>
+          </Transition.Child> */}
 
           <div className="fixed inset-0 overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">
@@ -62,7 +60,7 @@ function DrawerQRScan(props: any, ref: any) {
                         isOpen ? '' : 'py-6'
                       } shadow-xl`}
                     >
-                      <div className="px-4 sm:px-6">
+                      {/* <div className="px-4 sm:px-6">
                         <div className="flex items-start justify-between">
                           <Dialog.Title className="text-lg font-semibold text-gray-900">
                             {props.panelTitle || ''}
@@ -84,7 +82,7 @@ function DrawerQRScan(props: any, ref: any) {
                         <p className="mt-3 text-lg font-medium text-gray-400">
                           Please specify the number of token to be received to share QR code.
                         </p>
-                      </div>
+                      </div> */}
                       <div className={`relative mt-6 flex-1 ${isOpen ? '' : ' px-4 sm:px-6'} `}>
                         {isOpen && (
                           <ScanToPay

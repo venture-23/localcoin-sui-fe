@@ -97,16 +97,6 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
           scanDelay={delayScan}
           constraints={{
             facingMode: 'environment',
-            width : {
-              min : 640,
-              ideal : 720,
-              max : 1920
-            },
-            height : {
-              min : 640,
-              ideal : 720,
-              max : 1920
-            }
           }}
           onResult={(result, error) => {
             if (!result) return;

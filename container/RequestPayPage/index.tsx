@@ -230,7 +230,7 @@ const RequestPay = () => {
       console.log(formattedScannedData, ':formatdata')
       console.log(data, ':data')
   return (
-    <section>
+    <section className="non-scrollable-section">
         {!paymentRequested && !openConfirmation && !creatorPaymentSuccess && !merchantPaymentSuccess &&(
             <div className="flex flex-col min-h-[100vh] justify-between">
             <div className="container mx-auto">
@@ -267,11 +267,11 @@ const RequestPay = () => {
                         <Button disabled={amount === '' || amount === '0'} handleClick={handlePaymentRequest} buttonType={'tertiary'} text="Request" />
                     </div>
                     </div>
-                    <div className="p-[6px]">
-                    <div className="grid bg-[#ced2d9] backdrop-blur-[35px] w-full grid-cols-3 gap-3 rounded-[5px] p-3">
+                    <div className="mt-[12px]">
+                    <div className="grid bg-[#ced2d9] backdrop-blur-[35px] w-full grid-cols-3 gap-3 p-3">
                   {new Array(9).fill('0').map((x, index) => (
                     <div
-                      className="rounded-[5px] bg-white p-[12px] text-center"
+                      className="rounded-[5px] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.30)] bg-white p-[12px] text-center"
                       key={index + 1 + ''}
                       onClick={() => handleClick(index + 1 + '')}
                     >
@@ -282,7 +282,7 @@ const RequestPay = () => {
                   <div className="pointer-events-none bg-none"></div>
                   <div className="">
                     <div
-                      className="col-span-3 rounded-[5px] bg-white p-[12px] text-center"
+                      className="col-span-3 shadow-[0px_1px_0px_0px_rgba(0,0,0,0.30)] rounded-[5px] bg-white p-[12px] text-center"
                       onClick={() => handleClick(0 + '')}
                     >
                       0

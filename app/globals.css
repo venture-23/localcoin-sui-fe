@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url(https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900);
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -66,6 +68,8 @@ button {
 body{
   @apply  bg-[#F7F8FA];
 
+  font-family: 'Inter';
+
 }
 
 .container {
@@ -77,8 +81,8 @@ body{
 
 main{
   /* padding-bottom: 73px; */
-  height: 100dvh;
-  overflow-y: scroll;
+  /* height: 100dvh;
+  overflow-y: scroll; */
   /* background-color: white; */
 }
 
@@ -89,7 +93,7 @@ main{
 }
 section {
   height: 100%;
-  @apply mb-12 md:mb-0;
+  /* @apply mb-12 md:mb-0; */
   }
   
   @media screen and (min-width: 768px) {
@@ -127,7 +131,7 @@ section {
     justify-content: space-between;
     padding: 20px 28px;
     position: fixed;
-    bottom: 18px;
+    bottom: 0px;
     margin-left: -20px;
     
   }
@@ -391,4 +395,9 @@ section {
   color: red;
   cursor: pointer;
   font-size: 18px;
+}
+
+.non-scrollable-section {
+  margin-bottom: 0px !important;
+  overflow-y: hidden;
 }
