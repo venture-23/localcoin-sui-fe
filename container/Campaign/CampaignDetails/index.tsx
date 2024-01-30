@@ -609,7 +609,7 @@ const CampaignDetail = (props: any) => {
                   <Button disabled={participantPaymentReceived} handleClick={handleIncentive} buttonType={'secondary'}  text={participantPaymentReceived ? 'Payment Received' :'Request Incentives'}/>
                 ) : (
                   isParticipantFull() ? (
-                    <Button disabled={true} text='Paticipant limit reached' />
+                    <Button disabled={true} text='Paticipant Limit Reached' />
                   ) : (
                     <Button disabled={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0} handleClick={handleJoin} text={Boolean(currentParticipant) && Object.keys(currentParticipant).length > 0 ? 'Requested to join' : 'Join Campaign'} />
                   )
