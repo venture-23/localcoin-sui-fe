@@ -62,11 +62,13 @@ const SignupPage = () => {
       localStorage.setItem('local-coin', encodedData);
       seShowSpinner(false);
       setData({ ...data, ...resp });
+      setUserInfo({ ...data, ...resp });
     }
   };
   const handleSignUp = () => {
+    console.log('handled')
     setUserInfo({ ...data });
-    router.push('/');
+    router.push("/");
   };
 
   return (
@@ -87,7 +89,7 @@ const SignupPage = () => {
             <>
               <div className="fixed inset-0 mx-auto flex flex-col items-center justify-center bg-white">
                 <div>
-                  <Image src={'/generateQR.gif'} width={250} height={250} />
+                  <Image src={'/generateQR.gif'} alt='zz' width={250} height={250} />
                 </div>
                 <p className="my-4 text-2xl ">Creating your digital account</p>
               </div>
@@ -137,7 +139,7 @@ const SignupPage = () => {
             //     )}
             //   </div>
             // </div>
-            <SignUpSuccess publicKey={data.publicKey} secretKey={data.secretKey} />
+            <SignUpSuccess handleSignUp={handleSignUp} publicKey={data.publicKey} secretKey={data.secretKey} />
           )}
           
         </div>

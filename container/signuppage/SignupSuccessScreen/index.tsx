@@ -1,6 +1,7 @@
 import Button from "components/botton"
 import useHandleCopy from "hooks/useCopyText"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { maskWalletAddress } from "utils/clipper"
 
 interface ISignupSuccessProps {
@@ -11,6 +12,7 @@ interface ISignupSuccessProps {
 
 const SignUpSuccess = ({ publicKey, secretKey, handleSignUp }: ISignupSuccessProps) => {
   const [isCopied, handleCopy] = useHandleCopy({ showToast: true });
+  const router = useRouter()
 
   const copyKeys = () => {
     const stringToCopy = JSON.stringify({
@@ -18,6 +20,10 @@ const SignUpSuccess = ({ publicKey, secretKey, handleSignUp }: ISignupSuccessPro
       secretKey
     })
     handleCopy(stringToCopy)
+  }
+
+  const signUp = () => {
+    router.push("/")
   }
   return (
     <section className="w-full relative bg-[#1653AE] h-[100vh]">
@@ -74,8 +80,8 @@ const SignUpSuccess = ({ publicKey, secretKey, handleSignUp }: ISignupSuccessPro
                         </div>
                     </div>
                     <div className="mx-auto flex flex-col w-full gap-[12px] mb-[10px]">
-                        <Button handleClick={copyKeys} link="/" buttonType={'white'} text="Copy Keys" />
-                        <Button handleClick={handleSignUp} buttonType={'secondary'} text="Start Earning" />
+                        <Button handleClick={copyKeys} buttonType={'white'} text="Copy Keys" />
+                        <Button link="/" buttonType={'secondary'} text="Start Earning" />
                     </div>
                 </div>
             </div>
