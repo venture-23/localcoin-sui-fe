@@ -44,7 +44,7 @@ const Button: React.FC<ButtonProps> = ({
           type="button"
           className={`w-full rounded-[4px] ${
             buttonType === 'primary'
-              ? 'bg-[#000] font-bold text-white disabled:opacity-30'
+              ? 'bg-[#171717] font-bold text-white disabled:opacity-30'
               : buttonType === 'secondary'
               ? 'bg-[#FAD146] font-bold text-[#000] disabled:opacity-30'
               : buttonType === 'outlined'

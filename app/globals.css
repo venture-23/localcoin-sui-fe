@@ -341,7 +341,7 @@ section {
   z-index: 333;
 }
 
-.verification-checkbox {
+.verification-checkbox , .confirm-checkbox{
   -webkit-appearance: none;
 
   display: none;
@@ -355,6 +355,20 @@ section {
 }
 
 .verification-checkbox.crossed-checkbox:checked + .verification-checkbox-label::before {
+  content: '\2717';
+  color: #000;
+  font-weight: 500;
+
+}
+
+.confirm-checkbox.ticked-checkbox:checked + .confirm-checkbox-label::before {
+  content: '\2713';
+  color: #000;
+  font-weight: 500;
+
+}
+
+.confirm-checkbox.crossed-checkbox:checked + .confirm-checkbox-label::before {
   content: '\2717';
   color: #000;
   font-weight: 500;
@@ -377,6 +391,27 @@ section {
   height: 20px;
   text-align: center;
   line-height: 20px;
+}
+
+.confirm-checkbox-label {
+  /* display: inline-block; */
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.confirm-checkbox-label::before {
+  content: '';
+  display: flex;
+  align-items: center;
+  
+  border: 1px solid #E4E4E7;
+  border-radius: 5px;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  margin-right: 10px;
 }
 
 .verified-user, .unverified-user {
