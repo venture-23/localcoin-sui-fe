@@ -268,8 +268,8 @@ const RequestPay = () => {
                     </div>
                     </div>
                     <div className="mt-[12px]">
-                    <div className="grid bg-[#ced2d9] backdrop-blur-[35px] w-full grid-cols-3 gap-3 p-3">
-                  {new Array(9).fill('0').map((x, index) => (
+                      <div className="grid bg-[#ced2d9] backdrop-blur-[35px] w-full grid-cols-3 gap-3 p-3">
+                        {new Array(9).fill('0').map((x, index) => (
                     <div
                       className="rounded-[5px] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.30)] bg-white p-[12px] text-center"
                       key={index + 1 + ''}
@@ -278,23 +278,23 @@ const RequestPay = () => {
                       {' '}
                       {index + 1}
                     </div>
-                  ))}
-                  <div className="pointer-events-none bg-none"></div>
-                  <div className="">
+                        ))}
+                        <div className="pointer-events-none bg-none"></div>
+                        <div className="">
                     <div
                       className="col-span-3 shadow-[0px_1px_0px_0px_rgba(0,0,0,0.30)] rounded-[5px] bg-white p-[12px] text-center"
                       onClick={() => handleClick(0 + '')}
                     >
                       0
                     </div>
-                  </div>
-                  <div
+                        </div>
+                        <div
                     className="flex items-center justify-center rounded-md bg-none p-[12p]"
                     onClick={() => handleRemove()}
                   >
                     <BackspaceIcon className="h-6 w-6" />
-                  </div>
-                </div>
+                        </div>
+                      </div>
                     </div>
                 </div>
 

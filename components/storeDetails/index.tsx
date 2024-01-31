@@ -29,7 +29,7 @@ const StoreDetails = () => {
                   <ChevronLeftIcon width={16} height={16} />
                   <span className='text-[12px] font-normal'>Back</span>
              </div>
-             <div className="flex flex-col justify-between h-[90vh]">
+             <div className="flex flex-col justify-between h-[calc(100vh_-_54px)]">
                 <div>
                 <h3 className="text-base font-semibold">{storeInfo?.store_name}</h3>
                 <div className="w-full my-[16px] rounded-[12px] border-[3px] border-solid overflow-hidden border-[#D7D7D7]">

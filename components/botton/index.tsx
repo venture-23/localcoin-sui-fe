@@ -51,6 +51,8 @@ const Button: React.FC<ButtonProps> = ({
               ? 'bg-[transparent] font-bold text-[#000] disabled:opacity-30 border border-[#DF5B5B]'
               : buttonType === 'tertiary'
               ? 'bg-[#1653AE] font-bold text-[#fff] disabled:opacity-30'
+              : buttonType === 'white'
+              ? 'bg-white font-bold text-[#000] disabled:opacity-30'
               : `bg-[${buttonBg} !important] font-semibold text-[#212B34] disabled:opacity-30`
           }  flex items-center justify-center gap-4 
           px-6 py-3.5 text-base ${underline}`}

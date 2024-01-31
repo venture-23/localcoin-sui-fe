@@ -54,6 +54,8 @@ export const Campaigns = () => {
                 {/* <span className="ml-[6px] text-xs">View all</span> */}
             </div>
 
+            <div className={["store-container-box h-[124px] w-[260px] bg-gray-300 animate-pulse rounded-[12px]", campaignList?.length > 0 && "hidden"].join(" ")}></div>
+
             <div className="flex store-container-box items-center overflow-auto gap-[20px]">
                 {
                     campaignList?.map((item: any ,idx: any) => (
