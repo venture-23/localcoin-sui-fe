@@ -39,7 +39,6 @@ const storeData = [
 export const Stores = () => {
     const { merchantList, isStoreFetching } = useCamapigns({ fetchAllCampaign: true});
     console.log(merchantList, ':mer1')
-
     
     return (
         <div className="mt-[20px]">
@@ -48,8 +47,10 @@ export const Stores = () => {
                 {/* <span className="ml-[6px] text-xs">View all</span> */}
             </div>
 
+            <div className={["store-container-box h-[124px] w-[260px] bg-gray-300 animate-pulse rounded-[12px]", merchantList?.length > 0 && "hidden"].join(" ")}></div>
+
             <div className="flex store-container-box items-center overflow-auto gap-[20px]">
-                {
+                {   
                     merchantList?.map((item,idx) => (
                         isStoreFetching ? (
                             <div key={idx} className="h-[124px] min-w-[260px] bg-gray-300 animate-pulse rounded-[12px]">

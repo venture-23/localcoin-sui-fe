@@ -21,7 +21,8 @@ const MerchantRegisterInfo = ({
       <div className="relative ">
         <h3 className="mb-2 text-2xl font-bold">{title || 'Apply to become a merchant'}</h3>
       </div>
-      <div className="mt-1 grid gap-5 pb-6">
+      <div className='flex flex-col justify-between h-[calc(100vh_-_140px)]'>
+        <div className="mt-1 grid gap-[12px] pb-6">
         <InputForm
           // label="Store Name"
           type="text"
@@ -69,7 +70,22 @@ const MerchantRegisterInfo = ({
           placeholder="Enter Store Address"
         />
 
-        <label className='block flex items-center'>
+        <div>
+          <input 
+            checked={data.correctInfoCheck} 
+            type="checkbox" 
+            id={`correct-info-check`} 
+            className='confirm-checkbox ticked-checkbox'
+            onChange={handleChange} 
+            disabled={isDataNotFilled()}
+            name='correctInfoCheck'
+          />
+          <label className={['confirm-checkbox-label', isDataNotFilled() ? "opacity-40" : "" ].join(" ")} htmlFor={`correct-info-check`}>
+            My merchant information is correct.
+          </label>
+        </div>
+
+        {/* <label className='block flex items-center'>
           <input 
             type='checkbox'
             name='correctInfoCheck'
@@ -80,10 +96,12 @@ const MerchantRegisterInfo = ({
           />
 
           <span className='ml-[6px] text-base font-medium text-[#171717]'>My merchant information is correct.</span>
-        </label>
+        </label> */}
 
+        
+        </div>
         <div onClick={handleSubmit}>
-          <Button showLoader={loader} disabled={!data.correctInfoCheck || loader} text="Continue" />
+            <Button showLoader={loader} disabled={!data.correctInfoCheck || loader} text="Continue" />
         </div>
       </div>
     </div>

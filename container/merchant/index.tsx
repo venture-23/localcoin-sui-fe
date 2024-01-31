@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { campaignServices } from 'services/campaign-services';
 import MerchantInfo from './components/register-form';
-import RegisterOverView from './components/register-overview';
 
 const MerchantRegisterPage = () => {
   const [error, setError] = useState<any>({});
@@ -76,17 +75,9 @@ const MerchantRegisterPage = () => {
   return (
     <section className="relative">
       <div className="container mx-auto">
-        {/* <div className="mb-6 flex items-center pt-10">
-          <Link
-            href={showFormNo === 1 ? '/' : '#'}
-            onClick={() => ((showFormNo === 2 || showFormNo === 3) && setShowFormNo(1)) || false}
-          >
-            <ChevronLeftIcon width={24} height={24} />
-          </Link>
-        </div> */}
         {showFormNo === 1 && (
           <>
-            <div className="mb-6 flex items-center pt-10">
+            <div className="mb-[18px] flex items-center pt-10">
               <Link
                 href={showFormNo === 1 ? '/' : '#'}
                 className='flex items-center'
@@ -107,9 +98,9 @@ const MerchantRegisterPage = () => {
         // ) : (
         //   <RegisterOverView data={data} loader={isProcessing} handleSubmit={handleSubmit} />
         )}
-        {showFormNo ===  2 && (
+        {/* {showFormNo ===  2 && (
           <RegisterOverView data={data} loader={showLoader} handleSubmit={handleSubmit} />
-        )}
+        )} */}
 
 
         {showFormNo === 3 && (

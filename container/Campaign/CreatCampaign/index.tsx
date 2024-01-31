@@ -121,42 +121,25 @@ const CreateCampaignPage = () => {
   }
 
   return (
-    <section>
+    <section className='non-scrollable-section'>
       {showSuccess ? (
         <ConfirmationScreen type='campaign' />
       ) : (
         <div className="container mx-auto">
           {/* <PageHeader backLink={`/campaign`} /> */}
-          <div onClick={() => router.back()} className="my-[18px] flex cursor-pointer items-center">
+          <div onClick={() => router.back()} className="my-[12px] flex cursor-pointer items-center">
             <ChevronLeftIcon width={16} height={16} />
             <span className="text-[12px] font-normal">Back</span>
           </div>
 
-          <div className="rounded-top-[4px]">
+          <div className="">
             <div className="relative">
-              {/* <Image
-              alt="heading image"
-              width={388}
-              height={104}
-              src={'/heading_bg.png'}
-              className="!w-full"
-            /> */}
-              {/* <div
-              className="left-7 top-7 p-6"
-              style={{ backgroundImage: 'url("/heading_bg.png")', backgroundSize: 'cover' }}
-            >
-              <h1 className=" text-2xl font-bold  !text-white">
-                <span className="font-normal ">Please provide</span> following details to{' '}
-                <span className="font-normal"> create camapaign.</span>{' '}
-              </h1>
-            </div> */}
-
               <div>
                 <h3 className="text-lg font-semibold">Start a Campaign</h3>
               </div>
             </div>
           </div>
-          <div className="grid gap-5 pb-6 pt-8">
+          <div className="grid gap-[12px] pb-[12px] pt-[12px]">
             <InputForm
               name="name"
               // label={'Title'}
@@ -217,7 +200,7 @@ const CreateCampaignPage = () => {
               handleChange={handleChange}
               // label={'Total Amount'}
               // labelClass={'!mb-[2px]'}
-              placeholder={'Total funding amount'}
+              placeholder={'Total funding amount(Min: 100 USDC)'}
               maxLength={5}
               error={error}
               inputMode="numeric"
@@ -249,7 +232,22 @@ const CreateCampaignPage = () => {
                 {data.totalAmount || 0} Tokens for {data.participant || 0} Recipients
               </span>
             </div>
-            <label className="block flex items-center">
+
+            <div>
+              <input 
+                checked={data.correctInfoCheck} 
+                type="checkbox" 
+                id={`correct-info-check`} 
+                className='confirm-checkbox ticked-checkbox'
+                onChange={handleChange} 
+                disabled={isDataNotFilled()}
+                name='correctInfoCheck'
+              />
+              <label className={['confirm-checkbox-label', isDataNotFilled() ? "opacity-40" : "" ].join(" ")} htmlFor={`correct-info-check`}>
+                My campaign information is correct.
+              </label>
+            </div>
+            {/* <label className="block flex items-center">
               <input
                 type="checkbox"
                 name="correctInfoCheck"
@@ -262,7 +260,7 @@ const CreateCampaignPage = () => {
               <span className="ml-[6px] text-base font-medium text-[#171717]">
                 My merchant information is correct.
               </span>
-            </label>
+            </label> */}
             <div onClick={handleSubmit}>
               <Button
                 disabled={showLoader || !data.correctInfoCheck}

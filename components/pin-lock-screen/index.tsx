@@ -1,6 +1,7 @@
 'use client';
 import { BackspaceIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { MyContext } from 'app/providers';
+import Button from 'components/botton';
 import CustomToaster from 'components/toaster';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -22,10 +23,9 @@ export default function PinLockScreen(props: any) {
   const [userEnterPinData, setUserEnterPinData] = useState<any>('');
   const [error, setError] = useState('');
 
-  const handleClick = (value: string | number) => {
-    if (userEnterPinData.length + 1 === 4) {
-      setError('');
-      const enterPin = userEnterPinData + value.toString();
+  const handleSignUp = () => {
+    setError('');
+      const enterPin = userEnterPinData.toString();
       setUserEnterPinData(enterPin);
       if (isInCookies) {
         if (checkPinCorrect(cookieValue, enterPin)) {
@@ -41,7 +41,32 @@ export default function PinLockScreen(props: any) {
         setUserInfo({ ...userInfo, enterPin });
         setShowPinScreen(false);
       }
-    } else if (userEnterPinData.length + 1 <= 4) {
+  }
+
+  const handleClick = (value: string | number) => {
+    // if (userEnterPinData.length + 1 === 4) {
+    //   setError('');
+    //   const enterPin = userEnterPinData + value.toString();
+    //   setUserEnterPinData(enterPin);
+    //   if (isInCookies) {
+    //     if (checkPinCorrect(cookieValue, enterPin)) {
+    //       const userD = decodeToken(cookieValue, enterPin)
+    //       setUserInfo({ ...userD, enterPin });
+    //       setUserEnterPinData('');
+    //       setShowPinScreen(false);
+    //       setCheckPinCode(false);
+    //     } else {
+    //       setError('Invalid Pin');
+    //     }
+    //   } else {
+    //     setUserInfo({ ...userInfo, enterPin });
+    //     setShowPinScreen(false);
+    //   }
+    // } else if (userEnterPinData.length + 1 <= 4) {
+    //   setError('');
+    //   setUserEnterPinData((prevPin: string) => prevPin + value.toString());
+    // }
+    if (userEnterPinData.length + 1 <= 4) {
       setError('');
       setUserEnterPinData((prevPin: string) => prevPin + value.toString());
     }
@@ -90,7 +115,7 @@ export default function PinLockScreen(props: any) {
                 <Image src={'/enterPIN.png'} width={250} height={250} alt="image verify" />
               </div>
               <div
-                className="text-center "
+                className="text-center"
                 onClick={() => {
                   window.location.reload();
                   localStorage.removeItem('local-coin');
@@ -119,34 +144,39 @@ export default function PinLockScreen(props: any) {
                 </div>
               </div>
               <p className="my-1 text-center text-sm font-bold text-red-500 ">{error}</p>
+
+              <div className="mb-[20px]">
+                        
+                  <Button disabled={userEnterPinData?.length < 4} handleClick={handleSignUp} buttonType={'primary'} text="Continue" />
+              </div>
               <div className="">
-                <div className="grid w-full grid-cols-3 gap-3 rounded-md border bg-slate-50 p-3">
-                  {new Array(9).fill('0').map((x, index) => (
+                <div className="grid bg-[#ced2d9] backdrop-blur-[35px] w-full grid-cols-3 gap-3 p-3">
+                        {new Array(9).fill('0').map((x, index) => (
                     <div
-                      className="rounded-md bg-white p-6 text-center"
+                      className="rounded-[5px] shadow-[0px_1px_0px_0px_rgba(0,0,0,0.30)] bg-white p-[12px] text-center"
                       key={index + 1 + ''}
                       onClick={() => handleClick(index + 1 + '')}
                     >
                       {' '}
                       {index + 1}
                     </div>
-                  ))}
-                  <div className="pointer-events-none bg-slate-50"></div>
-                  <div className="">
+                        ))}
+                        <div className="pointer-events-none bg-none"></div>
+                        <div className="">
                     <div
-                      className="col-span-3 rounded-md bg-white p-6 text-center"
+                      className="col-span-3 shadow-[0px_1px_0px_0px_rgba(0,0,0,0.30)] rounded-[5px] bg-white p-[12px] text-center"
                       onClick={() => handleClick(0 + '')}
                     >
                       0
                     </div>
-                  </div>
-                  <div
-                    className="flex items-center justify-center rounded-md bg-primary p-6 text-white"
+                        </div>
+                        <div
+                    className="flex items-center justify-center rounded-md bg-none p-[12p]"
                     onClick={() => handleRemove()}
                   >
                     <BackspaceIcon className="h-6 w-6" />
-                  </div>
-                </div>
+                        </div>
+                      </div>
               </div>
             </div>
           </div>

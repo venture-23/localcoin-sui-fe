@@ -122,7 +122,7 @@ section {
   }
 
   .sticky-footer {
-    height: 48px;
+    /* height: 48px; */
     background-color: #FFF;
     max-width: 400px !important;
     width: 100%;
@@ -140,7 +140,7 @@ section {
     color: #1384F5;
     text-align: center;
     font-family: Inter;
-    font-size: 10px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -341,7 +341,7 @@ section {
   z-index: 333;
 }
 
-.verification-checkbox {
+.verification-checkbox , .confirm-checkbox{
   -webkit-appearance: none;
 
   display: none;
@@ -355,6 +355,20 @@ section {
 }
 
 .verification-checkbox.crossed-checkbox:checked + .verification-checkbox-label::before {
+  content: '\2717';
+  color: #000;
+  font-weight: 500;
+
+}
+
+.confirm-checkbox.ticked-checkbox:checked + .confirm-checkbox-label::before {
+  content: '\2713';
+  color: #000;
+  font-weight: 500;
+
+}
+
+.confirm-checkbox.crossed-checkbox:checked + .confirm-checkbox-label::before {
   content: '\2717';
   color: #000;
   font-weight: 500;
@@ -379,6 +393,27 @@ section {
   line-height: 20px;
 }
 
+.confirm-checkbox-label {
+  /* display: inline-block; */
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.confirm-checkbox-label::before {
+  content: '';
+  display: flex;
+  align-items: center;
+  
+  border: 1px solid #E4E4E7;
+  border-radius: 5px;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  margin-right: 10px;
+}
+
 .verified-user, .unverified-user {
   height: 24px;
   width: 24px
@@ -400,4 +435,12 @@ section {
 .non-scrollable-section {
   margin-bottom: 0px !important;
   overflow-y: hidden;
+}
+
+.generate-container {
+  height: 100vh;
+  background: url('/generate-bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
