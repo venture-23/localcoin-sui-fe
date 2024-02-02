@@ -102,8 +102,8 @@ export const campaignServices = (() => {
         }
       }
     } catch (error: any) {
-      console.log(error, `FRM THE ERROR from ${parameterType}`);
-      toast.error(`FRM THE ERROR from ${parameterType} `);
+      console.log(error, `Something went wrong. Please try again`);
+      toast.error(`Something went wrong. Please try again`);
       // toast.error(`FRM THE ERROR from ${parameterType} ${JSON.stringify(error, null, 2)} `, {
       //   autoClose: false
       // });

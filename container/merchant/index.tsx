@@ -80,10 +80,11 @@ const MerchantRegisterPage = () => {
             <div className="mb-[18px] flex items-center pt-10">
               <Link
                 href={showFormNo === 1 ? '/' : '#'}
-                className='flex items-center'
+                className='flex items-center gap-[6px]'
               >
                 <ChevronLeftIcon width={16} height={16} />
-                Back
+                <span className='text-[12px] font-normal'>Back</span>
+               
               </Link>
             </div>
             <MerchantInfo
