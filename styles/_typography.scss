@@ -18,9 +18,9 @@ $textColor: #212b34;
 /* Inter Regular */
 @font-face {
   font-family: 'Inter';
-  // src:
-  //   url('/fonts/Inter-Regular.woff2') format('woff2'),
-  //   url('/fonts/Inter-Regular.woff') format('woff');
+  src:
+    url('/fonts/Inter-Regular.ttf') format('ttf'),
+    url('/fonts/Inter-Regular.ttf') format('ttf');
   font-weight: 400;
   font-style: normal;
 }
@@ -28,9 +28,9 @@ $textColor: #212b34;
 /* Inter Medium */
 @font-face {
   font-family: 'Inter';
-  // src:
-  //   url('/fonts/Inter-Medium.woff2') format('woff2'),
-  //   url('/fonts/Inter-Medium.woff') format('woff');
+  src:
+    url('/fonts/Inter-Medium.ttf') format('ttf'),
+    url('/fonts/Inter-Medium.ttf') format('ttf');
   font-weight: 500;
   font-style: normal;
 }
@@ -38,9 +38,9 @@ $textColor: #212b34;
 /* Inter Semi-Bold */
 @font-face {
   font-family: 'Inter';
-  // src:
-  //   url('/fonts/Inter-SemiBold.woff2') format('woff2'),
-  //   url('/fonts/Inter-SemiBold.woff') format('woff');
+  src:
+    url('/fonts/Inter-SemiBold.ttf') format('ttf'),
+    url('/fonts/Inter-SemiBold.ttf') format('ttf');
   font-weight: 600;
   font-style: normal;
 }
@@ -48,9 +48,9 @@ $textColor: #212b34;
 /* Inter Bold */
 @font-face {
   font-family: 'Inter';
-  // src:
-  //   url('/fonts/Inter-Bold.woff2') format('woff2'),
-  //   url('/fonts/Inter-Bold.woff') format('woff');
+  src:
+    url('/fonts/Inter-Bold.ttf') format('ttf'),
+    url('/fonts/Inter-Bold.ttf') format('ttf');
   font-weight: 700;
   font-style: normal;
 }
@@ -58,9 +58,9 @@ $textColor: #212b34;
 /* Inter Extra-Bold */
 @font-face {
   font-family: 'Inter';
-  // src:
-  //   url('/fonts/Inter-ExtraBold.woff2') format('woff2'),
-  //   url('/fonts/Inter-ExtraBold.woff') format('woff');
+  src:
+    url('/fonts/Inter-ExtraBold.ttf') format('ttf'),
+    url('/fonts/Inter-ExtraBold.ttf') format('ttf');
   font-weight: 800;
   font-style: normal;
 }
@@ -68,9 +68,9 @@ $textColor: #212b34;
 /* Inter Black */
 @font-face {
   font-family: 'Inter';
-  // src:
-  //   url('/fonts/Inter-Black.woff2') format('woff2'),
-  //   url('/fonts/Inter-Black.woff') format('woff');
+  src:
+    url('/fonts/Inter-Black.ttf') format('ttf'),
+    url('/fonts/Inter-Black.ttf') format('ttf');
   font-weight: 900;
   font-style: normal;
 }

@@ -139,7 +139,8 @@ const CreateCampaignPage = () => {
               </div>
             </div>
           </div>
-          <div className="grid gap-[12px] pb-[12px] pt-[12px]">
+          <div className='h-[calc(100vh_-_90px)] flex flex-col justify-between'>
+            <div className="grid gap-[4px] pb-[12px] pt-[12px]">
             <InputForm
               name="name"
               // label={'Title'}
@@ -200,7 +201,7 @@ const CreateCampaignPage = () => {
               handleChange={handleChange}
               // label={'Total Amount'}
               // labelClass={'!mb-[2px]'}
-              placeholder={'Total funding amount(Min: 100 USDC)'}
+              placeholder={'Total amount(Min. 100 USDC)'}
               maxLength={5}
               error={error}
               inputMode="numeric"
@@ -261,6 +262,8 @@ const CreateCampaignPage = () => {
                 My merchant information is correct.
               </span>
             </label> */}
+            
+            </div>
             <div onClick={handleSubmit}>
               <Button
                 disabled={showLoader || !data.correctInfoCheck}

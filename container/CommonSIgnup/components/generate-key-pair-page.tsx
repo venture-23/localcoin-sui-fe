@@ -6,13 +6,13 @@ const GenerateKeyPairPage = ({ handleGenerateKey }: any) => {
   return (
     <>
       <div className="generate-container bg-[#D5D5D5]">
-        <div className="container mb-[6px] flex items-center pt-10">
+        <div className="container pl-[14px] mb-[6px] flex items-center pt-10">
               <Link className='flex items-center gap-[6px]' href={'/'}>
-                <ChevronLeftIcon width={24} height={24} />
-                <span>Back</span>
-              </Link>
-            </div>
-        <div className='container h-[calc(100vh_-_75px)] pt-[64px] mx-auto flex flex-col justify-between'>
+                <ChevronLeftIcon width={16} height={16} />
+                <span className='text-[12px] font-normal'>Back</span>
+              </Link>    
+        </div>
+        <div className='container h-[calc(100vh_-_75px)] pt-[10px] mx-auto flex flex-col justify-between'>
           <div className="mb-6">
           {/* <div className="flex justify-center">
             <Image src={'/generateQR.png'} width={250} height={250} alt="genetate image" />
