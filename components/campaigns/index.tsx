@@ -54,7 +54,7 @@ export const Campaigns = () => {
                 {/* <span className="ml-[6px] text-xs">View all</span> */}
             </div>
 
-            <div className={["store-container-box h-[124px] w-[260px] bg-gray-300 animate-pulse rounded-[12px]", campaignList?.length > 0 && "hidden"].join(" ")}></div>
+            <div className={["store-container-box h-[124px] w-[260px] bg-gray-300 animate-pulse rounded-[12px]", (campaignList?.length > 0 || !isFetching) && "hidden"].join(" ")}></div>
 
             <div className="flex store-container-box items-center overflow-auto gap-[20px]">
                 {
@@ -69,12 +69,12 @@ export const Campaigns = () => {
                 }
             </div>
 
-            {!isFetching && campaignList?.length === 0 && (
+            {!isFetching && (campaignList?.length === 0 || !campaignList) && (
                 <div className="flex store-container-box items-center">
                     <div 
                         className="h-[124px] overflow-hidden min-w-[260px] relative before:content-[''] before:absolute before:h-full before:w-full before:left-0 before:top-0 before:bg-[#000000a6] rounded-[12px] flex jusitfy-center items-center"
                     >
-                        <h4 className="text-center relative z-[2] w-full text-[#fff] font-extrabold text-lg">No campaigns created yet</h4>
+                        <h4 className="text-center relative font-['Inter'] z-[2] w-full text-[#fff] font-extrabold text-lg">No campaigns created yet</h4>
                     </div>
                 </div>
             )}
