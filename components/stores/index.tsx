@@ -38,7 +38,7 @@ const storeData = [
 
 export const Stores = () => {
     const { merchantList, isStoreFetching } = useCamapigns({ fetchAllCampaign: true});
-    console.log(merchantList, ':mer1')
+    console.log(isStoreFetching, ':mer1')
     
     return (
         <div className="mt-[20px]">
@@ -47,7 +47,7 @@ export const Stores = () => {
                 {/* <span className="ml-[6px] text-xs">View all</span> */}
             </div>
 
-            <div className={["store-container-box h-[124px] w-[260px] bg-gray-300 animate-pulse rounded-[12px]", merchantList?.length > 0 && "hidden"].join(" ")}></div>
+            <div className={["store-container-box h-[124px] w-[260px] bg-gray-300 animate-pulse rounded-[12px]", (merchantList?.length > 0 || !isStoreFetching) && "hidden"].join(" ")}></div>
 
             <div className="flex store-container-box items-center overflow-auto gap-[20px]">
                 {   
@@ -63,12 +63,12 @@ export const Stores = () => {
                     ))
                 }
             </div>
-            {!isStoreFetching && merchantList?.length === 0 && (
+            {!isStoreFetching && (merchantList?.length === 0 || !merchantList) && (
                 <div className="flex store-container-box items-center">
                 <div  
                     className="h-[124px] overflow-hidden min-w-[260px] relative before:content-[''] before:absolute before:h-full before:w-full before:left-0 before:top-0 before:bg-[#000000a6] rounded-[12px] flex jusitfy-center items-center"
                 >
-                    <h4 className="text-center relative z-[2] w-full text-[#fff] font-extrabold text-lg">No store created yet</h4>
+                    <h4 className="text-center relative z-[2] font-['Inter'] w-full text-[#fff] font-extrabold text-lg">No store created yet</h4>
                 </div>
             </div>
             )}
