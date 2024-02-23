@@ -44,6 +44,23 @@ export const successStatusText = {
     text: 'Your payment has successfully been sent to the participant.'
   }
 }
+
+export const filterCampaigns = [
+  {
+      "name": "Nitesh's Campaign",
+      "id": "CB34NAQ3HNYHEBI4ZTOCC2LYEEY5MFTYAXNWAWVXT7HU4EDTOEMIK3DW"
+  },
+  {
+      "name": "Sudeep's campaign",
+      "id": "CC66RRSQQDWOCGPYGX7K3SS6GMHHGWAKTJWJXGHVY4IZK4Q6R4TSM5XY"
+  },
+  {
+      "name": "Donate Medicine",
+      "id": "CDYAGP5H6VD6FELBKUS7SEHZDMLJABZHEOYP3YGPN5UOSN6QBJYHL5MO"
+  }
+]
+
+
 /* 
 
  'create_campaign',
