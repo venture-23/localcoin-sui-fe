@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
-import { staticPubKey } from 'utils/constants';
+import { filterCampaigns, staticPubKey } from 'utils/constants';
 import { useMyContext } from './useMyContext';
 
 export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }: any) {
@@ -21,7 +21,8 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
         : await campaignServices.getCreatorCampaigns(userInfo?.secretKey, userInfo?.publicKey);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
-      return response;
+      const filteredResponse = response.filter((item : any) => !filterCampaigns.some(campaign => campaign.id === item.id));
+      return filteredResponse;
     },
     onError: (error: any) => {
       console.log('campaign status error', JSON.stringify(error, null, 2));
