@@ -1,5 +1,6 @@
 'use client';
 import { useRouter } from "next/navigation";
+import { coverImageMaps } from "utils/constants";
 
 export interface IBoxDataProps {
     id?: Number
@@ -25,14 +26,23 @@ export interface IDummyCardBoxProps {
     boxData: IBoxDataProps,
 }
 
+
+
+
 export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
     const router = useRouter()
+    console.log(boxData)
+
+    const getCoverImage = () => {
+        const image = coverImageMaps[boxData?.merchantAddress] || 'storeImg.png'
+        return image
+    }
     return (
         <div style={{
-                background: `url(${boxTitle === 'Campaigns' ? '/campaignImg.png' : 'storeImg.png'})`,
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover'
+                background: `url(${boxTitle === 'Campaigns' ? '/campaignImg.png' : getCoverImage()})`,
+                backgroundPosition: `center`,
+                backgroundSize: `cover`,
+                backgroundRepeat: `no-repeat`,
             }} 
             className="h-[124px] card-box p-[10px] flex-none rounded-[12px] cursor-pointer w-[290px] flex items-end"
             onClick={() => router.push(`/${boxTitle === 'Campaigns' ? `all-campaigns/${boxData?.id}` : `all-stores/${boxData?.merchantAddress}`}`)}

@@ -6,12 +6,15 @@ import CampaignDetailSkeleton from "components/skeleton/campagin-details";
 import { useCamapigns } from "hooks";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
+import { coverImageMaps } from "utils/constants";
+
 
 
 const StoreDetails = () => {
     const router = useRouter()
     const params = useParams()
     const { storeInfo, isStoreFetching  } = useCamapigns({ storeId: params?.storeId, fetchAllCampaigns: false });
+
 
     if(isStoreFetching) {
         return (
@@ -34,7 +37,7 @@ const StoreDetails = () => {
                 <h3 className="text-base font-semibold">{storeInfo?.store_name}</h3>
                 <div className="w-full my-[16px] rounded-[12px] border-[3px] border-solid overflow-hidden border-[#D7D7D7]">
                     <Image 
-                        src={'/storeImg.png'}
+                        src={coverImageMaps[params?.storeId] || '/storeImg.png'}
                         alt="Store"
                         height={420}
                         width={400}

@@ -60,6 +60,10 @@ export const filterCampaigns = [
   }
 ]
 
+export const coverImageMaps = {
+  "GBTTE3ALU4ZQHX3T42EKAAJYXOQS5P4OXA4LARBQVQIO7GMHV3AKPH3E": "/merchant_3.jpg"
+}
+
 
 /* 
 
