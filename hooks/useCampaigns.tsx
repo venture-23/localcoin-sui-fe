@@ -105,7 +105,13 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
   }, [campaignListInfo.data, campaignDetailsInfo.data]);
 
   const { merchantList, storeInfo } = useMemo(() => {
-    const merchantList = merchantListInfo.data;
+    const merLists = merchantListInfo.data
+    const newLists = [...merchantListInfo.data]
+    const thirdElem = newLists.splice(2,1)[0]
+    const secondEleme = newLists.splice(1,1)[0]
+    newLists.unshift(thirdElem)
+    newLists.splice(1, 0, secondEleme)
+    const merchantList = newLists;
     const storeInfo = storeDetailInfo.data;
     return { merchantList, storeInfo };
   }, [merchantListInfo.data, storeDetailInfo.data]);
