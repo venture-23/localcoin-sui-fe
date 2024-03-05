@@ -50,9 +50,12 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
       // const response = await campaignServices.get_merchant_info(userInfo.secretKey, merResponse[0])
 
       console.log(response, ':stores');
+      const newRes = [...response]
+      const thirdRes = newRes.splice(2,1)[0]
+      newRes.unshift(thirdRes)
       if (response?.error) throw new Error(response.error || 'Something went wrong');
-      console.log({ response });
-      return response;
+      console.log({ response, newRes });
+      return newRes;
     },
     onError: (error: any) => {
       console.log('campaign status error', JSON.stringify(error, null, 2));
