@@ -57,6 +57,18 @@ export const filterCampaigns = [
   {
       "name": "Donate Medicine",
       "id": "CDYAGP5H6VD6FELBKUS7SEHZDMLJABZHEOYP3YGPN5UOSN6QBJYHL5MO"
+  },
+  {
+    "name": "test campaign xyz",
+    "id": "CATGWTTE5M3GZBXX4T6STR5OWHJTQWOQLGERSQYXEO4DHDBT3ISCIU2K"
+  },
+  {
+    "name": "Donate Medicine",
+    "id": "CBK3MTW4EI2SH6KEWYZ3SSUGJIPOEWKAJRCYSFOAM3637WLT2HPR4DCF"
+  },
+  {
+    "name": "Testtt",
+    "id": "CCG4UA3KTAA7QJV3WPSVKNCYIV3LBQTM3A46DQUZT2HDHO3CQNAUB7TW"
   }
 ]
 

@@ -41,7 +41,7 @@ const StoreDetails = () => {
                         alt="Store"
                         height={420}
                         width={400}
-                        className="w-full"
+                        className={["w-full", coverImageMaps[params?.storeId] === '/merchant_5.jpg' ? 'h-[100px]': 'h-fit' ].join(',')}
                     />
                 </div>
                 <h2 className="text-2xl font-medium mb-[16px]">{storeInfo?.store_name}</h2>
