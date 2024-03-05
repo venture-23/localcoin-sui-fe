@@ -35,10 +35,10 @@ const CampaignDetail = (props: any) => {
   // const [data, setData] = useState({
   //   username: ''
   // })
-  const joinedInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '{}')
+  const joinedCInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '{}')
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({
-    username: joinedInfo[0]?.username || '',
+    username: joinedCInfo[0]?.username || '',
     recipientAddress: userInfo?.publicKey
   });
   const pathname = usePathname();
@@ -639,7 +639,7 @@ const CampaignDetail = (props: any) => {
                     placeholder={'Enter Username'}
                     maxLength={300}
                     data={data}
-                    disabled={data.username !== ""}
+                    disabled={joinedCInfo?.length > 0}
                   />
                   <Button disabled={showLoader} showLoader={showLoader} handleClick={joinCampaign} text="Join" />
                 </div>
