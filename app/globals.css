@@ -308,23 +308,28 @@ section {
   top: 0;
   left: 0;
   z-index: -1;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.89) 100%);
 }
 
-.card-item-box {
+/* .odd-cover {
   position: relative;
-}
-
-.card-item-box::after {
+  z-index: 4;
+} */
+.odd-cover::after {
   position: absolute;
   content: '';
   width: 100%;
-  height: 100%;
+  height: 121px;
   top: 0;
   left: 0;
   z-index: -1;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.7) 100%);
+  /* background: linear-gradient(to bottom, rgba(1, 46, 5, 0.6) 0%, rgba(34, 100, 35, 0.5) 100%); */
+  background: url('/merchant_5.jpg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
+
 
 
 .card-secondary-data svg {
@@ -461,4 +466,13 @@ section {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.odd-image {
+  height: 131px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #304D47;
 }

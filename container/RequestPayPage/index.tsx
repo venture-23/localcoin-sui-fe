@@ -154,6 +154,8 @@ const RequestPay = () => {
     }
 
     const handleClick = (value : string | number) => {
+        if(value === '.' && amount.length === 0) return
+        if(value === '.' && amount.includes('.')) return
         const enterAmount = amount + value.toString();
         setAmount(enterAmount);
     }
@@ -279,14 +281,22 @@ const RequestPay = () => {
                       {index + 1}
                     </div>
                         ))}
-                        <div className="pointer-events-none bg-none"></div>
+                        {/* <div className="pointer-events-none bg-none"></div> */}
                         <div className="">
-                    <div
-                      className="col-span-3 shadow-[0px_1px_0px_0px_rgba(0,0,0,0.30)] rounded-[5px] bg-white p-[12px] text-center"
-                      onClick={() => handleClick(0 + '')}
-                    >
-                      0
-                    </div>
+                          <div
+                            className="col-span-3 h-[48px] flex items-center justify-center shadow-[0px_1px_0px_0px_rgba(0,0,0,0.30)] rounded-[5px] bg-white p-[12px] text-center"
+                            onClick={() => handleClick('.' + '')}
+                          >
+                            <div className="w-[5px] h-[5px] bg-black rounded-[50%]"></div>
+                          </div>
+                        </div>
+                        <div className="">
+                          <div
+                            className="col-span-3 shadow-[0px_1px_0px_0px_rgba(0,0,0,0.30)] rounded-[5px] bg-white p-[12px] text-center"
+                            onClick={() => handleClick(0 + '')}
+                          >
+                            0
+                          </div>
                         </div>
                         <div
                     className="flex items-center justify-center rounded-md bg-none p-[12p]"

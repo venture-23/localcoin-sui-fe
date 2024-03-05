@@ -39,12 +39,12 @@ export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
     }
     return (
         <div style={{
-                background: `url(${boxTitle === 'Campaigns' ? '/campaignImg.png' : getCoverImage()})`,
+                background: `${coverImageMaps[boxData?.merchantAddress] === '/merchant_5.jpg' ? '#304D47': `url(${boxTitle === 'Campaigns' ? '/campaignImg.png' : getCoverImage()})` }`,
                 backgroundPosition: `center`,
-                backgroundSize: `cover`,
+                backgroundSize: `${coverImageMaps[boxData?.merchantAddress] === '/merchant_5.jpg' ? 'contain': 'cover'}`,
                 backgroundRepeat: `no-repeat`,
             }} 
-            className="card-item-box h-[124px] card-box p-[10px] flex-none rounded-[12px] cursor-pointer w-[290px] flex items-end"
+            className={["h-[124px] card-box p-[10px] flex-none rounded-[12px] cursor-pointer w-[290px] flex items-end", coverImageMaps[boxData?.merchantAddress] === '/merchant_5.jpg' && 'odd-cover'].join(' ')}
             onClick={() => router.push(`/${boxTitle === 'Campaigns' ? `all-campaigns/${boxData?.id}` : `all-stores/${boxData?.merchantAddress}`}`)}
         >
             <div className="w-full flex flex-col gap-[7px]">
@@ -52,11 +52,11 @@ export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
                     <div className="text-base font-medium text-[#fff]">
                         <div>{boxTitle === 'Campaigns' ? boxData?.name : boxData?.store_name}</div>
                     </div>
-                    {boxData?.distance && (
+                    {/* {boxData?.distance && (
                         <div className="text-base font-medium text-[#fff]">
                             <div>{boxData?.distance}</div>
                         </div>
-                    )}
+                    )} */}
                     
                 </div>
                 {boxTitle === 'Campaigns' && (

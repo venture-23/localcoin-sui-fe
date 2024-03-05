@@ -35,7 +35,7 @@ const StoreDetails = () => {
              <div className="flex flex-col justify-between h-[calc(100vh_-_75px)]">
                 <div>
                 <h3 className="text-base font-semibold">{storeInfo?.store_name}</h3>
-                <div className="w-full my-[16px] rounded-[12px] border-[3px] border-solid overflow-hidden border-[#D7D7D7]">
+                <div className={["w-full my-[16px] rounded-[12px] border-[3px] border-solid overflow-hidden border-[#D7D7D7]", coverImageMaps[params?.storeId] === '/merchant_5.jpg' && 'odd-image'].join(' ')}>
                     <Image 
                         src={coverImageMaps[params?.storeId] || '/storeImg.png'}
                         alt="Store"
