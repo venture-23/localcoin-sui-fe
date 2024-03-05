@@ -51,7 +51,7 @@ export const Stores = () => {
 
             <div className="flex store-container-box items-center overflow-auto gap-[20px]">
                 {   
-                    merchantList?.map((item,idx) => (
+                    merchantList?.reverse()?.map((item,idx) => (
                         isStoreFetching ? (
                             <div key={idx} className="h-[124px] min-w-[260px] bg-gray-300 animate-pulse rounded-[12px]">
                                 
