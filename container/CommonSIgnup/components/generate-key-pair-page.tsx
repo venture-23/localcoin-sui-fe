@@ -1,24 +1,32 @@
-import { KeyIcon } from '@heroicons/react/20/solid';
+import { ChevronLeftIcon } from '@heroicons/react/24/solid';
 import Button from 'components/botton';
+import Link from 'next/link';
 
 const GenerateKeyPairPage = ({ handleGenerateKey }: any) => {
   return (
     <>
-      <div className="rounded-lg bg-white p-10 ">
-        <div className="mb-6">
+      <div className="generate-container bg-[#D5D5D5]">
+        <div className="container pl-[14px] mb-[6px] flex items-center pt-10">
+              <Link className='flex items-center gap-[6px]' href={'/'}>
+                <ChevronLeftIcon width={16} height={16} />
+                <span className='text-[12px] font-normal'>Back</span>
+              </Link>    
+        </div>
+        <div className='container h-[calc(100vh_-_75px)] pt-[10px] mx-auto flex flex-col justify-between'>
+          <div className="mb-6">
           {/* <div className="flex justify-center">
             <Image src={'/generateQR.png'} width={250} height={250} alt="genetate image" />
           </div> */}
-          <h1 className="mb-2 text-2xl font-bold">Create Digital Account</h1>
-          <p className="max-w-sm font-medium text-textSecondary">
-            Clicking the button below will Generates a keypair associated with the stellar
-            blockchain.
+          <h1 className="mb-2 text-3xl font-[Inter] font-bold">Generate Keypair</h1>
+          <p className="max-w-sm font-normal text-base">
+          Clicking “Continue” will Generates a key pair associated with the stellar blockchain.
           </p>
-        </div>
+          </div>
 
-        <div className="grid gap-4">
+          <div className="grid gap-4">
           <div onClick={() => handleGenerateKey()}>
-            <Button text="Proceed" buttonIcon={<KeyIcon width={20} height={20} />} />
+            <Button text="Continue"/>
+          </div>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ interface ButtonProps {
   link?: string;
   query?: any;
   buttonType?: any;
+  buttonBg?: any;
   underline?: any;
   textOrder?: any;
   iconOrder?: any;
@@ -23,13 +24,13 @@ const Button: React.FC<ButtonProps> = ({
   link,
   query,
   buttonType = 'primary',
+  buttonBg = '#fff',
   underline,
   textOrder,
   iconOrder,
   disabled = false,
   handleClick,
-  showLoader = false,
-  
+  showLoader = false
 }) => {
   return (
     <>
@@ -41,14 +42,25 @@ const Button: React.FC<ButtonProps> = ({
           onClick={() => (handleClick ? handleClick() : null)}
           disabled={disabled}
           type="button"
-          className={`w-full rounded-[4px] ${
+          className={`w-full rounded-[4px] text-center ${
             buttonType === 'primary'
-              ? 'bg-primary font-bold text-white'
-              : ' bg-[#F7F8FA] font-semibold text-[#212B34]'
+              ? 'bg-[#171717] font-bold text-white disabled:opacity-60'
+              : buttonType === 'secondary'
+              ? 'bg-[#FAD146] font-bold text-[#000] disabled:opacity-60'
+              : buttonType === 'outlined'
+              ? 'bg-[transparent] font-bold text-[#000] disabled:opacity-60 border border-[#DF5B5B]'
+              : buttonType === 'tertiary'
+              ? 'bg-[#1653AE] font-bold text-[#fff] disabled:opacity-60'
+              : buttonType === 'white'
+              ? 'bg-white font-bold text-[#000] disabled:opacity-60'
+              : `bg-[${buttonBg} !important] font-semibold text-[#212B34] disabled:opacity-60`
           }  flex items-center justify-center gap-4 
-          px-6 py-3.5 text-base ${underline} `}
-        >
-          <div className={`${iconOrder}`}>{buttonIcon}</div>
+          px-6 py-3.5 text-base ${underline}`}
+        > 
+          {buttonIcon && (
+            <div className={`${iconOrder}`}>{buttonIcon}</div>
+          )}
+          
           <p className={`${textOrder} m-0`}>{text}</p>
           {showLoader && (
             <svg
@@ -63,7 +75,7 @@ const Button: React.FC<ButtonProps> = ({
                 cy="12"
                 r="10"
                 stroke="currentColor"
-                stroke-width="4"
+                strokeWidth="4"
               ></circle>
               <path
                 className="opacity-75"

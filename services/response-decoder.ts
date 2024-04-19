@@ -7,6 +7,7 @@ interface ResponseType {
   returnValue?: {
     _value?: any[];
   };
+  status?: string
 }
 
 const makeSingleObject = (data: any) => {
@@ -87,6 +88,8 @@ const decoderHelper = (params: string, response: ResponseType) => {
               ? decodePublicKey(eachValue?._attributes?.val?._value?._value?._value)
               : eachValue?._attributes?.key?._value?.toString() === 'token_address'
               ? decodeContract(eachValue?._attributes?.val?._value?._value)
+              : eachValue?._attributes?.key?._value?.toString() === 'amount'
+              ? decodei128(eachValue?._attributes?.val?._value)
               : eachValue?._attributes?.val?._value?.toString()
         }));
 
@@ -119,15 +122,30 @@ const decoderHelper = (params: string, response: ResponseType) => {
         return tokenList;
       case 'request_campaign_settlement':
         toast.success('Settled Successfully');
-        return response.returnValue?._value;
+        return response.returnValue?._value || response?.status;
       case 'merchant_registration':
       case 'recipient_to_merchant_transfer':
         toast.success(
           params === 'recipient_to_merchant_transfer'
             ? 'Send To Merchant Sucessfully'
-            : 'Registered, Waiting for verified account'
+            : 'Registered, Waiting for verify account'
         );
-        return response.returnValue?._value;
+        return response.returnValue?._value || response?.status;
+      case 'end_campaign':
+        toast.success(
+          'Campaign Ended Successfully'
+        );
+        return response?.status;
+      case 'join_campaign':
+        toast.success(
+          'Campaign Joined Successfully'
+        );
+        return response?.status;
+      case 'verify_recipients':
+        toast.success(
+          'Verified Participants Successfully'
+        );
+        return response?.status;
       case 'verify_merchant':
         toast.success('Verified Mechant from admin, Successfully');
         return response.returnValue?._value;
@@ -137,6 +155,13 @@ const decoderHelper = (params: string, response: ResponseType) => {
             StellarSdk.StrKey.encodeEd25519PublicKey(eachValue?._value?._value?._value) || ''
         );
         return merchantAssco;
+      case 'get_verified_merchants':
+        const verifiedMerchants = (response?.returnValue?._value || []).map(
+          (eachValue: any) =>
+            StellarSdk.StrKey.encodeEd25519PublicKey(eachValue?._value?._value?._value) || ''
+        );
+        console.log(verifiedMerchants, ':verfied');
+        return verifiedMerchants;
       case 'get_merchant_info':
         const merchantInfo = (response?.returnValue?._value || []).map((eachValue: any) => ({
           [eachValue?._attributes?.key?._value?.toString()]:
@@ -149,6 +174,18 @@ const decoderHelper = (params: string, response: ResponseType) => {
         return makeSingleObject(merchantInfo);
       case 'balance':
         return decodei128(response?.returnValue?._value) || '0.00';
+      case 'get_amount_received':
+        return decodei128(response?.returnValue?._value) || '0.00';
+      case 'get_recipients_status':
+        const receipientList = (response?.returnValue?._value || []).map((eachValue: any) => ({
+          name: eachValue?._attributes?.key?._value?.toString(),
+          value: eachValue?._attributes?.val?._value[0]?._value,
+          address: decodePublicKey(eachValue?._attributes?.val?._value[1]?._value?._value?._value)
+        }));
+        return receipientList;
+      case 'get_owner':
+        const owner_address: any = decodePublicKey(response?.returnValue?._value?._value?._value);
+        return owner_address;
       default:
         return response.returnValue;
     }

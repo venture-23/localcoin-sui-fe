@@ -20,7 +20,7 @@ const useHandleCopy = (props?: Props) => {
             toastId: 'success',
             autoClose: 1000
           });
-        const timer = setTimeout(() => setIsCopied(false), props?.setTimeOut || 3000);
+        const timer = setTimeout(() => setIsCopied(false), props?.setTimeOut || 300);
         return () => clearTimeout(timer);
       }
     } catch (error) {

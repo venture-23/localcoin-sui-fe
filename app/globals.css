@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url(https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900);
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -10,7 +12,7 @@
 
 @supports (font: -apple-system-body) and (-webkit-appearance: none) {
   img[loading='lazy'] {
-    clip-path: inset(0.6px);
+    clipPath: inset(0.6px);
   }
 }
 
@@ -29,6 +31,17 @@ button {
   --button-secondary-color: white; /* Text color */
   --button-border-radius: 5px; /* Border radius for rounded corners */
   --button-transparent: transparent;
+}
+
+
+*:not(input):not(select):not(code):not(textarea):not([contenteditable]) {
+  webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-family: 'Inter', sans-serif;
 }
 
 .button-primary  {
@@ -56,6 +69,8 @@ button {
 body{
   @apply  bg-[#F7F8FA];
 
+  font-family: 'Inter', sans-serif;
+
 }
 
 .container {
@@ -67,8 +82,8 @@ body{
 
 main{
   /* padding-bottom: 73px; */
-  height: 100dvh;
-  overflow-y: scroll;
+  /* height: 100dvh;
+  overflow-y: scroll; */
   /* background-color: white; */
 }
 
@@ -79,12 +94,12 @@ main{
 }
 section {
   height: 100%;
-  @apply mb-12 md:mb-0;
+  /* @apply mb-12 md:mb-0; */
   }
   
   @media screen and (min-width: 768px) {
     section {
-      background-color: #F7F8FA ;
+      background-color: #F9F9F9 ;
       max-width: 400px !important; /* or any other fixed width that suits your design */
         margin: 0 auto; /* This centers the container in the viewport */
       height: 100%;
@@ -100,6 +115,59 @@ section {
   }
  
 
+
+  .header-container {
+    height: 100px;
+    max-width: 400px !important;
+    margin: 0 auto;
+  }
+
+  .sticky-footer {
+    /* height: 48px; */
+    background-color: #FFF;
+    max-width: 400px !important;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    padding-top: 0px !important;
+    position: fixed;
+    bottom: 0px;
+    margin-left: -20px;
+    
+  }
+
+  .sticky-footer a {
+    color: #1384F5;
+    text-align: center;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .sticky-footer a:first-of-type {
+    color: #1653AE;
+  }
+
+  .req-pay-link {
+    width: max-content;
+    height: 70px;
+    background-color: #EAEBEE;
+    position: absolute;
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: -28px;
+    left: 10%;
+    transform: translateX(50%);
+    cursor: pointer;
+    
+  }
  
  
 
@@ -189,4 +257,222 @@ section {
 
 .dot.active {
   background-color: #717171;
+}
+
+
+.store-container-box {
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+
+.store-container-box::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-menu {
+  position: fixed;
+  max-width: 400px;
+  width: 100%;
+  top: 100%;
+  height: 100%;
+  background: #fff;
+  transition: 0.4s top ease-in-out;
+  z-index: 999;
+  margin-left: -20px;
+  padding-bottom: 20px;
+}
+
+.mobile-menu.open {
+  top: 0px;
+  transition: 0.4s top ease-in-out;
+}
+
+
+.landing-top {
+  background: #fff;
+  border: 1px solid #E4E4E7;
+  border-radius: 0 0 24px 24px;
+  padding: 24px 16px;
+}
+
+.card-box {
+  position: relative;
+  overflow: hidden;
+  z-index: 4;
+}
+.card-box::after {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.89) 100%);
+}
+
+/* .odd-cover {
+  position: relative;
+  z-index: 4;
+} */
+.odd-cover::after {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 121px;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  /* background: linear-gradient(to bottom, rgba(1, 46, 5, 0.6) 0%, rgba(34, 100, 35, 0.5) 100%); */
+  background: url('/merchant_5.jpg');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+
+
+.card-secondary-data svg {
+  width: 10px;
+  fill: #fff;
+}
+
+.success-vector-1, .success-vector-2 {
+  position: absolute;
+  opacity: 0.1;
+}
+
+.success-vector-1 {
+  top: -40px;
+  left: 0;
+}
+
+.success-vector-2 {
+  right: 0;
+  bottom: 40px
+}
+
+.username-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000044;
+  max-width: 400px;
+  backdrop-filter: blur(2px);
+  z-index: 333;
+}
+
+.verification-checkbox , .confirm-checkbox{
+  -webkit-appearance: none;
+
+  display: none;
+}
+
+.verification-checkbox.ticked-checkbox:checked + .verification-checkbox-label::before {
+  content: '\2713';
+  color: #000;
+  font-weight: 500;
+
+}
+
+.verification-checkbox.crossed-checkbox:checked + .verification-checkbox-label::before {
+  content: '\2717';
+  color: #000;
+  font-weight: 500;
+
+}
+
+.confirm-checkbox.ticked-checkbox:checked + .confirm-checkbox-label::before {
+  content: '\2713';
+  color: #000;
+  font-weight: 500;
+
+}
+
+.confirm-checkbox.crossed-checkbox:checked + .confirm-checkbox-label::before {
+  content: '\2717';
+  color: #000;
+  font-weight: 500;
+
+}
+
+.verification-checkbox-label {
+  display: inline-block;
+  cursor: pointer;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.verification-checkbox-label::before {
+  content: '';
+  display: inline-block;
+  border: 1px solid #E4E4E7;
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+}
+
+.confirm-checkbox-label {
+  /* display: inline-block; */
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.confirm-checkbox-label::before {
+  content: '';
+  display: flex;
+  align-items: center;
+  
+  border: 1px solid #E4E4E7;
+  border-radius: 5px;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.verified-user, .unverified-user {
+  height: 24px;
+  width: 24px
+}
+
+.verified-user::before {
+  content: '\2713';
+  color: green;
+  cursor: pointer;
+  font-size: 18px;
+}
+.unverified-user::before {
+  content: '\2717';
+  color: red;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.non-scrollable-section {
+  margin-bottom: 0px !important;
+  overflow-y: hidden;
+}
+
+.generate-container {
+  height: 100vh;
+  background: url('/generate-bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.odd-image {
+  height: 131px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #304D47;
 }

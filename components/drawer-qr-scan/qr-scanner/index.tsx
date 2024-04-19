@@ -96,7 +96,7 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
         <QrReader
           scanDelay={delayScan}
           constraints={{
-            facingMode: 'environment'
+            facingMode: 'environment',
           }}
           onResult={(result, error) => {
             if (!result) return;
