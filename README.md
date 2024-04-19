@@ -43,4 +43,4 @@ https://www.figma.com/file/DuJv4E8Fx0y93HLiJ30734/LocalCoin-Test?type=design&nod
 
 ## Final Design
 
-https://www.figma.com/file/Wdq44TfGM3o85fXDna3Gd6/Mobile_App_UX%2FUI_Final?type=design&node-id=71-1273&mode=design&t=5SliUVkDdLSvN3uk-0
+https://www.figma.com/file/kT47LTqARggAQUuyNSbomj/LocalCoin?type=design&node-id=0-1&mode=design&t=rHOxdCC86L8RvkLv-0
