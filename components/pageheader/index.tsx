@@ -1,6 +1,6 @@
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
-import { useGetBalance } from 'hooks';
+import { useGetBalance, useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -19,13 +19,16 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 }) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const { userInfo, setShowPinScreen } = useMyContext();
+  const { isLoggedIn, login, logOut, userDetails } = useLogin();
   const { userBalance } = useGetBalance();
+
+  console.log('ZKLogin User', userDetails);
 
   // const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
 
   const handleCopy = () => {
-    if (userInfo?.publicKey) {
-      navigator.clipboard.writeText(userInfo?.publicKey);
+    if (userDetails?.address) {
+      navigator.clipboard.writeText(userDetails?.address);
       toast.info('Address copied');
     }
   };
@@ -69,13 +72,17 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           <div className="flex h-[100%] flex-col justify-between">
             <div className=" w-[calc(100%_+_2px)] rounded-[0px_0px_24px_24px] border border-t-[0] border-[#E4E4E7] bg-[#fff]">
               <div
-                className={[' w-full px-[16px]', !userInfo?.publicKey && 'opacity-[0.3]'].join(' ')}
+                className={[' w-full px-[16px]', !userDetails?.address && 'opacity-[0.3]'].join(
+                  ' '
+                )}
               >
                 <div
                   onClick={handleCopy}
                   className="cursor-pointer rounded-[6px] border border-[#E4E4E7] bg-[#fff] px-[16px] py-[4px] text-lg font-normal"
                 >
-                  {userInfo?.publicKey ? maskWalletAddress(userInfo?.publicKey) : 'Wallet Address'}
+                  {userDetails?.address
+                    ? maskWalletAddress(userDetails?.address)
+                    : 'Wallet Address'}
                 </div>
                 <p className="mt-[16px] pb-[18px] text-base font-semibold">
                   {userInfo?.publicKey
@@ -93,13 +100,13 @@ const PageHeader: React.FC<PageHeaderProps> = ({
               ) : (
                 <div
                   className={[
-                    'border rounded-[6px] border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
-                    !userInfo?.publicKey && 'opacity-[0.3]'
+                    'rounded-[6px] border border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
+                    !userDetails?.address && 'opacity-[0.3]'
                   ].join(' ')}
                 >
                   <Link
-                    className={`block w-full ${!userInfo?.publicKey && 'cursor-not-allowed'}`}
-                    href={userInfo?.publicKey ? '/merchant/register' : '/'}
+                    className={`block w-full ${!userDetails?.address && 'cursor-not-allowed'}`}
+                    href={userDetails?.address ? '/merchant/register' : '/'}
                   >
                     Apply to become a Merchant
                   </Link>
@@ -108,7 +115,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
               <div
                 className={[
-                  'border rounded-[6px] border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
+                  'rounded-[6px] border border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
                   !userInfo?.publicKey && 'opacity-[0.3]'
                 ].join(' ')}
               >
@@ -121,10 +128,20 @@ const PageHeader: React.FC<PageHeaderProps> = ({
               </div>
               <div
                 className={[
-                  'border rounded-[6px] border-[#171717] bg-[#171717] py-[10px] text-center text-lg font-semibold text-white'
+                  'rounded-[6px] border border-[#171717] bg-[#171717] py-[10px] text-center text-lg font-semibold text-white'
                 ].join(' ')}
               >
-                {!userInfo?.publicKey && (
+                {!isLoggedIn && (
+                  <div className="flex items-center justify-center gap-[6px]" onClick={login}>
+                    Sign In
+                  </div>
+                )}
+                {isLoggedIn && (
+                  <div className="flex items-center justify-center gap-[6px]" onClick={logOut}>
+                    Sign out
+                  </div>
+                )}
+                {/* {!userInfo?.publicKey && (
                   <Link className="block w-full" href={'/signup'}>
                     Sign In{' '}
                   </Link>
@@ -136,7 +153,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                   >
                     Sign out
                   </div>
-                )}
+                )} */}
                 {/* <Link className="block w-full" href={'/signup'}>
                   {userInfo.publicKey ? (
                     <div className="flex items-center justify-center gap-[6px]">Sign out</div>
