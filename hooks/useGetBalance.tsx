@@ -1,11 +1,14 @@
+import { SuiClient, getFullnodeUrl } from '@mysten/sui.js/client';
+import { useWallet } from '@suiet/wallet-kit';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { campaignServices } from 'services/campaign-services';
 import { useMyContext } from './useMyContext';
 
 export function useGetBalance() {
   const { userInfo } = useMyContext();
+  const client = new SuiClient({ url: getFullnodeUrl('devnet') });
+const { signAndExecuteTransactionBlock } = useWallet();
 
   const userBalanceResponse = useQuery({
     queryKey: [`user-balance-${userInfo?.publicKey}`],
@@ -15,11 +18,13 @@ export function useGetBalance() {
     retryDelay: 3000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      console.log(userInfo, ':info')
-      const response = await campaignServices.getReceipientToken(userInfo.secretKey, userInfo.publicKey);
-      if (response?.error) throw new Error(response.error || 'Something went wrong');
-      console.log({ response,  }, ':token');
+      // console.log(userInfo, ':info')
+      // const response = await campaignServices.getReceipientToken(userInfo.publicKey);
+      // if (response?.error) throw new Error(response.error || 'Something went wrong');
+      // console.log({ response,  }, ':token');
+      const response = { data: 0 }
       return response;
+
     },
     onError: (error: any) => {
       console.log('campaign status error', JSON.stringify(error, null, 2));
@@ -37,9 +42,10 @@ export function useGetBalance() {
     refetchOnWindowFocus: false,
     queryFn: async () => {
       console.log(userInfo, ':info')
-      const response = await campaignServices.get_user_balance(userInfo);
-      if (response?.error) throw new Error(response.error || 'Something went wrong');
-      console.log({ response,  });
+      // const response = await campaignServices.get_user_balance(userInfo);
+      // if (response?.error) throw new Error(response.error || 'Something went wrong');
+      // console.log({ response,  });
+      const response = { data: 0 }
       return response;
     },
     onError: (error: any) => {

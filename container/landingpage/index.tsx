@@ -12,7 +12,6 @@ import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { ThreeDots } from 'react-loader-spinner';
-import { campaignServices } from 'services/campaign-services';
 // import { useMyContext } from 'hooks/useMyContext';
 // import { useRouter } from 'next/navigation';
 
@@ -72,12 +71,12 @@ const LandingPage = () => {
 
   useEffect(() => {
     if (userInfo?.publicKey) {
-      campaignServices.get_verified_merchants(userInfo?.publicKey).then((response) => {
-        if (response.length > 0) {
-          console.log(response.includes(userInfo?.publicKey), ':veri');
-          setIsVerifiedMerchant(response.includes(userInfo?.publicKey));
-        }
-      });
+      // campaignServices.get_verified_merchants(userInfo?.publicKey).then((response) => {
+      //   if (response.length > 0) {
+      //     console.log(response.includes(userInfo?.publicKey), ':veri');
+      //     setIsVerifiedMerchant(response.includes(userInfo?.publicKey));
+      //   }
+      // });
     }
   }, [userInfo]);
 

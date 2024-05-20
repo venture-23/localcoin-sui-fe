@@ -58,7 +58,7 @@ const SignUpSuccess = ({ publicKey, secretKey, handleSignUp }: ISignupSuccessPro
                             Congratulations !
                         </h3>
                         <div className="text-base font-medium text-[#fff] text-center">
-                          Your key pair has been generated. <br /> Please keep them safe.
+                          You have successfully logged in.
                         </div>
                         <div className=" w-full px-[12px] border rounded-[6px] border-[#E4E4E7] bg-white">
                           <div className="flex items-center justify-between py-[15px]  border-b-zinc-200 border-b border-solid">
@@ -69,14 +69,14 @@ const SignUpSuccess = ({ publicKey, secretKey, handleSignUp }: ISignupSuccessPro
                               {maskWalletAddress(publicKey)}
                             </div>
                           </div>
-                          <div className="flex py-[15px] items-center justify-between">
+                          {/* <div className="flex py-[15px] items-center justify-between">
                             <div className="text-base font-extrabold color-[#222]">
                                 Secret Key:
                               </div>
                               <div className="text-base font-medium color-[#222]">
                                 {maskWalletAddress(secretKey)}
                               </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="mx-auto flex flex-col w-full gap-[12px] mb-[10px]">

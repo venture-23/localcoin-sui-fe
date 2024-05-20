@@ -7,13 +7,13 @@ import { useEffect, useRef, useState } from 'react';
 // import Header from 'components/layout/header';
 import Image from 'next/image';
 
+import { useWallet } from '@suiet/wallet-kit';
 import { setCookieData } from 'app/action';
 import GenerateKeyPairPage from 'container/CommonSIgnup/components/generate-key-pair-page';
 import useHandleCopy from 'hooks/useCopyText';
 import { useMyContext } from 'hooks/useMyContext';
 import { useRouter } from 'next/navigation';
 import { encodeToken } from 'services/encrypt-decrypt-data';
-import generateKeyPair from 'services/generateKeypair';
 import SignUpSuccess from './SignupSuccessScreen';
 
 const SignupPage = () => {
@@ -22,6 +22,7 @@ const SignupPage = () => {
 
   const popOverRef = useRef<any>(null);
   const router = useRouter();
+  const { connected, address } = useWallet()
 
   useEffect(() => {
     setShowPinScreen(true);
@@ -30,6 +31,7 @@ const SignupPage = () => {
   useEffect(() => {
     popOverRef && showPopup();
   }, [promptable]);
+
 
   const showPopup = () => {
     popOverRef?.current?.open({
@@ -52,15 +54,17 @@ const SignupPage = () => {
   });
 
   const handleGenerateKey = async () => {
-    seShowSpinner(true);
-    const resp: any = await generateKeyPair();
+    // const resp: any = await generateKeyPair();
+    const resp: any = {
+      publicKey: address,
+      secretKey: address
+    }
     console.log({ resp });
     if (resp.secretKey) {
       const encodedData = encodeToken({ ...data, ...resp }, userInfo.enterPin);
       await setCookieData(encodedData);
       setUserInfo({ ...userInfo, enterPin: '' });
       localStorage.setItem('local-coin', encodedData);
-      seShowSpinner(false);
       setData({ ...data, ...resp });
       setUserInfo({ ...data, ...resp });
     }
@@ -70,6 +74,13 @@ const SignupPage = () => {
     setUserInfo({ ...data });
     router.push("/");
   };
+
+
+  useEffect(() => {
+    if(connected) {
+      handleGenerateKey()
+    }
+  }, [connected])
 
   return (
     <>
@@ -96,49 +107,6 @@ const SignupPage = () => {
             </>
           )}
           {data.secretKey && (
-            // <div className="rounded-md bg-white p-10">
-            //   <p className="mb-4 text-lg font-bold text-text">Please securely copy this code</p>
-            //   <div className="grid gap-3">
-            //     <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
-            //       <div>
-            //         <p className="mb-2 font-medium">Public Key :</p>
-            //         <p className="text-sm text-textSecondary">
-            //           {maskWalletAddress(data.publicKey)}
-            //         </p>{' '}
-            //       </div>
-            //       <button
-            //         onClick={() => handleCopy(data.publicKey)}
-            //         className="absolute top-1/2 -translate-y-1/2 self-end rounded-full bg-primary p-2 text-white"
-            //       >
-            //         {/* {isCopied ? '' : <ClipboardIcon className="h-6 w-6" />} */}
-            //         <ClipboardIcon className="h-6 w-6" />
-            //       </button>
-            //     </div>
-            //     <div className="relative flex flex-col gap-1 rounded-[4px] bg-bgGray  p-4 ">
-            //       <div>
-            //         <p className="mb-2 font-medium">Secret Key :</p>
-            //         <p className="text-sm text-textSecondary">
-            //           {maskWalletAddress(data.secretKey)}
-            //         </p>{' '}
-            //       </div>
-            //       <button
-            //         disabled={isCopied}
-            //         onClick={() => handleCopy(data.secretKey)}
-            //         className="absolute top-1/2 -translate-y-1/2 self-end rounded-full bg-primary p-2 text-white"
-            //       >
-            //         {/* {isCopied ? '' : <ClipboardIcon className="h-6 w-6" />} */}
-            //         <ClipboardIcon className="h-6 w-6" />
-            //       </button>
-            //     </div>
-            //   </div>
-            //   <div className="mt-6">
-            //     {data.secretKey && (
-            //       <div onClick={() => handleSignUp()}>
-            //         <Button text="Start Earning" />
-            //       </div>
-            //     )}
-            //   </div>
-            // </div>
             <SignUpSuccess handleSignUp={handleSignUp} publicKey={data.publicKey} secretKey={data.secretKey} />
           )}
           

@@ -10,10 +10,12 @@ import { useMyContext } from 'hooks/useMyContext';
 import { useRouter } from 'next/navigation';
 import { KeyboardEvent, forwardRef, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { campaignServices } from 'services/campaign-services';
 
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { useWallet } from '@suiet/wallet-kit';
 import { ConfirmationScreen } from 'components/confirmationScreen';
 import 'react-datepicker/dist/react-datepicker.css';
+import { CAMPAIGN_PACKAGE_ID, LOCAL_COIN_APP, TOKEN_POLICY, USDC_TREASURY, USDC_TYPE } from 'utils/constants';
 
 const CreateCampaignPage = () => {
   const router = useRouter();
@@ -32,17 +34,18 @@ const CreateCampaignPage = () => {
   });
 
   const { userInfo } = useMyContext();
+  const { signAndExecuteTransactionBlock } = useWallet()
 
   useEffect(() => {
     if (userInfo.secretKey) {
-      campaignServices
-        .getTokenNameAddress(userInfo.publicKey)
-        .then((x) => {
-          console.log({ x });
-          setCreatorAddressList(x);
-          setData({ ...data, tokenAddress: x[0]?.value})
-        })
-        .catch(() => toast.error('Error from get_address_name'));
+      // campaignServices
+      //   .getTokenNameAddress(userInfo.publicKey)
+      //   .then((x) => {
+      //     console.log({ x });
+      //     setCreatorAddressList(x);
+      //     setData({ ...data, tokenAddress: x[0]?.value})
+      //   })
+      //   .catch(() => toast.error('Error from get_address_name'));
     }
   }, [userInfo]);
 
@@ -69,30 +72,67 @@ const CreateCampaignPage = () => {
     if (!data.totalAmount) err.totalAmount = 'Enter No of Token';
     if (!data.participant) err.participant = 'Enter Recipients';
     if (!data.description) err.description = 'Enter Description';
-    if(Number(data.totalAmount) < 100) err.totalAmount = 'Min. funding amount should be 100'
+    if(Number(data.totalAmount) < 1) err.totalAmount = 'Min. funding amount should be 100'
     return err;
   };
+
+  const createUserCampaign = async() => {
+    try {
+      const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+      const tx = new TransactionBlock()
+      tx.moveCall({
+        target: `${pkId}::campaign_management::create_campaign`,
+        arguments: [
+          tx.pure.string(data.name),
+          tx.pure.string(data.description),
+          tx.pure.u64(data.participant),
+          tx.pure.string(data.location),
+
+          tx.object(data.totalAmount),
+          tx.object(LOCAL_COIN_APP),
+          tx.object(USDC_TREASURY),
+          tx.object(CAMPAIGN_PACKAGE_ID),
+          tx.object(TOKEN_POLICY)
+
+          
+        ],
+        typeArguments:[USDC_TYPE]
+      })
+
+      const result = await signAndExecuteTransactionBlock({
+        transactionBlock: tx
+      })
+      console.log(result, ':result')
+      if(!result?.digest) {
+        throw new Error ('Failed creating campaign')
+      }
+      return result
+
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+  }
+
   const handleSubmit = async () => {
-    const errorChecked = validation();
-    setError(errorChecked);
-    if (Object.keys(errorChecked).length === 0) {
-      setShowLoader(true);
-      campaignServices
-        .createCampaigns(data, userInfo.secretKey, userInfo.publicKey)
-        .then((x) => {
-          console.log(x);
-          if (x._value === undefined) {
-            setShowLoader(false);
-            console.log(x);
-            toast.success('Created a Campaign');
-            // router.push('/campaign');
-            setShowSuccess(true);
-          }
-        })
-        .catch((x) => {
+    try {
+      const errorChecked = validation();
+      setError(errorChecked);
+      if (Object.keys(errorChecked).length === 0) {
+        setShowLoader(true);
+        const resp = await createUserCampaign()
+        if(resp?.digest) {
           setShowLoader(false);
-          // toast.error('Error while creating');
-        });
+          console.log(resp);
+          toast.success('Created a Campaign');
+          // router.push('/campaign');
+          setShowSuccess(true);
+        }
+      }
+    } catch (error: any) {
+      console.log(true)
+      setShowLoader(false)
+      toast.error('Failed creating campaign')
     }
   };
   const handleDropdown = (value) => {
@@ -201,16 +241,16 @@ const CreateCampaignPage = () => {
               handleChange={handleChange}
               // label={'Total Amount'}
               // labelClass={'!mb-[2px]'}
-              placeholder={'Total amount(Min. 100 USDC)'}
-              maxLength={5}
+              placeholder={'USDC Object'}
+              maxLength={70}
               error={error}
-              inputMode="numeric"
+              // inputMode="numeric"
               data={data}
-              handleKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-                if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) {
-                  e.preventDefault();
-                }
-              }}
+              // handleKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+              //   if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) {
+              //     e.preventDefault();
+              //   }
+              // }}
             />
             <TextArea
               type="text"
@@ -223,7 +263,7 @@ const CreateCampaignPage = () => {
               className="placeholder-extrabold mt-1 block w-full rounded-[4px] border border-slate-300  bg-white p-4 placeholder-[#A3A3A3] shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
               placeholder="Enter Campaign Location"
             />
-            <div
+            {/* <div
               className={`bg-[#F9F9F9) flex h-[48px] w-full items-center justify-between rounded-[6px] border border-[#E4E4E7] px-[12px] text-base font-semibold ${
                 !data.correctInfoCheck && 'opacity-40'
               }`}
@@ -232,7 +272,7 @@ const CreateCampaignPage = () => {
               <span>
                 {data.totalAmount || 0} Tokens for {data.participant || 0} Recipients
               </span>
-            </div>
+            </div> */}
 
             <div>
               <input 

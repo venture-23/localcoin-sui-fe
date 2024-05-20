@@ -20,6 +20,7 @@ export interface IBoxDataProps {
     store_name?: string
     verified_status?: string
     merchantAddress?: string
+    campaign_id?: string
 }
 export interface IDummyCardBoxProps {
     boxTitle: string
@@ -45,7 +46,7 @@ export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
                 backgroundRepeat: `no-repeat`,
             }} 
             className={["h-[124px] card-box p-[10px] flex-none rounded-[12px] cursor-pointer w-[290px] flex items-end", coverImageMaps[boxData?.merchantAddress] === '/merchant_5.jpg' && 'odd-cover'].join(' ')}
-            onClick={() => router.push(`/${boxTitle === 'Campaigns' ? `all-campaigns/${boxData?.id}` : `all-stores/${boxData?.merchantAddress}`}`)}
+            onClick={() => router.push(`/${boxTitle === 'Campaigns' ? `all-campaigns/${boxData?.campaign_id}` : `all-stores/${boxData?.merchantAddress}`}`)}
         >
             <div className="w-full flex flex-col gap-[7px]">
                 <div className="flex items-center w-full justify-between">

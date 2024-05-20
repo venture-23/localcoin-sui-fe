@@ -1,5 +1,5 @@
 'use client';
-import { CurrencyDollarIcon, MapIcon, UserCircleIcon } from '@heroicons/react/16/solid';
+import { MapIcon, UserCircleIcon } from '@heroicons/react/16/solid';
 import { ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import InputForm from 'components/form/input';
@@ -9,10 +9,8 @@ import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import { campaignServices } from 'services/campaign-services';
 import { maskWalletAddress } from 'utils/clipper';
 
 
@@ -46,7 +44,7 @@ const CampaignDetail = (props: any) => {
     id: props.campaignId,
     fetchAllCampaign: true
   });
-  console.log({ isDetailsFetching, campaignInfo });
+  console.log({ isDetailsFetching, campaignInfo }, ':campaignInfoDetails');
 
   const [participantList, setParticipantList] = useState<any>([]);
   const [isCampaignAdmin, setisCampaignAdmin] = useState(false);
@@ -67,8 +65,8 @@ const CampaignDetail = (props: any) => {
     if (userInfo.publicKey) {
       console.log({ userInfo });
       getCampaginOwner();
-      fetchCampaignParticipate();
-      getCampaignStatus()
+      // fetchCampaignParticipate();
+      // getCampaignStatus()
     }
 
     return () => {
@@ -79,66 +77,54 @@ const CampaignDetail = (props: any) => {
     }
   }, [userInfo]);
 
-  const getCampaignStatus = async() => {
-    try {
-      setLoader(true);
-      const isEnded = await campaignServices.is_ended(userInfo, props.campaignId)
-      setIsCampaignEnded(isEnded?._value)
-      setLoader(false)
-    } catch (error) {
-      console.log(error)
-      setLoader(false)
-    }
+  // const getCampaignStatus = async() => {
+  //   try {
+  //     setLoader(true);
+  //     const isEnded = await campaignServices.is_ended(userInfo, props.campaignId)
+  //     setIsCampaignEnded(isEnded?._value)
+  //     setLoader(false)
+  //   } catch (error) {
+  //     console.log(error)
+  //     setLoader(false)
+  //   }
     
-  }
+  // }
 
   const getCampaginOwner = async () => {
-    setLoader(true);
-    await campaignServices
-      .get_owner(userInfo.publicKey, props.campaignId)
-      .then((ownerAdd) => {
-        if (ownerAdd) {
-          if (userInfo.publicKey === ownerAdd) {
-            setisCampaignAdmin(true);
-          }
-        }
-        setLoader(false);
-      })
-      .catch((err) => {
-        console.log({ err }, 'from the gatecampaignOwner')
-        setLoader(false)
-      });
+    const isOwner = campaignInfo?.creator === userInfo?.publicKey
+    setisCampaignAdmin(isOwner);
+
   };
 
-  console.log({ isCampaignAdmin });
+  // console.log({ isCampaignAdmin });
 
-  const fetchCampaignParticipate = async () => {
-    setLoader(true)
-    await campaignServices
-      .get_recipients_status({
-        ...userInfo,
-        campaignAddress: props.campaignId
-      })
-      .then((res: any) => {
-        if (res.length) {
-          const sortedParticipant = res.sort((a: any, b: any) => (b?.value === true) - (a?.value === true))
-          setParticipantList(sortedParticipant);
+  // const fetchCampaignParticipate = async () => {
+  //   setLoader(true)
+  //   await campaignServices
+  //     .get_recipients_status({
+  //       ...userInfo,
+  //       campaignAddress: props.campaignId
+  //     })
+  //     .then((res: any) => {
+  //       if (res.length) {
+  //         const sortedParticipant = res.sort((a: any, b: any) => (b?.value === true) - (a?.value === true))
+  //         setParticipantList(sortedParticipant);
           
-          setCurrentParticipant(res?.find((part: any) => part.address === userInfo.publicKey))
-        }
-        setLoader(false)
-      })
-      .catch((e) => {
-        console.log(e, 'from the pariticipant list')
-        setLoader(false)
-      });
-  };
+  //         setCurrentParticipant(res?.find((part: any) => part.address === userInfo.publicKey))
+  //       }
+  //       setLoader(false)
+  //     })
+  //     .catch((e) => {
+  //       console.log(e, 'from the pariticipant list')
+  //       setLoader(false)
+  //     });
+  // };
 
-  useEffect(() => {
-    if (pathname.split('/')[1] === 'all-campaigns') {
-      setNotLoggedIn(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (pathname.split('/')[1] === 'all-campaigns') {
+  //     setNotLoggedIn(true);
+  //   }
+  // }, []);
   // useEffect(() => {
   //   if (scanData) {
   //     const scanDatParse: any = JSON.parse(scanData);
@@ -165,71 +151,71 @@ const CampaignDetail = (props: any) => {
     return err;
   };
 
-  const handleSubmit = async () => {
-    const err: any = validation();
-    setError(err);
-    if (Object.keys(err).length === 0) {
-      setShowLoader(true);
-      campaignServices
-        .transfer_tokens_to_recipient(
-          userInfo.secretKey,
-          data.recipientAddress,
-          parseFloat(data.amount),
-          props.campaignId
-        )
-        .then((z) => {
-          if (z._value === undefined) {
-            setOpenDrawer(false);
-            setShowLoader(false);
-            toast.success('Token Sent !!!');
-            router.push('/campaign');
-          }
-        })
-        .catch((e) => {
-          setShowLoader(false);
-          toast.error('Error on Token Transfer');
-        });
-      // console.log('first');
-    }
-  };
+  // const handleSubmit = async () => {
+  //   const err: any = validation();
+  //   setError(err);
+  //   if (Object.keys(err).length === 0) {
+  //     setShowLoader(true);
+  //     campaignServices
+  //       .transfer_tokens_to_recipient(
+  //         userInfo.secretKey,
+  //         data.recipientAddress,
+  //         parseFloat(data.amount),
+  //         props.campaignId
+  //       )
+  //       .then((z) => {
+  //         if (z._value === undefined) {
+  //           setOpenDrawer(false);
+  //           setShowLoader(false);
+  //           toast.success('Token Sent !!!');
+  //           router.push('/campaign');
+  //         }
+  //       })
+  //       .catch((e) => {
+  //         setShowLoader(false);
+  //         toast.error('Error on Token Transfer');
+  //       });
+  //     // console.log('first');
+  //   }
+  // };
   const joinCampaign = async () => {
-    try {
-      setShowLoader(true);
-      const joinRes = await campaignServices.join_campaign(
-        data.username,
-        data.recipientAddress,
-        userInfo,
-        props.campaignId
-      );
+    // try {
+    //   setShowLoader(true);
+    //   const joinRes = await campaignServices.join_campaign(
+    //     data.username,
+    //     data.recipientAddress,
+    //     userInfo,
+    //     props.campaignId
+    //   );
 
-      if(joinRes === 'FAILED') throw error;
+    //   if(joinRes === 'FAILED') throw error;
 
-      const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo') || '';
-      console.log(prevJoinedCamp)
-      const joinedInfo = []
-      if(prevJoinedCamp !== '') {
-        for(const prev of JSON.parse(prevJoinedCamp)) {
-          console.log(prev, ':prev')
-          joinedInfo.push(prev);
-        }
-      } 
-      joinedInfo.push({ campaignAddress: props.campaignId, username: data.username })
+    //   const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo') || '';
+    //   console.log(prevJoinedCamp)
+    //   const joinedInfo = []
+    //   if(prevJoinedCamp !== '') {
+    //     for(const prev of JSON.parse(prevJoinedCamp)) {
+    //       console.log(prev, ':prev')
+    //       joinedInfo.push(prev);
+    //     }
+    //   } 
+    //   joinedInfo.push({ campaignAddress: props.campaignId, username: data.username })
    
 
-      if (typeof window !== 'undefined') {
-        console.log(joinedInfo, ':Joined')
-        localStorage.setItem('joinedCampaignInfo', JSON.stringify(joinedInfo));
-      }
+    //   if (typeof window !== 'undefined') {
+    //     console.log(joinedInfo, ':Joined')
+    //     localStorage.setItem('joinedCampaignInfo', JSON.stringify(joinedInfo));
+    //   }
       
 
-      // toast.success('Campaign Joined');
-      setShowUsernameBox(false);
-      fetchCampaignParticipate();
-      setShowLoader(false);
-    } catch (error) {
-      console.log(error);
-      setShowLoader(false);
-    }
+    //   // toast.success('Campaign Joined');
+    //   setShowUsernameBox(false);
+    //   fetchCampaignParticipate();
+    //   setShowLoader(false);
+    // } catch (error) {
+    //   console.log(error);
+    //   setShowLoader(false);
+    // }
   };
 
   // const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo');
@@ -258,60 +244,61 @@ const CampaignDetail = (props: any) => {
 
   const handleVerify = async () => {
 
-    try {
-      setVerifyLoader(true)
-      if(acceptedNames.length === 0) {
-        toast.error('Please select participants to verify')
-        throw new Error ('Please select participants to verify')
-      }
-      if(isCampaignEnded) {
-        toast.error('Campaign has ended')
-        throw new Error ('Campaign has ended')
-      }
-      if(isParticipantFull()) {
-        toast.error('Cannot verify. Participant limit has reached')
-        throw new Error ('Cannot verify. Participant limit has reached')
-      }
-      const respose =  await campaignServices.verify_recipients(userInfo.secretKey, props.campaignId, acceptedNames);
-      if(respose === 'FAILED') throw error;
-      // toast.success('Successfully verified participants')
-      await fetchCampaignParticipate()
-      setVerifyLoader(false)
-      setVerifyConfirm(false)
-      setAcceptedNames([])
-      setData({
-        username: '',
-        recipientAddress: userInfo?.publicKey
-      })
-    } catch (error: any) {
-      console.log(error)
-      // toast.error(error.toString())
-      setVerifyLoader(false)
-      setVerifyConfirm(false)
-    }
+    // try {
+    //   setVerifyLoader(true)
+    //   if(acceptedNames.length === 0) {
+    //     toast.error('Please select participants to verify')
+    //     throw new Error ('Please select participants to verify')
+    //   }
+    //   if(isCampaignEnded) {
+    //     toast.error('Campaign has ended')
+    //     throw new Error ('Campaign has ended')
+    //   }
+    //   if(isParticipantFull()) {
+    //     toast.error('Cannot verify. Participant limit has reached')
+    //     throw new Error ('Cannot verify. Participant limit has reached')
+    //   }
+    //   const respose =  await campaignServices.verify_recipients(userInfo.secretKey, props.campaignId, acceptedNames);
+    //   if(respose === 'FAILED') throw error;
+    //   // toast.success('Successfully verified participants')
+    //   await fetchCampaignParticipate()
+    //   setVerifyLoader(false)
+    //   setVerifyConfirm(false)
+    //   setAcceptedNames([])
+    //   setData({
+    //     username: '',
+    //     recipientAddress: userInfo?.publicKey
+    //   })
+    // } catch (error: any) {
+    //   console.log(error)
+    //   // toast.error(error.toString())
+    //   setVerifyLoader(false)
+    //   setVerifyConfirm(false)
+    // }
     
   };
 
   const endCampaign = async () => {
-    try {
-      setShowLoader(true);
-      const response = await campaignServices.end_campaign(userInfo, props.campaignId)
-      if(response !== 'SUCCESS') throw error
-      // toast.success('Campaign Ended Successfully')
-      await getCampaignStatus();
+    // try {
+    //   setShowLoader(true);
+    //   const response = await campaignServices.end_campaign(userInfo, props.campaignId)
+    //   if(response !== 'SUCCESS') throw error
+    //   // toast.success('Campaign Ended Successfully')
+    //   await getCampaignStatus();
 
-      setShowLoader(false);
-      setEndCampaignConfirm(false);
-    } catch (error: any) {
-      console.log(error);
-      setEndCampaignConfirm(false);
-      setShowLoader(false);
-    }
+    //   setShowLoader(false);
+    //   setEndCampaignConfirm(false);
+    // } catch (error: any) {
+    //   console.log(error);
+    //   setEndCampaignConfirm(false);
+    //   setShowLoader(false);
+    // }
   }
 
   const getVerifiedParticipants = () => {
-    const verified = participantList.filter((item: any) => item.value)
-    return verified.length
+    // const verified = participantList.filter((item: any) => item.value)
+    // return verified.length
+    return null
   }
 
   const handleIncentive = async () => {
@@ -320,62 +307,63 @@ const CampaignDetail = (props: any) => {
   }
 
   const getUsername = () => {
-    const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
-    if(allJoinedCampaignInfo === '') return '';
-    const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
-    return currentCampaignInfo?.username
+    // const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
+    // if(allJoinedCampaignInfo === '') return '';
+    // const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
+    // return currentCampaignInfo?.username
+    return ''
   }
 
   const isParticipantFull = () => {
-    const isFull = getVerifiedParticipants() >= Number(campaignInfo?.no_of_recipients) 
-    console.log(isFull, ':isFull')
-    return isFull
+    // const isFull = getVerifiedParticipants() >= Number(campaignInfo?.no_of_recipients) 
+    // console.log(isFull, ':isFull')
+    return false
   }
 
   const generateQrCode = async () => {
-    try {
-      const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
-      const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
-      const staticData = {
-        type: 'campaign creator',
-        publicKey: userInfo.publicKey,
-        amount: (Number(campaignInfo?.amount)/Number(campaignInfo?.no_of_recipients)).toFixed(2),
-        proprietaryName: userInfo.proprietaryName,
-        phoneNumber: userInfo.phoneNumber,
-        storeName: userInfo.storeName,
-        location: userInfo.location,
-        campaignAddress: currentCampaignInfo?.campaignAddress ||  props.campaignId,
-        campaignName: campaignInfo?.name,
-        username: currentCampaignInfo?.username
-      };
-      const response = await QRCode.toDataURL(JSON.stringify(staticData));
-      setImageUrl(response);
-    } catch (error) {
-      // debugger;
-      console.log(error);
-    }
+    // try {
+    //   const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
+    //   const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
+    //   const staticData = {
+    //     type: 'campaign creator',
+    //     publicKey: userInfo.publicKey,
+    //     amount: (Number(campaignInfo?.amount)/Number(campaignInfo?.no_of_recipients)).toFixed(2),
+    //     proprietaryName: userInfo.proprietaryName,
+    //     phoneNumber: userInfo.phoneNumber,
+    //     storeName: userInfo.storeName,
+    //     location: userInfo.location,
+    //     campaignAddress: currentCampaignInfo?.campaignAddress ||  props.campaignId,
+    //     campaignName: campaignInfo?.name,
+    //     username: currentCampaignInfo?.username
+    //   };
+    //   const response = await QRCode.toDataURL(JSON.stringify(staticData));
+    //   setImageUrl(response);
+    // } catch (error) {
+    //   // debugger;
+    //   console.log(error);
+    // }
   };
 
-  useEffect(() => {
-    console.log(userInfo, ':user')
-    if(userInfo?.publicKey) {
-      if(participantList?.length > 0) {
-        const verified = participantList.filter((item: any) => item.value)
-        console.log(verified, ':all verified')
-        const isCurrentUserVerified = verified.find((item: any) => item.address === userInfo.publicKey)
-        console.log(isCurrentUserVerified, ':isVerified')
+  // useEffect(() => {
+  //   console.log(userInfo, ':user')
+  //   if(userInfo?.publicKey) {
+  //     if(participantList?.length > 0) {
+  //       const verified = participantList.filter((item: any) => item.value)
+  //       console.log(verified, ':all verified')
+  //       const isCurrentUserVerified = verified.find((item: any) => item.address === userInfo.publicKey)
+  //       console.log(isCurrentUserVerified, ':isVerified')
 
-        if(Boolean(isCurrentUserVerified)){
-          console.log('checking amount')
-          campaignServices.get_amount_received(userInfo, props.campaignId).then((response: any) => {
-            console.log(response, ':esponse')
-            setParticipantPaymentReceived(Number(response) > 0)
-          })
-        }
-      }
-    }
+  //       if(Boolean(isCurrentUserVerified)){
+  //         console.log('checking amount')
+  //         campaignServices.get_amount_received(userInfo, props.campaignId).then((response: any) => {
+  //           console.log(response, ':esponse')
+  //           setParticipantPaymentReceived(Number(response) > 0)
+  //         })
+  //       }
+  //     }
+  //   }
 
-  }, [userInfo, participantList])
+  // }, [userInfo, participantList])
 
   if(isDetailsFetching || loader) {
     return (
@@ -510,7 +498,7 @@ const CampaignDetail = (props: any) => {
                     </span>
                   </div>
                 </div>
-                {(currentParticipant?.value || isCampaignAdmin) && (
+                {/* {(currentParticipant?.value || isCampaignAdmin) && (
                   <div className="flex items-center gap-[6px]">
                     <CurrencyDollarIcon width={20} height={20} />
                     <div className="items-cente flex gap-[4px]">
@@ -521,7 +509,7 @@ const CampaignDetail = (props: any) => {
                     </div>
                 </div>
 
-                )}
+                )} */}
                 {(currentParticipant?.value || isCampaignAdmin) && (
                   <div className="flex gap-[6px]">
                     <MapIcon width={20} height={20} />

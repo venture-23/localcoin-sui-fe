@@ -4,9 +4,11 @@ import { cookies } from 'next/headers';
 import { ReactNode, Suspense } from 'react';
 import Providers from 'utils/provider';
 
+
 const { SITE_NAME } = process.env;
 // const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
 // const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
+import "@suiet/wallet-kit/style.css";
 import { AppleSplashScreen } from 'components/layout/splash-screen';
 import PinLockScreen from 'components/pin-lock-screen';
 import '../styles/index.scss';

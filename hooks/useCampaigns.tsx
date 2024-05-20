@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
-import { filterCampaigns, staticPubKey } from 'utils/constants';
+import { staticPubKey } from 'utils/constants';
 import { useMyContext } from './useMyContext';
 
 export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }: any) {
@@ -16,13 +16,14 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
+      console.log('Campaign fetch')
       const response = fetchAllCampaign
-        ? await campaignServices.getAllCampaigns(staticPubKey)
+        ? await campaignServices.getAllCampaigns()
         : await campaignServices.getCreatorCampaigns(userInfo?.secretKey, userInfo?.publicKey);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
-      const filteredResponse = response.filter((item : any) => !filterCampaigns.some(campaign => campaign.id === item.id));
-      return filteredResponse;
+      // const filteredResponse = response.filter((item : any) => !filterCampaigns.some(campaign => campaign.id === item.id));
+      return response;
     },
     onError: (error: any) => {
       console.log('campaign status error', JSON.stringify(error, null, 2));
@@ -91,7 +92,7 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
     retryDelay: 3000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      const response = await campaignServices.getCampaignInfo(staticPubKey, id);
+      const response = await campaignServices.getCampaignDetails(id);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
       return response;

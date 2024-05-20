@@ -1,3 +1,5 @@
+import { Chain } from "@suiet/wallet-kit";
+
 const serverUrl = 'https://soroban-testnet.stellar.org';
 
 const issuanceManagementContract = 'CD5IOTDZNKZJSEP3RKH5KJ57C4HMQB3CQKXBOTU4ZM5QJDEXEAZKVDCF';
@@ -8,13 +10,22 @@ const superAdminSecret = 'SB46364SGIGPEQOLRXL6RTVDP4X2HBIMSNPIG246GAQC7VHHGHBOEV
 const balanceContractId = 'CBAIOENSLLEKWFIUWPLJWA5E32AEB6ROJHTGUSZO4IVBPB6LQS2MLZKO';
 const staticPubKey = 'GBDUWRKIEX5WCXT2O3A62DV6AZNCTON5TVOIZQRLGU6DOI2NGX4MCAXG'; // for read only methods
 
+// SUI contracts
+const CAMPAIGN_PACKAGE_ID = '0xc2c0fd142f5322ae24141d406910d383662d6d38a4a77e94799d56e8966f4b08'
+const USDC_TREASURY='0x4372562a5444c4894082c1154cecc49e292df4ef2a2681fe9220bdd9adaae460'
+const USDC_FOR_CAMPAIGN='0xfcdc8c5352bf325d4a29143b09c6b3183526dc7338035bcf1b62c836f81692d2'
+const USDC_TYPE='0x219d80b1be5d586ff3bdbfeaf4d051ec721442c3a6498a3222773c6945a73d9f::usdc::USDC'
+const LC_TOKEN_CAMPAIGN_CREATOR='0x58331b0aae2ed453126453e402afde0aad976c25dc54a142ca5459d0dfda0f72'
+const LOCAL_COIN_APP='0x576f72b7bb0689b3553a2d0597c1b8a1e315f474a30c588eabf192a5b9f08942'
+const TOKEN_POLICY='0xdbaef9f48144e2ac085ef15b7a645fedada25e61a97768a7f29bcba5b0a808b1'
 
 
 
 export {
-  balanceContractId,
-  campaignContractId,
-  issuanceManagementContract,
+  CAMPAIGN_PACKAGE_ID, LOCAL_COIN_APP, TOKEN_POLICY, USDC_FOR_CAMPAIGN,
+  USDC_TREASURY,
+  USDC_TYPE, balanceContractId,
+  campaignContractId, issuanceManagementContract,
   localCoinAddress,
   serverUrl, staticPubKey, superAdminSecret,
   userRegistryContractId
@@ -77,6 +88,23 @@ export const coverImageMaps = {
   "GCECEU7T2PI6DAZ3PPY7OW4JBBTYNFCYQLWWEJXFWGJFKU6S75ZZM35W": '/merchant_4.png',
   "GAJJLIEOO5G3JGAD6T3A65M5NQSVMWYOLX4Y4AXY3V37JHWIFPC4PWLZ": "/merchant_5.jpg"
 }
+
+
+export const SuiDevnetChain: Chain = {
+  id: "sui:devnet",
+  name: "Sui Devnet",
+  rpcUrl: "https://fullnode.devnet.sui.io/",
+};
+export const SuiTestnetChain: Chain = {
+  id: "sui:testnet",
+  name: "Sui Testnet",
+  rpcUrl: "https://fullnode.testnet.sui.io/",
+};
+export const SuiMainnetChain: Chain = {
+  id: "sui:testnet",
+  name: "Sui Testnet",
+  rpcUrl: "https://rpc.mainnet.sui.io/",
+};
 
 
 /* 

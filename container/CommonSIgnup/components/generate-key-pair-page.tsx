@@ -1,8 +1,11 @@
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
-import Button from 'components/botton';
+import { ConnectButton, ErrorCode } from '@suiet/wallet-kit';
+
+
 import Link from 'next/link';
 
 const GenerateKeyPairPage = ({ handleGenerateKey }: any) => {
+
   return (
     <>
       <div className="generate-container bg-[#D5D5D5]">
@@ -17,16 +20,30 @@ const GenerateKeyPairPage = ({ handleGenerateKey }: any) => {
           {/* <div className="flex justify-center">
             <Image src={'/generateQR.png'} width={250} height={250} alt="genetate image" />
           </div> */}
-          <h1 className="mb-2 text-3xl font-[Inter] font-bold">Generate Keypair</h1>
+          <h1 className="mb-2 text-3xl font-[Inter] font-bold">Login With SUI Wallet</h1>
           <p className="max-w-sm font-normal text-base">
-          Clicking “Continue” will Generates a key pair associated with the stellar blockchain.
+          Clicking “Continue” will Generates a key pair associated with the sui blockchain.
           </p>
           </div>
 
           <div className="grid gap-4">
-          <div onClick={() => handleGenerateKey()}>
-            <Button text="Continue"/>
-          </div>
+          {/* <div onClick={() => setShowModal(true)}> */}
+          <ConnectButton
+              style={{ width: '100%' }}
+              
+              onConnectError={(error) => {
+                 if (error.code === ErrorCode.WALLET__CONNECT_ERROR__USER_REJECTED) {
+                   console.warn('user rejected the connection to ' + error.details?.wallet);
+                 } else {
+                   console.warn('unknown connect error: ', error);
+                 }
+            }}
+          >
+            Connect Wallet
+          </ConnectButton>
+            
+            {/* <Button text="Continue"/> */}
+          {/* </div> */}
           </div>
         </div>
       </div>
