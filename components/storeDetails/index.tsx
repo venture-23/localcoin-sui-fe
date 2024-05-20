@@ -13,7 +13,10 @@ import { coverImageMaps } from "utils/constants";
 const StoreDetails = () => {
     const router = useRouter()
     const params = useParams()
+    console.log(params,':param')
     const { storeInfo, isStoreFetching  } = useCamapigns({ storeId: params?.storeId, fetchAllCampaigns: false });
+
+    console.log(storeInfo, ':storeInfo')
 
 
     if(isStoreFetching) {

@@ -244,7 +244,7 @@ export const campaignServices = (() => {
     // });
   };
 
-  const getReceipientToken = (secretKey: string, publicKey: string) => {
+  const getReceipientToken = (publicKey: string) => {
     // return makeTransaction({
     //   parameterType: 'get_balance_of_batch',
     //   contractId: issuanceManagementContract,
@@ -342,22 +342,64 @@ export const campaignServices = (() => {
     // });
   };
 
-  const get_verified_merchants = (publicKey: any) => {
-    // return makeTransaction({
-    //   contractId: userRegistryContractId,
-    //   parameterType: 'get_verified_merchants',
-    //   publicKey
-    // });
+  const get_verified_merchants = async () => {
+    try {
+      const txn = await client.getDynamicFields({
+        parentId: "0x9a7fef60fa51b2d95114584c5f7085a7060702e212011e96146082abf471f910"
+    });
+    const result = txn.data;
+
+    const objectIds = result.map(item => item.objectId);
+    let merchantDetails;
+    const merchants = []
+    console.log(objectIds, ':objects')
+    for(const object of objectIds) {
+      const response = await client.getObject({
+        id: object,
+        options : {
+          showContent: true
+        }
+      })
+      const data = response.data
+      const res = data?.content
+
+      merchantDetails = (res as any)?.fields;
+      console.log(res, ':merchant')
+      if(merchantDetails.verified_status === true) {
+        merchants.push({
+          store_id: merchantDetails?.id?.id,
+          merchant_address: merchantDetails.merchant_addr,
+          location: merchantDetails.location,
+          store_name: merchantDetails.store_name,
+          proprietor: merchantDetails.proprietor,
+          phone_no: merchantDetails.phone_no,
+          
+      });
+      }
+
+      
+
+
+      console.log(merchants, ':resOb')
+
+      // campaignDetails = res?.
+    }
+    return merchants
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   };
 
-  const get_merchant_info = (publicKey: any, merchantAddress: string) => {
-    console.log({ merchantAddress });
-    // return makeTransaction({
-    //   contractId: userRegistryContractId, //token_contract_id
-    //   parameterType: 'get_merchant_info',
-    //   publicKey,
-    //   payload: [accountToScVal(merchantAddress)]
-    // });
+  const get_merchant_info = async (storeId: string) => {
+    try {
+      const allMercInfo = await get_verified_merchants()
+      const mercInfo = allMercInfo?.find((merc) => merc?.store_id === storeId)
+      return mercInfo
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   };
 
   const request_campaign_settlement = (
