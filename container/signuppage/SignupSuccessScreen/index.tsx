@@ -1,75 +1,56 @@
-import Button from "components/botton"
-import useHandleCopy from "hooks/useCopyText"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { maskWalletAddress } from "utils/clipper"
+import Button from 'components/botton';
+import useHandleCopy from 'hooks/useCopyText';
+import Image from 'next/image';
+import { maskWalletAddress } from 'utils/clipper';
 
 interface ISignupSuccessProps {
-  publicKey: string
-  secretKey: string
-  handleSignUp:() => void
+  // publicKey: string;
+  // secretKey: string;
+  handleSignUp: () => void;
+  address: string;
 }
 
-const SignUpSuccess = ({ publicKey, secretKey, handleSignUp }: ISignupSuccessProps) => {
-  const [isCopied, handleCopy] = useHandleCopy({ showToast: true });
-  const router = useRouter()
+const SignUpSuccess = ({ handleSignUp, address }: ISignupSuccessProps) => {
+  const [, handleCopy] = useHandleCopy({ showToast: true });
+  // const router = useRouter()
 
   const copyKeys = () => {
-    const stringToCopy = JSON.stringify({
-      publicKey,
-      secretKey
-    })
-    handleCopy(stringToCopy)
-  }
+    // const stringToCopy = JSON.stringify({
+    //   publicKey,
+    //   secretKey
+    // });
+    handleCopy(address);
+  };
 
-  const signUp = () => {
-    router.push("/")
-  }
+  // const signUp = () => {
+  //   router.push("/")
+  // }
   return (
-    <section className="w-full relative bg-[#1653AE] h-[100vh]">
-            <div className="success-vector-1">
-                <Image 
-                    src={'/successScreenVector1.png'}
-                    height={120}
-                    width={120}
-                    alt="z"
-                />
+    <section className="relative h-[100vh] w-full bg-[#1653AE]">
+      <div className="success-vector-1">
+        <Image src={'/successScreenVector1.png'} height={120} width={120} alt="z" />
+      </div>
+      <div className="success-vector-2">
+        <Image src={'/successScreenVector2.png'} height={120} width={120} alt="z" />
+      </div>
+      <div className="container mx-auto h-[100%]">
+        <div className="flex h-[100%] flex-col justify-between">
+          <div className="mt-[100px] flex flex-col items-center gap-[12px]">
+            <div>
+              <Image src={'/localCoinLogo.png'} height={83} width={83} alt="Local Coin" />
             </div>
-            <div className="success-vector-2">
-                <Image 
-                    src={'/successScreenVector2.png'}
-                    height={120}
-                    width={120}
-                    alt="z"
-                />
+            <h3 className="text-2xl font-semibold text-[#fff]">Congratulations !</h3>
+            <div className="text-center text-base font-medium text-[#fff]">
+              You have successfully logged in.
             </div>
-            <div className="h-[100%] container mx-auto">
-                <div className="h-[100%] flex flex-col justify-between">
-                    <div className="flex flex-col mt-[100px] gap-[12px] items-center">
-                        <div>
-                            <Image 
-                                src={'/localCoinLogo.png'}
-                                height={83}
-                                width={83}
-                                alt="Local Coin"
-                            />
-                        </div>
-                        <h3 className="text-2xl font-semibold text-[#fff]">
-                            Congratulations !
-                        </h3>
-                        <div className="text-base font-medium text-[#fff] text-center">
-                          You have successfully logged in.
-                        </div>
-                        <div className=" w-full px-[12px] border rounded-[6px] border-[#E4E4E7] bg-white">
-                          <div className="flex items-center justify-between py-[15px]  border-b-zinc-200 border-b border-solid">
-                            <div className="text-base font-extrabold color-[#222]">
-                              Public Key:
-                            </div>
-                            <div className="text-base font-medium color-[#222]">
-                              {maskWalletAddress(publicKey)}
-                            </div>
-                          </div>
-                          {/* <div className="flex py-[15px] items-center justify-between">
+            <div className=" w-full rounded-[6px] border border-[#E4E4E7] bg-white px-[12px]">
+              <div className="flex items-center justify-between border-b  border-solid border-b-zinc-200 py-[15px]">
+                <div className="color-[#222] text-base font-extrabold">Public Key:</div>
+                <div className="color-[#222] text-base font-medium">
+                  {maskWalletAddress(address)}
+                </div>
+              </div>
+              {/* <div className="flex py-[15px] items-center justify-between">
                             <div className="text-base font-extrabold color-[#222]">
                                 Secret Key:
                               </div>
@@ -77,16 +58,16 @@ const SignUpSuccess = ({ publicKey, secretKey, handleSignUp }: ISignupSuccessPro
                                 {maskWalletAddress(secretKey)}
                               </div>
                             </div> */}
-                        </div>
-                    </div>
-                    <div className="mx-auto flex flex-col w-full gap-[12px] mb-[10px]">
-                        <Button handleClick={copyKeys} buttonType={'white'} text="Copy Keys" />
-                        <Button link="/" buttonType={'secondary'} text="Start Earning" />
-                    </div>
-                </div>
             </div>
-        </section>
-  )
-}
+          </div>
+          <div className="mx-auto mb-[10px] flex w-full flex-col gap-[12px]">
+            <Button handleClick={copyKeys} buttonType={'white'} text="Copy Keys" />
+            <Button handleClick={handleSignUp} buttonType={'secondary'} text="Start Earning" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-export default SignUpSuccess
+export default SignUpSuccess;

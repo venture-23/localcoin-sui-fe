@@ -1,9 +1,10 @@
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
+import SignUpSuccess from 'container/signuppage/SignupSuccessScreen';
 import { useGetBalance, useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { maskWalletAddress } from 'utils/clipper';
 interface PageHeaderProps {
@@ -19,10 +20,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 }) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const { userInfo, setShowPinScreen } = useMyContext();
-  const { isLoggedIn, login, logOut, userDetails } = useLogin();
+  const { isLoggedIn, login, logOut, userDetails, showSuccessScreen, setShowSuccessScreen } =
+    useLogin();
   const { userBalance } = useGetBalance();
 
-  console.log('ZKLogin User', userDetails);
+  useEffect(() => {
+    if (!userDetails.salt) return;
+    console.log('ZKLogin User', userDetails);
+  }, [userDetails.salt]);
 
   // const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
 
@@ -32,6 +37,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       toast.info('Address copied');
     }
   };
+
   return (
     <>
       <div className="mb-[10px] flex w-full items-center justify-between pt-[10px]">
@@ -61,6 +67,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           <UserCircleIcon />
         </div>
 
+        <div className={['mobile-menu pt-[10px]', showSuccessScreen && 'open'].join(' ')}>
+          <SignUpSuccess
+            handleSignUp={() => setShowSuccessScreen((prev) => !prev)}
+            address={userDetails.address}
+          />
+        </div>
         <div className={['mobile-menu pt-[10px]', openMenu && 'open'].join(' ')}>
           <div
             onClick={() => setOpenMenu(false)}

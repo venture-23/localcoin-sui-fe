@@ -8,8 +8,10 @@ const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
 interface LoginContextType {
   isLoggedIn: boolean;
   userDetails: UserDetails;
+  showSuccessScreen: boolean;
   login: () => void;
   logOut: () => void;
+  setShowSuccessScreen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const LoginContext = createContext<LoginContextType | undefined>(undefined);
@@ -36,6 +38,7 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
   useAuthCallback();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showSuccessScreen, setShowSuccessScreen] = useState<boolean>(false);
   const [userDetails, setUserDetails] = useState<UserDetails>(InitUserDetails);
 
   const login = async () => {
@@ -65,6 +68,7 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
         address: zkLogin.address
       });
       setIsLoggedIn(true);
+      setShowSuccessScreen(true);
     }
   }, [zkLogin.address]);
 
@@ -81,8 +85,10 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
   const contextValue: LoginContextType = {
     isLoggedIn,
     userDetails,
+    showSuccessScreen,
     login,
-    logOut
+    logOut,
+    setShowSuccessScreen
   };
 
   return <LoginContext.Provider value={contextValue}>{children}</LoginContext.Provider>;
