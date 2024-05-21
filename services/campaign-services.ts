@@ -126,12 +126,86 @@ export const campaignServices = (() => {
 
   const getReceipientToken = async (address: string) => {
     try {
-      const txn = await client.getBalance({
+      console.log(address, ':address')
+      const txn = await client.getOwnedObjects({
         owner: address,
-        coinType: `0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e::local_coin::LOCAL_COIN`
       })
-      console.log(txn, ':balanceOb')
-      return txn.totalBalance
+      const data = txn.data
+
+      const obId = ''
+      let balance = 0
+
+      const objectIds = data.map(item => item.data?.objectId ?? null)
+      for (const objectId of objectIds) {
+        const txn2 = await client.getObject({
+          id: `${objectId}`,
+          options: {
+            showContent: true
+          }
+        })
+        console.log(txn2, ':balanceObLo')
+        const content = txn2.data?.content;
+        console.log(content)
+        const type = content?.type;
+        if(type === "0x2::token::Token<0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e::local_coin::LOCAL_COIN>") {
+          balance += Number(content?.fields?.balance)
+        }
+
+      }
+      console.log(balance)
+      if(balance === 0) {
+        return balance
+      } else {
+        return balance / Math.pow(10, 6)
+      }
+      
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+    // try {
+    //   const txn = await client.getBalance({
+    //     owner: address,
+    //     coinType: `0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e::local_coin::LOCAL_COIN`
+    //   })
+    //   console.log(txn, ':balanceOb')
+    //   // return txn.totalBalance
+    //   return 0
+    // } catch (error) {
+    //   console.log(error)
+    //   throw error
+    // }
+  };
+
+  const getTokenObj = async (address: string) => {
+    try {
+      console.log(address, ':address')
+      const txn = await client.getOwnedObjects({
+        owner: address,
+      })
+      const data = txn.data
+
+      let obId = ''
+
+      const objectIds = data.map(item => item.data?.objectId ?? null)
+      for (const objectId of objectIds) {
+        const txn2 = await client.getObject({
+          id: `${objectId}`,
+          options: {
+            showContent: true
+          }
+        })
+        const content = txn2.data?.content;
+        console.log(content)
+        const type = content?.type;
+        if(type === "0x2::token::Token<0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e::local_coin::LOCAL_COIN>") {
+          obId = objectId as string
+          break;
+        }
+
+      }
+      console.log(obId)
+      return obId
     } catch (error) {
       console.log(error)
       throw error
@@ -449,7 +523,8 @@ export const campaignServices = (() => {
     end_campaign,
     is_ended,
     get_amount_received,
-    getCampaignDetails
+    getCampaignDetails,
+    getTokenObj
   };
 })();
 

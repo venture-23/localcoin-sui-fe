@@ -2,6 +2,8 @@
 
 import { ChevronLeftIcon } from "@heroicons/react/16/solid";
 import { BackspaceIcon } from "@heroicons/react/24/outline";
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { useWallet } from "@suiet/wallet-kit";
 import Button from "components/botton";
 import { ConfirmationScreen } from "components/confirmationScreen";
 import DrawerQrScan from "components/drawer-qr-scan";
@@ -13,6 +15,7 @@ import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { campaignServices } from "services/campaign-services";
+import { TOKEN_POLICY } from "utils/constants";
 import RecipientConfirmation from "./RecipientConfirmation";
 
 interface IScannedDataProps {
@@ -59,6 +62,8 @@ const RequestPay = () => {
     const [creatorPaymentSuccess, setCreatorPaymentSuccess] = useState(false);
     const [merchantPaymentSuccess, setMerchantPaymentSuccess] = useState(false);
     const [storeName, setStoreName] = useState('')
+    const { signAndExecuteTransactionBlock } = useWallet()
+
 
     const {  merchant_associated } = useMerchant(
         {
@@ -74,6 +79,7 @@ const RequestPay = () => {
 
 
     const { merchantList } = useCamapigns({ fetchAllCampaign: true});
+    console.log(merchantList, ':merchant1')
 
     console.log(isSendToMerchantSucc, ':isSend')
 
@@ -161,7 +167,7 @@ const RequestPay = () => {
     }
 
     const handlePaymentRequest = async () => {
-        const merchant = merchantList?.find(item => item.merchantAddress === userInfo?.publicKey)
+        const merchant = merchantList?.find(item => item?.merchant_address === userInfo?.publicKey)
         if(!merchant || Object.keys(merchant).length === 0) {
           toast.error('You are not a verified mechant.')
           return;
@@ -192,29 +198,93 @@ const RequestPay = () => {
         }
       };
 
+      const sendTokenToRecipient = async () => {
+        try {
+          const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+          const tx = new TransactionBlock()
+          const amount = +formattedScannedData?.amount * Math.pow(10, 6)
+          const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
+          console.log(amount, ':forAmt')
+          tx.moveCall({
+            target: `${pkId}::local_coin::transfer_token_to_recipients`,
+            arguments: [
+                tx.pure.u64(amount),
+                // address of recipients
+                tx.pure.address(formattedScannedData?.publicKey as string),
+                // local coin token
+                tx.object(localCoinObj),
+                tx.object(TOKEN_POLICY)
+            ],
+          })
+          const result = await signAndExecuteTransactionBlock({
+            transactionBlock: tx
+          })
+
+          if(result?.digest) {
+            return result
+          } else throw new Error('Transaction Failed')
+        } catch (error) {
+          console.log(error)
+          throw error
+        }
+      }
+      const sendTokenToMerchant = async () => {
+        try {
+          const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+          const tx = new TransactionBlock()
+          const amount = +formattedScannedData?.amount * Math.pow(10, 6)
+          const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
+          console.log(amount, ':forAmt')
+          tx.moveCall({
+            target: `${pkId}::local_coin::transfer_token_to_merchants`,
+            arguments: [
+                tx.pure.address(formattedScannedData?.publicKey as string),
+                tx.object(localCoinObj),
+                tx.object(TOKEN_POLICY)
+                
+            ],
+          })
+          const result = await signAndExecuteTransactionBlock({
+            transactionBlock: tx
+          })
+
+          if(result?.digest) {
+            return result
+          } else throw new Error('Transaction Failed')
+        } catch (error) {
+          console.log(error)
+          throw error
+        }
+      }
+
       const handleSendToken = async () => {
         try {
           setPaymentSuccessLoader(true)
             if(formattedScannedData?.type === 'campaign creator') {
-                await campaignServices.transfer_tokens_to_recipient(
-                  userInfo?.secretKey, 
-                  formattedScannedData?.publicKey as string, 
-                  formattedScannedData?.amount as number, 
-                  formattedScannedData?.campaignAddress as string
-                );
+                // await campaignServices.transfer_tokens_to_recipient(
+                //   userInfo?.secretKey, 
+                //   formattedScannedData?.publicKey as string, 
+                //   formattedScannedData?.amount as number, 
+                //   formattedScannedData?.campaignAddress as string
+                // );
+                const paymentTx = await sendTokenToRecipient()
+                if(!paymentTx?.digest) throw 'Failed Transferring Funds'
                 toast.success('Amount transferred to participant')
                 setPaymentSuccessLoader(false)
                 setCreatorPaymentSuccess(true)
             } else {
                 // sendTokenToMerchant()
-                await campaignServices.transfer_tokens_from_recipient_to_merchant(
-                  userInfo.secretKey,
-                  formattedScannedData?.amount as number,
-                  data?.tokenAddress,
-                  data?.merchantAddress,
-                  userInfo.publicKey
-                );
-                // toast.success('Amount transferred to merchant')
+                // await campaignServices.transfer_tokens_from_recipient_to_merchant(
+                //   userInfo.secretKey,
+                //   formattedScannedData?.amount as number,
+                //   data?.tokenAddress,
+                //   data?.merchantAddress,
+                //   userInfo.publicKey
+                // );
+                
+                const paymentTx = await sendTokenToMerchant()
+                if(!paymentTx?.digest) throw 'Failed Transferring Funds'
+                toast.success('Amount transferred to merchant')
                 setPaymentSuccessLoader(false)
                 setMerchantPaymentSuccess(true)
             }
@@ -224,7 +294,7 @@ const RequestPay = () => {
             setData({});
         } catch (error: any) {
             console.log(error)
-            // toast.error('Error: Failed transferring the funds')
+            toast.error('Error: Failed transferring the funds')
             setPaymentSuccessLoader(false)
         }
       }
