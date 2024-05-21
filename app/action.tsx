@@ -32,4 +32,19 @@ async function getCookiedata() {
   }
 }
 
-export { getCookiedata, setCookieData };
+async function deleteCookieData() {
+  try {
+    cookies().set({
+      name: 'local-coin',
+      value: '',
+      httpOnly: true,
+      path: '/',
+      expires: new Date(0) // Setting expiration date to a past date to delete the cookie
+    });
+  } catch (error) {
+    throw new Error();
+  }
+}
+
+export { deleteCookieData, getCookiedata, setCookieData };
+

@@ -3,6 +3,7 @@ import { useWallet } from '@suiet/wallet-kit';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
+import { campaignServices } from 'services/campaign-services';
 import { useMyContext } from './useMyContext';
 
 export function useGetBalance() {
@@ -18,11 +19,11 @@ const { signAndExecuteTransactionBlock } = useWallet();
     retryDelay: 3000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      // console.log(userInfo, ':info')
-      // const response = await campaignServices.getReceipientToken(userInfo.publicKey);
-      // if (response?.error) throw new Error(response.error || 'Something went wrong');
-      // console.log({ response,  }, ':token');
-      const response = { data: 0 }
+      console.log(userInfo, ':info')
+      const response = await campaignServices.getReceipientToken(userInfo.publicKey);
+      if (response?.error) throw new Error(response.error || 'Something went wrong');
+      console.log({ response,  }, ':token');
+      // const response = { data: 0 }
       return response;
 
     },
@@ -42,10 +43,10 @@ const { signAndExecuteTransactionBlock } = useWallet();
     refetchOnWindowFocus: false,
     queryFn: async () => {
       console.log(userInfo, ':info')
-      // const response = await campaignServices.get_user_balance(userInfo);
-      // if (response?.error) throw new Error(response.error || 'Something went wrong');
-      // console.log({ response,  });
-      const response = { data: 0 }
+      const response = await campaignServices.get_user_balance(userInfo?.publicKey);
+      if (response?.error) throw new Error(response.error || 'Something went wrong');
+      console.log({ response,  });
+      
       return response;
     },
     onError: (error: any) => {
@@ -61,7 +62,7 @@ const { signAndExecuteTransactionBlock } = useWallet();
   }, [userBalanceResponse.data]);
 
   const { userUsdcBalance } = useMemo(() => {
-    const userUsdcBalance = userUsdcBalanceResponse.data;
+    const userUsdcBalance = Number(userUsdcBalanceResponse.data) / Math.pow(10, 6) ;
     return { userUsdcBalance };
   }, [userUsdcBalanceResponse.data]);
 

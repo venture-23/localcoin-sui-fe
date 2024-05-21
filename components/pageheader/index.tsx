@@ -1,5 +1,7 @@
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
+import { useWallet } from '@suiet/wallet-kit';
+import { deleteCookieData } from 'app/action';
 import { useGetBalance } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
@@ -18,8 +20,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   isVerifiedMerchant
 }) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
-  const { userInfo, setShowPinScreen } = useMyContext();
+  const { userInfo, setShowPinScreen, setUserInfo } = useMyContext();
   const { userBalance } = useGetBalance();
+  const { disconnect } = useWallet()
 
   // const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
 
@@ -29,6 +32,20 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       toast.info('Address copied');
     }
   };
+
+  const logout = async () => {
+    localStorage.removeItem('local-coin')
+    await deleteCookieData()
+    disconnect()
+    setUserInfo({
+      storeName: '',
+      proprietaryName: '',
+      phoneNumber: '',
+      location: ''
+    })
+    toast.info('Wallet Disconnected')
+    setOpenMenu(false)
+  }
   return (
     <>
       <div className="mb-[10px] flex w-full items-center justify-between pt-[10px]">
@@ -80,7 +97,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                 <p className="mt-[16px] pb-[18px] text-base font-semibold">
                   {userInfo?.publicKey
                     ? `${
-                        userBalance?.length > 0 ? Number(userBalance[0].amount).toString() : 0
+                        userBalance ?? 0
                       } Local Coin Tokens`
                     : 'Earned coins today'}
                 </p>
@@ -131,8 +148,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                 )}
                 {!!userInfo?.publicKey && (
                   <div
-                    className="flex items-center justify-center gap-[6px]"
-                    onClick={() => setShowPinScreen(true)}
+                    className="flex cursor-pointer items-center justify-center gap-[6px]"
+                    onClick={logout}
                   >
                     Sign out
                   </div>
