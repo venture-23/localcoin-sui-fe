@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { campaignServices } from "services/campaign-services";
-import { TOKEN_POLICY, USDC_TREASURY, USDC_TYPE } from "utils/constants";
+import { PACKAGE_ID, TOKEN_POLICY, USDC_TREASURY, USDC_TYPE } from "utils/constants";
 
 const Withdraw = () => {
     const { userBalance } = useGetBalance()
@@ -24,9 +24,14 @@ const Withdraw = () => {
 
     const requestSettlement = async () => {
       try {
-        const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+        const pkId = PACKAGE_ID
         const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
         const tx = new TransactionBlock()
+        console.log({
+          USDC_TREASURY,
+          localCoinObj,
+          TOKEN_POLICY
+        })
         tx.moveCall({
           target: `${pkId}::campaign_management::request_settlement`,
           arguments : [

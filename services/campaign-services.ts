@@ -1,5 +1,5 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
-import { USDC_TYPE } from "utils/constants";
+import { CAMPAIGN_PACKAGE_ID, MERCHANT_REGISTRY, PACKAGE_ID, USDC_TYPE } from "utils/constants";
 
 var StellarSdk = require('stellar-sdk');
 
@@ -36,7 +36,7 @@ export const campaignServices = (() => {
   const getAllCampaigns = async () => {
     try {
       const txn = await client.getDynamicFields({
-        parentId: "0xc2c0fd142f5322ae24141d406910d383662d6d38a4a77e94799d56e8966f4b08"
+        parentId: CAMPAIGN_PACKAGE_ID
     });
     const result = txn.data;
 
@@ -147,7 +147,7 @@ export const campaignServices = (() => {
         const content = txn2.data?.content;
         console.log(content)
         const type = content?.type;
-        if(type === "0x2::token::Token<0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e::local_coin::LOCAL_COIN>") {
+        if(type === `0x2::token::Token<${PACKAGE_ID}::local_coin::LOCAL_COIN>`) {
           balance += Number(content?.fields?.balance)
         }
 
@@ -166,7 +166,7 @@ export const campaignServices = (() => {
     // try {
     //   const txn = await client.getBalance({
     //     owner: address,
-    //     coinType: `0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e::local_coin::LOCAL_COIN`
+    //     coinType: `PACKAGE_ID::local_coin::LOCAL_COIN`
     //   })
     //   console.log(txn, ':balanceOb')
     //   // return txn.totalBalance
@@ -198,7 +198,7 @@ export const campaignServices = (() => {
         const content = txn2.data?.content;
         console.log(content)
         const type = content?.type;
-        if(type === "0x2::token::Token<0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e::local_coin::LOCAL_COIN>") {
+        if(type === `0x2::token::Token<${PACKAGE_ID}::local_coin::LOCAL_COIN>`) {
           obId = objectId as string
           break;
         }
@@ -304,7 +304,7 @@ export const campaignServices = (() => {
   const get_verified_merchants = async () => {
     try {
       const txn = await client.getDynamicFields({
-        parentId: "0x9a7fef60fa51b2d95114584c5f7085a7060702e212011e96146082abf471f910"
+        parentId: MERCHANT_REGISTRY
     });
     const result = txn.data;
 
@@ -409,7 +409,7 @@ export const campaignServices = (() => {
     try {
       console.log(objId, ':obj')
       const txn = await client.getDynamicFields({
-        parentId: "0xc2c0fd142f5322ae24141d406910d383662d6d38a4a77e94799d56e8966f4b08"
+        parentId: CAMPAIGN_PACKAGE_ID
     });
     const result = txn.data;
 

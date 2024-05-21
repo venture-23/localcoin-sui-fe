@@ -16,7 +16,7 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import { maskWalletAddress } from 'utils/clipper';
-import { CAMPAIGN_PACKAGE_ID, LOCAL_COIN_APP, TOKEN_POLICY } from 'utils/constants';
+import { CAMPAIGN_PACKAGE_ID, LOCAL_COIN_APP, PACKAGE_ID, TOKEN_POLICY } from 'utils/constants';
 
 
 interface IPaticipant {
@@ -185,7 +185,7 @@ const CampaignDetail = (props: any) => {
   const joinCampaign = async () => {
     try {
       setShowLoader(true);
-      const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+      const pkId = PACKAGE_ID
       const tx = new TransactionBlock()
       tx.moveCall({
         target: `${pkId}::campaign_management::join_campaign`,
@@ -260,7 +260,7 @@ const CampaignDetail = (props: any) => {
 
   const verifyRecipients = async () => {
     try {
-      const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+      const pkId = PACKAGE_ID
       const tx = new TransactionBlock()
       tx.moveCall({
         target: `${pkId}::campaign_management::verify_recipients`,

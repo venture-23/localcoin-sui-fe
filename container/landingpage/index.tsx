@@ -75,7 +75,7 @@ const LandingPage = () => {
       const verifiedMer = merchantList?.find(item => item?.merchant_address === userInfo?.publicKey)
       setIsVerifiedMerchant(Boolean(verifiedMer))
     }
-  }, [userInfo]);
+  }, [userInfo.publicKey]);
 
   console.log(userUsdcBalance, 'usdc');
 
@@ -127,7 +127,7 @@ const LandingPage = () => {
                 
               </div>
             </div>
-            {isVerifiedMerchant && (
+            {userInfo?.publicKey && isVerifiedMerchant && (
               <div className="self-end">
                 <Link href={'/withdraw'}>
                   <button className="cursor-pointer rounded-[6px] bg-[#1653AE] px-[18px] py-[5px] text-[12px] font-medium text-[#FFf]">

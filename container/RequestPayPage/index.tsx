@@ -15,7 +15,7 @@ import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { campaignServices } from "services/campaign-services";
-import { TOKEN_POLICY } from "utils/constants";
+import { PACKAGE_ID, TOKEN_POLICY } from "utils/constants";
 import RecipientConfirmation from "./RecipientConfirmation";
 
 interface IScannedDataProps {
@@ -200,7 +200,7 @@ const RequestPay = () => {
 
       const sendTokenToRecipient = async () => {
         try {
-          const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+          const pkId = PACKAGE_ID
           const tx = new TransactionBlock()
           const amount = +formattedScannedData?.amount * Math.pow(10, 6)
           const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
@@ -230,7 +230,7 @@ const RequestPay = () => {
       }
       const sendTokenToMerchant = async () => {
         try {
-          const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+          const pkId = PACKAGE_ID
           const tx = new TransactionBlock()
           const amount = +formattedScannedData?.amount * Math.pow(10, 6)
           const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
