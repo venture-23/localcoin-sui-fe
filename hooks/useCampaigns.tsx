@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
-import { staticPubKey } from 'utils/constants';
 import { useMyContext } from './useMyContext';
 
 export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }: any) {
@@ -39,24 +38,30 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
     refetchOnWindowFocus: false,
     retryDelay: 3000,
     queryFn: async () => {
-      const merResponse = await campaignServices.get_verified_merchants(staticPubKey);
-
-      const response = [];
-
-      for (const merchantAddr of merResponse) {
-        const infoRes = await campaignServices.get_merchant_info(staticPubKey, merchantAddr);
-        infoRes.merchantAddress = merchantAddr;
-        response.push(infoRes);
-      }
-      // const response = await campaignServices.get_merchant_info(userInfo.secretKey, merResponse[0])
-
-      console.log(response, ':stores');
-      const newRes = [...response]
-      const thirdRes = newRes.splice(2,1)[0]
-      newRes.unshift(thirdRes)
+      const response = await campaignServices.get_verified_merchants()
+      console.log({ response });
       if (response?.error) throw new Error(response.error || 'Something went wrong');
-      console.log({ response, newRes });
-      return newRes;
+      
+      // const filteredResponse = response.filter((item : any) => !filterCampaigns.some(campaign => campaign.id === item.id));
+      return response;
+      // const merResponse = await campaignServices.get_verified_merchants(staticPubKey);
+
+      // const response = [];
+
+      // for (const merchantAddr of merResponse) {
+      //   const infoRes = await campaignServices.get_merchant_info(staticPubKey, merchantAddr);
+      //   infoRes.merchantAddress = merchantAddr;
+      //   response.push(infoRes);
+      // }
+      // // const response = await campaignServices.get_merchant_info(userInfo.secretKey, merResponse[0])
+
+      // console.log(response, ':stores');
+      // const newRes = [...response]
+      // const thirdRes = newRes.splice(2,1)[0]
+      // newRes.unshift(thirdRes)
+      // if (response?.error) throw new Error(response.error || 'Something went wrong');
+      // console.log({ response, newRes });
+      // return newRes;
     },
     onError: (error: any) => {
       console.log('campaign status error', JSON.stringify(error, null, 2));
@@ -73,7 +78,7 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
     refetchOnWindowFocus: false,
     queryFn: async () => {
       console.log(storeId, 'storeId');
-      const response = await campaignServices.get_merchant_info(staticPubKey, storeId);
+      const response = await campaignServices.get_merchant_info(storeId);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
       return response;

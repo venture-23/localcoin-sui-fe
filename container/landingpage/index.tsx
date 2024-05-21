@@ -90,7 +90,7 @@ const LandingPage = () => {
       <section className="">
         <div className="landing-top mb-[24px]">
           <PageHeader isVerifiedMerchant={isVerifiedMerchant} />
-          {Number(userUsdcBalance) !== 0 && userUsdcBalance !== undefined && (
+          {Number(userUsdcBalance) !== 0 && userUsdcBalance !== undefined && !Number.isNaN(userUsdcBalance) && (
             <div className="mb-[4px]">
               <h6 className="text-sm font-semibold text-[#1384F5]">USDC Coins</h6>
               <div className="text-[16px] font-semibold">
@@ -105,7 +105,7 @@ const LandingPage = () => {
                     wrapperStyle={{}}
                     wrapperClass=""
                   />
-                ) : (userUsdcBalance ? Number(userUsdcBalance).toFixed(0).toString() : 0)}
+                ) : (userUsdcBalance ?? 0)}
                 
               </div>
             </div>
@@ -126,7 +126,7 @@ const LandingPage = () => {
                     wrapperStyle={{}}
                     wrapperClass=""
                   />
-                ) : (userBalance?.length > 0 ? Number(userBalance[0].amount).toString() : 0)}
+                ) : (userBalance ?? 0)}
                 
               </div>
             </div>

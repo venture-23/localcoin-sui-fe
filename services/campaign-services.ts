@@ -1,4 +1,5 @@
 import { SuiClient, getFullnodeUrl } from "@mysten/sui.js/client";
+import { USDC_TYPE } from "utils/constants";
 
 var StellarSdk = require('stellar-sdk');
 
@@ -21,124 +22,7 @@ export const campaignServices = (() => {
   const numberToU32 = (value: number) => new StellarSdk.nativeToScVal(value, { type: 'u32' });
   const StringToScVal = (value: string) => new StellarSdk.nativeToScVal(value, { type: 'string' });
 
-  // const { signAndExecuteTransactionBlock } = useWallet()
-  // // use getFullnodeUrl to define Devnet RPC location
-  // const rpcUrl = getFullnodeUrl('testnet');
-  
-  // // create a client connected to devnet
-  // const client = new SuiClient({ url: rpcUrl });
 
-  // const makeTransaction = async ({
-  //   secretKey,
-  //   publicKey,
-  //   parameterType,
-  //   payload = '',
-  //   contractId = campaignContractId
-  // }: any) => {
-  //   try {
-  //     let sourcePublicKey: string = '';
-  //     let sourceKeypair: any = '';
-  //     if (secretKey) {
-  //       sourceKeypair = StellarSdk.Keypair.fromSecret(secretKey);
-  //       sourcePublicKey = sourceKeypair.publicKey();
-  //     } else {
-  //       sourcePublicKey = publicKey;
-  //     }
-  //     const server = new StellarSdk.SorobanRpc.Server(serverUrl, {
-  //       allowHttp: true
-  //     });
-  //     const account = await server.getAccount(sourcePublicKey);
-
-  //     const contract = new StellarSdk.Contract(contractId);
-  //     const fee = 1000000;
-  //     let transaction = new StellarSdk.TransactionBuilder(account, {
-  //       fee,
-  //       networkPassphrase: StellarSdk.Networks.TESTNET
-  //     })
-  //       .addOperation(contract.call(parameterType, ...((payload && payload) || [])))
-  //       .setTimeout(30)
-  //       .build();
-  //     if (
-  //       ![
-  //         'create_campaign',
-  //         'transfer_tokens_to_recipient',
-  //         'recipient_to_merchant_transfer',
-  //         'merchant_registration',
-  //         'verify_merchant',
-  //         'request_campaign_settlement',
-  //         'join_campaign',
-  //         'verify_recipients',
-  //         'end_campaign'
-  //       ].includes(parameterType)
-  //     ) {
-  //       return server.simulateTransaction(transaction).then((sim: any) => {
-  //         console.log({ sim: sim.result?.retval, parameterType });
-  //         return decoderHelper(parameterType, { returnValue: sim.result?.retval });
-  //       });
-  //     } else {
-  //       transaction = await server.prepareTransaction(transaction);
-  //       transaction.sign(sourceKeypair);
-  //       const response = await server.sendTransaction(transaction);
-  //       const SendTxStatus = {
-  //         Pending: 'PENDING',
-  //         Duplicate: 'DUPLICATE',
-  //         Retry: 'TRY_AGAIN_LATER',
-  //         Error: 'ERROR'
-  //       };
-  //       if (response.status === SendTxStatus.Pending) {
-  //         while (true) {
-  //           try {
-  //             const txResponse = await server.getTransaction(response.hash);
-  //             if (txResponse.status === 'SUCCESS') {
-  //               console.log('Transaction is successful:', txResponse, parameterType);
-  //               // return txResponse.resultXdr.toXDR('base64');
-  //               return decoderHelper(parameterType, txResponse);
-  //             } else if (txResponse.status === 'NOT_FOUND') {
-  //               console.log('Transaction not found. Retrying...', parameterType);
-  //               await new Promise((resolve) => setTimeout(resolve, 1000));
-  //             } else {
-  //               console.log(txResponse,'error');
-  //               // toast.error(`failed while performing ${parameterType}`);
-  //               toast.error(`Something went wrong. Please try again`);
-  //               return null;
-  //             }
-  //           } catch (error) {
-  //             console.error('Error while checking transaction status:', error);
-  //             return null;
-  //           }
-  //         }
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     console.log(error, `Something went wrong. Please try again`);
-  //     toast.error(`Something went wrong. Please try again`);
-  //     // toast.error(`FRM THE ERROR from ${parameterType} ${JSON.stringify(error, null, 2)} `, {
-  //     //   autoClose: false
-  //     // });
-  //     // return error;
-  //     return Promise.reject(error);
-  //   }
-  // };
-
-  // const makeTransaction = async (packageId?: string, contractModule?: string, contractMethod?:string, args?: any[], tx?: any) => {
-  //   try {
-  //     // const tx = new TransactionBlock
-  //     tx.moveCall({
-  //       target: `${packageId}::${contractModule}::${contractMethod}`,
-  //       arguments: args,
-  //     });
-
-
-
-  //     const result = await signAndExecuteTransactionBlock({ transactionBlock: tx })
-  //     return result
-
-    
-  //   } catch (error) {
-  //     console.log(error)
-  //     return Promise.reject(error)
-  //   }
-  // }
 
   const getCreatorCampaigns = (secretKey: string, publicKey: string) => {
     // return makeTransaction({ secretKey, parameterType: 'get_campaigns_name' });
@@ -236,21 +120,22 @@ export const campaignServices = (() => {
     // });
   };
 
-  const getTokenNameAddress = (publicKey: string) => {
-    // return makeTransaction({
-    //   parameterType: 'get_token_name_address',
-    //   contractId: issuanceManagementContract,
-    //   publicKey
-    // });
+  const getTokenNameAddress = (address: string) => {
+    
   };
 
-  const getReceipientToken = (secretKey: string, publicKey: string) => {
-    // return makeTransaction({
-    //   parameterType: 'get_balance_of_batch',
-    //   contractId: issuanceManagementContract,
-    //   secretKey,
-    //   payload: [accountToScVal(publicKey)]
-    // });
+  const getReceipientToken = async (address: string) => {
+    try {
+      const txn = await client.getBalance({
+        owner: address,
+        coinType: `0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e::local_coin::LOCAL_COIN`
+      })
+      console.log(txn, ':balanceOb')
+      return txn.totalBalance
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   };
 
   const transfer_tokens_to_recipient = (
@@ -342,22 +227,64 @@ export const campaignServices = (() => {
     // });
   };
 
-  const get_verified_merchants = (publicKey: any) => {
-    // return makeTransaction({
-    //   contractId: userRegistryContractId,
-    //   parameterType: 'get_verified_merchants',
-    //   publicKey
-    // });
+  const get_verified_merchants = async () => {
+    try {
+      const txn = await client.getDynamicFields({
+        parentId: "0x9a7fef60fa51b2d95114584c5f7085a7060702e212011e96146082abf471f910"
+    });
+    const result = txn.data;
+
+    const objectIds = result.map(item => item.objectId);
+    let merchantDetails;
+    const merchants = []
+    console.log(objectIds, ':objects')
+    for(const object of objectIds) {
+      const response = await client.getObject({
+        id: object,
+        options : {
+          showContent: true
+        }
+      })
+      const data = response.data
+      const res = data?.content
+
+      merchantDetails = (res as any)?.fields;
+      console.log(res, ':merchant')
+      if(merchantDetails.verified_status === true) {
+        merchants.push({
+          store_id: merchantDetails?.id?.id,
+          merchant_address: merchantDetails.merchant_addr,
+          location: merchantDetails.location,
+          store_name: merchantDetails.store_name,
+          proprietor: merchantDetails.proprietor,
+          phone_no: merchantDetails.phone_no,
+          
+      });
+      }
+
+      
+
+
+      console.log(merchants, ':resOb')
+
+      // campaignDetails = res?.
+    }
+    return merchants
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   };
 
-  const get_merchant_info = (publicKey: any, merchantAddress: string) => {
-    console.log({ merchantAddress });
-    // return makeTransaction({
-    //   contractId: userRegistryContractId, //token_contract_id
-    //   parameterType: 'get_merchant_info',
-    //   publicKey,
-    //   payload: [accountToScVal(merchantAddress)]
-    // });
+  const get_merchant_info = async (storeId: string) => {
+    try {
+      const allMercInfo = await get_verified_merchants()
+      const mercInfo = allMercInfo?.find((merc) => merc?.store_id === storeId)
+      return mercInfo
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   };
 
   const request_campaign_settlement = (
@@ -375,14 +302,18 @@ export const campaignServices = (() => {
     // });
   };
 
-  const get_balance = (userInfo: any) => {
-    // return makeTransaction({
-    //   secretKey: userInfo?.secretKey,
-    //   contractId: balanceContractId,
-    //   publicKey: userInfo?.publicKey,
-    //   parameterType: 'balance',
-    //   payload: [accountToScVal(userInfo?.publicKey)]
-    // });
+  const get_balance = async (address: string) => {
+    try {
+      const txn = await client.getBalance({
+        owner: address,
+        coinType: USDC_TYPE
+      })
+      console.log(txn, ':balanceOb')
+      return txn.totalBalance
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   };
 
   const join_campaign = (
@@ -400,12 +331,52 @@ export const campaignServices = (() => {
     // });
   };
 
-  const get_recipients_status = (userInfo: any) => {
-    // return makeTransaction({
-    //   publicKey: userInfo.publicKey,
-    //   contractId: userInfo.campaignAddress,
-    //   parameterType: 'get_recipients_status'
-    // });
+  const get_recipients_status = async (address: string, objId: string) => {
+    try {
+      console.log(objId, ':obj')
+      const txn = await client.getDynamicFields({
+        parentId: "0xc2c0fd142f5322ae24141d406910d383662d6d38a4a77e94799d56e8966f4b08"
+    });
+    const result = txn.data;
+
+    const objectIds = result.map(item => item.objectId);
+    const filterObjIds = objectIds.filter(item => item === objId)
+    let campaignDetails;
+    const recipients: any = []
+    console.log(objectIds, ':objects')
+    for(const object of filterObjIds) {
+      const response = await client.getObject({
+        id: object,
+        options : {
+          showContent: true
+        }
+      })
+      const data = response.data
+      const res = data?.content
+
+      campaignDetails = (res as any)?.fields;
+      console.log(res, ':cam')
+      campaignDetails?.unverified_recipients?.fields?.contents?.forEach((entry: any) => {
+        recipients.push({address: entry?.fields?.key, value: false, userName: entry?.fields?.value })
+      })
+      campaignDetails?.verified_recipients?.fields?.contents?.forEach((entry: any) => {
+        recipients.push({address: entry?.fields?.key, value: true, userName: entry?.fields?.value})
+      })
+      // campaigns.push({
+      //     unverified: campaignDetails?.unverified_recipients,
+      //     verified: campaignDetails?.verified_recipients,
+      // });
+
+
+      console.log(recipients, ':resOb')
+
+      // campaignDetails = res?.
+    }
+    return recipients
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   };
 
   const get_owner = (publicKey: string, contractId: string) => {

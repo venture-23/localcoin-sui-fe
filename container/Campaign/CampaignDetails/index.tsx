@@ -1,6 +1,8 @@
 'use client';
 import { MapIcon, UserCircleIcon } from '@heroicons/react/16/solid';
 import { ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { useWallet } from '@suiet/wallet-kit';
 import Button from 'components/botton';
 import InputForm from 'components/form/input';
 import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
@@ -9,9 +11,12 @@ import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import { campaignServices } from 'services/campaign-services';
 import { maskWalletAddress } from 'utils/clipper';
+import { CAMPAIGN_PACKAGE_ID, LOCAL_COIN_APP, TOKEN_POLICY } from 'utils/constants';
 
 
 interface IPaticipant {
@@ -36,7 +41,7 @@ const CampaignDetail = (props: any) => {
   const joinedCInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '{}')
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({
-    username: joinedCInfo[0]?.username || '',
+    username: '',
     recipientAddress: userInfo?.publicKey
   });
   const pathname = usePathname();
@@ -56,6 +61,8 @@ const CampaignDetail = (props: any) => {
   const [requestedIncentive, setRequestedIncentive] = useState(false);
   const [participantPaymentReceived, setParticipantPaymentReceived] = useState(false);
   const [loader, setLoader] = useState(false);
+
+  const { signAndExecuteTransactionBlock } = useWallet()
   
 
   const [isCampaignEnded, setIsCampaignEnded] = useState(false);
@@ -65,7 +72,7 @@ const CampaignDetail = (props: any) => {
     if (userInfo.publicKey) {
       console.log({ userInfo });
       getCampaginOwner();
-      // fetchCampaignParticipate();
+      fetchCampaignParticipate();
       // getCampaignStatus()
     }
 
@@ -77,18 +84,19 @@ const CampaignDetail = (props: any) => {
     }
   }, [userInfo]);
 
-  // const getCampaignStatus = async() => {
-  //   try {
-  //     setLoader(true);
-  //     const isEnded = await campaignServices.is_ended(userInfo, props.campaignId)
-  //     setIsCampaignEnded(isEnded?._value)
-  //     setLoader(false)
-  //   } catch (error) {
-  //     console.log(error)
-  //     setLoader(false)
-  //   }
+  const getCampaignStatus = async() => {
+    try {
+      setLoader(true);
+      // const isEnded = await campaignServices.is_ended(userInfo, props.campaignId)
+      // setIsCampaignEnded(isEnded?._value)
+      setIsCampaignEnded(false)
+      setLoader(false)
+    } catch (error) {
+      console.log(error)
+      setLoader(false)
+    }
     
-  // }
+  }
 
   const getCampaginOwner = async () => {
     const isOwner = campaignInfo?.creator === userInfo?.publicKey
@@ -98,27 +106,23 @@ const CampaignDetail = (props: any) => {
 
   // console.log({ isCampaignAdmin });
 
-  // const fetchCampaignParticipate = async () => {
-  //   setLoader(true)
-  //   await campaignServices
-  //     .get_recipients_status({
-  //       ...userInfo,
-  //       campaignAddress: props.campaignId
-  //     })
-  //     .then((res: any) => {
-  //       if (res.length) {
-  //         const sortedParticipant = res.sort((a: any, b: any) => (b?.value === true) - (a?.value === true))
-  //         setParticipantList(sortedParticipant);
-          
-  //         setCurrentParticipant(res?.find((part: any) => part.address === userInfo.publicKey))
-  //       }
-  //       setLoader(false)
-  //     })
-  //     .catch((e) => {
-  //       console.log(e, 'from the pariticipant list')
-  //       setLoader(false)
-  //     });
-  // };
+  const fetchCampaignParticipate = async () => {
+    console.log('fetching recipients')
+    try {
+      const res = await campaignServices.get_recipients_status(userInfo?.publicKey, props.campaignId)
+      if(res.length > 0) {
+        const sortedParticipant = res.sort((a: any, b: any) => (b?.value === true) - (a?.value === true))
+
+        setParticipantList(sortedParticipant);
+        
+        setCurrentParticipant(res?.find((part: any) => part.address === userInfo.publicKey))
+      }
+      setLoader(false)
+    } catch (error) {
+      console.log(error, 'from the pariticipant list')
+      setLoader(false)
+    }
+  };
 
   // useEffect(() => {
   //   if (pathname.split('/')[1] === 'all-campaigns') {
@@ -179,43 +183,56 @@ const CampaignDetail = (props: any) => {
   //   }
   // };
   const joinCampaign = async () => {
-    // try {
-    //   setShowLoader(true);
-    //   const joinRes = await campaignServices.join_campaign(
-    //     data.username,
-    //     data.recipientAddress,
-    //     userInfo,
-    //     props.campaignId
-    //   );
+    try {
+      setShowLoader(true);
+      const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+      const tx = new TransactionBlock()
+      tx.moveCall({
+        target: `${pkId}::campaign_management::join_campaign`,
+        arguments: [
+            
+            tx.object(CAMPAIGN_PACKAGE_ID),
+            tx.pure.string(campaignInfo?.name),
+            tx.pure.string(data.username)
+        ],
 
-    //   if(joinRes === 'FAILED') throw error;
+      })
 
-    //   const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo') || '';
-    //   console.log(prevJoinedCamp)
-    //   const joinedInfo = []
-    //   if(prevJoinedCamp !== '') {
-    //     for(const prev of JSON.parse(prevJoinedCamp)) {
-    //       console.log(prev, ':prev')
-    //       joinedInfo.push(prev);
-    //     }
-    //   } 
-    //   joinedInfo.push({ campaignAddress: props.campaignId, username: data.username })
-   
+      const result = await signAndExecuteTransactionBlock({
+        transactionBlock: tx
+      })
 
-    //   if (typeof window !== 'undefined') {
-    //     console.log(joinedInfo, ':Joined')
-    //     localStorage.setItem('joinedCampaignInfo', JSON.stringify(joinedInfo));
-    //   }
+      if(!result?.digest) throw new Error("Failed joining campaign")
       
+        const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo') || '';
+        console.log(prevJoinedCamp)
+        const joinedInfo = []
+        if(prevJoinedCamp !== '') {
+          for(const prev of JSON.parse(prevJoinedCamp)) {
+            console.log(prev, ':prev')
+            joinedInfo.push(prev);
+          }
+        } 
+        joinedInfo.push({ campaignAddress: props.campaignId, username: data.username })
+     
+  
+        if (typeof window !== 'undefined') {
+          console.log(joinedInfo, ':Joined')
+          localStorage.setItem('joinedCampaignInfo', JSON.stringify(joinedInfo));
+        }
+        
+  
+        toast.success('Campaign Joined Successfully');
+        setShowUsernameBox(false);
+        fetchCampaignParticipate();
 
-    //   // toast.success('Campaign Joined');
-    //   setShowUsernameBox(false);
-    //   fetchCampaignParticipate();
-    //   setShowLoader(false);
-    // } catch (error) {
-    //   console.log(error);
-    //   setShowLoader(false);
-    // }
+
+      setShowLoader(false)
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed Joining Campaign')
+      setShowLoader(false);
+    }
   };
 
   // const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo');
@@ -241,40 +258,68 @@ const CampaignDetail = (props: any) => {
   }
 
 
+  const verifyRecipients = async () => {
+    try {
+      const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+      const tx = new TransactionBlock()
+      tx.moveCall({
+        target: `${pkId}::campaign_management::verify_recipients`,
+        arguments: [
+            
+            tx.object(CAMPAIGN_PACKAGE_ID),
+            tx.pure.string(campaignInfo?.name),
+            tx.pure(acceptedNames),
+            tx.object(TOKEN_POLICY),         
+            tx.object(LOCAL_COIN_APP)
+        ],
+
+    });
+    const result = signAndExecuteTransactionBlock({
+      transactionBlock: tx
+    })
+
+    return result
+    } catch (error) {
+      console.log(error)
+
+      throw error
+    }
+  }
+
 
   const handleVerify = async () => {
 
-    // try {
-    //   setVerifyLoader(true)
-    //   if(acceptedNames.length === 0) {
-    //     toast.error('Please select participants to verify')
-    //     throw new Error ('Please select participants to verify')
-    //   }
-    //   if(isCampaignEnded) {
-    //     toast.error('Campaign has ended')
-    //     throw new Error ('Campaign has ended')
-    //   }
-    //   if(isParticipantFull()) {
-    //     toast.error('Cannot verify. Participant limit has reached')
-    //     throw new Error ('Cannot verify. Participant limit has reached')
-    //   }
-    //   const respose =  await campaignServices.verify_recipients(userInfo.secretKey, props.campaignId, acceptedNames);
-    //   if(respose === 'FAILED') throw error;
-    //   // toast.success('Successfully verified participants')
-    //   await fetchCampaignParticipate()
-    //   setVerifyLoader(false)
-    //   setVerifyConfirm(false)
-    //   setAcceptedNames([])
-    //   setData({
-    //     username: '',
-    //     recipientAddress: userInfo?.publicKey
-    //   })
-    // } catch (error: any) {
-    //   console.log(error)
-    //   // toast.error(error.toString())
-    //   setVerifyLoader(false)
-    //   setVerifyConfirm(false)
-    // }
+    try {
+      setVerifyLoader(true)
+      if(acceptedNames.length === 0) {
+        toast.error('Please select participants to verify')
+        throw new Error ('Please select participants to verify')
+      }
+      if(isCampaignEnded) {
+        toast.error('Campaign has ended')
+        throw new Error ('Campaign has ended')
+      }
+      if(isParticipantFull()) {
+        toast.error('Cannot verify. Participant limit has reached')
+        throw new Error ('Cannot verify. Participant limit has reached')
+      }
+      const respose =  await verifyRecipients()
+      if(!respose?.digest) throw error;
+      toast.success('Successfully verified participants')
+      await fetchCampaignParticipate()
+      setVerifyLoader(false)
+      setVerifyConfirm(false)
+      setAcceptedNames([])
+      setData({
+        username: '',
+        recipientAddress: userInfo?.publicKey
+      })
+    } catch (error: any) {
+      console.log(error)
+      toast.error('Recipients verification failed')
+      setVerifyLoader(false)
+      setVerifyConfirm(false)
+    }
     
   };
 
@@ -296,9 +341,8 @@ const CampaignDetail = (props: any) => {
   }
 
   const getVerifiedParticipants = () => {
-    // const verified = participantList.filter((item: any) => item.value)
-    // return verified.length
-    return null
+    const verified = participantList.filter((item: any) => item.value)
+    return verified.length
   }
 
   const handleIncentive = async () => {
@@ -306,42 +350,42 @@ const CampaignDetail = (props: any) => {
     setRequestedIncentive(true);
   }
 
+
   const getUsername = () => {
-    // const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
-    // if(allJoinedCampaignInfo === '') return '';
-    // const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
-    // return currentCampaignInfo?.username
-    return ''
+    const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
+    if(allJoinedCampaignInfo === '') return '';
+    const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
+    return currentCampaignInfo?.username
   }
 
   const isParticipantFull = () => {
-    // const isFull = getVerifiedParticipants() >= Number(campaignInfo?.no_of_recipients) 
-    // console.log(isFull, ':isFull')
+    const isFull = getVerifiedParticipants() >= Number(campaignInfo?.no_of_recipients) 
+    console.log(isFull, ':isFull')
     return false
   }
 
   const generateQrCode = async () => {
-    // try {
-    //   const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
-    //   const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
-    //   const staticData = {
-    //     type: 'campaign creator',
-    //     publicKey: userInfo.publicKey,
-    //     amount: (Number(campaignInfo?.amount)/Number(campaignInfo?.no_of_recipients)).toFixed(2),
-    //     proprietaryName: userInfo.proprietaryName,
-    //     phoneNumber: userInfo.phoneNumber,
-    //     storeName: userInfo.storeName,
-    //     location: userInfo.location,
-    //     campaignAddress: currentCampaignInfo?.campaignAddress ||  props.campaignId,
-    //     campaignName: campaignInfo?.name,
-    //     username: currentCampaignInfo?.username
-    //   };
-    //   const response = await QRCode.toDataURL(JSON.stringify(staticData));
-    //   setImageUrl(response);
-    // } catch (error) {
-    //   // debugger;
-    //   console.log(error);
-    // }
+    try {
+      const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
+      const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
+      const staticData = {
+        type: 'campaign creator',
+        publicKey: userInfo.publicKey,
+        amount: (Number(1)/Number(campaignInfo?.no_of_recipients)).toFixed(2),
+        proprietaryName: userInfo.proprietaryName,
+        phoneNumber: userInfo.phoneNumber,
+        storeName: userInfo.storeName,
+        location: userInfo.location,
+        campaignAddress: currentCampaignInfo?.campaignAddress ||  props.campaignId,
+        campaignName: campaignInfo?.name,
+        username: currentCampaignInfo?.username
+      };
+      const response = await QRCode.toDataURL(JSON.stringify(staticData));
+      setImageUrl(response);
+    } catch (error) {
+      // debugger;
+      console.log(error);
+    }
   };
 
   // useEffect(() => {
@@ -365,6 +409,24 @@ const CampaignDetail = (props: any) => {
 
   // }, [userInfo, participantList])
 
+  useEffect(() => {
+    if (userInfo.publicKey) {
+      console.log({ userInfo });
+      getCampaginOwner();
+      fetchCampaignParticipate();
+      getCampaignStatus()
+    }
+
+    return () => {
+      setCurrentParticipant({})
+      setIsCampaignEnded(false);
+      setisCampaignAdmin(false);
+      
+    }
+  }, [userInfo?.publicKey]);
+
+  console.log(isCampaignAdmin, ':isAdmin')
+
   if(isDetailsFetching || loader) {
     return (
       <section>
@@ -379,80 +441,7 @@ const CampaignDetail = (props: any) => {
       <section className="relative">
         {!requestedIncentive && (
           <div className="container mx-auto">
-          {/* <PageHeader
-            backLink={notLoggedIn ? '/all-campaigns' : '/campaign'}
-            pageHeaderTitle={'Campaign Details'}
-          /> */}
-
-          {/* {(isDetailsFetching && !campaignInfo?.name && (
-            <>
-              <CampaignDetailSkeleton />
-            </>
-          )) || (
-            <>
-              <div className="grid grid-cols-1 gap-1">
-                <DetailCampaign campaignDetails={campaignInfo} />
-                {!notLoggedIn && (
-                  <>
-                    <div
-                      className="fixed bottom-7 right-7 md:absolute "
-                      onClick={() => {
-                        setScanData('');
-                        buttonRef.current.open(Drawer);
-                        // setOpenDrawer(true);
-                      }}
-                    >
-                      <Link
-                        href=""
-                        className="flex w-fit items-center gap-2 rounded-full bg-blue-500 px-6 py-3"
-                      >
-                        <QrCodeIcon className="h-6 w-6 text-white" />
-                        <span className="text-base font-semibold text-white">Scan To Pay</span>
-                      </Link>
-                    </div>
-
-                    <DrawerQRScan
-                      ref={buttonRef}
-                      setScanData={setScanData}
-                      panelTitle="Scan QR Code"
-                    />
-
-                    <Drawer open={openDrawer} setOpen={setOpenDrawer} panelTitle="Send Token">
-                      <label className="block">
-                        <InputForm
-                          type="text"
-                          data={data}
-                          error={error}
-                          maxLength={300}
-                          name="recipientAddress"
-                          handleChange={handleChange}
-                          placeholder="Recipient Address"
-                        />
-                        <InputForm
-                          type="text"
-                          data={data}
-                          error={error}
-                          maxLength={300}
-                          name="amount"
-                          handleChange={handleChange}
-                          placeholder="Amount"
-                        />
-                      </label>
-
-                      <div
-                        className="mt-6"
-                        onClick={() => {
-                          handleSubmit();
-                        }}
-                      >
-                        <Button text="Pay Now" disabled={showLoader} showLoader={showLoader} />
-                      </div>
-                    </Drawer>
-                  </>
-                )}
-              </div>
-            </>
-          )} */}
+          
 
           <div onClick={() => router.back()} className="flex cursor-pointer items-center py-[18px]">
             <ChevronLeftIcon width={16} height={16} />
@@ -535,7 +524,7 @@ const CampaignDetail = (props: any) => {
                     {participantList.map((eachParticipant: any, eachIndex: number) => (
                       <div className='flex items-center justify-between' key={eachIndex + 1 + ''}>
                         <div className='flex items-center gap-[3px] text-base font-normal text-[#171717]'>
-                          <span>{eachParticipant.name}{' '}</span>
+                          <span>{eachParticipant.userName}{' '}</span>
                           {/* {eachParticipant.value ? (
                             <div title='Verified' className='verified-user'></div>
                           ) : (
@@ -554,10 +543,10 @@ const CampaignDetail = (props: any) => {
                           )}
                           <div className='w-[25px]'>
                               <input 
-                                checked={acceptedNames.includes(eachParticipant.name)} 
+                                checked={acceptedNames.includes(eachParticipant.address)} 
                                 type="checkbox" id={`accept-${eachIndex + 1}`} 
                                 className='verification-checkbox ticked-checkbox'
-                                onChange={(e) => handleCheckboxChange(eachParticipant.name, e.target.checked)} 
+                                onChange={(e) => handleCheckboxChange(eachParticipant.address, e.target.checked)} 
                                 disabled={eachParticipant?.value}
                               />
                               <label className='verification-checkbox-label' htmlFor={`accept-${eachIndex + 1}`}></label>
@@ -627,7 +616,6 @@ const CampaignDetail = (props: any) => {
                     placeholder={'Enter Username'}
                     maxLength={300}
                     data={data}
-                    disabled={joinedCInfo?.length > 0}
                   />
                   <Button disabled={showLoader} showLoader={showLoader} handleClick={joinCampaign} text="Join" />
                 </div>

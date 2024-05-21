@@ -1,12 +1,14 @@
 'use client';
 
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import { useWallet } from '@suiet/wallet-kit';
 import { ConfirmationScreen } from 'components/confirmationScreen';
-import { useMerchant } from 'hooks/useMerchant';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useState } from 'react';
-import { campaignServices } from 'services/campaign-services';
+import { toast } from 'react-toastify';
+import { MERCHANT_REGISTRY } from 'utils/constants';
 import MerchantInfo from './components/register-form';
 
 const MerchantRegisterPage = () => {
@@ -20,7 +22,8 @@ const MerchantRegisterPage = () => {
     proprietor: '',
     correctInfoCheck: false,
   });
-  const { registerMerchant, isProcessing, isMerchantError } = useMerchant({ data: { ...data } });
+
+  const { signAndExecuteTransactionBlock } = useWallet()
 
   const [showLoader, setShowLoader] = useState(false);
 
@@ -33,7 +36,6 @@ const MerchantRegisterPage = () => {
     }
   };
 
-  console.log(isMerchantError, ':error')
   console.log(data, ':data')
 
   const validation = () => {
@@ -45,27 +47,62 @@ const MerchantRegisterPage = () => {
     return err;
   };
 
+  const registerMerchant = async () => {
+    try {
+      const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+      const tx = new TransactionBlock()
+      tx.moveCall({
+        target: `${pkId}::registry::merchant_registration`,
+        arguments: [
+          tx.pure.string(data.proprietor),
+          tx.pure.string(data.phone_no),
+          tx.pure.string(data.store_name),
+          tx.pure.string(data.location),
+
+          tx.object(MERCHANT_REGISTRY)
+
+          
+        ],
+      })
+
+      const result = await signAndExecuteTransactionBlock({
+        transactionBlock: tx
+      })
+      console.log(result, ':result')
+      if(!result?.digest) {
+        throw new Error ('Failed registering merchant')
+      }
+      return result
+
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+  }
+
   const handleSubmit = async () => {
     try {
-      setShowLoader(true)
+      
       const errorChecked = validation();
       setError(errorChecked);
       if (Object.keys(errorChecked).length === 0) {
-        // if (showFormNo === 1) {
-        //   setShowFormNo(2);
-        // } else {
-          console.log('manish');
-
-          const response = await campaignServices.merchant_registration(userInfo, data)
-          console.log(response)
-          if(response != 'SUCCESS') throw new Error('Error while registering store')
-          setShowLoader(false);
-          setShowFormNo(3);
+          setShowLoader(true)
+          const resp = await registerMerchant()
+          if(resp?.digest) {
+            setShowLoader(false);
+            console.log(resp);
+            toast.success('Merchant Registration Successfull');
+            setShowLoader(false);
+            setShowFormNo(3);
+          } else {
+            throw new Error('Failed Registering Merchant')
+          }
+          
       }
       setShowLoader(false);
     } catch (error: any) {
       console.log(error)
-      // toast.error('Failed while applying for merchant')
+      toast.error('Failed while applying for merchant')
       setShowFormNo(1);
       setShowLoader(false);
     }
