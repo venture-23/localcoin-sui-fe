@@ -1,12 +1,16 @@
 "use client"
 import { ChevronLeftIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { TransactionBlock } from "@mysten/sui.js/transactions";
+import { useWallet } from "@suiet/wallet-kit";
 import Button from "components/botton";
 import { ConfirmationScreen } from "components/confirmationScreen";
-import { useGetBalance, useRecipient } from "hooks";
+import { useGetBalance } from "hooks";
 import { useMyContext } from "hooks/useMyContext";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { campaignServices } from "services/campaign-services";
+import { TOKEN_POLICY, USDC_TREASURY, USDC_TYPE } from "utils/constants";
 
 const Withdraw = () => {
     const { userBalance } = useGetBalance()
@@ -14,31 +18,49 @@ const Withdraw = () => {
     const [showLoader, setShowLoader] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const { userInfo } = useMyContext();
-    const { tokenList } = useRecipient({});
-    console.log(tokenList, ':token')
+    const { signAndExecuteTransactionBlock } = useWallet()
+    // const { tokenList } = useRecipient({});
+    // console.log(tokenList, ':token')
 
+    const requestSettlement = async () => {
+      try {
+        const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+        const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
+        const tx = new TransactionBlock()
+        tx.moveCall({
+          target: `${pkId}::campaign_management::request_settlement`,
+          arguments : [
+            tx.object(USDC_TREASURY),
+            tx.object(localCoinObj),
+            tx.object(TOKEN_POLICY)
+          ],
+          typeArguments: [USDC_TYPE]
+        })
+
+        const result = await signAndExecuteTransactionBlock({
+          transactionBlock: tx
+        })
+
+        if(!result.digest) throw new Error('Failed seltting funds')
+        return result
+      } catch (error) {
+        console.log(error)
+        throw error
+      }
+    }
 
     const withdrawFunds = async () => {
       try {
-        if(!userBalance || !tokenList) {
+        if(!userBalance) {
           throw new Error('No funds to withdraw');
         }
         setShowLoader(true)
-        console.log({
-          publicKey: userInfo.publicKey,
-          secretKey: userInfo.secretKey,
-          amount: parseFloat(userBalance[0].amount),
-          con: tokenList[0].contractToken
-        })
-        const response = await campaignServices.request_campaign_settlement(
-          userInfo.publicKey,
-          userInfo.secretKey,
-          parseFloat(userBalance[0].amount),
-          tokenList[0].contractToken
-        );
-        if(response != 'SUCCESS') throw new Error('Failed while withdrawing')
+        
+        const response = await requestSettlement()
+        if(!response?.digest) throw new Error('Failed Withdrawing Funds')
         console.log(response)
 
+        toast.success('Funds withdrawn successfully')
         setShowLoader(false)
         setConfirmWithdraw(false)
         setShowSuccess(true);
@@ -47,6 +69,7 @@ const Withdraw = () => {
         console.log(error)
         setShowLoader(false)
         setConfirmWithdraw(false)
+        toast.error('Failed withdawing funds')
       }
     }
      
@@ -71,7 +94,7 @@ const Withdraw = () => {
 
                        <div className="bg-[#fff] border p-[16px] mt-[16px] border-[#E4E4E7] rounded-[12px]">
                            <p className="text-base font-medium text-[#1384F5]">Total LocalCoin Available</p>
-                           <h2 className="text-[32px] font-">{userBalance?.length > 0 ? Number(userBalance[0].amount).toString() : 0}</h2>
+                           <h2 className="text-[32px] font-">{userBalance ?? 0}</h2>
                        </div>
                     </div>
 

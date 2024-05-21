@@ -7,7 +7,7 @@ import { PageFooter } from 'components/pageFooter';
 import PageHeader from 'components/pageheader';
 import PopupBox from 'components/popover';
 import { Stores } from 'components/stores';
-import { useGetBalance } from 'hooks';
+import { useCamapigns, useGetBalance } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -38,6 +38,7 @@ const LandingPage = () => {
   const { userBalance, userUsdcBalance, isFetchingUsdcBalance, isFetchingUserBalance } = useGetBalance();
   const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
 
+  const { merchantList } = useCamapigns({ fetchAllCampaign: true});
   console.log(userBalance, ':lcoal')
 
   const campInfo = {
@@ -71,12 +72,8 @@ const LandingPage = () => {
 
   useEffect(() => {
     if (userInfo?.publicKey) {
-      // campaignServices.get_verified_merchants(userInfo?.publicKey).then((response) => {
-      //   if (response.length > 0) {
-      //     console.log(response.includes(userInfo?.publicKey), ':veri');
-      //     setIsVerifiedMerchant(response.includes(userInfo?.publicKey));
-      //   }
-      // });
+      const verifiedMer = merchantList?.find(item => item?.merchant_address === userInfo?.publicKey)
+      setIsVerifiedMerchant(Boolean(verifiedMer))
     }
   }, [userInfo]);
 
