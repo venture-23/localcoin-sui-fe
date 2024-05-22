@@ -8,7 +8,7 @@ import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { MERCHANT_REGISTRY } from 'utils/constants';
+import { MERCHANT_REGISTRY, PACKAGE_ID } from 'utils/constants';
 import MerchantInfo from './components/register-form';
 
 const MerchantRegisterPage = () => {
@@ -49,7 +49,7 @@ const MerchantRegisterPage = () => {
 
   const registerMerchant = async () => {
     try {
-      const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+      const pkId = PACKAGE_ID
       const tx = new TransactionBlock()
       tx.moveCall({
         target: `${pkId}::registry::merchant_registration`,

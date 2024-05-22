@@ -15,7 +15,7 @@ import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWallet } from '@suiet/wallet-kit';
 import { ConfirmationScreen } from 'components/confirmationScreen';
 import 'react-datepicker/dist/react-datepicker.css';
-import { CAMPAIGN_PACKAGE_ID, LOCAL_COIN_APP, TOKEN_POLICY, USDC_TREASURY, USDC_TYPE } from 'utils/constants';
+import { CAMPAIGN_PACKAGE_ID, LOCAL_COIN_APP, PACKAGE_ID, TOKEN_POLICY, USDC_TREASURY, USDC_TYPE } from 'utils/constants';
 
 const CreateCampaignPage = () => {
   const router = useRouter();
@@ -78,8 +78,9 @@ const CreateCampaignPage = () => {
 
   const createUserCampaign = async() => {
     try {
-      const pkId = '0xe5239e9b6291896cb0f68ffe67017999012fabb93c33b83c7430f23ccf367f8e'
+      const pkId = PACKAGE_ID
       const tx = new TransactionBlock()
+
       tx.moveCall({
         target: `${pkId}::campaign_management::create_campaign`,
         arguments: [
