@@ -1,7 +1,9 @@
-type SuiNetwork = 'testnet' | 'mainnet' | 'devnet';
+import { SuiClient, getFullnodeUrl } from '@mysten/sui.js/client';
+
+type SuiNetwork = 'testnet' | 'mainnet';
 
 export const getNetwork = (network: string): SuiNetwork => {
-  const validNetworks: SuiNetwork[] = ['mainnet', 'testnet', 'devnet'];
+  const validNetworks: SuiNetwork[] = ['mainnet', 'testnet'];
   if (validNetworks.includes(network as SuiNetwork)) {
     return network as SuiNetwork;
   }
@@ -9,3 +11,4 @@ export const getNetwork = (network: string): SuiNetwork => {
 };
 
 export const APP_NETWORK: SuiNetwork = getNetwork(process.env.NEXT_PUBLIC_NETWORK || 'testnet');
+export const SUI_CLIENT = new SuiClient({ url: getFullnodeUrl(APP_NETWORK) });

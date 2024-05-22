@@ -142,12 +142,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
               <div
                 className={[
                   'rounded-[6px] border border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
-                  !userInfo?.publicKey && 'opacity-[0.3]'
+                  !userDetails?.address && 'opacity-[0.3]'
                 ].join(' ')}
               >
                 <Link
-                  className={`block w-full ${!userInfo?.publicKey && 'cursor-not-allowed'}`}
-                  href={userInfo?.publicKey ? '/campaign/create' : ''}
+                  className={`block w-full ${!userDetails?.address && 'cursor-not-allowed'}`}
+                  href={userDetails?.address ? '/campaign/create' : ''}
                 >
                   Start a campaign
                 </Link>

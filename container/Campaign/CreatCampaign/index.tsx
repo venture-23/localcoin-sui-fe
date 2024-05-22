@@ -11,15 +11,24 @@ import { useRouter } from 'next/navigation';
 import { KeyboardEvent, forwardRef, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { useEnokiFlow } from '@mysten/enoki/react';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { useWallet } from '@suiet/wallet-kit';
 import { ConfirmationScreen } from 'components/confirmationScreen';
 import 'react-datepicker/dist/react-datepicker.css';
-import { CAMPAIGN_PACKAGE_ID, LOCAL_COIN_APP, PACKAGE_ID, TOKEN_POLICY, USDC_TREASURY, USDC_TYPE } from 'utils/constants';
+import {
+  CAMPAIGN_PACKAGE_ID,
+  LOCAL_COIN_APP,
+  PACKAGE_ID,
+  TOKEN_POLICY,
+  USDC_TREASURY,
+  USDC_TYPE
+} from 'utils/constants';
+import { APP_NETWORK, SUI_CLIENT } from 'utils/sui';
 
 const CreateCampaignPage = () => {
   const router = useRouter();
   const [creatorAddressList, setCreatorAddressList] = useState([]);
+  const flow = useEnokiFlow();
   const [data, setData] = useState({
     name: '',
     totalAmount: '',
@@ -34,7 +43,6 @@ const CreateCampaignPage = () => {
   });
 
   const { userInfo } = useMyContext();
-  const { signAndExecuteTransactionBlock } = useWallet()
 
   useEffect(() => {
     if (userInfo.secretKey) {
@@ -49,11 +57,11 @@ const CreateCampaignPage = () => {
     }
   }, [userInfo]);
 
-  console.log(creatorAddressList, ':creator')
+  console.log(creatorAddressList, ':creator');
 
   const [showLoader, setShowLoader] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  
+
   const [error, setError] = useState<any>({});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -72,14 +80,14 @@ const CreateCampaignPage = () => {
     if (!data.totalAmount) err.totalAmount = 'Enter No of Token';
     if (!data.participant) err.participant = 'Enter Recipients';
     if (!data.description) err.description = 'Enter Description';
-    if(Number(data.totalAmount) < 1) err.totalAmount = 'Min. funding amount should be 100'
+    if (Number(data.totalAmount) < 1) err.totalAmount = 'Min. funding amount should be 100';
     return err;
   };
 
-  const createUserCampaign = async() => {
+  const createUserCampaign = async () => {
     try {
-      const pkId = PACKAGE_ID
-      const tx = new TransactionBlock()
+      const pkId = PACKAGE_ID;
+      const tx = new TransactionBlock();
 
       tx.moveCall({
         target: `${pkId}::campaign_management::create_campaign`,
@@ -94,26 +102,25 @@ const CreateCampaignPage = () => {
           tx.object(USDC_TREASURY),
           tx.object(CAMPAIGN_PACKAGE_ID),
           tx.object(TOKEN_POLICY)
-
-          
         ],
-        typeArguments:[USDC_TYPE]
-      })
+        typeArguments: [USDC_TYPE]
+      });
 
-      const result = await signAndExecuteTransactionBlock({
-        transactionBlock: tx
-      })
-      console.log(result, ':result')
-      if(!result?.digest) {
-        throw new Error ('Failed creating campaign')
+      const result = await flow.sponsorAndExecuteTransactionBlock({
+        network: APP_NETWORK,
+        transactionBlock: tx,
+        client: SUI_CLIENT
+      });
+
+      if (!result?.digest) {
+        throw new Error('Failed creating campaign');
       }
-      return result
-
+      return result;
     } catch (error) {
-      console.log(error)
-      throw error
+      console.log(error);
+      throw error;
     }
-  }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -121,8 +128,8 @@ const CreateCampaignPage = () => {
       setError(errorChecked);
       if (Object.keys(errorChecked).length === 0) {
         setShowLoader(true);
-        const resp = await createUserCampaign()
-        if(resp?.digest) {
+        const resp = await createUserCampaign();
+        if (resp?.digest) {
           setShowLoader(false);
           console.log(resp);
           toast.success('Created a Campaign');
@@ -131,9 +138,9 @@ const CreateCampaignPage = () => {
         }
       }
     } catch (error: any) {
-      console.log(true)
-      setShowLoader(false)
-      toast.error('Failed creating campaign')
+      console.log(true);
+      setShowLoader(false);
+      toast.error('Failed creating campaign');
     }
   };
   const handleDropdown = (value) => {
@@ -155,16 +162,20 @@ const CreateCampaignPage = () => {
 
   CustomInput.displayName = 'CustomInput';
 
-
   const isDataNotFilled = () => {
-    const isNotFilled = data.name === '' || data.description === '' || data.location === '' || data.participant === '' || data.totalAmount === ''
-    return isNotFilled
-  }
+    const isNotFilled =
+      data.name === '' ||
+      data.description === '' ||
+      data.location === '' ||
+      data.participant === '' ||
+      data.totalAmount === '';
+    return isNotFilled;
+  };
 
   return (
-    <section className='non-scrollable-section'>
+    <section className="non-scrollable-section">
       {showSuccess ? (
-        <ConfirmationScreen type='campaign' />
+        <ConfirmationScreen type="campaign" />
       ) : (
         <div className="container mx-auto">
           {/* <PageHeader backLink={`/campaign`} /> */}
@@ -180,34 +191,34 @@ const CreateCampaignPage = () => {
               </div>
             </div>
           </div>
-          <div className='h-[calc(100vh_-_90px)] flex flex-col justify-between'>
+          <div className="flex h-[calc(100vh_-_90px)] flex-col justify-between">
             <div className="grid gap-[4px] pb-[12px] pt-[12px]">
-            <InputForm
-              name="name"
-              // label={'Title'}
-              // labelClass={'!mb-[2px]'}
-              handleChange={handleChange}
-              placeholder={'Campaign Title'}
-              maxLength={300}
-              error={error}
-              data={data}
-            />
-            <TextArea
-              name="description"
-              // label={'Campaign Description'}
-              // labelClass={'!mb-[2px]'}
-              handleChange={handleChange}
-              placeholder={'Campaign Description'}
-              maxLength={300}
-              error={error}
-              data={data}
-            />
-            {/* <Select
+              <InputForm
+                name="name"
+                // label={'Title'}
+                // labelClass={'!mb-[2px]'}
+                handleChange={handleChange}
+                placeholder={'Campaign Title'}
+                maxLength={300}
+                error={error}
+                data={data}
+              />
+              <TextArea
+                name="description"
+                // label={'Campaign Description'}
+                // labelClass={'!mb-[2px]'}
+                handleChange={handleChange}
+                placeholder={'Campaign Description'}
+                maxLength={300}
+                error={error}
+                data={data}
+              />
+              {/* <Select
               defaultvalue={data.tokenName || ''}
               optionsList={creatorAddressList}
               handleChange={handleDropdown}
             /> */}
-            {/* <div className='flex flex-col gap-[2px]'>
+              {/* <div className='flex flex-col gap-[2px]'>
               <label className='text-base font-semibold text-[#171717]'>Ending date</label>
               <DatePicker
                 selected={new Date(data.endingDate)}
@@ -221,50 +232,53 @@ const CreateCampaignPage = () => {
                 customInput={<CustomInput />}
               />
             </div> */}
-            <InputForm
-              name="participant"
-              // label={'No of Recipients'}
-              // labelClass={'!mb-[2px]'}
-              handleChange={handleChange}
-              placeholder={'Number of Recipients'}
-              maxLength={3}
-              error={error}
-              inputMode="numeric"
-              data={data}
-              handleKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-                if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) {
-                  e.preventDefault();
-                }
-              }}
-            />
-            <InputForm
-              name="totalAmount"
-              handleChange={handleChange}
-              // label={'Total Amount'}
-              // labelClass={'!mb-[2px]'}
-              placeholder={'USDC Object'}
-              maxLength={70}
-              error={error}
-              // inputMode="numeric"
-              data={data}
-              // handleKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-              //   if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) {
-              //     e.preventDefault();
-              //   }
-              // }}
-            />
-            <TextArea
-              type="text"
-              rows={3}
-              error={error}
-              name="location"
-              maxLength={225}
-              data={data}
-              handleChange={handleChange}
-              className="placeholder-extrabold mt-1 block w-full rounded-[4px] border border-slate-300  bg-white p-4 placeholder-[#A3A3A3] shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
-              placeholder="Enter Campaign Location"
-            />
-            {/* <div
+              <InputForm
+                name="participant"
+                // label={'No of Recipients'}
+                // labelClass={'!mb-[2px]'}
+                handleChange={handleChange}
+                placeholder={'Number of Recipients'}
+                maxLength={3}
+                error={error}
+                inputMode="numeric"
+                data={data}
+                handleKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+                  if (
+                    (e.keyCode >= 65 && e.keyCode <= 90) ||
+                    (e.keyCode >= 97 && e.keyCode <= 122)
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
+              />
+              <InputForm
+                name="totalAmount"
+                handleChange={handleChange}
+                // label={'Total Amount'}
+                // labelClass={'!mb-[2px]'}
+                placeholder={'USDC Object'}
+                maxLength={70}
+                error={error}
+                // inputMode="numeric"
+                data={data}
+                // handleKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+                //   if ((e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 97 && e.keyCode <= 122)) {
+                //     e.preventDefault();
+                //   }
+                // }}
+              />
+              <TextArea
+                type="text"
+                rows={3}
+                error={error}
+                name="location"
+                maxLength={225}
+                data={data}
+                handleChange={handleChange}
+                className="placeholder-extrabold mt-1 block w-full rounded-[4px] border border-slate-300  bg-white p-4 placeholder-[#A3A3A3] shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm"
+                placeholder="Enter Campaign Location"
+              />
+              {/* <div
               className={`bg-[#F9F9F9) flex h-[48px] w-full items-center justify-between rounded-[6px] border border-[#E4E4E7] px-[12px] text-base font-semibold ${
                 !data.correctInfoCheck && 'opacity-40'
               }`}
@@ -275,21 +289,26 @@ const CreateCampaignPage = () => {
               </span>
             </div> */}
 
-            <div>
-              <input 
-                checked={data.correctInfoCheck} 
-                type="checkbox" 
-                id={`correct-info-check`} 
-                className='confirm-checkbox ticked-checkbox'
-                onChange={handleChange} 
-                disabled={isDataNotFilled()}
-                name='correctInfoCheck'
-              />
-              <label className={['confirm-checkbox-label', isDataNotFilled() ? "opacity-40" : "" ].join(" ")} htmlFor={`correct-info-check`}>
-                My campaign information is correct.
-              </label>
-            </div>
-            {/* <label className="block flex items-center">
+              <div>
+                <input
+                  checked={data.correctInfoCheck}
+                  type="checkbox"
+                  id={`correct-info-check`}
+                  className="confirm-checkbox ticked-checkbox"
+                  onChange={handleChange}
+                  disabled={isDataNotFilled()}
+                  name="correctInfoCheck"
+                />
+                <label
+                  className={['confirm-checkbox-label', isDataNotFilled() ? 'opacity-40' : ''].join(
+                    ' '
+                  )}
+                  htmlFor={`correct-info-check`}
+                >
+                  My campaign information is correct.
+                </label>
+              </div>
+              {/* <label className="block flex items-center">
               <input
                 type="checkbox"
                 name="correctInfoCheck"
@@ -303,7 +322,6 @@ const CreateCampaignPage = () => {
                 My merchant information is correct.
               </span>
             </label> */}
-            
             </div>
             <div onClick={handleSubmit}>
               <Button
@@ -320,9 +338,3 @@ const CreateCampaignPage = () => {
 };
 
 export default CreateCampaignPage;
-
-
-
-
-
-
