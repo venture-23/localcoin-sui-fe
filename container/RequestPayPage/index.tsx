@@ -15,7 +15,7 @@ import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { campaignServices } from "services/campaign-services";
-import { PACKAGE_ID, TOKEN_POLICY } from "utils/constants";
+import { CAMPAIGN_PACKAGE_ID, PACKAGE_ID, TOKEN_POLICY } from "utils/constants";
 import RecipientConfirmation from "./RecipientConfirmation";
 
 interface IScannedDataProps {
@@ -206,14 +206,16 @@ const RequestPay = () => {
           const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
           console.log(amount, ':forAmt')
           tx.moveCall({
-            target: `${pkId}::local_coin::transfer_token_to_recipients`,
+            target: `${pkId}::campaign_management::transfer_token_to_recipient`,
             arguments: [
+                tx.object(CAMPAIGN_PACKAGE_ID),
+                tx.pure.string(formattedScannedData?.campaignName as string),
                 tx.pure.u64(amount),
                 // address of recipients
                 tx.pure.address(formattedScannedData?.publicKey as string),
                 // local coin token
                 tx.object(localCoinObj),
-                tx.object(TOKEN_POLICY)
+                tx.object(TOKEN_POLICY),
             ],
           })
           const result = await signAndExecuteTransactionBlock({
