@@ -4,23 +4,25 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
+import { useLogin } from './useLogin';
 import { useMyContext } from './useMyContext';
 
 export function useGetBalance() {
   const { userInfo } = useMyContext();
+  const { userDetails } = useLogin()
   const client = new SuiClient({ url: getFullnodeUrl('devnet') });
 const { signAndExecuteTransactionBlock } = useWallet();
 
   const userBalanceResponse = useQuery({
-    queryKey: [`user-balance-${userInfo?.publicKey}`],
-    enabled: !!userInfo?.publicKey,
+    queryKey: [`user-balance-${userDetails?.address}`],
+    enabled: !!userDetails?.address,
     // cacheTime: Infinity,
     retry: 3,
     retryDelay: 3000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
       console.log(userInfo, ':info')
-      const response = await campaignServices.getReceipientToken(userInfo.publicKey);
+      const response = await campaignServices.getReceipientToken(userDetails?.address);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response,  }, ':token');
       // const response = { data: 0 }
@@ -35,15 +37,15 @@ const { signAndExecuteTransactionBlock } = useWallet();
 
 
   const userUsdcBalanceResponse = useQuery({
-    queryKey: [`user-usdc-balance-${userInfo?.publicKey}`],
-    enabled: !!userInfo?.publicKey,
+    queryKey: [`user-usdc-balance-${userDetails?.address}`],
+    enabled: !!userDetails?.address,
     // cacheTime: Infinity,
     retry: 3,
     retryDelay: 3000,
     refetchOnWindowFocus: false,
     queryFn: async () => {
       console.log(userInfo, ':info')
-      const response = await campaignServices.get_user_balance(userInfo?.publicKey);
+      const response = await campaignServices.get_user_balance(userDetails?.address);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response,  });
       

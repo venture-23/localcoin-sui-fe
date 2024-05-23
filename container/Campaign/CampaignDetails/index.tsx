@@ -6,6 +6,7 @@ import { useWallet } from '@suiet/wallet-kit';
 import Button from 'components/botton';
 import InputForm from 'components/form/input';
 import CampaignDetailSkeleton from 'components/skeleton/campagin-details';
+import { useLogin } from 'hooks';
 import { useCamapigns } from 'hooks/useCampaigns';
 import { useMyContext } from 'hooks/useMyContext';
 import Image from 'next/image';
@@ -26,6 +27,7 @@ interface IPaticipant {
 }
 
 const CampaignDetail = (props: any) => {
+  const { userDetails } = useLogin()
   const { userInfo } = useMyContext();
   const router = useRouter();
   const [showLoader, setShowLoader] = useState(false);
@@ -42,7 +44,7 @@ const CampaignDetail = (props: any) => {
   const [error, setError] = useState<any>({});
   const [data, setData] = useState<any>({
     username: '',
-    recipientAddress: userInfo?.publicKey
+    recipientAddress: userDetails?.address
   });
   const pathname = usePathname();
   const { isDetailsFetching, campaignInfo } = useCamapigns({
@@ -61,6 +63,7 @@ const CampaignDetail = (props: any) => {
   const [requestedIncentive, setRequestedIncentive] = useState(false);
   const [participantPaymentReceived, setParticipantPaymentReceived] = useState(false);
   const [loader, setLoader] = useState(false);
+  
 
   const { signAndExecuteTransactionBlock } = useWallet()
   
@@ -69,7 +72,7 @@ const CampaignDetail = (props: any) => {
   console.log(currentParticipant, ':cuurPart')
 
   useEffect(() => {
-    if (userInfo.publicKey) {
+    if (userDetails?.address) {
       console.log({ userInfo });
       getCampaginOwner();
       fetchCampaignParticipate();
@@ -99,7 +102,7 @@ const CampaignDetail = (props: any) => {
   }
 
   const getCampaginOwner = async () => {
-    const isOwner = campaignInfo?.creator === userInfo?.publicKey
+    const isOwner = campaignInfo?.creator === userDetails?.address
     setisCampaignAdmin(isOwner);
 
   };
@@ -109,13 +112,13 @@ const CampaignDetail = (props: any) => {
   const fetchCampaignParticipate = async () => {
     console.log('fetching recipients')
     try {
-      const res = await campaignServices.get_recipients_status(userInfo?.publicKey, props.campaignId)
+      const res = await campaignServices.get_recipients_status(userDetails?.address, props.campaignId)
       if(res.length > 0) {
         const sortedParticipant = res.sort((a: any, b: any) => (b?.value === true) - (a?.value === true))
 
         setParticipantList(sortedParticipant);
         
-        setCurrentParticipant(res?.find((part: any) => part.address === userInfo.publicKey))
+        setCurrentParticipant(res?.find((part: any) => part.address === userDetails?.address))
       }
       setLoader(false)
     } catch (error) {
@@ -239,7 +242,7 @@ const CampaignDetail = (props: any) => {
   // console.log(prevJoinedCamp, ':preg')
 
   const handleJoin = async () => {
-    if (!userInfo?.publicKey) {
+    if (!userDetails?.address) {
       toast.error('Please login first');
       return;
     }
@@ -312,7 +315,7 @@ const CampaignDetail = (props: any) => {
       setAcceptedNames([])
       setData({
         username: '',
-        recipientAddress: userInfo?.publicKey
+        recipientAddress: userDetails?.address
       })
     } catch (error: any) {
       console.log(error)
@@ -370,7 +373,7 @@ const CampaignDetail = (props: any) => {
       const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
       const staticData = {
         type: 'campaign creator',
-        publicKey: userInfo.publicKey,
+        publicKey: userDetails?.address,
         amount: (Number(1)/Number(campaignInfo?.no_of_recipients)).toFixed(2),
         proprietaryName: userInfo.proprietaryName,
         phoneNumber: userInfo.phoneNumber,
@@ -390,11 +393,11 @@ const CampaignDetail = (props: any) => {
 
   // useEffect(() => {
   //   console.log(userInfo, ':user')
-  //   if(userInfo?.publicKey) {
+  //   if(userDetails?.address) {
   //     if(participantList?.length > 0) {
   //       const verified = participantList.filter((item: any) => item.value)
   //       console.log(verified, ':all verified')
-  //       const isCurrentUserVerified = verified.find((item: any) => item.address === userInfo.publicKey)
+  //       const isCurrentUserVerified = verified.find((item: any) => item.address === userDetails?.address)
   //       console.log(isCurrentUserVerified, ':isVerified')
 
   //       if(Boolean(isCurrentUserVerified)){
@@ -410,7 +413,7 @@ const CampaignDetail = (props: any) => {
   // }, [userInfo, participantList])
 
   useEffect(() => {
-    if (userInfo.publicKey) {
+    if (userDetails?.address) {
       console.log({ userInfo });
       getCampaginOwner();
       fetchCampaignParticipate();
@@ -423,7 +426,7 @@ const CampaignDetail = (props: any) => {
       setisCampaignAdmin(false);
       
     }
-  }, [userInfo?.publicKey]);
+  }, [userDetails?.address]);
 
   console.log(isCampaignAdmin, ':isAdmin')
 
@@ -677,7 +680,7 @@ const CampaignDetail = (props: any) => {
                   {getUsername()}
               </div>
               <div className="text-base font-[400] italic">
-                  {maskWalletAddress(userInfo?.publicKey)}
+                  {maskWalletAddress(userDetails?.address)}
               </div>
             </div>
             {/* QR SCANNER PART */}

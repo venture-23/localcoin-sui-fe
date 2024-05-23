@@ -6,9 +6,8 @@ import InputForm from 'components/form/input';
 import TextArea from 'components/form/text-area';
 // import PopupBox from 'components/popover';
 
-import { useMyContext } from 'hooks/useMyContext';
 import { useRouter } from 'next/navigation';
-import { KeyboardEvent, forwardRef, useEffect, useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { useEnokiFlow } from '@mysten/enoki/react';
@@ -27,7 +26,7 @@ import { APP_NETWORK, SUI_CLIENT } from 'utils/sui';
 
 const CreateCampaignPage = () => {
   const router = useRouter();
-  const [creatorAddressList, setCreatorAddressList] = useState([]);
+
   const flow = useEnokiFlow();
   const [data, setData] = useState({
     name: '',
@@ -42,22 +41,6 @@ const CreateCampaignPage = () => {
     location: ''
   });
 
-  const { userInfo } = useMyContext();
-
-  useEffect(() => {
-    if (userInfo.secretKey) {
-      // campaignServices
-      //   .getTokenNameAddress(userInfo.publicKey)
-      //   .then((x) => {
-      //     console.log({ x });
-      //     setCreatorAddressList(x);
-      //     setData({ ...data, tokenAddress: x[0]?.value})
-      //   })
-      //   .catch(() => toast.error('Error from get_address_name'));
-    }
-  }, [userInfo]);
-
-  console.log(creatorAddressList, ':creator');
 
   const [showLoader, setShowLoader] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -143,24 +126,11 @@ const CreateCampaignPage = () => {
       toast.error('Failed creating campaign');
     }
   };
-  const handleDropdown = (value) => {
-    console.log(value, ':val');
-    setData({ ...data, tokenAddress: value.value, tokenName: value.name });
-  };
+  // const handleDropdown = (value) => {
+  //   console.log(value, ':val');
+  //   setData({ ...data, tokenAddress: value.value, tokenName: value.name });
+  // };
 
-  const CustomInput = forwardRef(({ value, onClick }: any, ref) => {
-    return (
-      <input
-        value={value}
-        onClick={onClick}
-        placeholder={'Ending Date'}
-        ref={ref}
-        className={`placeholder-extrabold mt-1 block w-full rounded-[6px] border border-[#E4E4E7] bg-white p-4 text-base  font-semibold text-[#000] placeholder-[#A3A3A3] shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 sm:text-sm`}
-      />
-    );
-  });
-
-  CustomInput.displayName = 'CustomInput';
 
   const isDataNotFilled = () => {
     const isNotFilled =

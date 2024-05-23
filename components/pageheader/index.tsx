@@ -132,7 +132,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                 >
                   <Link
                     className={`block w-full ${!userDetails?.address && 'cursor-not-allowed'}`}
-                    href={userDetails?.address ? '/merchant/register' : '/'}
+                    href={userDetails?.address ? '/registerMerchant' : '/'}
                   >
                     Apply to become a Merchant
                   </Link>
@@ -147,7 +147,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
               >
                 <Link
                   className={`block w-full ${!userDetails?.address && 'cursor-not-allowed'}`}
-                  href={userDetails?.address ? '/campaign/create' : ''}
+                  href={userDetails?.address ? '/createCampaign' : ''}
                 >
                   Start a campaign
                 </Link>
