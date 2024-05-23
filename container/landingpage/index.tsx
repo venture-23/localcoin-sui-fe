@@ -7,7 +7,7 @@ import { PageFooter } from 'components/pageFooter';
 import PageHeader from 'components/pageheader';
 import PopupBox from 'components/popover';
 import { Stores } from 'components/stores';
-import { useCamapigns, useGetBalance } from 'hooks';
+import { useCamapigns, useGetBalance, useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -37,6 +37,7 @@ const LandingPage = () => {
   const { userInfo } = useMyContext();
   const { userBalance, userUsdcBalance, isFetchingUsdcBalance, isFetchingUserBalance } = useGetBalance();
   const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
+  const { userDetails } = useLogin()
 
   const { merchantList } = useCamapigns({ fetchAllCampaign: true});
   console.log(userBalance, ':lcoal')
@@ -71,11 +72,11 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    if (userInfo?.publicKey) {
-      const verifiedMer = merchantList?.find(item => item?.merchant_address === userInfo?.publicKey)
+    if (userDetails?.address) {
+      const verifiedMer = merchantList?.find(item => item?.merchant_address === userDetails?.address)
       setIsVerifiedMerchant(Boolean(verifiedMer))
     }
-  }, [userInfo.publicKey]);
+  }, [userDetails?.address]);
 
   console.log(userUsdcBalance, 'usdc');
 
@@ -127,7 +128,7 @@ const LandingPage = () => {
                 
               </div>
             </div>
-            {userInfo?.publicKey && isVerifiedMerchant && (
+            {userDetails?.address && isVerifiedMerchant && (
               <div className="self-end">
                 <Link href={'/withdraw'}>
                   <button className="cursor-pointer rounded-[6px] bg-[#1653AE] px-[18px] py-[5px] text-[12px] font-medium text-[#FFf]">

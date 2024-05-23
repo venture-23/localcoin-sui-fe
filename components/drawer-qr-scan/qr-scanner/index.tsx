@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import PopupBox from 'components/popover';
+import { useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import QRCode from 'qrcode';
@@ -22,6 +23,7 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
   const ref = useRef(null);
   const lastResult = useRef();
   const { userInfo } = useMyContext();
+  const { userDetails } = useLogin()
 
   const [delayScan, setDelayScan] = useState(500);
   const popOverRef = useRef<any>(null);
@@ -35,7 +37,7 @@ export default function ScanPayMerchant({ closeScanner, setScanData, shareQr }: 
     try {
       const staticData = {
         type: userInfo.userType,
-        publicKey: userInfo.publicKey
+        publicKey: userDetails?.address
       };
       const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);

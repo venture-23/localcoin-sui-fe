@@ -2,10 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
+import { useLogin } from './useLogin';
 import { useMyContext } from './useMyContext';
 
 export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }: any) {
   const { userInfo } = useMyContext();
+  const { userDetails } = useLogin()
 
   const campaignListInfo = useQuery({
     queryKey: [`campaignListInfo`],
@@ -18,7 +20,7 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
       console.log('Campaign fetch')
       const response = fetchAllCampaign
         ? await campaignServices.getAllCampaigns()
-        : await campaignServices.getCreatorCampaigns(userInfo?.secretKey, userInfo?.publicKey);
+        : await campaignServices.getCreatorCampaigns(userInfo?.secretKey, userDetails?.address);
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
       // const filteredResponse = response.filter((item : any) => !filterCampaigns.some(campaign => campaign.id === item.id));
@@ -32,7 +34,7 @@ export function useCamapigns({ id = '', fetchAllCampaign = false, storeId = '' }
 
   const merchantListInfo = useQuery({
     queryKey: [`merchantListInfo`],
-    enabled: (!id && !!userInfo?.publicKey) || fetchAllCampaign,
+    enabled: (!id && !!userDetails?.address) || fetchAllCampaign,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,

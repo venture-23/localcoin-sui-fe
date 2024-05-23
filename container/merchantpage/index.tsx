@@ -32,6 +32,7 @@ const MerchantPage = () => {
   const { isFetching, tokenList, fetchToken } = useRecipient({});
   const [verifyMerchant, setVerifyMerchant] = useState(false);
   const [registerMerchant, setRegisterMerchant] = useState(false);
+  const { userDetails } = useLogin()
   const { settelmentSuccess } = useMerchant({
     verify_merchant: verifyMerchant,
     data,
@@ -50,7 +51,7 @@ const MerchantPage = () => {
     try {
       const staticData = {
         type: 'merchant',
-        publicKey: userInfo.publicKey,
+        publicKey: userDetails?.address,
         amount: data.amount || 0,
         proprietaryName: userInfo.proprietaryName,
         phoneNumber: userInfo.phoneNumber,

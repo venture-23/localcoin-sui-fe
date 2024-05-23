@@ -2,10 +2,11 @@ import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { useWallet } from '@suiet/wallet-kit';
 import { deleteCookieData } from 'app/action';
-import { useGetBalance } from 'hooks';
+import SignUpSuccess from 'container/signuppage/SignupSuccessScreen';
+import { useGetBalance, useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { maskWalletAddress } from 'utils/clipper';
 interface PageHeaderProps {
@@ -20,32 +21,39 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   isVerifiedMerchant
 }) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
+  const { isLoggedIn, login, logOut, userDetails, showSuccessScreen, setShowSuccessScreen } =
+    useLogin();
   const { userInfo, setShowPinScreen, setUserInfo } = useMyContext();
   const { userBalance } = useGetBalance();
-  const { disconnect } = useWallet()
+  const { disconnect } = useWallet();
+
+  useEffect(() => {
+    if (!userDetails.salt) return;
+    console.log('ZKLogin User', userDetails);
+  }, [userDetails.salt]);
 
   // const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
 
   const handleCopy = () => {
-    if (userInfo?.publicKey) {
-      navigator.clipboard.writeText(userInfo?.publicKey);
+    if (userDetails?.address) {
+      navigator.clipboard.writeText(userDetails?.address);
       toast.info('Address copied');
     }
   };
 
   const logout = async () => {
-    localStorage.removeItem('local-coin')
-    await deleteCookieData()
-    disconnect()
+    localStorage.removeItem('local-coin');
+    await deleteCookieData();
+    disconnect();
     setUserInfo({
       storeName: '',
       proprietaryName: '',
       phoneNumber: '',
       location: ''
-    })
-    toast.info('Wallet Disconnected')
-    setOpenMenu(false)
-  }
+    });
+    toast.info('Wallet Disconnected');
+    setOpenMenu(false);
+  };
   return (
     <>
       <div className="mb-[10px] flex w-full items-center justify-between pt-[10px]">
@@ -75,6 +83,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           <UserCircleIcon />
         </div>
 
+        <div className={['mobile-menu pt-[10px]', showSuccessScreen && 'open'].join(' ')}>
+          <SignUpSuccess
+            handleSignUp={() => setShowSuccessScreen((prev) => !prev)}
+            address={userDetails.address}
+          />
+        </div>
         <div className={['mobile-menu pt-[10px]', openMenu && 'open'].join(' ')}>
           <div
             onClick={() => setOpenMenu(false)}
@@ -86,37 +100,39 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           <div className="flex h-[100%] flex-col justify-between">
             <div className=" w-[calc(100%_+_2px)] rounded-[0px_0px_24px_24px] border border-t-[0] border-[#E4E4E7] bg-[#fff]">
               <div
-                className={[' w-full px-[16px]', !userInfo?.publicKey && 'opacity-[0.3]'].join(' ')}
+                className={[' w-full px-[16px]', !userDetails?.address && 'opacity-[0.3]'].join(
+                  ' '
+                )}
               >
                 <div
                   onClick={handleCopy}
                   className="cursor-pointer rounded-[6px] border border-[#E4E4E7] bg-[#fff] px-[16px] py-[4px] text-lg font-normal"
                 >
-                  {userInfo?.publicKey ? maskWalletAddress(userInfo?.publicKey) : 'Wallet Address'}
+                  {userDetails?.address
+                    ? maskWalletAddress(userDetails?.address)
+                    : 'Wallet Address'}
                 </div>
                 <p className="mt-[16px] pb-[18px] text-base font-semibold">
-                  {userInfo?.publicKey
-                    ? `${
-                        userBalance ?? 0
-                      } Local Coin Tokens`
+                  {userDetails?.address
+                    ? `${userBalance ?? 0} Local Coin Tokens`
                     : 'Earned coins today'}
                 </p>
               </div>
             </div>
 
             <div className="mx-[16px] my-[40px] flex flex-col gap-[19px]">
-              {userInfo.publicKey && isVerifiedMerchant ? (
+              {userDetails?.address && isVerifiedMerchant ? (
                 ''
               ) : (
                 <div
                   className={[
-                    'border rounded-[6px] border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
-                    !userInfo?.publicKey && 'opacity-[0.3]'
+                    'rounded-[6px] border border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
+                    !userDetails?.address && 'opacity-[0.3]'
                   ].join(' ')}
                 >
                   <Link
-                    className={`block w-full ${!userInfo?.publicKey && 'cursor-not-allowed'}`}
-                    href={userInfo?.publicKey ? '/merchant/register' : '/'}
+                    className={`block w-full ${!userDetails?.address && 'cursor-not-allowed'}`}
+                    href={userDetails?.address ? '/registerMerchant' : '/'}
                   >
                     Apply to become a Merchant
                   </Link>
@@ -125,37 +141,47 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
               <div
                 className={[
-                  'border rounded-[6px] border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
-                  !userInfo?.publicKey && 'opacity-[0.3]'
+                  'rounded-[6px] border border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
+                  !userDetails?.address && 'opacity-[0.3]'
                 ].join(' ')}
               >
                 <Link
-                  className={`block w-full ${!userInfo?.publicKey && 'cursor-not-allowed'}`}
-                  href={userInfo?.publicKey ? '/campaign/create' : ''}
+                  className={`block w-full ${!userDetails?.address && 'cursor-not-allowed'}`}
+                  href={userDetails?.address ? '/createCampaign' : ''}
                 >
                   Start a campaign
                 </Link>
               </div>
               <div
                 className={[
-                  'border rounded-[6px] border-[#171717] bg-[#171717] py-[10px] text-center text-lg font-semibold text-white'
+                  'rounded-[6px] border border-[#171717] bg-[#171717] py-[10px] text-center text-lg font-semibold text-white'
                 ].join(' ')}
               >
-                {!userInfo?.publicKey && (
+                {!isLoggedIn && (
+                  <div className="flex items-center justify-center gap-[6px]" onClick={login}>
+                    Sign In
+                  </div>
+                )}
+                {isLoggedIn && (
+                  <div className="flex items-center justify-center gap-[6px]" onClick={logOut}>
+                    Sign out
+                  </div>
+                )}
+                {/* {!userDetails?.address && (
                   <Link className="block w-full" href={'/signup'}>
                     Sign In{' '}
                   </Link>
                 )}
-                {!!userInfo?.publicKey && (
+                {!!userDetails?.address && (
                   <div
                     className="flex cursor-pointer items-center justify-center gap-[6px]"
                     onClick={logout}
                   >
                     Sign out
                   </div>
-                )}
+                )} */}
                 {/* <Link className="block w-full" href={'/signup'}>
-                  {userInfo.publicKey ? (
+                  {userDetails?.address ? (
                     <div className="flex items-center justify-center gap-[6px]">Sign out</div>
                   ) : (
                     'Sign in'

@@ -1,6 +1,7 @@
 'use client';
 
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
+import { useEnokiFlow } from '@mysten/enoki/react';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWallet } from '@suiet/wallet-kit';
 import { ConfirmationScreen } from 'components/confirmationScreen';
@@ -9,12 +10,14 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { MERCHANT_REGISTRY, PACKAGE_ID } from 'utils/constants';
+import { APP_NETWORK, SUI_CLIENT } from 'utils/sui';
 import MerchantInfo from './components/register-form';
 
 const MerchantRegisterPage = () => {
   const [error, setError] = useState<any>({});
   const [showFormNo, setShowFormNo] = useState(1);
   const { userInfo } = useMyContext();
+  const flow = useEnokiFlow()
   const [data, setData] = useState<any>({
     location: '',
     store_name: '',
@@ -65,9 +68,11 @@ const MerchantRegisterPage = () => {
         ],
       })
 
-      const result = await signAndExecuteTransactionBlock({
-        transactionBlock: tx
-      })
+      const result = await flow.sponsorAndExecuteTransactionBlock({
+        network: APP_NETWORK,
+        transactionBlock: tx,
+        client: SUI_CLIENT
+      });
       console.log(result, ':result')
       if(!result?.digest) {
         throw new Error ('Failed registering merchant')

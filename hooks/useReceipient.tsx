@@ -2,14 +2,16 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
+import { useLogin } from './useLogin';
 import { useMyContext } from './useMyContext';
 
 export function useRecipient({ data = {}, fetchAllToken = false }: any) {
   const { userInfo } = useMyContext();
+  const { userDetails } = useLogin()
 
   const receipientInfo = useQuery({
     queryKey: [`receipient-token-list`],
-    enabled: !!userInfo.publicKey || fetchAllToken,
+    enabled: !!userDetails?.address || fetchAllToken,
     // cacheTime: Infinity,
     retry: 3,
     refetchOnWindowFocus: false,
@@ -17,7 +19,7 @@ export function useRecipient({ data = {}, fetchAllToken = false }: any) {
     queryFn: async () => {
       const response = await campaignServices.getReceipientToken(
         userInfo.secretKey,
-        userInfo.publicKey
+        userDetails?.address
       );
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });
@@ -42,7 +44,7 @@ export function useRecipient({ data = {}, fetchAllToken = false }: any) {
         data?.amount,
         data?.tokenAddress,
         data?.merchantAddress,
-        userInfo.publicKey
+        userDetails?.address
       );
       if (response?.error) throw new Error(response.error || 'Something went wrong');
       console.log({ response });

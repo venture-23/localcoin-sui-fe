@@ -1,16 +1,19 @@
 "use client"
 import { ChevronLeftIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useEnokiFlow } from '@mysten/enoki/react';
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { useWallet } from "@suiet/wallet-kit";
 import Button from "components/botton";
 import { ConfirmationScreen } from "components/confirmationScreen";
-import { useGetBalance } from "hooks";
+import { useGetBalance, useLogin } from "hooks";
 import { useMyContext } from "hooks/useMyContext";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { campaignServices } from "services/campaign-services";
 import { PACKAGE_ID, TOKEN_POLICY, USDC_TREASURY, USDC_TYPE } from "utils/constants";
+import { APP_NETWORK, SUI_CLIENT } from "utils/sui";
+
 
 const Withdraw = () => {
     const { userBalance } = useGetBalance()
@@ -21,11 +24,13 @@ const Withdraw = () => {
     const { signAndExecuteTransactionBlock } = useWallet()
     // const { tokenList } = useRecipient({});
     // console.log(tokenList, ':token')
+    const flow = useEnokiFlow()
+    const { userDetails } = useLogin()
 
     const requestSettlement = async () => {
       try {
         const pkId = PACKAGE_ID
-        const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
+        const localCoinObj = await campaignServices.getTokenObj(userDetails?.address)
         const tx = new TransactionBlock()
         console.log({
           USDC_TREASURY,
@@ -42,9 +47,11 @@ const Withdraw = () => {
           typeArguments: [USDC_TYPE]
         })
 
-        const result = await signAndExecuteTransactionBlock({
-          transactionBlock: tx
-        })
+        const result = await flow.sponsorAndExecuteTransactionBlock({
+          network: APP_NETWORK,
+          transactionBlock: tx,
+          client: SUI_CLIENT
+        });
 
         if(!result.digest) throw new Error('Failed seltting funds')
         return result
