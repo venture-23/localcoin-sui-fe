@@ -2,12 +2,13 @@
 
 import { ChevronLeftIcon } from "@heroicons/react/16/solid";
 import { BackspaceIcon } from "@heroicons/react/24/outline";
+import { useEnokiFlow } from '@mysten/enoki/react';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWallet } from "@suiet/wallet-kit";
 import Button from "components/botton";
 import { ConfirmationScreen } from "components/confirmationScreen";
 import DrawerQrScan from "components/drawer-qr-scan";
-import { useCamapigns, useMerchant, useRecipient } from "hooks";
+import { useCamapigns, useLogin, useMerchant, useRecipient } from "hooks";
 import { useMyContext } from "hooks/useMyContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,6 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { campaignServices } from "services/campaign-services";
 import { CAMPAIGN_PACKAGE_ID, PACKAGE_ID, TOKEN_POLICY } from "utils/constants";
+import { APP_NETWORK, SUI_CLIENT } from "utils/sui";
 import RecipientConfirmation from "./RecipientConfirmation";
 
 interface IScannedDataProps {
@@ -40,6 +42,7 @@ const RequestPay = () => {
     const [imageUrl, setImageUrl] = useState('');
     const { userInfo } = useMyContext()
     const buttonRef = useRef<any>(null);
+    const flow = useEnokiFlow()
     // const [scanData, setScanData] = useState(JSON.stringify(
     //   {
     //     type:"campaign creator",
@@ -63,6 +66,7 @@ const RequestPay = () => {
     const [merchantPaymentSuccess, setMerchantPaymentSuccess] = useState(false);
     const [storeName, setStoreName] = useState('')
     const { signAndExecuteTransactionBlock } = useWallet()
+    const { userDetails } = useLogin()
 
 
     const {  merchant_associated } = useMerchant(
@@ -167,7 +171,7 @@ const RequestPay = () => {
     }
 
     const handlePaymentRequest = async () => {
-        const merchant = merchantList?.find(item => item?.merchant_address === userInfo?.publicKey)
+        const merchant = merchantList?.find(item => item?.merchant_address === userDetails?.address)
         if(!merchant || Object.keys(merchant).length === 0) {
           toast.error('You are not a verified mechant.')
           return;
@@ -183,12 +187,12 @@ const RequestPay = () => {
           
           const staticData = {
             type: 'merchant',
-            publicKey: userInfo.publicKey,
+            publicKey: userDetails?.address,
             amount: amount || 0,
-            proprietaryName: userInfo.proprietaryName,
-            phoneNumber: userInfo.phoneNumber,
+            proprietaryName: merchant?.proprietor,
+            phoneNumber: merchant?.phone_no,
             storeName: merchant?.store_name,
-            location: userInfo.location
+            location: merchant?.location
           };
           const response = await QRCode.toDataURL(JSON.stringify(staticData));
           setImageUrl(response);
@@ -200,11 +204,21 @@ const RequestPay = () => {
 
       const sendTokenToRecipient = async () => {
         try {
+          console.log(formattedScannedData, ':scannedDData')
           const pkId = PACKAGE_ID
           const tx = new TransactionBlock()
           const amount = +formattedScannedData?.amount * Math.pow(10, 6)
-          const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
+          const localCoinObj = await campaignServices.getTokenObj(userDetails?.address)
           console.log(amount, ':forAmt')
+          console.log({
+            CAMPAIGN_PACKAGE_ID,
+            campaignName: formattedScannedData?.campaignName,
+            recipientAddr: formattedScannedData?.publicKey,
+            localCoinObj,
+            TOKEN_POLICY
+
+
+          })
           tx.moveCall({
             target: `${pkId}::campaign_management::transfer_token_to_recipient`,
             arguments: [
@@ -218,9 +232,13 @@ const RequestPay = () => {
                 tx.object(TOKEN_POLICY),
             ],
           })
-          const result = await signAndExecuteTransactionBlock({
-            transactionBlock: tx
-          })
+
+          const result = await flow.sponsorAndExecuteTransactionBlock({
+            network: APP_NETWORK,
+            transactionBlock: tx,
+            client: SUI_CLIENT
+          });
+          
 
           if(result?.digest) {
             return result
@@ -235,7 +253,7 @@ const RequestPay = () => {
           const pkId = PACKAGE_ID
           const tx = new TransactionBlock()
           const amount = +formattedScannedData?.amount * Math.pow(10, 6)
-          const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
+          const localCoinObj = await campaignServices.getTokenObj(userDetails?.address)
           console.log(amount, ':forAmt')
           tx.moveCall({
             target: `${pkId}::local_coin::transfer_token_to_merchants`,
@@ -246,9 +264,11 @@ const RequestPay = () => {
                 
             ],
           })
-          const result = await signAndExecuteTransactionBlock({
-            transactionBlock: tx
-          })
+          const result = await flow.sponsorAndExecuteTransactionBlock({
+            network: APP_NETWORK,
+            transactionBlock: tx,
+            client: SUI_CLIENT
+          });
 
           if(result?.digest) {
             return result
@@ -281,7 +301,7 @@ const RequestPay = () => {
                 //   formattedScannedData?.amount as number,
                 //   data?.tokenAddress,
                 //   data?.merchantAddress,
-                //   userInfo.publicKey
+                //   userDetails?.address
                 // );
                 
                 const paymentTx = await sendTokenToMerchant()

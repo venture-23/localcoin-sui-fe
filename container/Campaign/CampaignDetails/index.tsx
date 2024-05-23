@@ -1,6 +1,7 @@
 'use client';
 import { MapIcon, UserCircleIcon } from '@heroicons/react/16/solid';
 import { ChevronLeftIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useEnokiFlow } from '@mysten/enoki/react';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWallet } from '@suiet/wallet-kit';
 import Button from 'components/botton';
@@ -18,6 +19,7 @@ import { toast } from 'react-toastify';
 import { campaignServices } from 'services/campaign-services';
 import { maskWalletAddress } from 'utils/clipper';
 import { CAMPAIGN_PACKAGE_ID, LOCAL_COIN_APP, PACKAGE_ID, TOKEN_POLICY } from 'utils/constants';
+import { APP_NETWORK, SUI_CLIENT } from 'utils/sui';
 
 
 interface IPaticipant {
@@ -32,6 +34,7 @@ const CampaignDetail = (props: any) => {
   const router = useRouter();
   const [showLoader, setShowLoader] = useState(false);
   const [showUsernameBox, setShowUsernameBox] = useState(false);
+  const flow = useEnokiFlow()
 
   const [scanData, setScanData] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -201,9 +204,15 @@ const CampaignDetail = (props: any) => {
 
       })
 
-      const result = await signAndExecuteTransactionBlock({
-        transactionBlock: tx
-      })
+      const result = await flow.sponsorAndExecuteTransactionBlock({
+        network: APP_NETWORK,
+        transactionBlock: tx,
+        client: SUI_CLIENT
+      });
+
+      // const result = await signAndExecuteTransactionBlock({
+      //   transactionBlock: tx
+      // })
 
       if(!result?.digest) throw new Error("Failed joining campaign")
       
@@ -277,9 +286,12 @@ const CampaignDetail = (props: any) => {
         ],
 
     });
-    const result = signAndExecuteTransactionBlock({
-      transactionBlock: tx
-    })
+
+    const result = await flow.sponsorAndExecuteTransactionBlock({
+      network: APP_NETWORK,
+      transactionBlock: tx,
+      client: SUI_CLIENT
+    });
 
     return result
     } catch (error) {
