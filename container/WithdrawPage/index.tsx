@@ -5,7 +5,7 @@ import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { useWallet } from "@suiet/wallet-kit";
 import Button from "components/botton";
 import { ConfirmationScreen } from "components/confirmationScreen";
-import { useGetBalance } from "hooks";
+import { useGetBalance, useLogin } from "hooks";
 import { useMyContext } from "hooks/useMyContext";
 import Link from "next/link";
 import { useState } from "react";
@@ -25,11 +25,12 @@ const Withdraw = () => {
     // const { tokenList } = useRecipient({});
     // console.log(tokenList, ':token')
     const flow = useEnokiFlow()
+    const { userDetails } = useLogin()
 
     const requestSettlement = async () => {
       try {
         const pkId = PACKAGE_ID
-        const localCoinObj = await campaignServices.getTokenObj(userInfo?.publicKey)
+        const localCoinObj = await campaignServices.getTokenObj(userDetails?.address)
         const tx = new TransactionBlock()
         console.log({
           USDC_TREASURY,

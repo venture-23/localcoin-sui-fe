@@ -8,7 +8,7 @@ import { useWallet } from "@suiet/wallet-kit";
 import Button from "components/botton";
 import { ConfirmationScreen } from "components/confirmationScreen";
 import DrawerQrScan from "components/drawer-qr-scan";
-import { useCamapigns, useLogin, useMerchant, useRecipient } from "hooks";
+import { useCamapigns, useLogin } from "hooks";
 import { useMyContext } from "hooks/useMyContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -69,31 +69,30 @@ const RequestPay = () => {
     const { userDetails } = useLogin()
 
 
-    const {  merchant_associated } = useMerchant(
-        {
-          merchantAddress: data?.merchantAddress || '',
-          tokenId: data?.tokenAddress || '',
-          data
-        }
-      );
+    // const {  merchant_associated } = useMerchant(
+    //     {
+    //       merchantAddress: data?.merchantAddress || '',
+    //       tokenId: data?.tokenAddress || '',
+    //       data
+    //     }
+    //   );
   
-    const { tokenList, isSendToMerchantSucc } = useRecipient({
-      data
-    });
+    // const { tokenList, isSendToMerchantSucc } = useRecipient({
+    //   data
+    // });
 
 
     const { merchantList } = useCamapigns({ fetchAllCampaign: true});
     console.log(merchantList, ':merchant1')
 
-    console.log(isSendToMerchantSucc, ':isSend')
 
-    useEffect(() => {
-        if (isSendToMerchantSucc) {
-            setOpenConfirmation(false);
-          setScanData('');
-          setData({});
-        }
-      }, [isSendToMerchantSucc]);
+    // useEffect(() => {
+    //     if (isSendToMerchantSucc) {
+    //         setOpenConfirmation(false);
+    //       setScanData('');
+    //       setData({});
+    //     }
+    //   }, [isSendToMerchantSucc]);
 
 
       const handleCancelPayment = () => {
@@ -121,41 +120,41 @@ const RequestPay = () => {
         }
       }, [scanData]);
 
-      useEffect(() => {
-        if (tokenList?.length) {
-          console.log({ tokenList });
-          setData({
-            ...data,
-            tokenName: tokenList[0]?.name,
-            tokenAddress: tokenList[0]?.contractToken
-          });
-        }
-      }, [tokenList]);
+      // useEffect(() => {
+      //   if (tokenList?.length) {
+      //     console.log({ tokenList });
+      //     setData({
+      //       ...data,
+      //       tokenName: tokenList[0]?.name,
+      //       tokenAddress: tokenList[0]?.contractToken
+      //     });
+      //   }
+      // }, [tokenList]);
 
-      useEffect(() => {
-        if (
-          data.merchantAddress &&
-          merchant_associated
-        ) {
-          if (merchant_associated?.length) {
-            if (merchant_associated.includes(data.merchantAddress)) {
+      // useEffect(() => {
+      //   if (
+      //     data.merchantAddress &&
+      //     merchant_associated
+      //   ) {
+      //     if (merchant_associated?.length) {
+      //       if (merchant_associated.includes(data.merchantAddress)) {
          
-              console.log(merchant_associated.includes(data.merchantAddress));
-            } else {
-              toast.error(
-                `You can't transfer to the scan Merchant, Choose Another one token or Scan another Merchant`,
-                {
-                  autoClose: 5000,
-                  pauseOnHover: true
-                }
-              );
-            }
-          } else {
-            toast.error(`You can't transfer to the scan Merchant`);
-          }
-          setData({ ...data, merchant_associated });
-        }
-      }, [merchant_associated]);
+      //         console.log(merchant_associated.includes(data.merchantAddress));
+      //       } else {
+      //         toast.error(
+      //           `You can't transfer to the scan Merchant, Choose Another one token or Scan another Merchant`,
+      //           {
+      //             autoClose: 5000,
+      //             pauseOnHover: true
+      //           }
+      //         );
+      //       }
+      //     } else {
+      //       toast.error(`You can't transfer to the scan Merchant`);
+      //     }
+      //     setData({ ...data, merchant_associated });
+      //   }
+      // }, [merchant_associated]);
 
     const handleRemove = () => {
         if (amount) {

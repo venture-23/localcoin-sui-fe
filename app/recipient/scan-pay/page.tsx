@@ -3,6 +3,7 @@ import { XCircleIcon } from '@heroicons/react/20/solid';
 import { ArrowDownOnSquareStackIcon, QrCodeIcon, ShareIcon } from '@heroicons/react/24/outline';
 import Button from 'components/botton';
 import PopupBox from 'components/popover';
+import { useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -22,6 +23,7 @@ export default function ScanPayMerchant() {
 
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const cameraRef = useRef();
+  const { userDetails } = useLogin()
 
   useEffect(() => {
     generateQrCode();
@@ -31,7 +33,7 @@ export default function ScanPayMerchant() {
     try {
       const staticData = {
         type: 'receipient',
-        publicKey: userInfo.publicKey,
+        publicKey: userDetails?.address,
         secretKey: userInfo.secretKey
       };
       // debugger;

@@ -74,21 +74,21 @@ const CampaignDetail = (props: any) => {
   const [isCampaignEnded, setIsCampaignEnded] = useState(false);
   console.log(currentParticipant, ':cuurPart')
 
-  useEffect(() => {
-    if (userDetails?.address) {
-      console.log({ userInfo });
-      getCampaginOwner();
-      fetchCampaignParticipate();
-      // getCampaignStatus()
-    }
+  // useEffect(() => {
+  //   if (userDetails?.address) {
+  //     console.log({ userInfo });
+  //     getCampaginOwner();
+  //     fetchCampaignParticipate();
+  //     // getCampaignStatus()
+  //   }
 
-    return () => {
-      setCurrentParticipant({})
-      setIsCampaignEnded(false);
-      setisCampaignAdmin(false);
+  //   return () => {
+  //     setCurrentParticipant({})
+  //     setIsCampaignEnded(false);
+  //     setisCampaignAdmin(false);
       
-    }
-  }, [userInfo]);
+  //   }
+  // }, [userDetails?.address]);
 
   const getCampaignStatus = async() => {
     try {
@@ -106,6 +106,7 @@ const CampaignDetail = (props: any) => {
 
   const getCampaginOwner = async () => {
     const isOwner = campaignInfo?.creator === userDetails?.address
+    console.log(isOwner, ':isOwner')
     setisCampaignAdmin(isOwner);
 
   };
@@ -414,7 +415,7 @@ const CampaignDetail = (props: any) => {
 
   //       if(Boolean(isCurrentUserVerified)){
   //         console.log('checking amount')
-  //         campaignServices.get_amount_received(userInfo, props.campaignId).then((response: any) => {
+  //         campaignServices.get_amount_received(userDetails?.address, props.campaignId).then((response: any) => {
   //           console.log(response, ':esponse')
   //           setParticipantPaymentReceived(Number(response) > 0)
   //         })
@@ -425,8 +426,22 @@ const CampaignDetail = (props: any) => {
   // }, [userInfo, participantList])
 
   useEffect(() => {
-    if (userDetails?.address) {
-      console.log({ userInfo });
+    if(userDetails?.address) {
+      if(participantList?.length > 0) {
+        const verified = participantList.filter((item: any) => item.value)
+        const isCurrentUserVerified = verified.find((item: any) => item.address === userDetails?.address)
+        console.log(isCurrentUserVerified, ':isVerified')
+        if(isCurrentUserVerified) {
+          const isPaid = campaignInfo?.recipient_balance?.find((item:any) => item.paidAddress === userDetails?.address)
+          setParticipantPaymentReceived(Boolean(isPaid))
+        }
+      }
+    }
+  }, [userDetails?.address, participantList])
+
+  useEffect(() => {
+    if (userDetails?.address && !isDetailsFetching) {
+      console.log({ userDetails }, ':onrender');
       getCampaginOwner();
       fetchCampaignParticipate();
       getCampaignStatus()
@@ -438,7 +453,7 @@ const CampaignDetail = (props: any) => {
       setisCampaignAdmin(false);
       
     }
-  }, [userDetails?.address]);
+  }, [userDetails?.address, isDetailsFetching]);
 
   console.log(isCampaignAdmin, ':isAdmin')
 

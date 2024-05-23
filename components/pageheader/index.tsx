@@ -113,7 +113,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                     : 'Wallet Address'}
                 </div>
                 <p className="mt-[16px] pb-[18px] text-base font-semibold">
-                  {userInfo?.publicKey
+                  {userDetails?.address
                     ? `${userBalance ?? 0} Local Coin Tokens`
                     : 'Earned coins today'}
                 </p>
@@ -121,7 +121,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             </div>
 
             <div className="mx-[16px] my-[40px] flex flex-col gap-[19px]">
-              {userInfo.publicKey && isVerifiedMerchant ? (
+              {userDetails?.address && isVerifiedMerchant ? (
                 ''
               ) : (
                 <div
@@ -167,12 +167,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                     Sign out
                   </div>
                 )}
-                {/* {!userInfo?.publicKey && (
+                {/* {!userDetails?.address && (
                   <Link className="block w-full" href={'/signup'}>
                     Sign In{' '}
                   </Link>
                 )}
-                {!!userInfo?.publicKey && (
+                {!!userDetails?.address && (
                   <div
                     className="flex cursor-pointer items-center justify-center gap-[6px]"
                     onClick={logout}
@@ -181,7 +181,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                   </div>
                 )} */}
                 {/* <Link className="block w-full" href={'/signup'}>
-                  {userInfo.publicKey ? (
+                  {userDetails?.address ? (
                     <div className="flex items-center justify-center gap-[6px]">Sign out</div>
                   ) : (
                     'Sign in'

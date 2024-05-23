@@ -63,6 +63,12 @@ export const campaignServices = (() => {
           name: campaignDetails.name,
           description: campaignDetails.description,
           no_of_recipients: campaignDetails.no_of_recipients,
+          recipient_balance: campaignDetails.recipient_balance.fields.contents.map((entry: any) => {
+            return {
+              paidAddress: entry.fields.key,
+              value: entry.fields.value
+            };
+          })
       });
 
 
@@ -269,7 +275,7 @@ export const campaignServices = (() => {
       //   parameterType: 'merchant_registration',
       //   secretKey: userInfo.secretKey,
       //   payload: [
-      //     accountToScVal(userInfo.publicKey),
+      //     accountToScVal(userDetails?.address),
       //     StringToScVal(data.proprietor),
       //     StringToScVal(data.phone_no),
       //     StringToScVal(data.store_name),
@@ -398,10 +404,10 @@ export const campaignServices = (() => {
   ) => {
     // return makeTransaction({
     //   secretKey: userInfo.secretKey,
-    //   publicKey: userInfo.publicKey,
+    //   publicKey: userDetails?.address,
     //   contractId: campaignAddress,
     //   parameterType: 'join_campaign',
-    //   payload: [StringToScVal(username), accountToScVal(userInfo.publicKey)]
+    //   payload: [StringToScVal(username), accountToScVal(userDetails?.address)]
     // });
   };
 
@@ -478,7 +484,7 @@ export const campaignServices = (() => {
     //   secretKey: userInfo.secretKey,
     //   contractId: campaignContractId,
     //   parameterType: 'end_campaign',
-    //   payload: [accountToScVal(contractId), accountToScVal(userInfo.publicKey)]
+    //   payload: [accountToScVal(contractId), accountToScVal(userDetails?.address)]
     // });
   };
 
@@ -491,13 +497,8 @@ export const campaignServices = (() => {
     // });
   }
 
-  const  get_amount_received = (userInfo: any, contractId: string) => {
-    // return makeTransaction({
-    //   secretKey: userInfo.secretKey,
-    //   contractId: contractId,
-    //   parameterType: 'get_amount_received',
-    //   payload: [accountToScVal(userInfo.publicKey)]
-    // });
+  const  get_amount_received = (userAddress: any, contractId: string) => {
+    
   }
 
   return {

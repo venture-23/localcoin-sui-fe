@@ -51,7 +51,7 @@ export function useMerchant({
     queryFn: async () => {
       setisSettledSuccess(false);
       const response = await campaignServices.request_campaign_settlement(
-        userInfo.publicKey,
+        userDetails?.address,
         userInfo.secretKey,
         parseFloat(data.amount),
         data.tokenId
