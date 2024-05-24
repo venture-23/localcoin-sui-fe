@@ -7,6 +7,7 @@ import { useGetBalance, useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { TailSpin } from 'react-loader-spinner';
 import { toast } from 'react-toastify';
 import { maskWalletAddress } from 'utils/clipper';
 interface PageHeaderProps {
@@ -21,7 +22,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   isVerifiedMerchant
 }) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
-  const { isLoggedIn, login, logOut, userDetails, showSuccessScreen, setShowSuccessScreen } =
+  const { isLoggedIn, login, logOut, userDetails, showSuccessScreen, setShowSuccessScreen, isGoogleScreenLoading } =
     useLogin();
   const { userInfo, setShowPinScreen, setUserInfo } = useMyContext();
   const { userBalance } = useGetBalance();
@@ -54,6 +55,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     toast.info('Wallet Disconnected');
     setOpenMenu(false);
   };
+
+  const disconnectWallet = () => {
+    logOut();
+    toast.info('Wallet Disconnected');
+    setOpenMenu(false);
+  }
   return (
     <>
       <div className="mb-[10px] flex w-full items-center justify-between pt-[10px]">
@@ -158,12 +165,24 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                 ].join(' ')}
               >
                 {!isLoggedIn && (
-                  <div className="flex items-center justify-center gap-[6px]" onClick={login}>
+                  <div className="flex cursor-pointer items-center justify-center gap-[6px]" onClick={login}>
                     Sign In
+                    {isGoogleScreenLoading && (
+                      <TailSpin
+                        visible={true}
+                        height="30"
+                        width="30"
+                        color="#fff"
+                        ariaLabel="tail-spin-loading"
+                        radius="1"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                      />
+                    )}
                   </div>
                 )}
                 {isLoggedIn && (
-                  <div className="flex items-center justify-center gap-[6px]" onClick={logOut}>
+                  <div className="flex cursor-pointer items-center justify-center gap-[6px]" onClick={disconnectWallet}>
                     Sign out
                   </div>
                 )}

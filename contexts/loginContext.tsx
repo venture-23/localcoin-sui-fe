@@ -12,6 +12,7 @@ interface LoginContextType {
   login: () => void;
   logOut: () => void;
   setShowSuccessScreen: React.Dispatch<React.SetStateAction<boolean>>;
+  isGoogleScreenLoading: boolean;
 }
 
 export const LoginContext = createContext<LoginContextType | undefined>(undefined);
@@ -38,16 +39,22 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
   useAuthCallback();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isGoogleScreenLoading, setIsGoogleScreenLaoding] = useState(false)
   const [showSuccessScreen, setShowSuccessScreen] = useState<boolean>(false);
   const [userDetails, setUserDetails] = useState<UserDetails>(InitUserDetails);
 
   const login = async () => {
+    setIsGoogleScreenLaoding(true)
     window.location.href = await flow.createAuthorizationURL({
       provider: 'google',
       clientId: GOOGLE_CLIENT_ID,
       redirectUrl: window.location.origin,
       network: APP_NETWORK
     });
+    if(isLoggedIn) {
+      setIsGoogleScreenLaoding(false)
+    }
+    
   };
 
   const logOut = async () => {
@@ -88,7 +95,8 @@ export const LoginProvider: React.FC<LoginProviderProps> = ({ children }) => {
     showSuccessScreen,
     login,
     logOut,
-    setShowSuccessScreen
+    setShowSuccessScreen,
+    isGoogleScreenLoading
   };
 
   return <LoginContext.Provider value={contextValue}>{children}</LoginContext.Provider>;

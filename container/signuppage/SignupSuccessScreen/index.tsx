@@ -34,7 +34,7 @@ const SignUpSuccess = ({ handleSignUp, address }: ISignupSuccessProps) => {
         <Image src={'/successScreenVector2.png'} height={120} width={120} alt="z" />
       </div>
       <div className="container mx-auto h-[100%]">
-        <div className="flex h-[100%] flex-col justify-between">
+        <div className="flex h-[95%] flex-col justify-between">
           <div className="mt-[100px] flex flex-col items-center gap-[12px]">
             <div>
               <Image src={'/localCoinLogo.png'} height={83} width={83} alt="Local Coin" />
