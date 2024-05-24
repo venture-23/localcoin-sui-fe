@@ -1,9 +1,6 @@
 'use client';
-import { BackspaceIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { MyContext } from 'app/providers';
-import Button from 'components/botton';
 import CustomToaster from 'components/toaster';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { checkPinCorrect, decodeToken } from 'services/encrypt-decrypt-data';
@@ -88,16 +85,14 @@ export default function PinLockScreen(props: any) {
   return (
     <MyContext.Provider
       value={{
-        setShowPinScreen,
         setRedirectTo,
         setUserInfo,
         userInfo,
         redirectTo,
-        checkPinCode,
         requiredAuthentication
       }}
     >
-      {((showPinLockScreen || checkPinCode) && (
+      {/* {((showPinLockScreen || checkPinCode) && (
         <div className=" pin_lock fixed z-[1000]   grid  h-screen  w-full  place-items-center bg-white">
           {checkPinCode && (
             <div
@@ -182,7 +177,7 @@ export default function PinLockScreen(props: any) {
           </div>
         </div>
       )) ||
-        null}
+        null} */}
       {children}
       <CustomToaster />
     </MyContext.Provider>
