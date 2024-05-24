@@ -57,6 +57,7 @@ export const campaignServices = (() => {
       campaignDetails = (res as any)?.fields;
       console.log(res, ':cam')
       campaigns.push({
+          amount: campaignDetails.amount,
           campaign_id: campaignDetails?.id?.id,
           creator: campaignDetails.creator,
           location: campaignDetails.location,

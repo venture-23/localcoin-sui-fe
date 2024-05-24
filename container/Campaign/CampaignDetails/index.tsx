@@ -384,10 +384,11 @@ const CampaignDetail = (props: any) => {
     try {
       const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
       const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
+      const campaignAmt = Number(campaignInfo?.amount) / Math.pow(10, 6)
       const staticData = {
         type: 'campaign creator',
         publicKey: userDetails?.address,
-        amount: (Number(1)/Number(campaignInfo?.no_of_recipients)).toFixed(2),
+        amount: (Number(campaignAmt)/Number(campaignInfo?.no_of_recipients)).toFixed(2),
         proprietaryName: userInfo.proprietaryName,
         phoneNumber: userInfo.phoneNumber,
         storeName: userInfo.storeName,
@@ -588,7 +589,7 @@ const CampaignDetail = (props: any) => {
                   </div>
                 )}
 
-              {participantList.length > 0 && isCampaignAdmin && (
+              {participantList.length > 0 && isCampaignAdmin && acceptedNames.length > 0 && (
                 <div className='flex items-center justify-center'>
                   <button disabled={verifyLoader} className='border border-[#171717] rounded-[6px] text-base font-normal px-[12px] py-[4px] cursor-pointer' onClick={() => setVerifyConfirm(true)}>
                     {verifyLoader ? (
@@ -606,7 +607,7 @@ const CampaignDetail = (props: any) => {
             
             <div>
               {isCampaignAdmin ? (
-                <Button handleClick={() => {if(!isCampaignEnded) setEndCampaignConfirm(true)}} buttonType={'outlined'} text={isCampaignEnded ? 'Campaign Ended' : 'End Campaign'}/>
+                <Button buttonType={'outlined'} text={isCampaignEnded ? 'Campaign Ended' : 'Campaign is live'}/>
               ) 
               : isCampaignEnded ? (
                 <Button buttonType={'outlined'} text={'Campaign Ended'}/>
