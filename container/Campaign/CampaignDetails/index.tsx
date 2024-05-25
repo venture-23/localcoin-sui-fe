@@ -440,6 +440,18 @@ const CampaignDetail = (props: any) => {
     }
   }, [userDetails?.address, participantList])
 
+  const isRecipientPaid = (address: string) => {
+        const verified = participantList.filter((item: any) => item.value)
+        const isCurrentParVerified = verified.find((item: any) => item.address === address)
+        if(isCurrentParVerified) {
+          const isPaid = campaignInfo?.recipient_balance?.find((item:any) => item.paidAddress === address)
+          return Boolean(isPaid)
+        } else {
+          return false
+        }
+   
+  }
+
   useEffect(() => {
     if (userDetails?.address && !isDetailsFetching) {
       console.log({ userDetails }, ':onrender');
@@ -550,17 +562,13 @@ const CampaignDetail = (props: any) => {
                       <div className='self-end flex items-center gap-[18px]'>
                         <div className='text-[10px] font-normal'>Status</div>
                         <div className='text-[10px] font-normal'>Accept</div>
+                        <div className='text-[10px] font-normal'>Payment</div>
                       </div>
                     </div>                      
                     {participantList.map((eachParticipant: any, eachIndex: number) => (
                       <div className='flex items-center justify-between' key={eachIndex + 1 + ''}>
                         <div className='flex items-center gap-[3px] text-base font-normal text-[#171717]'>
                           <span>{eachParticipant.userName}{' '}</span>
-                          {/* {eachParticipant.value ? (
-                            <div title='Verified' className='verified-user'></div>
-                          ) : (
-                            <div title='Unverified' className='unverified-user'></div>
-                          )} */}
                         </div>
                         <div className='flex items-center gap-[18px]'>
                           {/* <div className='w-[30px]'>
@@ -572,7 +580,12 @@ const CampaignDetail = (props: any) => {
                           ) : (
                             <div  className='text-xs font-normal'>Unverified</div>
                           )}
-                          <div className='w-[25px]'>
+                          {eachParticipant.value ? (
+                            <div className='w-[25px]'>
+                              <div title='Verified' className='verified-user'></div>
+                            </div>
+                          ) : (
+                            <div className='w-[25px]'>
                               <input 
                                 checked={acceptedNames.includes(eachParticipant.address)} 
                                 type="checkbox" id={`accept-${eachIndex + 1}`} 
@@ -582,6 +595,16 @@ const CampaignDetail = (props: any) => {
                               />
                               <label className='verification-checkbox-label' htmlFor={`accept-${eachIndex + 1}`}></label>
                           </div>
+                          )}
+                          <div className='w-[25px]'>
+                            {isRecipientPaid(eachParticipant?.address) ? (
+                              <div title='Verified' className='verified-user'></div>
+                            ) : (
+                              <div title='Verified' className='unverified-user'></div>
+                            )}
+                              
+                          </div>
+                          
                         </div>
                       </div>
                     ))}
