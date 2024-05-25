@@ -111,7 +111,7 @@ const Withdraw = () => {
                     </div>
 
                     <div>
-                        <Button handleClick={() => setConfirmWithdraw(true)} text="Withdraw" />
+                        <Button disabled={Number(userBalance) === 0} handleClick={() => setConfirmWithdraw(true)} text="Withdraw" />
                     </div>
 
               </div>

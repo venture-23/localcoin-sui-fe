@@ -83,12 +83,23 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           </h2>
         </div>
 
-        <div
-          onClick={() => setOpenMenu((prev) => !prev)}
-          className="flex-end ml-[auto] h-[46px] w-[46px] cursor-pointer rounded-[100%]"
-        >
-          <UserCircleIcon />
-        </div>
+
+            <div className='flex-end flex item-center'>
+              <div className='flex items-center justify-center'>
+                <div className='flex h-[24px] px-[2px] py-[4px] items-center gap-[2px] rounded-[3px] border border-[#1384F5]'>
+                  <img className='w-[20px]' src={'https://blog.sui.io/content/images/2023/04/Sui_Droplet_Logo_Blue-3.png'} alt="" />
+                  <span className='text-sm text-[#1384F5] font-medium'>Testnet</span>
+                </div>
+              </div>
+              
+              <div
+                onClick={() => setOpenMenu((prev) => !prev)}
+                className="ml-[auto] h-[46px] w-[46px] cursor-pointer rounded-[100%]"
+              >
+                <UserCircleIcon />
+              </div>
+            </div>
+        
 
         <div className={['mobile-menu pt-[10px]', showSuccessScreen && 'open'].join(' ')}>
           <SignUpSuccess

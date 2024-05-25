@@ -36,7 +36,7 @@ export type StatusType = 'withdraw' | 'merchant' | 'campaign' | 'recipient_trans
 export const successStatusText = {
   'withdraw' : {
     title: 'Withdraw requested.',
-    text: 'Your LocalCoin will be credited into USD for you once our administration gets to this transaction. This can take up to 2 business days.'
+    text: 'You have received your USDC. If you wish to convert it to fiat currency, please contact the super admin.'
   },
   'merchant': {
     title: 'Congratulations!',
