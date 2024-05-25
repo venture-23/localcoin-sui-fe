@@ -11,7 +11,7 @@ import { useCamapigns, useGetBalance, useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { ThreeDots } from 'react-loader-spinner';
+import { TailSpin, ThreeDots } from 'react-loader-spinner';
 // import { useMyContext } from 'hooks/useMyContext';
 // import { useRouter } from 'next/navigation';
 
@@ -37,7 +37,7 @@ const LandingPage = () => {
   const { userInfo } = useMyContext();
   const { userBalance, userUsdcBalance, isFetchingUsdcBalance, isFetchingUserBalance } = useGetBalance();
   const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
-  const { userDetails } = useLogin()
+  const { userDetails, isLoggedIn,isGoogleScreenLoading, login } = useLogin()
 
   const { merchantList } = useCamapigns({ fetchAllCampaign: true});
   console.log(userBalance, ':lcoal')
@@ -135,6 +135,26 @@ const LandingPage = () => {
                     Withdraw
                   </button>
                 </Link>
+              </div>
+            )}
+            {!isLoggedIn && (
+              <div className='self-end'>
+                <button onClick={login} className="flex items-center gap-[4px] cursor-pointer border border-[#1653AE] rounded-[6px] bg-[#fff] px-[18px] py-[5px] text-[12px] font-bold text-[#1653AE]">
+                    <span>Sign in</span>
+                    <img className='w-[20px]' src="https://w7.pngwing.com/pngs/326/85/png-transparent-google-logo-google-text-trademark-logo-thumbnail.png" alt="" />
+                    
+                    <TailSpin
+                      visible={isGoogleScreenLoading}
+                      height="20"
+                      width="20"
+                      color="#1653AE"
+                      ariaLabel="tail-spin-loading"
+                      radius="1"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                    />
+                   
+                </button>
               </div>
             )}
           </div>
