@@ -15,7 +15,6 @@ import { TailSpin, ThreeDots } from 'react-loader-spinner';
 // import { useMyContext } from 'hooks/useMyContext';
 // import { useRouter } from 'next/navigation';
 
-import { encodeToken } from 'services/encrypt-decrypt-data';
 const LandingPage = () => {
   const [promptable, promptToInstall, isInstalled] = useAddToHomescreenPrompt();
   const popOverRef = useRef<any>(null);
@@ -37,46 +36,24 @@ const LandingPage = () => {
   const { userInfo } = useMyContext();
   const { userBalance, userUsdcBalance, isFetchingUsdcBalance, isFetchingUserBalance } = useGetBalance();
   const [isVerifiedMerchant, setIsVerifiedMerchant] = useState(false);
+  const [isMerchant, setIsMerchant] = useState(false);
+  const [isCampaignCreator, setIsCampaignCreator] = useState<boolean>(false);
   const { userDetails, isLoggedIn,isGoogleScreenLoading, login } = useLogin()
 
   const { merchantList } = useCamapigns({ fetchAllCampaign: true});
-  console.log(userBalance, ':lcoal')
-
-  const campInfo = {
-    publicKey: 'GC35FMQWTX7HA2UGRRHLEVT46CEKZBSDDXQXADEZGWWWOZCGCUZOOPE4',
-    secretKey: 'SBQD2MZPMRDLDIYE3SPXUD5G5X5IBPI5L7SGV476SHLVHTIJJIRJ3MVN',
-    userType: 'campaign'
-  };
-  const merInfo = {
-    publicKey: 'GA443P5NB7YKQW3Q7U7NDUJLFO7HVMQH3FWK7PTR3IUMZAN5JG6UUHL5',
-    secretKey: 'SCKKS3FLNGIOXICRNSFVNPBUNZLUA5EMEQESQS2IGLVYYYJAHRQX2GSA',
-    userType: 'merchant',
-    proprietaryName: 'Property Of Om',
-    phoneNumber: '9860105561',
-    storeName: 'Om Store Name',
-    location: 'pokhara'
-  };
-  const recInfo = {
-    publicKey: 'GAJEZJRT7AG4HK5OFFW7K7SZWU4GMT2JYIKIVE23PDLMQONPOLWUAZ2Q',
-    secretKey: 'SDD7WD742RDSCUFKYI2BV77AQSU5FQ2C4ZMUMOTFKJRCPTBGTMBT7GZS',
-    userType: 'recipient'
-  };
-  const handleClick = (name: string) => {
-    const mapValue: any = {
-      c: campInfo,
-      m: merInfo,
-      r: recInfo
-    };
-    localStorage.setItem('local-coin', encodeToken(mapValue[name], '1111'));
-    window.location.reload();
-  };
+  const { campaignList } = useCamapigns({ fetchAllCampaign: true });
+  console.log(campaignList, ':campaignListLanding')
 
   useEffect(() => {
     if (userDetails?.address) {
-      const verifiedMer = merchantList?.find(item => item?.merchant_address === userDetails?.address)
-      setIsVerifiedMerchant(Boolean(verifiedMer))
+      const verifiedMer = merchantList?.find(item => ((item?.merchant_address === userDetails?.address)))
+      const isCreator = campaignList?.some(item => item.creator === userDetails.address)
+      console.log(verifiedMer, ':veriy')
+      setIsMerchant(Boolean(verifiedMer))
+      setIsVerifiedMerchant(Boolean(verifiedMer?.verification_status))
+      setIsCampaignCreator(Boolean(isCreator))
     }
-  }, [userDetails?.address]);
+  }, [userDetails?.address, merchantList, campaignList]);
 
   console.log(userUsdcBalance, 'usdc');
 
@@ -87,7 +64,7 @@ const LandingPage = () => {
     </div> */}
       <section className="">
         <div className="landing-top mb-[24px]">
-          <PageHeader isVerifiedMerchant={isVerifiedMerchant} />
+          <PageHeader isCampaignCreator={isCampaignCreator} isMerchant={isMerchant} isVerifiedMerchant={isVerifiedMerchant} />
           {Number(userUsdcBalance) !== 0 && userUsdcBalance !== undefined && !Number.isNaN(userUsdcBalance) && (
             <div className="mb-[4px]">
               <h6 className="text-sm font-semibold text-[#1384F5]">USDC Coins</h6>
@@ -139,7 +116,7 @@ const LandingPage = () => {
             )}
             {!isLoggedIn && (
               <div className='self-end'>
-                <button onClick={login} className="flex items-center gap-[4px] cursor-pointer border border-[#1653AE] rounded-[6px] bg-[#fff] px-[18px] py-[5px] text-[12px] font-bold text-[#1653AE]">
+                <button disabled={isGoogleScreenLoading} onClick={login} className="flex items-center gap-[4px] cursor-pointer border border-[#1653AE] rounded-[6px] bg-[#fff] px-[18px] py-[5px] text-[12px] font-bold text-[#1653AE]">
                     <span>Sign in</span>
                     <img className='w-[20px]' src="https://w7.pngwing.com/pngs/326/85/png-transparent-google-logo-google-text-trademark-logo-thumbnail.png" alt="" />
                     

@@ -478,3 +478,14 @@ section {
 }
 
 
+
+.store-img::before {
+  position: absolute;
+  content: '';
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(1deg, black, transparent);
+  z-index: 100;
+}

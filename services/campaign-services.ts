@@ -331,7 +331,7 @@ export const campaignServices = (() => {
 
       merchantDetails = (res as any)?.fields;
       console.log(res, ':merchant')
-      if(merchantDetails.verified_status === true) {
+      // if(merchantDetails.verified_status === true) {
         merchants.push({
           store_id: merchantDetails?.id?.id,
           merchant_address: merchantDetails.merchant_addr,
@@ -339,9 +339,10 @@ export const campaignServices = (() => {
           store_name: merchantDetails.store_name,
           proprietor: merchantDetails.proprietor,
           phone_no: merchantDetails.phone_no,
+          verification_status: merchantDetails.verified_status,
           
       });
-      }
+      // }
 
       
 
