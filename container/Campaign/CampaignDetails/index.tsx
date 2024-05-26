@@ -493,7 +493,7 @@ const CampaignDetail = (props: any) => {
           <div className="flex h-[90vh] flex-col justify-between">
             <div>
               <h3 className="text-base font-semibold">{campaignInfo?.name}</h3>
-              <div className="my-[16px] relative w-full overflow-hidden rounded-[12px] border-[3px] border-solid border-[#D7D7D7]">
+              <div className={["my-[16px] relative w-full overflow-hidden rounded-[12px] border-[3px] border-solid border-[#D7D7D7]", "store-img"].join(' ')}>
                 <Image
                   src={'/campaignImg.png'}
                   alt="Store"
@@ -503,11 +503,11 @@ const CampaignDetail = (props: any) => {
                 />
                 {currentParticipant && Object.keys(currentParticipant).length > 0 && (
                   currentParticipant?.value ? (
-                    <div className='absolute flex items-center bottom-[10px] right-[10px]  border border-[#fff] rounded-[6px] p-[2px] text-[#fff] text-xs font-normal'>
+                    <div className='absolute z-[101] flex items-center bottom-[10px] right-[10px]  border border-[#fff] rounded-[6px] p-[2px] text-[#fff] text-xs font-normal'>
                       <span className='w-[10px] block h-[10px] rounded-[100%] bg-[#6ED365] mr-[2px]'></span> Verified
                     </div>
                   ) : (
-                    <div className='absolute flex items-center bottom-[10px] right-[10px]  border border-[#fff] rounded-[6px] p-[2px] text-[#fff] text-xs font-normal'>
+                    <div className='absolute z-[101] flex items-center bottom-[10px] right-[10px]  border border-[#fff] rounded-[6px] p-[2px] text-[#fff] text-xs font-normal'>
                       <span className='w-[10px] block h-[10px] rounded-[100%] bg-[#F24141] mr-[2px]'></span> Unverified
                     </div>
                   ) 

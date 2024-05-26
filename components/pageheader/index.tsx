@@ -14,12 +14,16 @@ interface PageHeaderProps {
   pageHeaderTitle?: any;
   backLink?: any;
   isVerifiedMerchant?: boolean;
+  isMerchant?: boolean;
+  isCampaignCreator?: boolean;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({
   pageHeaderTitle,
   backLink,
-  isVerifiedMerchant
+  isVerifiedMerchant,
+  isMerchant,
+  isCampaignCreator
 }) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const { isLoggedIn, login, logOut, userDetails, showSuccessScreen, setShowSuccessScreen, isGoogleScreenLoading } =
@@ -139,6 +143,36 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             </div>
 
             <div className="mx-[16px] my-[40px] flex flex-col gap-[19px]">
+              {userDetails?.address && isCampaignCreator && (
+                  <div
+                    className={[
+                      'rounded-[6px] border border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
+                      !userDetails?.address && 'opacity-[0.3]'
+                    ].join(' ')}
+                  >
+                    <Link
+                      className={`block w-full ${!userDetails?.address && 'cursor-not-allowed'}`}
+                      href={userDetails?.address ? '/my-campaigns' : ''}
+                    >
+                      My Campaigns
+                    </Link>
+                  </div>
+              )}
+              {userDetails?.address && isMerchant && (
+                <div
+                className={[
+                  'rounded-[6px] border border-[#171717] bg-[#FFF] py-[10px] text-center text-lg font-semibold',
+                  !userDetails?.address && 'opacity-[0.3]'
+                ].join(' ')}
+              >
+                <Link
+                  className={`block w-full ${!userDetails?.address && 'cursor-not-allowed'}`}
+                  href={userDetails?.address ? '/my-stores' : ''}
+                >
+                  My Stores
+                </Link>
+              </div>
+              )}
               {userDetails?.address && isVerifiedMerchant ? (
                 ''
               ) : (
