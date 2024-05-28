@@ -9,7 +9,7 @@ interface LoginContextType {
   isLoggedIn: boolean;
   userDetails: UserDetails;
   showSuccessScreen: boolean;
-  login: (url?: string) => void;
+  login: () => void;
   logOut: () => void;
   setShowSuccessScreen: React.Dispatch<React.SetStateAction<boolean>>;
   isGoogleScreenLoading: boolean;
