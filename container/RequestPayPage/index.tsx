@@ -11,6 +11,7 @@ import { useCamapigns, useLogin } from "hooks";
 import { useMyContext } from "hooks/useMyContext";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import QRCode from 'qrcode';
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
@@ -70,6 +71,7 @@ const RequestPay = () => {
     const [isRecipient, setIsRecipient] = useState(false);
     const [recipientPaymentStatus, setRecipientPaymentStatus] = useState(false)
     const [participantList, setParticipantList] = useState<any[]>([])
+    const router = useRouter()
 
 
     // const {  merchant_associated } = useMerchant(
@@ -128,16 +130,24 @@ const RequestPay = () => {
 
     useEffect(() => {
         if (scanData) {
-          const scannedData = JSON.parse(scanData);
-          setFormattedScannedData(scannedData);
-          if (scannedData?.publicKey) {
-            console.log({ publicKey: scannedData?.publicKey });
-            // setFetch_merchant_info(true);
-            setData({ ...data, merchantAddress: scannedData?.publicKey, amount: scannedData?.amount });
-            setOpenConfirmation(true);
-          } else {
-            toast.error('Invalid QR');
+          const scannedData = scanData
+          console.log(scannedData, ":scannedData")
+          if(scanData?.includes('payment')) {
+            const queryIndex = scannedData?.indexOf('?')
+            const queryString = scannedData?.substring(queryIndex + 1);
+            router.push(`/payment/?${queryString}`)
+
           }
+            
+          // setFormattedScannedData(scannedData);
+          // if (scannedData?.publicKey) {
+          //   console.log({ publicKey: scannedData?.publicKey });
+          //   // setFetch_merchant_info(true);
+          //   setData({ ...data, merchantAddress: scannedData?.publicKey, amount: scannedData?.amount });
+          //   setOpenConfirmation(true);
+          // } else {
+          //   toast.error('Invalid QR');
+          // }
         }
       }, [scanData]);
 
@@ -473,7 +483,7 @@ const RequestPay = () => {
                               <div className="w-full flex flex-col items-center gap-[10px]">
                                 <p>Congrats, you have received your incentive</p> 
 
-                                <div className="size-[100px] rounded-full overflow-hidden flex items-center justify-center">
+                                <div className="w-full h-[200px] overflow-hidden flex items-center justify-center">
                                   <img className="size-[100%] object-cover" src="https://cdn.pixabay.com/animation/2023/10/21/02/28/02-28-11-217_512.gif" alt="" />
                                 </div>
                               </div>
