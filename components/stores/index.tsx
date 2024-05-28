@@ -41,7 +41,7 @@ export const Stores = () => {
     console.log(isStoreFetching, ':mer1')
     
     return (
-        <div className="mt-[20px]">
+        <div className="mt-[2px]">
             <div className="flex items-center">
                 <h4 className='text-lg font-semibold font-[Inter] mb-[6px]'>Visit a store</h4>
                 {/* <span className="ml-[6px] text-xs">View all</span> */}
