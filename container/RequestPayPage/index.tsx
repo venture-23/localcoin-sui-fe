@@ -238,11 +238,11 @@ const RequestPay = () => {
           setPaymentRequested(true);
           return
         } else if(isRecipient) {
-          const isPaid = checkIsRecipientPaid()
-          if(isPaid) {
-            setRecipientPaymentStatus(true)
-            return
-          }
+          // const isPaid = checkIsRecipientPaid()
+          // if(isPaid) {
+          //   setRecipientPaymentStatus(true)
+          //   return
+          // }
           await generateQrCodeForRecipient()
           setPaymentRequested(true);
         } else {
@@ -568,7 +568,14 @@ const RequestPay = () => {
                 <h3 className="text-base font-semibold text-[#000]">Payment Request</h3>
 
                 <div className="flex flex-col mt-[18px] items-center jusitfy-center gap-[12px]">
-                    <div className="w-[80px] h-[80px] rounded-[100%] bg-[#EAEBEE]"></div>
+                    <div className="w-[80px] h-[80px] rounded-[100%] bg-[#EAEBEE]">
+                      <Image 
+                          src={'/user.png'}
+                          height={80}
+                          width={80}
+                          alt="Local Coin"
+                        />
+                    </div>
                     {isRecipient && (
                       <div className="text-[24px] font-normal text-[#000]">
                         {getRecipientAmt()} LocalCoin

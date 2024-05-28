@@ -5,6 +5,7 @@ import { deleteCookieData } from 'app/action';
 import SignUpSuccess from 'container/signuppage/SignupSuccessScreen';
 import { useGetBalance, useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { TailSpin } from 'react-loader-spinner';
@@ -75,6 +76,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         )}
 
         <div className="">
+          <Link target='_blank' href={'https://localcoin.us/'}>
+           <Image 
+                src={'/localCoinLogo.png'}
+                height={30}
+                width={30}
+                alt="Local Coin"
+            />
+          </Link>
           <h2 className="text-base font-medium">
             {pageHeaderTitle ? (
               <>

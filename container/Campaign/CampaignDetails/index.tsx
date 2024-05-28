@@ -728,7 +728,14 @@ const CampaignDetail = (props: any) => {
             <h3 className="text-base font-semibold text-[#000]">Request Incentives</h3>
 
             <div className="flex flex-col mt-[18px] items-center jusitfy-center gap-[12px]">
-              <div className="w-[80px] h-[80px] rounded-[100%] bg-[#EAEBEE]"></div>
+              <div className="w-[80px] h-[80px] rounded-[100%] bg-[#EAEBEE]">
+                <Image 
+                    src={'/user.png'}
+                    height={80}
+                    width={80}
+                    alt={getUsername()}
+                />
+              </div>
               <div className="text-[24px] font-normal text-[#000]">
                   {getUsername()}
               </div>

@@ -75,6 +75,7 @@ body{
 
 .container {
  max-width: calc(100% - 10%) !important;
+ overflow-y: auto;
 }
 
 
