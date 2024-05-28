@@ -73,6 +73,7 @@ const CampaignDetail = (props: any) => {
 
   const [isCampaignEnded, setIsCampaignEnded] = useState(false);
   console.log(currentParticipant, ':cuurPart')
+  console.log(participantList, ':participant')
 
   // useEffect(() => {
   //   if (userDetails?.address) {
@@ -217,25 +218,25 @@ const CampaignDetail = (props: any) => {
 
       if(!result?.digest) throw new Error("Failed joining campaign")
       
-        const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo') || '';
-        console.log(prevJoinedCamp)
-        const joinedInfo = []
-        if(prevJoinedCamp !== '') {
-          for(const prev of JSON.parse(prevJoinedCamp)) {
-            console.log(prev, ':prev')
-            joinedInfo.push(prev);
-          }
-        } 
-        joinedInfo.push({ campaignAddress: props.campaignId, username: data.username })
+        // const prevJoinedCamp = localStorage.getItem('joinedCampaignInfo') || '';
+        // console.log(prevJoinedCamp)
+        // const joinedInfo = []
+        // if(prevJoinedCamp !== '') {
+        //   for(const prev of JSON.parse(prevJoinedCamp)) {
+        //     console.log(prev, ':prev')
+        //     joinedInfo.push(prev);
+        //   }
+        // } 
+        // joinedInfo.push({ campaignAddress: props.campaignId, username: data.username, address: userDetails?.address })
      
   
-        if (typeof window !== 'undefined') {
-          console.log(joinedInfo, ':Joined')
-          localStorage.setItem('joinedCampaignInfo', JSON.stringify(joinedInfo));
-        }
+        // if (typeof window !== 'undefined') {
+        //   console.log(joinedInfo, ':Joined')
+        //   localStorage.setItem('joinedCampaignInfo', JSON.stringify(joinedInfo));
+        // }
         
   
-        toast.success('Campaign Joined Successfully');
+        toast.success('Request sent to join the campaign');
         setShowUsernameBox(false);
         fetchCampaignParticipate();
 
@@ -368,10 +369,10 @@ const CampaignDetail = (props: any) => {
 
 
   const getUsername = () => {
-    const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
-    if(allJoinedCampaignInfo === '') return '';
-    const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
-    return currentCampaignInfo?.username
+    
+    if(!participantList || participantList?.length === 0) return '';
+    const currentCampaignInfo = participantList?.find((item : any) => item?.address === userDetails?.address)
+    return currentCampaignInfo?.userName
   }
 
   const isParticipantFull = () => {
@@ -382,8 +383,8 @@ const CampaignDetail = (props: any) => {
 
   const generateQrCode = async () => {
     try {
-      const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
-      const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === props.campaignId)
+      
+      const currentCampaignInfo = participantList?.find((item : any) => item?.address === userDetails?.address)
       const campaignAmt = Number(campaignInfo?.amount) / Math.pow(10, 6)
       const staticData = {
         type: 'campaign creator',
@@ -393,9 +394,9 @@ const CampaignDetail = (props: any) => {
         phoneNumber: userInfo.phoneNumber,
         storeName: userInfo.storeName,
         location: userInfo.location,
-        campaignAddress: currentCampaignInfo?.campaignAddress ||  props.campaignId,
+        campaignAddress: props.campaignId,
         campaignName: campaignInfo?.name,
-        username: currentCampaignInfo?.username
+        username: currentCampaignInfo?.userName
       };
       const response = await QRCode.toDataURL(JSON.stringify(staticData));
       setImageUrl(response);

@@ -69,6 +69,7 @@ const RequestPay = () => {
     const [isMerchant, setIsMerchant] = useState(false)
     const [isRecipient, setIsRecipient] = useState(false);
     const [recipientPaymentStatus, setRecipientPaymentStatus] = useState(false)
+    const [participantList, setParticipantList] = useState<any[]>([])
 
 
     // const {  merchant_associated } = useMerchant(
@@ -197,7 +198,7 @@ const RequestPay = () => {
       const statusResponse = await campaignServices.get_recipients_status(userDetails?.address, campaignList[0]?.campaign_id)
       console.log(statusResponse, ':statResponse')
       if(statusResponse.length > 0) {
-        
+        setParticipantList(statusResponse)
         const currPar = statusResponse?.find((part: any) => part.address === userDetails?.address)
         console.log(currPar, ':currPar')
         setIsRecipient(Boolean(currPar?.value))
@@ -215,6 +216,10 @@ const RequestPay = () => {
     }
 
     const handlePaymentRequest = async () => {
+      if(!userDetails?.address) {
+        toast.error('User not logged in')
+        return
+      }
         const merchant = merchantList?.find(item => item?.merchant_address === userDetails?.address)
         
 
@@ -240,17 +245,17 @@ const RequestPay = () => {
 
     const generateQrCodeForRecipient = async () => {
       try {
-        const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
-        const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === campaignList[0]?.campaign_id)
+       
+        const currentCampaignInfo = participantList?.find((item : any) => item?.address === userDetails?.address)
         const campaignAmt = Number(campaignList[0]?.amount) / Math.pow(10, 6)
         const staticData = {
           type: 'campaign creator',
           publicKey: userDetails?.address,
           amount: (Number(campaignAmt)/Number(campaignList[0]?.no_of_recipients)).toFixed(2),
           
-          campaignAddress: currentCampaignInfo?.campaignAddress ||  campaignList[0]?.campaign_id,
+          campaignAddress: campaignList[0]?.campaign_id,
           campaignName: campaignList[0]?.name,
-          username: currentCampaignInfo?.username
+          username: currentCampaignInfo?.userName
         };
 
         const url = window.location.origin + '/payment?' + `type=recipient&recipientName=${staticData.username}&campaignName=${staticData.campaignName}&amount=${staticData.amount}&recipient=${staticData.publicKey}`

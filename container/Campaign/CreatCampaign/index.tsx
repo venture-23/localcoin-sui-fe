@@ -75,7 +75,7 @@ const CreateCampaignPage = () => {
       tx.moveCall({
         target: `${pkId}::campaign_management::create_campaign`,
         arguments: [
-          tx.pure.string(data.name),
+          tx.pure.string(data.name?.trim()),
           tx.pure.string(data.description),
           tx.pure.u64(data.participant),
           tx.pure.string(data.location),
