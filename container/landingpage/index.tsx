@@ -100,24 +100,26 @@ const LandingPage = () => {
           )}
 
           <div className="flex justify-between">
-            <div>
-              <h6 className="text-base font-bold text-[#1384F5]">Total LocalCoins</h6>
-              <div className="text-[32px] font-semibold leading-9">
-              {isFetchingUsdcBalance ? (
-                  <ThreeDots 
-                    visible={true}
-                    height="30"
-                    width="30"
-                    color="#000"
-                    radius="25"
-                    ariaLabel="three-dots-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                  />
-                ) : (userBalance ?? 0)}
-                
+            {userDetails?.address &&  (
+              <div>
+                <h6 className="text-base font-bold text-[#1384F5]">Total LocalCoins</h6>
+                <div className="text-[32px] font-semibold leading-9">
+                {isFetchingUsdcBalance ? (
+                    <ThreeDots 
+                      visible={true}
+                      height="30"
+                      width="30"
+                      color="#000"
+                      radius="25"
+                      ariaLabel="three-dots-loading"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                    />
+                  ) : (userBalance ?? 0)} 
+                </div>
               </div>
-            </div>
+            )}
+            
             {userDetails?.address && isVerifiedMerchant && (
               <div className="self-end">
                 <Link href={'/withdraw'}>
@@ -131,7 +133,7 @@ const LandingPage = () => {
               <div className='self-end'>
                 <button disabled={isGoogleScreenLoading} onClick={login} className="flex items-center gap-[4px] cursor-pointer border border-[#1653AE] rounded-[6px] bg-[#fff] px-[18px] py-[5px] text-[12px] font-bold text-[#1653AE]">
                     <span>Sign in</span>
-                    <img className='w-[20px]' src="https://w7.pngwing.com/pngs/326/85/png-transparent-google-logo-google-text-trademark-logo-thumbnail.png" alt="" />
+                    <img className='w-[20px]' src="https://img.icons8.com/color/48/google-logo.png" alt="" />
                     
                     <TailSpin
                       visible={isGoogleScreenLoading}
