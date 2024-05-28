@@ -398,7 +398,8 @@ const CampaignDetail = (props: any) => {
         campaignName: campaignInfo?.name,
         username: currentCampaignInfo?.userName
       };
-      const response = await QRCode.toDataURL(JSON.stringify(staticData));
+      const url = window.location.origin + '/payment?' + `type=recipient&recipientName=${staticData.username}&campaignName=${staticData.campaignName}&amount=${staticData.amount}&recipient=${staticData.publicKey}`
+      const response = await QRCode.toDataURL(url);
       setImageUrl(response);
     } catch (error) {
       // debugger;
