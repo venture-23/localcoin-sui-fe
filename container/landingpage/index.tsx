@@ -10,6 +10,7 @@ import { Stores } from 'components/stores';
 import { useCamapigns, useGetBalance, useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { TailSpin, ThreeDots } from 'react-loader-spinner';
 // import { useMyContext } from 'hooks/useMyContext';
@@ -39,10 +40,12 @@ const LandingPage = () => {
   const [isMerchant, setIsMerchant] = useState(false);
   const [isCampaignCreator, setIsCampaignCreator] = useState<boolean>(false);
   const { userDetails, isLoggedIn,isGoogleScreenLoading, login } = useLogin()
+  const router = useRouter()
 
   const { merchantList } = useCamapigns({ fetchAllCampaign: true});
   const { campaignList } = useCamapigns({ fetchAllCampaign: true });
   console.log(campaignList, ':campaignListLanding')
+  
 
   useEffect(() => {
     if (userDetails?.address) {
@@ -56,6 +59,16 @@ const LandingPage = () => {
   }, [userDetails?.address, merchantList, campaignList]);
 
   console.log(userUsdcBalance, 'usdc');
+
+  useEffect(() => {
+    if(typeof window !== 'undefined') {
+      const paymentUrl = localStorage.getItem('paymentUrl') || ''
+      if(paymentUrl) {
+        router.push(`/payment${paymentUrl}`)
+      }
+    }
+    
+  }, [])
 
   return (
     <>
