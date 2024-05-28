@@ -1,7 +1,6 @@
 "use client"
 
 import { ChevronLeftIcon } from "@heroicons/react/16/solid";
-import { BackspaceIcon } from "@heroicons/react/24/outline";
 import { useEnokiFlow } from '@mysten/enoki/react';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { useWallet } from "@suiet/wallet-kit";
@@ -67,6 +66,9 @@ const RequestPay = () => {
     const [storeName, setStoreName] = useState('')
     const { signAndExecuteTransactionBlock } = useWallet()
     const { userDetails } = useLogin()
+    const [isMerchant, setIsMerchant] = useState(false)
+    const [isRecipient, setIsRecipient] = useState(false);
+    const [recipientPaymentStatus, setRecipientPaymentStatus] = useState(false)
 
 
     // const {  merchant_associated } = useMerchant(
@@ -82,8 +84,24 @@ const RequestPay = () => {
     // });
 
 
-    const { merchantList } = useCamapigns({ fetchAllCampaign: true});
-    console.log(merchantList, ':merchant1')
+    const { merchantList, isStoreFetching } = useCamapigns({ fetchAllCampaign: true});
+    const { campaignList, isFetching } = useCamapigns({ fetchAllCampaign: true });
+    console.log(campaignList, ':campaign1')
+    
+
+    const checkMerchantStatus = () => {
+      const merchant = merchantList?.find(item => item?.merchant_address === userDetails?.address)
+        // if(!merchant || Object.keys(merchant).length === 0 || !merchant?.verification_status) {
+        //   setIsMerchant(false)
+        // } else {
+
+        // }
+        if((merchant && Object.keys(merchant)?.length > 0) && merchant?.verification_status) {
+          setIsMerchant(true)
+        } else {
+          setIsMerchant(false)
+        }
+    }
 
 
     // useEffect(() => {
@@ -93,6 +111,8 @@ const RequestPay = () => {
     //       setData({});
     //     }
     //   }, [isSendToMerchantSucc]);
+
+   
 
 
       const handleCancelPayment = () => {
@@ -169,15 +189,78 @@ const RequestPay = () => {
         setAmount(enterAmount);
     }
 
+    const checkRecicipientStatus = async () => {
+      if(campaignList?.length === 0) {
+        setIsRecipient(false)
+        return
+      }
+      const statusResponse = await campaignServices.get_recipients_status(userDetails?.address, campaignList[0]?.campaign_id)
+      console.log(statusResponse, ':statResponse')
+      if(statusResponse.length > 0) {
+        
+        const currPar = statusResponse?.find((part: any) => part.address === userDetails?.address)
+        console.log(currPar, ':currPar')
+        setIsRecipient(Boolean(currPar?.value))
+      } else {
+        setIsRecipient(false)
+      }
+      
+    }
+
+    
+
+    const checkIsRecipientPaid = () => {
+      const isPaid = campaignList[0]?.recipient_balance?.find((item:any) => item.paidAddress === userDetails.address)
+      return Boolean(isPaid)
+    }
+
     const handlePaymentRequest = async () => {
         const merchant = merchantList?.find(item => item?.merchant_address === userDetails?.address)
-        if(!merchant || Object.keys(merchant).length === 0) {
-          toast.error('You are not a verified mechant.')
+        
+
+        if(isMerchant) {
+          await generateQrCode(merchant)
+          setPaymentRequested(true);
+          return
+        } else if(isRecipient) {
+          const isPaid = checkIsRecipientPaid()
+          if(isPaid) {
+            setRecipientPaymentStatus(true)
+            return
+          }
+          await generateQrCodeForRecipient()
+          setPaymentRequested(true);
+        } else {
+          toast.error('You are not eligible to request incentives.')
           return;
         }
-        await generateQrCode(merchant)
-        setPaymentRequested(true);
+
+        
     }
+
+    const generateQrCodeForRecipient = async () => {
+      try {
+        const allJoinedCampaignInfo = JSON.parse(localStorage.getItem('joinedCampaignInfo') || '');
+        const currentCampaignInfo = allJoinedCampaignInfo.find((item : any) => item?.campaignAddress === campaignList[0]?.campaign_id)
+        const campaignAmt = Number(campaignList[0]?.amount) / Math.pow(10, 6)
+        const staticData = {
+          type: 'campaign creator',
+          publicKey: userDetails?.address,
+          amount: (Number(campaignAmt)/Number(campaignList[0]?.no_of_recipients)).toFixed(2),
+          
+          campaignAddress: currentCampaignInfo?.campaignAddress ||  campaignList[0]?.campaign_id,
+          campaignName: campaignList[0]?.name,
+          username: currentCampaignInfo?.username
+        };
+
+        const url = window.location.origin + '/payment?' + `type=recipient&recipientName=${staticData.username}&campaignName=${staticData.campaignName}&amount=${staticData.amount}&recipient=${staticData.publicKey}`
+        const response = await QRCode.toDataURL(url);
+        setImageUrl(response);
+      } catch (error) {
+        // debugger;
+        console.log(error);
+      }
+    };
 
     const generateQrCode = async (merchant: any) => {
         try {
@@ -193,7 +276,8 @@ const RequestPay = () => {
             storeName: merchant?.store_name,
             location: merchant?.location
           };
-          const response = await QRCode.toDataURL(JSON.stringify(staticData));
+          const url = window.location.origin + '/payment?' + `type=merchant&storeName=${staticData.storeName}&storeOwner=${staticData.proprietaryName}&merchant=${staticData.publicKey}`
+          const response = await QRCode.toDataURL(url);
           setImageUrl(response);
         } catch (error) {
           // debugger;
@@ -320,6 +404,27 @@ const RequestPay = () => {
         }
       }
 
+      const getRecipientAmt = () => {
+        const campAmt = Number(campaignList[0]?.amount) / Math.pow(10, 6)
+        const campRecipients = campaignList[0]?.no_of_recipients || 0
+        const disAmt = Number(campAmt)/Number(campRecipients)
+
+        return disAmt || 0
+      }
+
+      useEffect(() => {
+        if(userDetails?.address) {
+          checkMerchantStatus()
+        }
+        
+      }, [merchantList, isStoreFetching, userDetails?.address])
+      useEffect(() => {
+        if(userDetails?.address) {
+          checkRecicipientStatus()
+        }
+        
+      }, [campaignList, isFetching, userDetails?.address])
+
       console.log(formattedScannedData, ':formatdata')
       console.log(data, ':data')
   return (
@@ -354,13 +459,33 @@ const RequestPay = () => {
                 <div>
                     <div className="container mx-auto">
                     <div className="flex flex-col gap-[12px]">
-                        <div className="flex text-base font-semibold text-[#000] items-center px-[16px] w-full h-[54px] border border-[#E2E2E2] rounded-[4px]">
+                        {/* <div className="flex text-base font-semibold text-[#000] items-center px-[16px] w-full h-[54px] border border-[#E2E2E2] rounded-[4px]">
                             {amount || 0} LocalCoins
+                        </div> */}
+                        <div  className="h-[300px] flex items-start justify-center text-2xl font-bold text-center">
+                          {recipientPaymentStatus ? 
+                            (
+                              <div className="w-full flex flex-col items-center gap-[10px]">
+                                <p>Congrats, you have received your incentive</p> 
+
+                                <div className="size-[100px] rounded-full overflow-hidden flex items-center justify-center">
+                                  <img className="size-[100%] object-cover" src="https://cdn.pixabay.com/animation/2023/10/21/02/28/02-28-11-217_512.gif" alt="" />
+                                </div>
+                              </div>
+                            )
+                            
+                           : 
+                            'Recieve payments by generating your QR'
+                          }
+                          
                         </div>
-                        <Button disabled={amount === '' || amount === '0'} handleClick={handlePaymentRequest} buttonType={'tertiary'} text="Request" />
+                        <div className="mb-[50px]">
+                        <Button  handleClick={handlePaymentRequest} buttonType={'tertiary'} text="Request QR" />
+                        </div>
+                        
                     </div>
                     </div>
-                    <div className="mt-[12px]">
+                    {/* <div className="mt-[12px]">
                       <div className="grid bg-[#ced2d9] backdrop-blur-[35px] w-full grid-cols-3 gap-3 p-3">
                         {new Array(9).fill('0').map((x, index) => (
                     <div
@@ -372,7 +497,7 @@ const RequestPay = () => {
                       {index + 1}
                     </div>
                         ))}
-                        {/* <div className="pointer-events-none bg-none"></div> */}
+                       
                         <div className="">
                           <div
                             className="col-span-3 h-[48px] flex items-center justify-center shadow-[0px_1px_0px_0px_rgba(0,0,0,0.30)] rounded-[5px] bg-white p-[12px] text-center"
@@ -396,7 +521,7 @@ const RequestPay = () => {
                     <BackspaceIcon className="h-6 w-6" />
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                 </div>
 
             )}
@@ -429,12 +554,25 @@ const RequestPay = () => {
 
                 <div className="flex flex-col mt-[18px] items-center jusitfy-center gap-[12px]">
                     <div className="w-[80px] h-[80px] rounded-[100%] bg-[#EAEBEE]"></div>
-                    <div className="text-[24px] font-normal text-[#000]">
-                        {amount || 0 } LocalCoin
-                    </div>
-                    <div className="text-base font-[400] italic">
+                    {isRecipient && (
+                      <div className="text-[24px] font-normal text-[#000]">
+                        {getRecipientAmt()} LocalCoin
+                      </div>
+                    )}
+
+                    {isMerchant && (
+                      <div className="text-[24px] font-normal text-[#000]">
+                        Merchant Request
+                      </div>
+                    )}
+
+                    {isMerchant && (
+                      <div className="text-base font-[400] italic">
                         {storeName}
-                    </div>
+                      </div>
+                    )}
+                    
+                    
                 </div>
                 {/* QR SCANNER PART */}
                 {imageUrl && (
@@ -443,7 +581,7 @@ const RequestPay = () => {
                         <Image src={imageUrl} alt="img" width={240} height={240} />
                         </div>
 
-                        <p className="text-base font-normal text-center mt-[12px]">Participant must scan your QR code to send you the payment</p>
+                        <p className="text-base font-normal text-center mt-[12px]">{isMerchant ? 'Participant' : 'Campaign Creator'} must scan your QR code to send you the payment</p>
                     </>
 
                 )}

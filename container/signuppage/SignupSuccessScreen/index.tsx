@@ -60,8 +60,8 @@ const SignUpSuccess = ({ handleSignUp, address }: ISignupSuccessProps) => {
                             </div> */}
             </div>
           </div>
-          <div className="mx-auto mb-[10px] flex w-full flex-col gap-[12px]">
-            <Button handleClick={copyKeys} buttonType={'white'} text="Copy Keys" />
+          <div className="mx-auto mb-[40px] flex w-full flex-col gap-[12px]">
+            {/* <Button handleClick={copyKeys} buttonType={'white'} text="Copy Keys" /> */}
             <Button handleClick={handleSignUp} buttonType={'secondary'} text="Start Earning" />
           </div>
         </div>

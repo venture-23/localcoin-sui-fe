@@ -562,7 +562,7 @@ const CampaignDetail = (props: any) => {
                       <div className='self-end flex items-center gap-[18px]'>
                         <div className='text-[10px] font-normal'>Status</div>
                         <div className='text-[10px] font-normal'>Accept</div>
-                        <div className='text-[10px] font-normal'>Payment</div>
+                        <div className='text-[10px] font-normal'>Paid</div>
                       </div>
                     </div>                      
                     {participantList.map((eachParticipant: any, eachIndex: number) => (

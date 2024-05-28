@@ -1,10 +1,14 @@
 "user-client";
 import { XMarkIcon } from '@heroicons/react/16/solid';
 import Button from 'components/botton';
+import { useGetBalance } from 'hooks';
 import Image from 'next/image';
+import { KeyboardEvent } from 'react';
+import { toast } from 'react-toastify';
 
 interface IRecipientConfirmProps {
     amount: number | string
+    setAmount?: React.Dispatch<React.SetStateAction<string>>
     storeName: string
     handleClick:() => void
     type?: string
@@ -16,8 +20,35 @@ interface IRecipientConfirmProps {
     participantName?: string
 }
 
-const RecipientConfirmation = ({ amount, participantName = 'ABC', storeName, handleClick, type, campaignName, showLoader, transferConfirmation, setTransferConfirmation, cancelPayment }: IRecipientConfirmProps) => {
-    
+const controlKeys = [
+    "Backspace",
+    "Delete",
+    "Tab",
+    "Escape",
+    "Enter",
+    "ArrowLeft",
+    "ArrowRight",
+    "Home",
+    "End",
+  ];
+
+const RecipientConfirmation = ({ amount, setAmount, participantName = 'ABC', storeName, handleClick, type, campaignName, showLoader, transferConfirmation, setTransferConfirmation, cancelPayment }: IRecipientConfirmProps) => {
+    const { userBalance } = useGetBalance()
+    const handleTransfer = () => {
+        if(type === 'campaign') {
+            handleClick()
+        } else {
+            const isErr = Number(amount) >  Number(userBalance)
+            if(isErr) {
+                toast.error('Insuficient balance')
+                return
+            }
+            handleClick()
+        }
+        if(typeof window !== 'undefined') {
+            localStorage.removeItem('paymentUrl')
+        }
+    }
   return (
     <section className="w-full relative bg-[#1653AE] h-[100vh]">
             <div className="success-vector-1">
@@ -51,17 +82,61 @@ const RecipientConfirmation = ({ amount, participantName = 'ABC', storeName, han
                             />
                         </div>
                         <h3 className="text-2xl font-semibold text-[#fff]">
-                            {amount || 0} LocalCoin
+                            {type === 'campaign' ? 
+                               `${amount || 0} LocalCoin` : `${amount == 0 ? '' : amount} LocalCoin`
+                            }
                         </h3>
                         <p className='italic my-[12px] text-white text-base font-normal'>{type === 'campaign' ? campaignName : storeName}</p>
                         <div className="text-base container mx-auto font-medium text-[#fff] text-center">
                             {type === 'campaign' ? (
                                 `You are about to pay ${amount} LocalCoin to ${participantName} for completing the campaign ${campaignName}`
                             ): (
-                                `You are about to pay  ${amount || 0} LocalCoin to "${storeName}"`
+                                `Enter the amount you want to pay to "${storeName}"`
                             )}
                             
                         </div>
+
+                            {type === 'merchant' && (
+                                <div >
+                                <input 
+                                    value={amount} 
+                                    onChange={(e) => setAmount && setAmount(e.target.value)} 
+                                    placeholder='Enter Amount' 
+                                    className='bg-white w-full rounded-[4px] py-[8px] px-[4px]' 
+                                    type="text" 
+                                    onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+                                        const { key, keyCode, target } = e
+                                        console.log(key)
+                                        const { value } = target as HTMLInputElement;
+                                        console.log(value)
+                                        if (controlKeys.includes(key)) {
+                                            return; 
+                                        }
+                                    
+                                        
+                                        if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 96 && keyCode <= 105)) {
+                                          return; 
+                                        }
+                                    
+                                       
+                                        if (key === "." && !value.includes(".")) {
+                                            console.log('key', key)
+                                          return;
+                                        }
+    
+                                        e.preventDefault()
+                                          
+                                    }}
+                                />
+                            </div>
+                            )}
+                        
+                        {type === 'merchant' && (
+                            <div className='mt-[40px] text-center text-2xl font-semibold text-[#fff]'>
+                            Available LocalCoin: {userBalance}
+                        </div>
+                        )}
+                        
                     </div>
                     <div className="container mx-auto mb-[10px]">
                         <Button handleClick={() => setTransferConfirmation(true)} buttonType={'secondary'} text="Send Payment" />
@@ -77,7 +152,7 @@ const RecipientConfirmation = ({ amount, participantName = 'ABC', storeName, han
                                 </span>
                                 <div className="flex flex-col gap-[20px] pl-[20px]">
                                   <h3 className='text-lg font-extrabold text-center'>Are you sure you want to transfer the funds?</h3>
-                                  <Button disabled={showLoader} showLoader={showLoader} handleClick={handleClick} text="Yes, Transfer Funds" />
+                                  <Button disabled={showLoader} showLoader={showLoader} handleClick={handleTransfer} text="Yes, Transfer Funds" />
                                 </div>
                               </div>
                             </div>
