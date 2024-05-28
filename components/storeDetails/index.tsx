@@ -31,7 +31,7 @@ const StoreDetails = () => {
   return (
     <section>
         <div className="container mx-auto">
-            <div onClick={() => router.back()} className='cursor-pointer py-[18px] flex items-center'>
+            <div onClick={() => router.push('/')} className='cursor-pointer py-[18px] flex items-center'>
                   <ChevronLeftIcon width={16} height={16} />
                   <span className='text-[12px] font-normal'>Back</span>
              </div>
