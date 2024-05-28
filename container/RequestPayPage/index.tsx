@@ -238,11 +238,11 @@ const RequestPay = () => {
           setPaymentRequested(true);
           return
         } else if(isRecipient) {
-          // const isPaid = checkIsRecipientPaid()
-          // if(isPaid) {
-          //   setRecipientPaymentStatus(true)
-          //   return
-          // }
+          const isPaid = checkIsRecipientPaid()
+          if(isPaid) {
+            setRecipientPaymentStatus(true)
+            return
+          }
           await generateQrCodeForRecipient()
           setPaymentRequested(true);
         } else {
