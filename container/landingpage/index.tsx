@@ -7,6 +7,7 @@ import { PageFooter } from 'components/pageFooter';
 import PageHeader from 'components/pageheader';
 import PopupBox from 'components/popover';
 import { Stores } from 'components/stores';
+import { LoginScreen } from 'container/LoginScreen';
 import { useCamapigns, useGetBalance, useLogin } from 'hooks';
 import { useMyContext } from 'hooks/useMyContext';
 import Link from 'next/link';
@@ -70,12 +71,11 @@ const LandingPage = () => {
     
   }, [])
 
+
   return (
     <>
-      {/* <div className='header-container'>
-      <PageHeader />
-    </div> */}
-      <section className="">
+      {isLoggedIn || userDetails?.address ? (
+        <section className="">
         <div className="landing-top mb-[24px]">
           <PageHeader isCampaignCreator={isCampaignCreator} isMerchant={isMerchant} isVerifiedMerchant={isVerifiedMerchant} />
           {Number(userUsdcBalance) !== 0 && userUsdcBalance !== undefined && !Number.isNaN(userUsdcBalance) && (
@@ -219,6 +219,10 @@ const LandingPage = () => {
           <PageFooter />
         </div>
       </section>
+      ) : (
+        <LoginScreen />
+      )}
+      
     </>
   );
 };
