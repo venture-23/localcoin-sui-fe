@@ -76,7 +76,7 @@ const LandingPage = () => {
     <>
       {isLoggedIn || userDetails?.address ? (
         <section className="">
-        <div className="landing-top mb-[10px]">
+        <div className="landing-top mb-[8px]">
           <PageHeader isCampaignCreator={isCampaignCreator} isMerchant={isMerchant} isVerifiedMerchant={isVerifiedMerchant} />
           {Number(userUsdcBalance) !== 0 && userUsdcBalance !== undefined && !Number.isNaN(userUsdcBalance) && (
             <div className="mb-[4px]">
