@@ -40,7 +40,7 @@ const StoreDetails = () => {
                 <h3 className="text-base font-semibold">{storeInfo?.store_name}</h3>
                 <div className={["w-full my-[16px] rounded-[12px] border-[3px] border-solid overflow-hidden relative border-[#D7D7D7]", '', "store-img"].join(' ')}>
                     <Image 
-                        src={'/merchant_4.png'}
+                        src={coverImageMaps[storeInfo?.merchant_address] ?? '/storeImg.png'}
                         alt="Store"
                         height={420}
                         width={400}

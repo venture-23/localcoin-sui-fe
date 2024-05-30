@@ -35,7 +35,7 @@ export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
     console.log(boxData)
 
     const getCoverImage = () => {
-        const image = '/merchant_4.png'
+        const image = coverImageMaps[boxData?.merchant_address] ?? "/storeImg.png"
         return image
     }
     return (
