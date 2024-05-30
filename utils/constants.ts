@@ -85,6 +85,10 @@ export const coverImageMaps = {
   "0xcb78696fdcdbe803de64344d768a51c01108b561ab7de1a80a8f87e26edc2983": "/piiro_merchant.png"
 }
 
+export const toHide = [
+  "0xd24ded51f5ff3025a83ccc8cfa994d4b06cdcd029b4b90caf7f0f2c165196108",
+  "0x1eb5129496f0c3a7645c32c6ac84af09e506cea422d0edb335511bc0442f6e27"
+]
 
 export const SuiDevnetChain: Chain = {
   id: "sui:devnet",
