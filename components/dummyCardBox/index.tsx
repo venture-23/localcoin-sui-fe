@@ -35,14 +35,14 @@ export const DummyCardBox = ({ boxTitle, boxData }: IDummyCardBoxProps) => {
     console.log(boxData)
 
     const getCoverImage = () => {
-        const image = coverImageMaps[boxData?.merchantAddress] || 'storeImg.png'
+        const image = '/merchant_4.png'
         return image
     }
     return (
         <div style={{
-                background: `${coverImageMaps[boxData?.merchantAddress] === '/merchant_5.jpg' ? '#304D47': `url(${boxTitle === 'Campaigns' ? '/campaignImg.png' : getCoverImage()})` }`,
+                background: `${`url(${boxTitle === 'Campaigns' ? '/campaignImg.png' : getCoverImage()})` }`,
                 backgroundPosition: `center`,
-                backgroundSize: `${coverImageMaps[boxData?.merchantAddress] === '/merchant_5.jpg' ? 'contain': 'cover'}`,
+                backgroundSize: `100% 124px `,
                 backgroundRepeat: `no-repeat`,
             }} 
             className={["h-[124px] card-box p-[10px] flex-none rounded-[12px] cursor-pointer w-[290px] flex items-end", coverImageMaps[boxData?.merchantAddress] === '/merchant_5.jpg' && 'odd-cover'].join(' ')}
