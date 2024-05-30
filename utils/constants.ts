@@ -82,7 +82,8 @@ export const filterCampaigns = [
 ]
 
 export const coverImageMaps = {
-  "0xcb78696fdcdbe803de64344d768a51c01108b561ab7de1a80a8f87e26edc2983": "/piiro_merchant.png"
+  "0xcb78696fdcdbe803de64344d768a51c01108b561ab7de1a80a8f87e26edc2983": "/piiro_merchant.png",
+  "0xd10d65cfbd331cfc6127dd0cfe1c0668522cdd19ef769129e71a8845fc7c8c38": "/merchant_4.png"
 }
 
 export const toHide = [
