@@ -1,43 +1,24 @@
-name: "Deploy to netlify"
+name: Vercel Preview Deployment
+env:
+  VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID }}
 
 on: 
   push:
     branches:
-    - "main"
     - "stage"
 
 jobs:
-  build:
+  Deploy-Preview:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-  
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 19
-          cache: 'npm'
-  
-      - name: Cache node modules
-        uses: actions/cache@v3
-        with:
-          path: ${{ format('{0}/{1}', env.working_dir, 'node_modules') }}
-          key: build-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            build-
-  
-      - name: install dependencies
-        run: yarn --prefer-offline
-      
-      - name: build assets
-        run: CI=false yarn run build
-  
-
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25.1.1    
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional 
-          vercel-args: '--prod' #Optional
-          vercel-org-id: ${{ secrets.ORG_ID}}  #Required
-          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
-  
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build Project Artifacts
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        
