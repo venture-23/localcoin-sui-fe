@@ -33,20 +33,6 @@ jobs:
       - name: build assets
         run: CI=false yarn run build
   
-  
-      # - name: Deploy production to Netlify
-      #   uses: South-Paw/action-netlify-deploy@v1.2.0
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      #     netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-      #     build-dir: './.next'
-      #     comment-on-commit: true
-      # - name: Deploy to Netlify
-      #   uses: veloii/action-netlify-deploy@v2.2.1
-      #   with:
-      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25.1.1    
