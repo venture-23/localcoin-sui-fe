@@ -29,6 +29,18 @@ Recipients transfer the tokens to the merchants, who then provide goods or produ
 * Merchant Onboarding:
 We're working on building a network of merchants who sell quality products. For example, we won't onboard merchants who sell cigarettes or alcohol. Only the super admin/ app admin can add merchants to our network.
 
+# Resources
+
+The application is currently deployed on the testnet. The package identifier is 0xa82ce1c2d6b089981277db26ec87ffd2902ec929d85029d191943967e7f0d04d.
+
+You can explore it using the following link: [Suivision Testnet Explorer](https://testnet.suivision.xyz/package/0xa82ce1c2d6b089981277db26ec87ffd2902ec929d85029d191943967e7f0d04d).
+
+Website: [LocalCoin](https://localcoin.us/)
+
+App: [Application](https://app.localcoin.us/)
+
+Github Contract Repo: [LocalCoin-Contract](https://github.com/venture-23/localcoin-contract)
+
 # ZkLogin in SUI
 
 - We've integrated zkLogin into the LocalCoin app, making it easier to onboard web2 users into the web3 ecosystem. With zkLogin, Recipients and Merchants have minimal interaction with web3 processes. They don't need to remember their private keys; instead, they can simply log in with their Gmail accounts. Additionally, they remain unaware of the blockchain transactions happening in the background, enhancing their user experience. By combining the sponsored transaction feature provided by enoki services with the ability of zk login, users can experience web2 on web3 platforms without having to worry about signing transactions.
