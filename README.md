@@ -33,8 +33,12 @@ We're working on building a network of merchants who sell quality products. For 
 
 - We've integrated zkLogin into the LocalCoin app, making it easier to onboard web2 users into the web3 ecosystem. With zkLogin, Recipients and Merchants have minimal interaction with web3 processes. They don't need to remember their private keys; instead, they can simply log in with their Gmail accounts. Additionally, they remain unaware of the blockchain transactions happening in the background, enhancing their user experience. By combining the sponsored transaction feature provided by enoki services with the ability of zk login, users can experience web2 on web3 platforms without having to worry about signing transactions.
 
+- We have used Enoki SDK (https://docs.enoki.mystenlabs.com/ts-sdk) to integrate ZkLogin into our dApp. Enoki uses the OAuth2 OpenID Connect protocol to request an active JSON Web Token (JWT) from Google when a user comes in with their Google account. Using zkLogin, this JWT is then used to create a self-custodial Sui address. By using zkLogin proofs, Enoki generates a salt and address that the user may use to easily sign transactions inside the dApp by simply entering in with their Google credentials
+
 # Sponsored transaction in SUI
-With the sponsored transaction in SUI, the Merchant and Recipient do not need to pay SUI for the transaction. It will be paid by our wallet , thus making them easier to do transaction on blockchain without having initial fund. By combining the sponsored transaction feature provided by enoki services with the ability of zk login, users can experience web2 on web3 platforms without having to worry about signing transactions.
+- With the sponsored transaction in SUI, the Merchant and Recipient do not need to pay SUI for the transaction. It will be paid by our wallet , thus making them easier to do transaction on blockchain without having initial fund. By combining the sponsored transaction feature provided by enoki services with the ability of zk login, users can experience web2 on web3 platforms without having to worry about signing transactions.
+
+- Enoki allows builders to fully sponsor all end-user transactions, and Enoki Developer Portal (https://portal.enoki.mystenlabs.com) provides the tools to setup and manage these transactions. Using these, you can pay for transactions on the Sui network on behalf of your users. Doing so further removes complexity for your end users, as they don't need to understand gas fees or even know what a SUI token is, or that they are even conducting transactions on a blockchain.
 
 Website: https://localcoin.us/
 
