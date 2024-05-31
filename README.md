@@ -1,6 +1,6 @@
 # Localcoin
 
-LocalCoin is a closed cycle token system designed to enable on-chain control and tracking of financial incentives in the real world. It is a product and service that manages the disbursement of funds which have restrictions on how they may be spent, comprising smart contracts on Soroban, a web app and mobile app, and eventually a payment card and seamless DAO integration.
+LocalCoin is a closed cycle token system designed to enable on-chain control and tracking of financial incentives in the real world. It is a platform designed to empower communities through transparent and effective fund distribution. It connects Campaign Creators, Merchants, and Participants to drive positive local change. Campaign creators can manage social projects with full visibility, and donors can track the impact of their contributions. Participants earn LocalCoin by completing community tasks and can spend it at registered merchants, supporting local businesses and preventing misuse..
 
 # Localcoin Mobile App
 
@@ -8,32 +8,49 @@ LocalCoin is a closed cycle token system designed to enable on-chain control and
 
 ## Campaign Creation
 
-- Choose an existing token with acceptable restrictions or specify a name for a new token
-- Define token spending constraints
-- Define other parameters
-- Specify an amount of token to be minted
+- Log in with their google account
+- Create a campaign
+- Define the parameters of campaign
+- Specify an amount object of token(USDC) to be minted
 - Send the required amount of stablecoin to back the token
-
-## Merchant onboarding
-
-- Selects merchant persona and creates a wallet
-- Campaign manager or field admin scans QR code on Merchant App to add the merchant to the approved merchant list
-- After this step the merchant can receive tokens from recipients
+- Verify the join request by the recipients
+- Scan QR of recipients to transfer them incentives
 
 ## Recipient onboarding
 
-- Selects Recipient persona and creates a wallet
+- Recipients Logs in with their google accoun to create a wallet
+- Joins a campaign and get verfied by campaign owner
+- Complete the campaign by proving their availability
+- Share the QR for requesting incentive
 
-## Token Transactions
+## Merchant onboarding
 
-- Merchant app generates a QR code request for payment and an itemized receipt
-- Customer scans the QR code and approves the token transfer to the merchant
+- Log in with their google account to create a wallet
+- Apply for the merchant and get verified by super admin of localcoin
+- Recipient will scan the QR to buy items from their stores by paying localCoin
+- After this step the merchant can receive tokens from recipients
+- Convert their LocalCoin tokens to USDC. For fiat currency, settle with the Super admin or keep the USDC tokens in your wallet.
+
+
 
 ## Merchant Settlement
 
 - Tokens accumulated by the merchant from recipients can be transferred to a settlement account controlled by the campaign owner.
 - Campaign manager will settle local currency with the merchant.
 - Tokens that come to this settlement account cannot be transferred and have reached their end of life.
+
+## ZkLogin in SUI
+
+- zkLogin is utilized in our dApp to accelerate the Google OAuth login user authentication process. Enoki uses the OAuth2 OpenID Connect protocol to request an active JSON Web Token (JWT) from Google when a user comes in with their Google account. Using zkLogin, this JWT is then used to create a self-custodial Sui address. By using zkLogin proofs, Enoki generates a salt and address that the user may use to easily sign transactions inside the dApp by simply entering in with their Google credentials. This procedure eliminates the requirement for conventional private key management while guaranteeing simple and safe access.
+
+## Sponsored Transactions on SUI
+
+- Enoki allows builders to fully sponsor all end-user transactions, and Enoki Developer Portal provides the tools to setup and manage these transactions. Using these, you can pay for transactions on the Sui network on behalf of your users. Doing so further removes complexity for your end users, as they don't need to understand gas fees or even know what a SUI token is, or that they are even conducting transactions on a blockchain.
+
+Sponsored transactions will enable users to gain the following advantages:
+1. **No Gas Costs**: Users can execute transactions for less money when they use sponsored transactions, which lowers their gas costs to zero.
+2. **Better User Experience**: By allowing users to concentrate on their application logic rather than the underlying transaction processing, sponsored transactions create a more seamless and streamlined user experience.
+3. By combining the sponsored transaction feature provided by enoki services with the ability of zk login, users can experience web2 on web3 platforms without having to worry about signing transactions.
 
 # Mobile App Design
 
