@@ -33,6 +33,9 @@ We're working on building a network of merchants who sell quality products. For 
 
 - We've integrated zkLogin into the LocalCoin app, making it easier to onboard web2 users into the web3 ecosystem. With zkLogin, Recipients and Merchants have minimal interaction with web3 processes. They don't need to remember their private keys; instead, they can simply log in with their Gmail accounts. Additionally, they remain unaware of the blockchain transactions happening in the background, enhancing their user experience. By combining the sponsored transaction feature provided by enoki services with the ability of zk login, users can experience web2 on web3 platforms without having to worry about signing transactions.
 
+# Sponsored transaction in SUI
+With the sponsored transaction in SUI, the Merchant and Recipient do not need to pay SUI for the transaction. It will be paid by our wallet , thus making them easier to do transaction on blockchain without having initial fund. By combining the sponsored transaction feature provided by enoki services with the ability of zk login, users can experience web2 on web3 platforms without having to worry about signing transactions.
+
 Website: https://localcoin.us/
 
 App: https://app.localcoin.us/
